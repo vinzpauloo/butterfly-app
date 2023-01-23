@@ -1,11 +1,12 @@
 import Feather from "react-native-vector-icons/Feather";
-import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons";
 import Ionicons from "react-native-vector-icons/Ionicons";
+import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons";
 import Octicons from "react-native-vector-icons/Octicons";
-import HomeTab from "../screens/HomeTab";
-import Vlog from "../screens/VlogTab";
-import Chat from "../screens/ChatTab";
-import Account from "../screens/AccountTab";
+
+import Account from "screens/AccountTab";
+import Chat from "screens/ChatTab";
+import HomeTab from "screens/HomeTab";
+import Vlog from "screens/VlogTab";
 
 export const bottomNav = [
   {

@@ -1,6 +1,8 @@
 import { StatusBar } from "react-native";
-import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import React from "react";
+
+import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
+
 import { globalStyle } from "../../styles";
 
 const BottomTab = createBottomTabNavigator();

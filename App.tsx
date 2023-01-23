@@ -1,7 +1,8 @@
 import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
-import BottomTabs from "./src/layouts/navigators/BottomTabs";
-import { bottomNav } from "./src/data/bottomNav";
+
+import { bottomNav } from "data/bottomNav";
+import BottomTabs from "layouts/navigators/BottomTabs";
 
 const Stack = createNativeStackNavigator();
 

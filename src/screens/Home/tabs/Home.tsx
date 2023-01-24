@@ -1,21 +1,74 @@
-import { Image, Text, View } from "react-native";
+import { StyleSheet } from "react-native";
 
-import { bannerImage } from "data/bannerImages";
-import MaterialTopTabs from "layouts/navigators/MaterialTopTabs";
-import { topSubNav } from "data/topSubNav";
+import { ScrollView } from "react-native-gesture-handler";
+
 import CarouselContainer from "features/ads/components/CarouselContainer";
+import DividerContainer from "features/sectionList/components/DividerContainer";
+import GridVideos from "features/sectionList/components/GridVideos";
+import HorizontalSlider from "features/sectionList/components/HorizontalSlider";
+import MaterialTopTabs from "layouts/navigators/MaterialTopTabs";
+import SectionHeader from "features/sectionList/components/SectionHeader";
+import SingleVideo from "features/sectionList/components/SingleVideo";
+import VerticalSlider from "features/sectionList/components/VerticalSlider";
+import { bannerImage } from "data/bannerImages";
+import { globalStyle } from "globalStyles";
+import { homeMainSubNav } from "data/homeMainSubNav";
+import { topSubNav } from "data/topSubNav";
 
-export const DynamicScreen = ({ title }) => {
+const LayoutContainer = ({ title, children }) => {
   return (
-    <View style={{ flex: 1 }}>
-      <CarouselContainer images={bannerImage} />
-      <Text>{title}</Text>
-    </View>
+    <>
+      <SectionHeader title={title} />
+      {children}
+      <DividerContainer />
+    </>
   );
 };
 
-const Home = () => {
+export const DynamicScreen = ({ title, navigation }) => {
+  const screenData = homeMainSubNav?.filter((screen) => screen.name === title);
+
+  const SectionLayouts = {
+    videoSlider: (
+      <LayoutContainer title={"Horizontal Videos"}>
+        <HorizontalSlider navigation={navigation} />
+      </LayoutContainer>
+    ),
+    reelSlider: (
+      <LayoutContainer title={"Reels Slider Videos"}>
+        <VerticalSlider navigation={navigation} />
+      </LayoutContainer>
+    ),
+    grid: (
+      <LayoutContainer title={"Grid Videos"}>
+        <GridVideos videos={bannerImage.slice(0, 4)} navigation={navigation} />
+      </LayoutContainer>
+    ),
+    sigleVideo: (
+      <LayoutContainer title={"SingleVideo"}>
+        <SingleVideo navigation={navigation} />
+      </LayoutContainer>
+    ),
+  };
+  return (
+    <ScrollView style={styles.container}>
+      <CarouselContainer images={bannerImage} />
+      {screenData.map((screen, index) =>
+        screen.data.map((item) => SectionLayouts[item.layout])
+      )}
+    </ScrollView>
+  );
+};
+
+const Home = ({ navigation }) => {
   return <MaterialTopTabs data={topSubNav} />;
 };
 
 export default Home;
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: globalStyle.primaryColor,
+  },
+});

@@ -11,24 +11,15 @@ const data = {
   selections: [
     {
       layout: "videoSlider",
-      items: ["INSERT SAMPLES HERE"],
+    },
+    {
+      layout: "singleVideo",
     },
     {
       layout: "reelSlider",
-      items: ["INSERT SAMPLES HERE"],
     },
     {
       layout: "grid",
-      items: ["INSERT SAMPLES HERE"],
-    },
-    {
-      layout: "singleVideoWithGrid",
-      items: ["INSRT SAMPLE HERE"],
-      single: "INSERT SAMPLE HERE",
-    },
-    {
-      layout: "singleVideoList",
-      items: ["INSERT SAMPLES HERE"],
     },
   ],
   latest: [],
@@ -44,52 +35,52 @@ const data = {
 
 export const homeMainSubNav = [
   {
-    name: "Selections",
+    name: "selections",
     label: "精选",
     data: data.selections,
   },
   {
-    name: "Latest",
+    name: "satest",
     label: "最新",
     data: data.latest,
   },
   {
-    name: "Original",
+    name: "original",
     label: "原创",
     data: data.original,
   },
   {
-    name: "HomeMade",
+    name: "homeMade",
     label: "自制",
     data: data.homeMade,
   },
   {
-    name: "Hot",
+    name: "hot",
     label: "热门",
     data: data.hot,
   },
   {
-    name: "Local",
+    name: "local",
     label: "国产",
     data: data.local,
   },
   {
-    name: "PornStars",
+    name: "pornStars",
     label: "网黄",
     data: data.pornStars,
   },
   {
-    name: "Loli",
+    name: "loli",
     label: "萝莉",
     data: data.loli,
   },
   {
-    name: "AVModels",
+    name: "avModels",
     label: "AV",
     data: data.avModels,
   },
   {
-    name: "Hentai",
+    name: "hentai",
     label: "动漫",
     data: data.hentai,
   },

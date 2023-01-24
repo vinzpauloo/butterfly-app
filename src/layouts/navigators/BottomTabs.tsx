@@ -3,7 +3,7 @@ import React from "react";
 
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 
-import { globalStyle } from "../../styles";
+import { globalStyle } from "../../globalStyles";
 
 const BottomTab = createBottomTabNavigator();
 

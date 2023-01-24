@@ -1,14 +1,13 @@
 import { StyleSheet, Text, View } from "react-native";
 import React from "react";
 
+import MaterialTopTabs from "layouts/navigators/MaterialTopTabs";
+import { topMainNav } from "data/topMainNav";
+
 type Props = {};
 
 const HomeTab = (props: Props) => {
-  return (
-    <View>
-      <Text>Home</Text>
-    </View>
-  );
+  return <MaterialTopTabs data={topMainNav} />;
 };
 
 export default HomeTab;

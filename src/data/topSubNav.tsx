@@ -1,4 +1,3 @@
-import Feeds from "screens/Home/tabs/Feeds";
 import { DynamicScreen } from "screens/Home/tabs/Home";
 
 export const topSubNav = {

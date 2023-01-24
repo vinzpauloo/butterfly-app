@@ -14,6 +14,7 @@ module.exports = function (api) {
             assets: "./src/assets",
             features: "./src/features",
             globalStyles: "./src/globalStyles",
+            services: "./src/services",
           },
         },
       ],

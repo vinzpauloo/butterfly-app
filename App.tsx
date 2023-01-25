@@ -9,10 +9,12 @@ import { initializePusher } from "services/pusher";
 import { NavigationContainer } from "@react-navigation/native";
 
 import BottomTabs from "layouts/navigators/BottomTabs";
+import PortraitVideo from "layouts/PortraitVideo";
 import Search from "screens/Search";
 import SingleVideoScreen from "screens/SingleVideo";
-import { globalStyle } from "globalStyles";
 import { bottomNav } from "data/bottomNav";
+import { globalStyle } from "globalStyles";
+import { reelsVideos } from "data/reelsVideos";
 
 const Stack = createNativeStackNavigator();
 
@@ -104,6 +106,11 @@ export default function App() {
             },
           })}
         />
+        <Stack.Screen name="VlogScreen" options={{ headerShown: false }}>
+          {(props) => (
+            <PortraitVideo reelsVideos={reelsVideos} hasBackButton={true} />
+          )}
+        </Stack.Screen>
       </Stack.Navigator>
     </NavigationContainer>
   );

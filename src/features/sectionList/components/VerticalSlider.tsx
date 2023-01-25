@@ -15,7 +15,11 @@ const { width } = Dimensions.get("window");
 
 const Video = ({ item, index, data, navigation }: any) => {
   const handlePress = () => {
-    navigation.navigate("shortVideo");
+    navigation.navigate("VlogScreen", {
+      image: item.video,
+      title: "Mark",
+      subTitle: "123456789",
+    });
   };
   return (
     <TouchableOpacity

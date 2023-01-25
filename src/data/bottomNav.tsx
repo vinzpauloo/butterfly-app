@@ -6,7 +6,7 @@ import Octicons from "react-native-vector-icons/Octicons";
 import Account from "screens/AccountTab";
 import Chat from "screens/ChatTab";
 import HomeTab from "screens/Home";
-import Vlog from "screens/VlogTab";
+import Vlog from "screens/Vlog";
 
 export const bottomNav = [
   {

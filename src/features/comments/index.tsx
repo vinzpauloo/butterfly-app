@@ -1,12 +1,12 @@
+import React from 'react'
 import { Alert, Dimensions, FlatList, StyleSheet, Text, TextInput, View } from 'react-native'
 import { Pressable, VStack, Avatar, HStack, Divider } from "@react-native-material/core";
-import React from 'react'
 
 type Props = {}
 
 import { comments } from 'data/comments';
 
-const { width: windowWidth, height: windowHeight } = Dimensions.get("window")
+const { width: windowWidth } = Dimensions.get("window")
 
 type commentItemProps = {
 	userName: string
@@ -28,7 +28,7 @@ const CommentItem = (props: commentItemProps) => {
 	)
 }
 
-const index = (props: Props) => {
+const CommentList = (props: Props) => {
 	return (
 		<>
 			<FlatList
@@ -51,7 +51,7 @@ const index = (props: Props) => {
 	)
 }
 
-export default index
+export default CommentList
 
 const styles = StyleSheet.create({
 	whiteText: {

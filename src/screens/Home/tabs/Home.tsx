@@ -1,4 +1,4 @@
-import { StyleSheet } from "react-native";
+import { StyleSheet, View } from "react-native";
 
 import { ScrollView } from "react-native-gesture-handler";
 
@@ -14,6 +14,7 @@ import { bannerImage } from "data/bannerImages";
 import { globalStyle } from "globalStyles";
 import { homeMainSubNav } from "data/homeMainSubNav";
 import { topSubNav } from "data/topSubNav";
+import BottomMessage from "features/sectionList/components/BottomMessage";
 
 const LayoutContainer = ({ title, children }) => {
   return (
@@ -44,10 +45,22 @@ export const DynamicScreen = ({ title, navigation }) => {
         <GridVideos videos={bannerImage.slice(0, 4)} navigation={navigation} />
       </LayoutContainer>
     ),
-    sigleVideo: (
+    singleVideo: (
       <LayoutContainer title={"SingleVideo"}>
-        <SingleVideo navigation={navigation} />
+        <SingleVideo />
       </LayoutContainer>
+    ),
+    singleVideoWithGrid: (
+      <LayoutContainer title={"SingleVideo"}>
+        <SingleVideo />
+        <DividerContainer />
+        <GridVideos videos={bannerImage.slice(0, 4)} navigation={navigation} />
+      </LayoutContainer>
+    ),
+    singleVideoList: (
+      <View style={{ marginVertical: 15 }}>
+        <SingleVideo />
+      </View>
     ),
   };
   return (
@@ -56,6 +69,7 @@ export const DynamicScreen = ({ title, navigation }) => {
       {screenData.map((screen, index) =>
         screen.data.map((item) => SectionLayouts[item.layout])
       )}
+      <BottomMessage />
     </ScrollView>
   );
 };

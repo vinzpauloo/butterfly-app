@@ -8,12 +8,21 @@ import {
 } from "react-native";
 import React from "react";
 
-import banner10 from "assets/images/banner10.jpg";
+import { useNavigation } from "@react-navigation/native";
 import Ionicons from "react-native-vector-icons/Ionicons";
 
-const SingleVideo = ({ navigation }: any) => {
+import banner10 from "assets/images/banner10.jpg";
+import girl from "assets/images/girl.jpg";
+
+const SingleVideo = () => {
+  const navigation = useNavigation<any>();
+
   const handlePress = () => {
-    navigation.navigate("model");
+    navigation.navigate("SingleVideo", {
+      image: girl,
+      title: "Mark",
+      subTitle: "123456789",
+    });
   };
   return (
     <TouchableOpacity

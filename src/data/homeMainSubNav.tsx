@@ -21,8 +21,42 @@ const data = {
     {
       layout: "grid",
     },
+    {
+      layout: "singleVideoWithGrid",
+    },
   ],
-  latest: [],
+  latest: [
+    {
+      layout: "singleVideoList",
+    },
+    {
+      layout: "singleVideoList",
+    },
+    {
+      layout: "singleVideoList",
+    },
+    {
+      layout: "singleVideoList",
+    },
+    {
+      layout: "singleVideoList",
+    },
+    {
+      layout: "singleVideoList",
+    },
+    {
+      layout: "singleVideoList",
+    },
+    {
+      layout: "singleVideoList",
+    },
+    {
+      layout: "singleVideoList",
+    },
+    {
+      layout: "singleVideoList",
+    },
+  ],
   original: [],
   homeMade: [],
   hot: [],
@@ -40,7 +74,7 @@ export const homeMainSubNav = [
     data: data.selections,
   },
   {
-    name: "satest",
+    name: "latest",
     label: "最新",
     data: data.latest,
   },

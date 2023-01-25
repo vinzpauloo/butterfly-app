@@ -3,7 +3,7 @@ import { Dimensions, FlatList, StyleSheet, Text, View } from "react-native";
 import { useBottomTabBarHeight } from '@react-navigation/bottom-tabs';
 
 import { reelsVideos } from "data/reelsVideos";
-import PortraitVideo from "layouts/navigators/PortraitVideo";
+import PortraitVideo from "layouts/PortraitVideo";
 
 
 const { height: windowHeight } = Dimensions.get("window")

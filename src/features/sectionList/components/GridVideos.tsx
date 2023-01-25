@@ -7,14 +7,22 @@ import {
   View,
 } from "react-native";
 import React from "react";
+
 import Entypo from "react-native-vector-icons/Entypo";
-import { FlatList } from "react-native-gesture-handler";
+import { MasonryFlashList } from "@shopify/flash-list";
+import { useNavigation } from "@react-navigation/native";
 
 const { width } = Dimensions.get("window");
 
-const Video = ({ item, navigation }: any) => {
+const Video = ({ item }: any) => {
+  const navigation = useNavigation<any>();
+  const videoHeight = item.type === "horizontal" ? width * 0.3 : width * 0.5;
   const handlePress = () => {
-    navigation.navigate("model");
+    navigation.navigate("SingleVideo", {
+      image: item,
+      title: "Mark",
+      subTitle: "123456789",
+    });
   };
   return (
     <TouchableOpacity
@@ -23,7 +31,10 @@ const Video = ({ item, navigation }: any) => {
       onPress={handlePress}
     >
       <View>
-        <Image source={item} style={styles.video} />
+        <Image
+          source={item.video}
+          style={[styles.video, { height: videoHeight }]}
+        />
         <Text style={[styles.text, styles.title]}>Title and Description</Text>
       </View>
       <View style={styles.textContent}>
@@ -34,34 +45,27 @@ const Video = ({ item, navigation }: any) => {
   );
 };
 
-const GridVideos = ({ videos, navigation }) => {
+const GridVideos = ({ videos, padding = 0 }) => {
   return (
-    <View style={styles.container}>
-      <FlatList
-        numColumns={2}
-        data={videos}
-        renderItem={({ item }) => <Video item={item} navigation={navigation} />}
-        keyExtractor={(item, index) => "" + index}
-      />
-    </View>
+    <MasonryFlashList
+      numColumns={2}
+      data={videos}
+      renderItem={({ item }: any) => <Video item={item} />}
+      keyExtractor={(item, index) => "" + index}
+    />
   );
 };
 
 export default GridVideos;
 
 const styles = StyleSheet.create({
-  container: {
-    alignItems: "center",
-    justifyContent: "center",
-  },
   videoContainer: {
     margin: 5,
     borderWidth: 1,
     borderColor: "#fff",
   },
   video: {
-    height: width * 0.3,
-    width: width * 0.44,
+    width: "100%",
   },
   textContent: {
     flexDirection: "row",

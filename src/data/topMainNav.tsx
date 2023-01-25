@@ -1,5 +1,5 @@
 import Date from "screens/Home/tabs/Date";
-import Feeds from "screens/Home/tabs/Feeds";
+import Following from "screens/Home/tabs/Following";
 import Home from "screens/Home/tabs/Home";
 import Moment from "screens/Home/tabs/Moment";
 import Photography from "screens/Home/tabs/Photography";
@@ -9,7 +9,7 @@ export const topMainNav = {
   screens: [
     {
       name: "关注",
-      component: (props) => <Feeds {...props} />,
+      component: (props) => <Following {...props} />,
     },
     {
       name: "首页",

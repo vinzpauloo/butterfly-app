@@ -15,6 +15,7 @@ import { globalStyle } from "globalStyles";
 import { homeMainSubNav } from "data/homeMainSubNav";
 import { topSubNav } from "data/topSubNav";
 import BottomMessage from "features/sectionList/components/BottomMessage";
+import { multipleImages } from "data/gridImages";
 
 const LayoutContainer = ({ title, children }) => {
   return (
@@ -42,7 +43,9 @@ export const DynamicScreen = ({ title, navigation }) => {
     ),
     grid: (
       <LayoutContainer title={"Grid Videos"}>
-        <GridVideos videos={bannerImage.slice(0, 4)} navigation={navigation} />
+        <View style={{ paddingHorizontal: 10 }}>
+          <GridVideos videos={multipleImages} />
+        </View>
       </LayoutContainer>
     ),
     singleVideo: (
@@ -54,7 +57,7 @@ export const DynamicScreen = ({ title, navigation }) => {
       <LayoutContainer title={"SingleVideo"}>
         <SingleVideo />
         <DividerContainer />
-        <GridVideos videos={bannerImage.slice(0, 4)} navigation={navigation} />
+        <GridVideos videos={multipleImages} />
       </LayoutContainer>
     ),
     singleVideoList: (

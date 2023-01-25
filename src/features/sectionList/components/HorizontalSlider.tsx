@@ -5,11 +5,11 @@ import {
   Text,
   TouchableOpacity,
   View,
+  VirtualizedList,
 } from "react-native";
 import React from "react";
 
 import Ionicons from "react-native-vector-icons/Ionicons";
-import { FlatList } from "react-native-gesture-handler";
 
 import { bannerImage } from "data/bannerImages";
 
@@ -17,7 +17,11 @@ const { width } = Dimensions.get("window");
 
 const Video = ({ navigation, index, data, item }: any) => {
   const handlePress = () => {
-    navigation.navigate("model");
+    navigation.navigate("SingleVideo", {
+      image: item.video,
+      title: "Mark",
+      subTitle: "123456789",
+    });
   };
   return (
     <TouchableOpacity
@@ -29,7 +33,7 @@ const Video = ({ navigation, index, data, item }: any) => {
       activeOpacity={1}
       onPress={handlePress}
     >
-      <Image source={item} style={styles.image} />
+      <Image source={item.video} style={styles.image} />
       <View style={styles.content}>
         <Ionicons name="person-circle-outline" size={40} color={"#fff"} />
         <View style={styles.texts}>
@@ -43,13 +47,16 @@ const Video = ({ navigation, index, data, item }: any) => {
 
 const HorizontalSlider = ({ navigation }) => {
   return (
-    <FlatList
-      nestedScrollEnabled={true}
-      alwaysBounceHorizontal={true}
+    <VirtualizedList
       horizontal
       showsHorizontalScrollIndicator={false}
-      data={bannerImage}
-      keyExtractor={(_, index) => "" + index}
+      initialNumToRender={bannerImage.length}
+      getItem={(_data: unknown, index: number) => ({
+        id: index,
+        video: bannerImage[index],
+      })}
+      getItemCount={() => bannerImage.length}
+      keyExtractor={(item: any) => item.id}
       renderItem={({ item, index }) => (
         <Video
           navigation={navigation}

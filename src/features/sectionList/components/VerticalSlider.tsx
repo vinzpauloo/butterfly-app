@@ -5,10 +5,10 @@ import {
   Text,
   TouchableOpacity,
   View,
+  VirtualizedList,
 } from "react-native";
 import React from "react";
 
-import { FlatList } from "react-native-gesture-handler";
 import { reelsImages } from "data/reelsImages";
 
 const { width } = Dimensions.get("window");
@@ -27,7 +27,7 @@ const Video = ({ item, index, data, navigation }: any) => {
       ]}
       activeOpacity={1}
     >
-      <Image source={item} style={styles.image} />
+      <Image source={item.video} style={styles.image} />
       <View style={styles.textContent}>
         <Text style={styles.text}>Title and Description</Text>
       </View>
@@ -37,11 +37,16 @@ const Video = ({ item, index, data, navigation }: any) => {
 
 const VerticalSlider = ({ navigation }) => {
   return (
-    <FlatList
-      alwaysBounceHorizontal={true}
+    <VirtualizedList
       horizontal
       showsHorizontalScrollIndicator={false}
-      data={reelsImages}
+      initialNumToRender={reelsImages.length}
+      getItem={(_data: unknown, index: number) => ({
+        id: index,
+        video: reelsImages[index],
+      })}
+      getItemCount={() => reelsImages.length}
+      keyExtractor={(item: any) => item.id}
       renderItem={({ item, index }) => (
         <Video
           key={index}
@@ -51,7 +56,6 @@ const VerticalSlider = ({ navigation }) => {
           navigation={navigation}
         />
       )}
-      keyExtractor={(_, index) => "" + index}
     />
   );
 };

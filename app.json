@@ -14,9 +14,7 @@
     "updates": {
       "fallbackToCacheTimeout": 0
     },
-    "assetBundlePatterns": [
-      "**/*"
-    ],
+    "assetBundlePatterns": ["**/*"],
     "ios": {
       "supportsTablet": true
     },
@@ -32,8 +30,9 @@
     },
     "extra": {
       "eas": {
-        "projectId": "116fd8d0-09b1-4bf7-90ce-8daddde305bd"
+        "projectId": "e96e6e4b-e8b5-42ef-842b-302e50e14beb"
       }
-    }
+    },
+    "owner": "1bit-frontend"
   }
 }

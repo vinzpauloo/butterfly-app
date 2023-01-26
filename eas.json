@@ -8,17 +8,26 @@
       "distribution": "internal",
       "ios": {
         "resourceClass": "m1-medium"
+      },
+      "env": {
+        "APP_VARIANT": "development"
       }
     },
     "preview": {
       "distribution": "internal",
       "ios": {
         "resourceClass": "m1-medium"
+      },
+      "env": {
+        "APP_VARIANT": "preview"
       }
     },
     "production": {
       "ios": {
         "resourceClass": "m1-medium"
+      },
+      "env": {
+        "APP_VARIANT": "production"
       }
     }
   },

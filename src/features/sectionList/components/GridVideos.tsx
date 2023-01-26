@@ -15,6 +15,8 @@ import { useNavigation } from "@react-navigation/native";
 
 import { globalStyle } from "globalStyles";
 import { reelsVideos } from "data/reelsVideos";
+import { Center, NativeBaseProvider, useDisclose } from "native-base";
+import Modal from "components/Modal";
 
 const { width } = Dimensions.get("window");
 
@@ -33,16 +35,16 @@ const FollowingBottomContent = ({ item }) => {
   );
 };
 
-const GridVideosBottomContent = () => {
+const GridVideosBottomContent = ({ onOpen }) => {
   return (
     <View style={styles.textContent}>
       <Text style={styles.text}>Nana Taipei</Text>
-      <Entypo name="dots-three-vertical" color={"#fff"} />
+      <Entypo name="dots-three-vertical" color={"#fff"} onPress={onOpen} />
     </View>
   );
 };
 
-const Video = ({ item, isFollowingScreen }: any) => {
+const Video = ({ item, isFollowingScreen, onOpen }: any) => {
   const navigation = useNavigation<any>();
   const videoHeight = item.type === "horizontal" ? width * 0.3 : width * 0.5;
   const handlePress = () => {
@@ -74,22 +76,34 @@ const Video = ({ item, isFollowingScreen }: any) => {
       {isFollowingScreen ? (
         <FollowingBottomContent item={item} />
       ) : (
-        <GridVideosBottomContent />
+        <GridVideosBottomContent onOpen={onOpen} />
       )}
     </TouchableOpacity>
   );
 };
 
 const GridVideos = ({ videos, isFollowingScreen = false }) => {
+  const { isOpen, onOpen, onClose } = useDisclose();
   return (
-    <MasonryFlashList
-      numColumns={2}
-      data={videos}
-      renderItem={({ item }: any) => (
-        <Video item={item} isFollowingScreen={isFollowingScreen} />
-      )}
-      keyExtractor={(_, index) => "" + index}
-    />
+    <>
+      <MasonryFlashList
+        numColumns={2}
+        data={videos}
+        renderItem={({ item }: any) => (
+          <Video
+            item={item}
+            isFollowingScreen={isFollowingScreen}
+            onOpen={onOpen}
+          />
+        )}
+        keyExtractor={(_, index) => "" + index}
+      />
+      <NativeBaseProvider>
+        <Center flex={1} px="3">
+          <Modal isOpen={isOpen} onOpen={onOpen} onClose={onClose} />
+        </Center>
+      </NativeBaseProvider>
+    </>
   );
 };
 

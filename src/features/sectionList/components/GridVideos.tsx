@@ -10,11 +10,11 @@ import React from "react";
 
 import Entypo from "react-native-vector-icons/Entypo";
 import Foundation from "react-native-vector-icons/Foundation";
+import { MasonryFlashList } from "@shopify/flash-list";
+import { useNavigation } from "@react-navigation/native";
 
 import { globalStyle } from "globalStyles";
-import { MasonryFlashList } from "@shopify/flash-list";
 import { reelsVideos } from "data/reelsVideos";
-import { useNavigation } from "@react-navigation/native";
 
 const { width } = Dimensions.get("window");
 

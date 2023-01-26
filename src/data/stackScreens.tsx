@@ -1,4 +1,11 @@
-import { Image, StyleSheet, Text, TextInput, View } from "react-native";
+import {
+  Image,
+  Pressable,
+  StyleSheet,
+  Text,
+  TextInput,
+  View,
+} from "react-native";
 import React from "react";
 
 import Ionicons from "react-native-vector-icons/Ionicons";
@@ -46,9 +53,14 @@ export const stackScreens = {
             <Image source={route.params?.image} style={styles.image} />
             <View>
               <Text style={styles.title}>{route.params?.title}</Text>
-              <Text style={styles.subTitle}>{route.params?.subTitle}</Text>
+              <Text style={styles.subTitle}>{route.params?.subTitle}粉丝</Text>
             </View>
           </View>
+        ),
+        headerRight: () => (
+          <Pressable style={styles.followBtn}>
+            <Text style={styles.followText}>+关注</Text>
+          </Pressable>
         ),
         headerTitleStyle: {
           color: "#fff",
@@ -107,7 +119,7 @@ export const stackScreens = {
       component: () => <PhotoGallery />,
       headerShown: true,
       options: ({ navigation, route }: any) => ({
-        headerTitle: route?.params.postTitle ,
+        headerTitle: route?.params.postTitle,
         headerTitleAlign: "center",
         headerStyle: {
           backgroundColor: globalStyle.primaryColor,
@@ -166,5 +178,17 @@ const styles = StyleSheet.create({
   },
   input: {
     width: 180,
+  },
+  followBtn: {
+    backgroundColor: globalStyle.secondaryColor,
+    paddingVertical: 5,
+    paddingHorizontal: 10,
+    borderRadius: 15,
+    borderWidth: 1,
+    borderColor: "crimson",
+  },
+  followText: {
+    color: "#fff",
+    fontSize: 14,
   },
 });

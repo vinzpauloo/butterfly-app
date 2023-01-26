@@ -2,6 +2,7 @@ import {
   Button,
   Dimensions,
   Image,
+  Pressable,
   StyleSheet,
   Text,
   TouchableOpacity,
@@ -38,6 +39,9 @@ const SingleVideoScreen = () => {
   return (
     <View style={styles.container}>
       <View style={styles.videoContent}>
+        <Pressable style={styles.watermarkContainer}>
+          <Text style={styles.watermarkText}>购买视频观看完整版</Text>
+        </Pressable>
         <Video
           ref={video}
           style={styles.video}
@@ -63,7 +67,7 @@ const SingleVideoScreen = () => {
               size={15}
               style={styles.icon}
             />
-            <Text style={styles.text}>56554 | Duration: 45:12</Text>
+            <Text style={styles.text}>56554 | 时长: 45:12</Text>
           </View>
           <View style={styles.item}>
             <AntDesign
@@ -72,7 +76,7 @@ const SingleVideoScreen = () => {
               size={13}
               style={styles.icon}
             />
-            <Text style={styles.text}>56554 | Duration: 45:12</Text>
+            <Text style={styles.text}>未经作者允许禁止转载</Text>
           </View>
         </View>
         <View style={styles.tags}>
@@ -97,7 +101,7 @@ const SingleVideoScreen = () => {
               size={18}
               style={styles.icon}
             />
-            <Text style={styles.text}>Star</Text>
+            <Text style={styles.text}>收藏</Text>
           </View>
           <View style={[styles.buttonItem, { flexDirection: "column" }]}>
             <Zocial
@@ -106,7 +110,7 @@ const SingleVideoScreen = () => {
               size={18}
               style={styles.icon}
             />
-            <Text style={[styles.text, { marginVertical: 3 }]}>29 Star</Text>
+            <Text style={[styles.text, { marginVertical: 3 }]}>22金币</Text>
           </View>
           <View style={styles.buttonItem}>
             <MaterialCommunityIcons
@@ -115,7 +119,7 @@ const SingleVideoScreen = () => {
               size={18}
               style={styles.icon}
             />
-            <Text style={styles.text}>Download</Text>
+            <Text style={styles.text}>下载</Text>
           </View>
           <View style={styles.buttonItem}>
             <Fontisto
@@ -124,7 +128,7 @@ const SingleVideoScreen = () => {
               size={15}
               style={styles.icon}
             />
-            <Text style={styles.text}>Share</Text>
+            <Text style={styles.text}>分享</Text>
           </View>
         </View>
       </View>
@@ -140,7 +144,21 @@ const styles = StyleSheet.create({
     backgroundColor: globalStyle.primaryColor,
   },
   videoContent: {
+    position: "relative",
     height: 200,
+  },
+  watermarkContainer: {
+    backgroundColor: globalStyle.secondaryColor,
+    paddingVertical: 5,
+    paddingHorizontal: 10,
+    borderRadius: 20,
+    position: "absolute",
+    zIndex: 10,
+    top: 10,
+    right: 30,
+  },
+  watermarkText: {
+    color: "#fff",
   },
   title: {
     color: "#fff",
@@ -169,11 +187,14 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     marginHorizontal: 10,
+    marginVertical: 5,
   },
   tag: {
+    alignItems: "center",
+    justifyContent: "center",
     fontSize: 12,
     color: "#999",
-    paddingVertical: 2,
+    paddingTop: 2,
     paddingHorizontal: 5,
     borderColor: "#999",
     borderWidth: 2,

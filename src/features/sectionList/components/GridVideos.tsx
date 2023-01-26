@@ -1,6 +1,7 @@
 import {
   Dimensions,
   Image,
+  Pressable,
   StyleSheet,
   Text,
   TouchableOpacity,
@@ -39,7 +40,16 @@ const GridVideosBottomContent = ({ onOpen }) => {
   return (
     <View style={styles.textContent}>
       <Text style={styles.text}>Nana Taipei</Text>
-      <Entypo name="dots-three-vertical" color={"#fff"} onPress={onOpen} />
+      <Pressable
+        style={{
+          height: 15,
+          width: 15,
+          alignItems: "center",
+        }}
+        onPress={onOpen}
+      >
+        <Entypo name="dots-three-vertical" color={"#fff"} />
+      </Pressable>
     </View>
   );
 };

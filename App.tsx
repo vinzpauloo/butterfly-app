@@ -5,10 +5,10 @@ import { NavigationContainer } from "@react-navigation/native";
 
 import StackNavigators from "layouts/navigators/StackNavigators";
 import { globalStyle } from "globalStyles";
+import { stackScreens } from "data/stackScreens";
 
 export default function App() {
   useEffect(() => {
-    // initializePusher();
     // initializePusher();
   }, []);
 
@@ -18,7 +18,7 @@ export default function App() {
         barStyle={"light-content"}
         backgroundColor={globalStyle.primaryColor}
       />
-      <StackNavigators />
+      <StackNavigators data={stackScreens} />
     </NavigationContainer>
   );
 }

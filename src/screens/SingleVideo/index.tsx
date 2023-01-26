@@ -22,7 +22,7 @@ import { globalStyle } from "globalStyles";
 
 const { width, height } = Dimensions.get("window");
 
-const index = () => {
+const SingleVideoScreen = () => {
   const video = React.useRef(null);
   const [status, setStatus] = React.useState({});
 
@@ -132,7 +132,7 @@ const index = () => {
   );
 };
 
-export default index;
+export default SingleVideoScreen;
 
 const styles = StyleSheet.create({
   container: {

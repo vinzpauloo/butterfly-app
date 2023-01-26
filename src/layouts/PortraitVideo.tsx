@@ -7,21 +7,21 @@ import {
   Alert,
   Modal,
   TouchableOpacity,
+  Image,
 } from "react-native";
 import React, { useState } from "react";
+
 import { ResizeMode, Video } from "expo-av";
+import { useNavigation, useRoute } from "@react-navigation/native";
 import { Pressable, VStack } from "@react-native-material/core";
-import { Image } from "react-native";
-import { useBottomTabBarHeight } from "@react-navigation/bottom-tabs";
 import Ionicons from "react-native-vector-icons/Ionicons";
 import Feather from "react-native-vector-icons/Feather";
 import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons";
 
 import Comments from "features/comments";
-import { useNavigation } from "@react-navigation/native";
 
 interface PortraitVideoDataType {
-  reelsVideos: any;
+  reelsVideos?: any;
   bottomTabHeight?: number;
   hasBackButton?: boolean;
 }
@@ -179,11 +179,11 @@ const PortraitVideoContent = (props: Props) => {
 };
 
 const PortraitVideo: React.FC<PortraitVideoDataType> = ({
-  reelsVideos,
   bottomTabHeight = 0, // default value
   hasBackButton = false, // default value
 }) => {
   const navigation = useNavigation<any>();
+  const route = useRoute<any>();
   const [activeVideoIndex, setActiveVideoIndex] = useState(0);
   return (
     <View style={{ position: "relative", flex: 1 }}>
@@ -198,7 +198,7 @@ const PortraitVideo: React.FC<PortraitVideoDataType> = ({
       ) : null}
       <FlatList
         // estimatedItemSize={15}
-        data={reelsVideos}
+        data={route.params?.reelsVideos}
         pagingEnabled
         removeClippedSubviews={true}
         renderItem={({ item, index }) => (

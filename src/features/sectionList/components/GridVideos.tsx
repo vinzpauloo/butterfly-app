@@ -48,7 +48,7 @@ const Video = ({ item, isFollowingScreen }: any) => {
   const handlePress = () => {
     if (item.type === "horizontal") {
       navigation.navigate("SingleVideo", {
-        image: item,
+        image: item.video,
         title: "Mark",
         subTitle: "123456789",
       });

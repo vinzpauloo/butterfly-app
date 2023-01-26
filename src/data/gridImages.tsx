@@ -107,3 +107,14 @@ export const multipleImages = [
     video: banner4,
   },
 ];
+
+export const NoFollowingImages = [
+  {
+    type: "horizontal",
+    video: banner1,
+  },
+  {
+    type: "vertical",
+    video: banner2,
+  },
+];

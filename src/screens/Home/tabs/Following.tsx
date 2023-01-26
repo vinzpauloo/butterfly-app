@@ -1,4 +1,5 @@
 import {
+  Alert,
   Dimensions,
   Image,
   StyleSheet,
@@ -10,28 +11,37 @@ import React from "react";
 
 import Entypo from "react-native-vector-icons/Entypo";
 import { MasonryFlashList } from "@shopify/flash-list";
+import { Center, NativeBaseProvider, useDisclose } from "native-base";
 import { ScrollView } from "react-native-gesture-handler";
 import { useNavigation } from "@react-navigation/native";
 
 import Container from "components/Container";
+import DividerContainer from "features/sectionList/components/DividerContainer";
 import girl from "assets/images/girl.jpg";
 import GridVideos from "features/sectionList/components/GridVideos";
 import NoFollowingImg from "assets/images/nofollowing.png";
 import { followImages } from "data/gridImages";
 import { globalStyle } from "globalStyles";
-import { multipleImages } from "data/gridImages";
-import DividerContainer from "features/sectionList/components/DividerContainer";
+import { NoFollowingImages } from "data/gridImages";
+import { reelsVideos } from "data/reelsVideos";
+import Modal from "components/Modal";
 
 const { width } = Dimensions.get("window");
 
-const Video = ({ item, index }: any) => {
+const Video = ({ item, index, onOpen }: any) => {
   const navigation = useNavigation<any>();
   const handlePress = () => {
-    navigation.navigate("SingleVideo", {
-      image: item,
-      title: "Mark",
-      subTitle: "123456789",
-    });
+    if (item.type === "horizontal") {
+      navigation.navigate("SingleVideo", {
+        image: item.video,
+        title: "Mark",
+        subTitle: "123456789",
+      });
+    } else {
+      navigation.navigate("VlogScreen", {
+        reelsVideos: reelsVideos,
+      });
+    }
   };
   return (
     <TouchableOpacity
@@ -48,13 +58,13 @@ const Video = ({ item, index }: any) => {
       </View>
       <View style={styles.textContent}>
         <Text style={styles.text}>Nana Taipei</Text>
-        <Entypo name="dots-three-vertical" color={"#fff"} />
+        <Entypo name="dots-three-vertical" color={"#fff"} onPress={onOpen} />
       </View>
     </TouchableOpacity>
   );
 };
 
-const NoFollowing = () => {
+const NoFollowing = ({ onOpen }) => {
   return (
     <>
       <Image source={NoFollowingImg} style={styles.image} />
@@ -73,9 +83,9 @@ const NoFollowing = () => {
             </View>
             <MasonryFlashList
               numColumns={2}
-              data={multipleImages.slice(0, 2)}
+              data={NoFollowingImages}
               renderItem={({ item, index }: any) => (
-                <Video item={item} index={index} />
+                <Video item={item} index={index} onOpen={onOpen} />
               )}
               keyExtractor={(_, index) => "" + index}
             />
@@ -89,16 +99,24 @@ const NoFollowing = () => {
 
 const Following = () => {
   const noFollowing = true;
+  const { isOpen, onOpen, onClose } = useDisclose();
   return (
-    <ScrollView>
-      <Container>
-        {noFollowing ? (
-          <NoFollowing />
-        ) : (
-          <GridVideos videos={followImages} isFollowingScreen={true} />
-        )}
-      </Container>
-    </ScrollView>
+    <>
+      <ScrollView>
+        <Container>
+          {noFollowing ? (
+            <NoFollowing onOpen={onOpen} />
+          ) : (
+            <GridVideos videos={followImages} isFollowingScreen={true} />
+          )}
+        </Container>
+      </ScrollView>
+      <NativeBaseProvider>
+        <Center flex={1} px="3">
+          <Modal isOpen={isOpen} onOpen={onOpen} onClose={onClose} />
+        </Center>
+      </NativeBaseProvider>
+    </>
   );
 };
 

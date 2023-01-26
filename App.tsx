@@ -9,6 +9,7 @@ import { globalStyle } from "globalStyles";
 export default function App() {
   useEffect(() => {
     // initializePusher();
+    // initializePusher();
   }, []);
 
   return (

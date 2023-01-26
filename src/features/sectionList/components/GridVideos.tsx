@@ -10,6 +10,7 @@ import React from "react";
 
 import Entypo from "react-native-vector-icons/Entypo";
 import { MasonryFlashList } from "@shopify/flash-list";
+import { reelsVideos } from "data/reelsVideos";
 import { useNavigation } from "@react-navigation/native";
 
 const { width } = Dimensions.get("window");
@@ -18,11 +19,17 @@ const Video = ({ item }: any) => {
   const navigation = useNavigation<any>();
   const videoHeight = item.type === "horizontal" ? width * 0.3 : width * 0.5;
   const handlePress = () => {
-    navigation.navigate("SingleVideo", {
-      image: item,
-      title: "Mark",
-      subTitle: "123456789",
-    });
+    if (item.type === "horizontal") {
+      navigation.navigate("SingleVideo", {
+        image: item,
+        title: "Mark",
+        subTitle: "123456789",
+      });
+    } else {
+      navigation.navigate("VlogScreen", {
+        reelsVideos: reelsVideos,
+      });
+    }
   };
   return (
     <TouchableOpacity

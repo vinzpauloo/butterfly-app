@@ -12,7 +12,6 @@ import Search from "screens/Search";
 import SingleVideoScreen from "screens/SingleVideo";
 import { bottomNav } from "data/bottomNav";
 import { globalStyle } from "globalStyles";
-import { reelsVideos } from "data/reelsVideos";
 
 const Stack = createNativeStackNavigator();
 
@@ -101,13 +100,15 @@ const StackNavigators = ({}) => {
           },
         })}
       />
-      <Stack.Screen
-        name="VlogScreen"
-        options={{ headerShown: false }}
-        component={() => (
-          <PortraitVideo reelsVideos={reelsVideos} hasBackButton={true} />
+      <Stack.Screen name="VlogScreen" options={{ headerShown: false }}>
+        {(props: any) => (
+          <PortraitVideo
+            {...props}
+            reelsVideos={props.route.params?.reelsVideos}
+            hasBackButton={true}
+          />
         )}
-      />
+      </Stack.Screen>
     </Stack.Navigator>
   );
 };

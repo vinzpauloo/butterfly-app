@@ -2,6 +2,7 @@ import { StyleSheet, View } from "react-native";
 
 import { ScrollView } from "react-native-gesture-handler";
 
+import BottomMessage from "features/sectionList/components/BottomMessage";
 import CarouselContainer from "features/ads/components/CarouselContainer";
 import DividerContainer from "features/sectionList/components/DividerContainer";
 import GridVideos from "features/sectionList/components/GridVideos";
@@ -13,9 +14,8 @@ import VerticalSlider from "features/sectionList/components/VerticalSlider";
 import { bannerImage } from "data/bannerImages";
 import { globalStyle } from "globalStyles";
 import { homeMainSubNav } from "data/homeMainSubNav";
-import { topSubNav } from "data/topSubNav";
-import BottomMessage from "features/sectionList/components/BottomMessage";
 import { multipleImages } from "data/gridImages";
+import { topSubNav } from "data/topSubNav";
 
 const LayoutContainer = ({ title, children }) => {
   return (

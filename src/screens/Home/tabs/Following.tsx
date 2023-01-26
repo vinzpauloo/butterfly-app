@@ -1,8 +1,8 @@
-import { StyleSheet, Text } from "react-native";
+import { Image, StyleSheet, Text, View } from "react-native";
 import React from "react";
+
 import Container from "components/Container";
 import GridVideos from "features/sectionList/components/GridVideos";
-import { bannerImage } from "data/bannerImages";
 import { followImages } from "data/gridImages";
 
 type Props = {};
@@ -10,7 +10,7 @@ type Props = {};
 const Following = (props: Props) => {
   return (
     <Container>
-      <GridVideos videos={followImages} padding={0} />
+      <GridVideos videos={followImages} isFollowingScreen={true} />
     </Container>
   );
 };

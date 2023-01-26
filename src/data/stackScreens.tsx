@@ -9,6 +9,7 @@ import { globalStyle } from "globalStyles";
 import BottomTabs from "layouts/navigators/BottomTabs";
 import PortraitVideo from "layouts/PortraitVideo";
 import SingleVideoScreen from "screens/SingleVideo";
+import PhotoGallery from "screens/PhotoGallery";
 import Search from "screens/Search";
 
 import { bottomNav } from "./bottomNav";
@@ -100,6 +101,35 @@ export const stackScreens = {
       name: "VlogScreen",
       component: () => <PortraitVideo hasBackButton={true} />,
       options: { headerShown: false },
+    },
+    {
+      name: "PhotoGallery",
+      component: () => <PhotoGallery />,
+      headerShown: true,
+      options: ({ navigation, route }: any) => ({
+        headerTitle: route?.params.postTitle ,
+        headerTitleAlign: "center",
+        headerStyle: {
+          backgroundColor: globalStyle.primaryColor,
+        },
+        headerTitleStyle: {
+          color: "#fff",
+        },
+        headerLeft: () => (
+          <View
+            style={{
+              flexDirection: "row",
+            }}
+          >
+            <Ionicons
+              name="chevron-back-sharp"
+              color="#fff"
+              size={30}
+              onPress={() => navigation.goBack()}
+            />
+          </View>
+        ),
+      }),
     },
   ],
 };

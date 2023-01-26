@@ -18,11 +18,12 @@ import PortraitVideo from "layouts/PortraitVideo";
 import SingleVideoScreen from "screens/SingleVideo";
 import PhotoGallery from "screens/PhotoGallery";
 import Search from "screens/Search";
+import Preloading from "screens/Preloading";
 
 import { bottomNav } from "./bottomNav";
 
 export const stackScreens = {
-  initialRoute: "BottomNav",
+  initialRoute: "Preloading",
   screenOptions: { animation: "slide_from_right" },
   screens: [
     {
@@ -112,6 +113,11 @@ export const stackScreens = {
     {
       name: "VlogScreen",
       component: () => <PortraitVideo hasBackButton={true} />,
+      options: { headerShown: false },
+    },
+    {
+      name: "Preloading",
+      component: Preloading,
       options: { headerShown: false },
     },
     {

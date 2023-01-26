@@ -1,16 +1,11 @@
-import { StyleSheet, Text, View } from "react-native";
 import React from "react";
 
-type Props = {};
+import MaterialTopTabs from "layouts/navigators/MaterialTopTabs";
 
-const Photography = (props: Props) => {
-  return (
-    <View>
-      <Text>Photography</Text>
-    </View>
-  );
+import { photographySubNav } from "data/photographySubNav";
+
+const Photography = () => {
+  return <MaterialTopTabs data={photographySubNav} />;
 };
 
 export default Photography;
-
-const styles = StyleSheet.create({});

@@ -20,12 +20,12 @@ export const topMainNav = {
       component: (props) => <Moment {...props} />,
     },
     {
-      name: "约会",
-      component: (props) => <Photography {...props} />,
-    },
-    {
       name: "写真",
       component: (props) => <Date {...props} />,
+    },
+    {
+      name: "约会",
+      component: (props) => <Photography {...props} />,
     },
   ],
 };

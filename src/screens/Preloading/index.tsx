@@ -1,62 +1,72 @@
 import {
+  Dimensions,
   ImageBackground,
   Pressable,
+  ScrollView,
   StyleSheet,
   Text,
-  View,
 } from "react-native";
-import React from "react";
+import { useState, useEffect } from "react";
 
 import * as Linking from "expo-linking";
 
 import adsFullscreen from "assets/images/ads-fullscreen.jpg";
 import { useNavigation } from "@react-navigation/native";
 
-const adsURL = "https://docs.expo.dev/guides/linking/";
+const adsURL = "https://google.com/";
+const { height } = Dimensions.get("window");
 
 const Preloading = ({}) => {
+  const [counter, setCounter] = useState(5);
   const navigation = useNavigation<any>();
 
-  const handleAdPress = async () => {
-    await Linking.openURL(adsURL);
+  const handleAdPress = () => {
+    Linking.openURL(adsURL);
   };
 
   const handleButtonpress = () => {
-    console.log("Navigating to home page ...");
-    navigation.navigate("BottomNav");
+    !counter && navigation.navigate("BottomNav");
   };
 
+  useEffect(() => {
+    const timer =
+      counter > 0 && setInterval(() => setCounter(counter - 1), 1000);
+    return () => clearInterval(timer);
+  }, [counter]);
+
   return (
-    <Pressable style={styles.container} onPressOut={handleAdPress}>
-      <ImageBackground
-        source={adsFullscreen}
-        resizeMode="cover"
-        style={styles.image}
-      >
-        <Pressable style={styles.button} onPressOut={handleButtonpress}>
-          <Text style={styles.text}>Go to Home</Text>
-        </Pressable>
-      </ImageBackground>
-    </Pressable>
+    <ScrollView>
+      <Pressable onPress={handleAdPress}>
+        <ImageBackground
+          source={adsFullscreen}
+          resizeMode="cover"
+          style={styles.image}
+        >
+          <Pressable style={styles.button} onPress={handleButtonpress}>
+            <Text style={styles.text}>
+              {counter ? `${counter}s` : "Go to Home"}
+            </Text>
+          </Pressable>
+        </ImageBackground>
+      </Pressable>
+    </ScrollView>
   );
 };
 
 export default Preloading;
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-  },
   image: {
-    flex: 1,
+    height: height,
   },
   button: {
     margin: 15,
     marginLeft: "auto",
+    minWidth: 60,
   },
   text: {
     backgroundColor: "#000000c0",
-    borderRadius: 12,
+    borderRadius: 16,
     color: "white",
     fontSize: 12,
     lineHeight: 36,

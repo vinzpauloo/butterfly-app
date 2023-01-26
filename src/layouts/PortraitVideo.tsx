@@ -179,6 +179,7 @@ const PortraitVideoContent = (props: Props) => {
 };
 
 const PortraitVideo: React.FC<PortraitVideoDataType> = ({
+  reelsVideos,
   bottomTabHeight = 0, // default value
   hasBackButton = false, // default value
 }) => {
@@ -198,7 +199,7 @@ const PortraitVideo: React.FC<PortraitVideoDataType> = ({
       ) : null}
       <FlatList
         // estimatedItemSize={15}
-        data={route.params?.reelsVideos}
+        data={reelsVideos || route.params?.reelsVideos}
         pagingEnabled
         removeClippedSubviews={true}
         renderItem={({ item, index }) => (

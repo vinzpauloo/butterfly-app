@@ -3,8 +3,8 @@ import Ionicons from "react-native-vector-icons/Ionicons";
 import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons";
 import Octicons from "react-native-vector-icons/Octicons";
 
-import AccountTab from "screens/Account";
-import Chat from "screens/ChatTab";
+import Account from "screens/AccountTab";
+import Chat from "screens/Chat";
 import HomeTab from "screens/Home";
 import Vlog from "screens/Vlog";
 

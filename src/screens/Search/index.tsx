@@ -103,11 +103,69 @@ const SearchHistory = () => {
   );
 };
 
+const PopularSearchItem = ({ text, index }) => {
+  const color = (index) => {
+    switch (index) {
+      case 1:
+        return "#e01b25";
+      case 2:
+        return "#fa3f0b";
+      case 3:
+        return "#f38408";
+      default:
+        return "#9b9b99";
+    }
+  };
+  return (
+    <View style={styles.popularSearchItem}>
+      <Text style={[styles.number, { backgroundColor: color(index + 1) }]}>
+        {index + 1}
+      </Text>
+      <Text style={styles.popularText}>{text}</Text>
+    </View>
+  );
+};
+
+const PopularSearches = () => {
+  return (
+    <View>
+      <View style={styles.headerContent}>
+        <View style={styles.iconContent}>
+          <MaterialCommunityIcons name="fire" color="#fff" size={22} />
+          <Text style={[styles.text, { marginLeft: 5 }]}>
+            Recommended Videos List
+          </Text>
+        </View>
+      </View>
+      <View style={styles.popularSearchItemContainer}>
+        <FlatList
+          numColumns={2}
+          data={[
+            "Selections",
+            "Latest",
+            "Original",
+            "HomeMade",
+            "Hot",
+            "Local",
+            "PornStars",
+            "Loli",
+          ]}
+          renderItem={({ item, index }) => (
+            <PopularSearchItem text={item} index={index} />
+          )}
+          keyExtractor={(_, index) => "" + index}
+        />
+      </View>
+    </View>
+  );
+};
+
 const index = () => {
   return (
     <Container>
       <SearchBar />
       <SearchHistory />
+      <PopularSearches />
     </Container>
   );
 };
@@ -177,5 +235,25 @@ const styles = StyleSheet.create({
   searchesText: {
     paddingHorizontal: 5,
     color: globalStyle.secondaryColor,
+  },
+
+  //Popular Search Item
+  popularSearchItemContainer: {
+    marginHorizontal: 15,
+  },
+  popularSearchItem: {
+    flexDirection: "row",
+    alignItems: "center",
+    width: width * 0.45,
+    marginVertical: 8,
+  },
+  number: {
+    paddingHorizontal: 5,
+    color: "#fff",
+    textAlign: "center",
+  },
+  popularText: {
+    color: "#aaa",
+    marginHorizontal: 8,
   },
 });

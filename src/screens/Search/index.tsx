@@ -2,6 +2,7 @@ import {
   Dimensions,
   FlatList,
   Pressable,
+  ScrollView,
   StatusBar,
   StyleSheet,
   Text,
@@ -16,17 +17,20 @@ import Ionicons from "react-native-vector-icons/Ionicons";
 import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons";
 
 import Container from "components/Container";
+import Feeds from "./tabs/Feeds";
+import GridVideos from "features/sectionList/components/GridVideos";
+import MaterialTopTabs from "layouts/navigators/MaterialTopTabs";
+import Users from "./tabs/Users";
+import Videos from "./tabs/Videos";
 import { globalStyle } from "globalStyles";
 import { multipleImages } from "data/gridImages";
 import { useNavigation } from "@react-navigation/native";
-import GridVideos from "features/sectionList/components/GridVideos";
 
 const { width } = Dimensions.get("window");
 
-const SearchBar = ({ setSearches }) => {
+const SearchBar = ({ setSearches, hasSearch, setHasSearch }) => {
   const navigation = useNavigation<any>();
   const [search, setSearch] = useState<string>("");
-  const [hasSearch, setHasSearch] = useState(false);
   const handlePress = () => {
     navigation.navigate("BottomNav");
   };
@@ -120,6 +124,7 @@ const SearchHistory = ({ searches }) => {
       </View>
       <View style={styles.searchesContainer}>
         <FlatList
+          scrollEnabled={false}
           numColumns={3}
           data={searches}
           renderItem={({ item }) => <SearchItem text={item} />}
@@ -166,6 +171,7 @@ const PopularSearches = () => {
       </View>
       <View style={styles.popularSearchItemContainer}>
         <FlatList
+          scrollEnabled={false}
           numColumns={2}
           data={[
             "Selections",
@@ -207,7 +213,29 @@ const VideoList = () => {
   );
 };
 
+const SearchOutput = () => {
+  const data = {
+    initialRoute: "Videos",
+    screens: [
+      {
+        name: "Videos",
+        component: (props) => <Videos {...props} />,
+      },
+      {
+        name: "Users",
+        component: (props) => <Users {...props} />,
+      },
+      {
+        name: "Feeds",
+        component: (props) => <Feeds {...props} />,
+      },
+    ],
+  };
+  return <MaterialTopTabs data={data} isEqualWidth={true} />;
+};
+
 const index = () => {
+  const [hasSearch, setHasSearch] = useState(false);
   const [searches, setSearches] = useState<string[]>([
     "Mark",
     "Anthony",
@@ -217,10 +245,20 @@ const index = () => {
   return (
     <>
       <Container>
-        <SearchBar setSearches={setSearches} />
-        <SearchHistory searches={searches} />
-        <PopularSearches />
-        <VideoList />
+        <SearchBar
+          setSearches={setSearches}
+          hasSearch={hasSearch}
+          setHasSearch={setHasSearch}
+        />
+        {hasSearch ? (
+          <SearchOutput />
+        ) : (
+          <>
+            <SearchHistory searches={searches} />
+            <PopularSearches />
+            <VideoList />
+          </>
+        )}
       </Container>
     </>
   );

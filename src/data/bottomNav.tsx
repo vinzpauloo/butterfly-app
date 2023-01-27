@@ -3,7 +3,7 @@ import Ionicons from "react-native-vector-icons/Ionicons";
 import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons";
 import Octicons from "react-native-vector-icons/Octicons";
 
-import Account from "screens/AccountTab";
+import AccountTab from "screens/Account";
 import Chat from "screens/ChatTab";
 import HomeTab from "screens/Home";
 import Vlog from "screens/Vlog";
@@ -39,7 +39,7 @@ export const bottomNav = [
   },
   {
     name: "Account",
-    component: Account,
+    component: AccountTab,
     label: "我的",
     icon: ({ color, size }) => (
       <Octicons name="person" color={color} size={size} />

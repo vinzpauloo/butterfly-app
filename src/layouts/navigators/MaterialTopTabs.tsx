@@ -7,7 +7,7 @@ import { globalStyle } from "globalStyles";
 
 const TopTab = createMaterialTopTabNavigator();
 
-const MaterialTopTabs = ({ data, search = null }) => {
+const MaterialTopTabs = ({ data, search = null, isEqualWidth = false }) => {
   const { initialRoute, screens } = data;
   return (
     <>
@@ -29,12 +29,10 @@ const MaterialTopTabs = ({ data, search = null }) => {
           tabBarContentContainerStyle: {
             alignItems: "center",
           },
-          tabBarItemStyle: {
-            width: 45,
-            margin: 0,
-            padding: 0,
-          },
-          tabBarScrollEnabled: true,
+          tabBarItemStyle: !isEqualWidth
+            ? styles.defaultTabBarItemStyle
+            : styles.equalWidthTabBarItemStyle,
+          tabBarScrollEnabled: !isEqualWidth,
           animationEnabled: false,
         }}
       >
@@ -51,4 +49,14 @@ const MaterialTopTabs = ({ data, search = null }) => {
 
 export default MaterialTopTabs;
 
-const styles = StyleSheet.create({});
+const styles = StyleSheet.create({
+  defaultTabBarItemStyle: {
+    margin: 0,
+    padding: 0,
+    width: 45,
+  },
+  equalWidthTabBarItemStyle: {
+    margin: 0,
+    padding: 0,
+  },
+});

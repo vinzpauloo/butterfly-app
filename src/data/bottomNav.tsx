@@ -39,7 +39,7 @@ export const bottomNav = [
   },
   {
     name: "Account",
-    component: Account,
+    component: AccountTab,
     label: "我的",
     icon: ({ color, size }) => (
       <Octicons name="person" color={color} size={size} />

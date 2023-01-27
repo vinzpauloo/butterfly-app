@@ -1,4 +1,11 @@
-import { Image, StyleSheet, Text, TextInput, View } from "react-native";
+import {
+  Image,
+  Pressable,
+  StyleSheet,
+  Text,
+  TextInput,
+  View,
+} from "react-native";
 import React from "react";
 
 import Ionicons from "react-native-vector-icons/Ionicons";
@@ -11,11 +18,12 @@ import PortraitVideo from "layouts/PortraitVideo";
 import SingleVideoScreen from "screens/SingleVideo";
 import PhotoGallery from "screens/PhotoGallery";
 import Search from "screens/Search";
+import Preloading from "screens/Preloading";
 
 import { bottomNav } from "./bottomNav";
 
 export const stackScreens = {
-  initialRoute: "BottomNav",
+  initialRoute: "Preloading",
   screenOptions: { animation: "slide_from_right" },
   screens: [
     {
@@ -46,9 +54,14 @@ export const stackScreens = {
             <Image source={route.params?.image} style={styles.image} />
             <View>
               <Text style={styles.title}>{route.params?.title}</Text>
-              <Text style={styles.subTitle}>{route.params?.subTitle}</Text>
+              <Text style={styles.subTitle}>{route.params?.subTitle}粉丝</Text>
             </View>
           </View>
+        ),
+        headerRight: () => (
+          <Pressable style={styles.followBtn}>
+            <Text style={styles.followText}>+关注</Text>
+          </Pressable>
         ),
         headerTitleStyle: {
           color: "#fff",
@@ -58,44 +71,7 @@ export const stackScreens = {
     {
       name: "Search",
       component: Search,
-      options: ({ navigation }: any) => ({
-        title: "",
-        headerStyle: {
-          backgroundColor: globalStyle.primaryColor,
-        },
-        headerLeft: () => (
-          <View
-            style={{
-              flexDirection: "row",
-            }}
-          >
-            <Ionicons
-              name="chevron-back-sharp"
-              color="#fff"
-              size={30}
-              onPress={() => navigation.goBack()}
-            />
-            <View style={styles.searchInputContainer}>
-              <Feather
-                name="search"
-                size={25}
-                color="#aaa"
-                style={styles.icon}
-              />
-              <TextInput placeholder="Search here" style={styles.input} />
-              <Entypo
-                name="circle-with-cross"
-                size={18}
-                color="#aaa"
-                style={styles.icon}
-              />
-            </View>
-          </View>
-        ),
-        headerTitleStyle: {
-          color: "#fff",
-        },
-      }),
+      options: { headerShown: false },
     },
     {
       name: "VlogScreen",
@@ -103,11 +79,16 @@ export const stackScreens = {
       options: { headerShown: false },
     },
     {
+      name: "Preloading",
+      component: Preloading,
+      options: { headerShown: false },
+    },
+    {
       name: "PhotoGallery",
       component: () => <PhotoGallery />,
       headerShown: true,
       options: ({ navigation, route }: any) => ({
-        headerTitle: route?.params.postTitle ,
+        headerTitle: route?.params.postTitle,
         headerTitleAlign: "center",
         headerStyle: {
           backgroundColor: globalStyle.primaryColor,
@@ -166,5 +147,17 @@ const styles = StyleSheet.create({
   },
   input: {
     width: 180,
+  },
+  followBtn: {
+    backgroundColor: globalStyle.secondaryColor,
+    paddingVertical: 5,
+    paddingHorizontal: 10,
+    borderRadius: 15,
+    borderWidth: 1,
+    borderColor: "crimson",
+  },
+  followText: {
+    color: "#fff",
+    fontSize: 14,
   },
 });

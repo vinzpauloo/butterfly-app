@@ -16,9 +16,8 @@ export default BottomMessage;
 const styles = StyleSheet.create({
   bottomText: {
     textAlign: "center",
-    color: "#fff",
-    paddingTop: 5,
-    paddingBottom: 20,
+    color: "#999",
+    marginVertical: 24,
     fontSize: 14,
   },
 });

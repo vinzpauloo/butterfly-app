@@ -1,4 +1,4 @@
-import { StyleSheet, Text, View } from "react-native";
+import { StyleSheet, View } from "react-native";
 import React from "react";
 
 import Fontisto from "react-native-vector-icons/Fontisto";
@@ -20,7 +20,7 @@ const Header = () => {
   );
 };
 
-const Account = () => {
+const AccountTab = () => {
   return (
     <Container>
       <Header />
@@ -28,7 +28,7 @@ const Account = () => {
   );
 };
 
-export default Account;
+export default AccountTab;
 
 const styles = StyleSheet.create({
   header: {

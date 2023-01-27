@@ -15,12 +15,38 @@ import Entypo from "react-native-vector-icons/Entypo";
 import { globalStyle } from "globalStyles";
 import BottomTabs from "layouts/navigators/BottomTabs";
 import PortraitVideo from "layouts/PortraitVideo";
+import SingleSectionScreen from "screens/SingleSection";
 import SingleVideoScreen from "screens/SingleVideo";
 import PhotoGallery from "screens/PhotoGallery";
 import Search from "screens/Search";
 import Preloading from "screens/Preloading";
 
 import { bottomNav } from "./bottomNav";
+
+const basicHeader = ({ navigation, route }: any) => ({
+  headerTitle: route?.params.postTitle,
+  headerTitleAlign: "center",
+  headerStyle: {
+    backgroundColor: globalStyle.headerBasicBg,
+  },
+  headerTitleStyle: {
+    color: "#fff",
+  },
+  headerLeft: () => (
+    <View
+      style={{
+        flexDirection: "row",
+      }}
+    >
+      <Ionicons
+        name="chevron-back-sharp"
+        color="#fff"
+        size={30}
+        onPress={() => navigation.goBack()}
+      />
+    </View>
+  ),
+});
 
 export const stackScreens = {
   initialRoute: "Preloading",
@@ -85,32 +111,13 @@ export const stackScreens = {
     },
     {
       name: "PhotoGallery",
-      component: () => <PhotoGallery />,
-      headerShown: true,
-      options: ({ navigation, route }: any) => ({
-        headerTitle: route?.params.postTitle,
-        headerTitleAlign: "center",
-        headerStyle: {
-          backgroundColor: globalStyle.primaryColor,
-        },
-        headerTitleStyle: {
-          color: "#fff",
-        },
-        headerLeft: () => (
-          <View
-            style={{
-              flexDirection: "row",
-            }}
-          >
-            <Ionicons
-              name="chevron-back-sharp"
-              color="#fff"
-              size={30}
-              onPress={() => navigation.goBack()}
-            />
-          </View>
-        ),
-      }),
+      component: PhotoGallery,
+      options: basicHeader,
+    },
+    {
+      name: "SingleSection",
+      component: SingleSectionScreen,
+      options: basicHeader,
     },
   ],
 };

@@ -21,6 +21,8 @@ import { Video, AVPlaybackStatus, ResizeMode } from "expo-av";
 import frog from "../../../../images/frog.jpg";
 import { globalStyle } from "globalStyles";
 
+import BannerAds from "features/ads/components/BannerAds";
+
 const { width, height } = Dimensions.get("window");
 
 const SingleVideoScreen = () => {
@@ -132,6 +134,7 @@ const SingleVideoScreen = () => {
           </View>
         </View>
       </View>
+      <BannerAds/>
     </View>
   );
 };

@@ -2,6 +2,7 @@ import {
   Dimensions,
   FlatList,
   Pressable,
+  StatusBar,
   StyleSheet,
   Text,
   TextInput,
@@ -13,20 +14,31 @@ import AntDesign from "react-native-vector-icons/AntDesign";
 import Feather from "react-native-vector-icons/Feather";
 import Ionicons from "react-native-vector-icons/Ionicons";
 import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons";
-import { StatusBar } from "native-base";
 
 import Container from "components/Container";
 import { globalStyle } from "globalStyles";
+import { multipleImages } from "data/gridImages";
+import { useNavigation } from "@react-navigation/native";
+import GridVideos from "features/sectionList/components/GridVideos";
 
 const { width } = Dimensions.get("window");
 
 const SearchBar = () => {
+  const navigation = useNavigation<any>();
   const [search, setSearch] = useState<string>("");
+  const handlePress = () => {
+    navigation.navigate("BottomNav");
+  };
   return (
     <>
       <StatusBar backgroundColor="#262632" />
       <View style={styles.headerContainer}>
-        <Ionicons name="chevron-back" color="#fff" size={30} />
+        <Ionicons
+          name="chevron-back"
+          color="#fff"
+          size={30}
+          onPress={handlePress}
+        />
         <View style={styles.inputFieldContainer}>
           <Feather
             name="search"
@@ -133,7 +145,7 @@ const PopularSearches = () => {
         <View style={styles.iconContent}>
           <MaterialCommunityIcons name="fire" color="#fff" size={22} />
           <Text style={[styles.text, { marginLeft: 5 }]}>
-            Recommended Videos List
+            Top Keywords List
           </Text>
         </View>
       </View>
@@ -160,13 +172,36 @@ const PopularSearches = () => {
   );
 };
 
+const VideoList = () => {
+  return (
+    <View style={{ height: "100%" }}>
+      <View style={styles.headerContent}>
+        <View style={styles.iconContent}>
+          <MaterialCommunityIcons
+            name="heart-plus-outline"
+            color="#fff"
+            size={22}
+          />
+          <Text style={[styles.text, { marginLeft: 5 }]}>
+            Recommended Videos List
+          </Text>
+        </View>
+      </View>
+      <GridVideos videos={multipleImages} />
+    </View>
+  );
+};
+
 const index = () => {
   return (
-    <Container>
-      <SearchBar />
-      <SearchHistory />
-      <PopularSearches />
-    </Container>
+    <>
+      <Container>
+        <SearchBar />
+        <SearchHistory />
+        <PopularSearches />
+        <VideoList />
+      </Container>
+    </>
   );
 };
 

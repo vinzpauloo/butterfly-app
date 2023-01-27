@@ -23,11 +23,20 @@ import GridVideos from "features/sectionList/components/GridVideos";
 
 const { width } = Dimensions.get("window");
 
-const SearchBar = () => {
+const SearchBar = ({ setSearches }) => {
   const navigation = useNavigation<any>();
   const [search, setSearch] = useState<string>("");
+  const [hasSearch, setHasSearch] = useState(false);
   const handlePress = () => {
     navigation.navigate("BottomNav");
+  };
+  const searchWords = () => {
+    setHasSearch(true);
+    setSearches((prev) => [...prev, search]);
+  };
+  const searchClear = () => {
+    setHasSearch(false);
+    setSearch("");
   };
   return (
     <>
@@ -58,16 +67,22 @@ const SearchBar = () => {
               color="#aaa"
               size={15}
               style={{ marginHorizontal: 10 }}
-              onPress={() => setSearch("")}
+              onPress={searchClear}
             />
           ) : (
             //use to not adjust the parent container if the cross button is hidden
             <View style={{ width: 35 }} />
           )}
         </View>
-        <Pressable style={styles.searchBtn}>
-          <Text style={styles.searchText}>Search</Text>
-        </Pressable>
+        {hasSearch ? (
+          <Pressable style={styles.searchBtn} onPress={searchClear}>
+            <Text style={styles.searchText}>Clear</Text>
+          </Pressable>
+        ) : (
+          <Pressable style={styles.searchBtn} onPress={searchWords}>
+            <Text style={styles.searchText}>Search</Text>
+          </Pressable>
+        )}
       </View>
     </>
   );
@@ -84,7 +99,7 @@ const SearchItem = ({ text }) => {
   );
 };
 
-const SearchHistory = () => {
+const SearchHistory = ({ searches }) => {
   return (
     <View>
       <View style={styles.headerContent}>
@@ -106,7 +121,7 @@ const SearchHistory = () => {
       <View style={styles.searchesContainer}>
         <FlatList
           numColumns={3}
-          data={["Mark", "Anthony", "Salvacion Mark", "Famarin"]}
+          data={searches}
           renderItem={({ item }) => <SearchItem text={item} />}
           keyExtractor={(_, index) => "" + index}
         />
@@ -193,11 +208,17 @@ const VideoList = () => {
 };
 
 const index = () => {
+  const [searches, setSearches] = useState<string[]>([
+    "Mark",
+    "Anthony",
+    "Salvacion Mark",
+    "Famarin",
+  ]);
   return (
     <>
       <Container>
-        <SearchBar />
-        <SearchHistory />
+        <SearchBar setSearches={setSearches} />
+        <SearchHistory searches={searches} />
         <PopularSearches />
         <VideoList />
       </Container>

@@ -4,7 +4,7 @@ import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityI
 import Octicons from "react-native-vector-icons/Octicons";
 
 import Account from "screens/AccountTab";
-import Chat from "screens/ChatTab";
+import Chat from "screens/Chat";
 import HomeTab from "screens/Home";
 import Vlog from "screens/Vlog";
 

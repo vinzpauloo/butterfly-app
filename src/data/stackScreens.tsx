@@ -71,44 +71,7 @@ export const stackScreens = {
     {
       name: "Search",
       component: Search,
-      options: ({ navigation }: any) => ({
-        title: "",
-        headerStyle: {
-          backgroundColor: globalStyle.primaryColor,
-        },
-        headerLeft: () => (
-          <View
-            style={{
-              flexDirection: "row",
-            }}
-          >
-            <Ionicons
-              name="chevron-back-sharp"
-              color="#fff"
-              size={30}
-              onPress={() => navigation.goBack()}
-            />
-            <View style={styles.searchInputContainer}>
-              <Feather
-                name="search"
-                size={25}
-                color="#aaa"
-                style={styles.icon}
-              />
-              <TextInput placeholder="Search here" style={styles.input} />
-              <Entypo
-                name="circle-with-cross"
-                size={18}
-                color="#aaa"
-                style={styles.icon}
-              />
-            </View>
-          </View>
-        ),
-        headerTitleStyle: {
-          color: "#fff",
-        },
-      }),
+      options: { headerShown: false },
     },
     {
       name: "VlogScreen",

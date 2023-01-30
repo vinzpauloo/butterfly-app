@@ -42,74 +42,76 @@ const ProfileBanner = () => {
         resizeMode="cover"
         style={styles.bgImg}
       />
-      <Ionicons
-        name="chevron-back"
-        color="#fff"
-        size={30}
-        style={styles.backIcon}
-        onPress={() => navigation.goBack()}
-      />
-      <Ionicons
-        name="md-chatbox-ellipses-outline"
-        color="#fff"
-        size={25}
-        style={styles.messageIcon}
-        onPress={() => navigation.goBack()}
-      />
-      <Image source={ProfilePhoto} style={styles.profileImg} />
-      <View style={styles.usernameContainer}>
-        <View style={styles.usernameContent}>
-          <Text style={styles.usernameText}>Nana Taipie</Text>
-          <Text style={styles.usernameUp}>UP</Text>
-        </View>
-        <Pressable style={styles.followBtn}>
-          <Text style={styles.followText}>关注</Text>
-        </Pressable>
-      </View>
-      <Text style={styles.description}>
-        To work or act as a fashion or art model
-      </Text>
-      <View style={styles.summaryContainer}>
-        {sampleData.map((item, index) => (
-          <View
-            style={[
-              styles.summaryContent,
-              index === 1
-                ? {
-                    borderLeftColor: "#bbb",
-                    borderRightColor: "#bbb",
-                    borderLeftWidth: 1,
-                    borderRightWidth: 1,
-                  }
-                : null,
-            ]}
-          >
-            <Text style={styles.summaryNumber}>{item.number}</Text>
-            <Text style={styles.summaryText}>{item.text}</Text>
+      <View style={styles.bannerContent}>
+        <Ionicons
+          name="chevron-back"
+          color="#fff"
+          size={30}
+          style={styles.backIcon}
+          onPress={() => navigation.goBack()}
+        />
+        <Ionicons
+          name="md-chatbox-ellipses-outline"
+          color="#fff"
+          size={25}
+          style={styles.messageIcon}
+          onPress={() => navigation.goBack()}
+        />
+        <Image source={ProfilePhoto} style={styles.profileImg} />
+        <View style={styles.usernameContainer}>
+          <View style={styles.usernameContent}>
+            <Text style={styles.usernameText}>Nana Taipie</Text>
+            <Text style={styles.usernameUp}>UP</Text>
           </View>
-        ))}
-        {/* <View style={styles.summaryContent}>
-          <Text style={styles.summaryNumber}>7</Text>
-          <Text style={styles.summaryText}>Following</Text>
+          <Pressable style={styles.followBtn}>
+            <Text style={styles.followText}>关注</Text>
+          </Pressable>
         </View>
-        <View
-          style={[
-            styles.summaryContent,
-            {
-              borderLeftColor: "#bbb",
-              borderRightColor: "#bbb",
-              borderLeftWidth: 1,
-              borderRightWidth: 1,
-            },
-          ]}
-        >
-          <Text style={styles.summaryNumber}>12724</Text>
-          <Text style={styles.summaryText}>Fans</Text>
+        <Text style={styles.description}>
+          To work or act as a fashion or art model
+        </Text>
+        <View style={styles.summaryContainer}>
+          {sampleData.map((item, index) => (
+            <View
+              style={[
+                styles.summaryContent,
+                index === 1
+                  ? {
+                      borderLeftColor: "#bbb",
+                      borderRightColor: "#bbb",
+                      borderLeftWidth: 1,
+                      borderRightWidth: 1,
+                    }
+                  : null,
+              ]}
+            >
+              <Text style={styles.summaryNumber}>{item.number}</Text>
+              <Text style={styles.summaryText}>{item.text}</Text>
+            </View>
+          ))}
+          {/* <View style={styles.summaryContent}>
+            <Text style={styles.summaryNumber}>7</Text>
+            <Text style={styles.summaryText}>Following</Text>
+            </View>
+            <View
+            style={[
+                styles.summaryContent,
+                {
+                borderLeftColor: "#bbb",
+                borderRightColor: "#bbb",
+                borderLeftWidth: 1,
+                borderRightWidth: 1,
+                },
+            ]}
+            >
+            <Text style={styles.summaryNumber}>12724</Text>
+            <Text style={styles.summaryText}>Fans</Text>
+            </View>
+            <View style={styles.summaryContent}>
+            <Text style={styles.summaryNumber}>0</Text>
+            <Text style={styles.summaryText}>Total Likes</Text>
+            </View> */}
         </View>
-        <View style={styles.summaryContent}>
-          <Text style={styles.summaryNumber}>0</Text>
-          <Text style={styles.summaryText}>Total Likes</Text>
-        </View> */}
       </View>
     </View>
   );
@@ -153,8 +155,6 @@ const styles = StyleSheet.create({
     height: height * 0.3,
     width: width,
     position: "relative",
-    alignItems: "center",
-    justifyContent: "center",
   },
   bgImg: {
     top: 0,
@@ -163,6 +163,14 @@ const styles = StyleSheet.create({
     height: height * 0.3,
     width: width,
     position: "absolute",
+  },
+  bannerContent: {
+    backgroundColor: "rgba(0,0,0, 0.5)",
+    height: height * 0.3,
+    width: width,
+    position: "relative",
+    alignItems: "center",
+    justifyContent: "center",
   },
   backIcon: {
     position: "absolute",

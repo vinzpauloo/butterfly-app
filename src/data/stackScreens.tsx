@@ -27,6 +27,8 @@ import RecordingHistory from "../screens/Account/tabs/RecordingHistory";
 import OfflineCache from "../screens/Account/tabs/OfflineCache";
 import SharingPromotion from "../screens/Account/tabs/SharingPromotion";
 import AccountVerification from "screens/Account/tabs/AccountVerification";
+import OnlineCustomerService from "screens/Account/tabs/OnlineCustomerService";
+import BestApps from "screens/Account/tabs/BestApps";
 import Settings from "screens/Settings";
 
 const basicHeader = ({ navigation, route }: any) => ({
@@ -143,6 +145,16 @@ export const stackScreens = {
     {
       name: "AccountVerification",
       component: AccountVerification,
+      options: { headerShown: false },
+    },
+    {
+      name: "OnlineCustomerService",
+      component: OnlineCustomerService,
+      options: { headerShown: false },
+    },
+    {
+      name: "BestApps",
+      component: BestApps,
       options: { headerShown: false },
     },
     {

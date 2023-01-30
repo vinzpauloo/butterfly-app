@@ -4,15 +4,12 @@ import {
   Dimensions,
   View,
   TouchableOpacity,
-  Image,
   StyleSheet,
 } from "react-native";
 import { AntDesign } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
 
-import ImageCache from "../../../assets/images/cacheImage.jpg";
-
-const OfflineCache = () => {
+const OnlineCustomerService = () => {
   const navigation = useNavigation<any>();
 
   return (
@@ -25,13 +22,8 @@ const OfflineCache = () => {
           </TouchableOpacity>
         </View>
         <View>
-          <Text style={styles.title}>离线缓存</Text>
+          <Text style={styles.title}>在线客服</Text>
         </View>
-      </View>
-
-      <View style={styles.noCacheContainer}>
-        <Image source={ImageCache} style={styles.cacheImage} />
-        <Text style={styles.cacheText}>抱歉， 没有找到你想要的内容~</Text>
       </View>
     </ScrollView>
   );
@@ -62,20 +54,6 @@ const styles = StyleSheet.create({
     textAlign: "center",
     fontSize: 20,
   },
-  noCacheContainer: {
-    justifyContent: "center",
-    alignItems: "center",
-    marginVertical: 50,
-  },
-  cacheImage: {
-    width: 200,
-    height: 200,
-  },
-  cacheText: {
-    color: "white",
-    fontSize: 14,
-    marginTop: 20,
-  },
 });
 
-export default OfflineCache;
+export default OnlineCustomerService;

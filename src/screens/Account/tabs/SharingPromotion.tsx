@@ -14,6 +14,9 @@ import {
 } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
 
+import ImageTitle from "../../../assets/images/profilePhoto.jpg";
+import ImageQRCode from "../../../assets/images/qrcode.png";
+
 const SharingPromotion = () => {
   const navigation = useNavigation<any>();
 
@@ -34,10 +37,7 @@ const SharingPromotion = () => {
       {/* QRCODE */}
       <View style={styles.qrCodeContainer}>
         <View style={styles.qrCodeTitleContainer}>
-          <Image
-            style={styles.qrCodeTitleImage}
-            source={require("../../../assets/images/profilePhoto.jpg")}
-          />
+          <Image style={styles.qrCodeTitleImage} source={ImageTitle} />
           <Text style={styles.qrCodeTitle}>
             网黄UP主的性爱博客{"\n"}
             分享你我的性福生活
@@ -45,10 +45,7 @@ const SharingPromotion = () => {
         </View>
 
         <View style={styles.qrCodeImageContainer}>
-          <Image
-            style={styles.qrCodeImage}
-            source={require("../../../assets/images/qrcode.png")}
-          />
+          <Image style={styles.qrCodeImage} source={ImageQRCode} />
 
           <View>
             <Text style={styles.qrCodeDetails}>分享好友立赠糖心专享会员</Text>

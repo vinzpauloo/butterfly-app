@@ -27,6 +27,7 @@ import RecordingHistory from "../screens/Account/tabs/RecordingHistory";
 import OfflineCache from "../screens/Account/tabs/OfflineCache";
 import SharingPromotion from "../screens/Account/tabs/SharingPromotion";
 import AccountVerification from "screens/Account/tabs/AccountVerification";
+import Settings from "screens/Settings";
 
 const basicHeader = ({ navigation, route }: any) => ({
   headerTitle: route?.params.postTitle,
@@ -148,6 +149,11 @@ export const stackScreens = {
       name: "SingleUser",
       component: SingleUser,
       options: { headerShown: false },
+    },
+    {
+      name: "Settings",
+      component: Settings,
+      options: basicHeader,
     },
   ],
 };

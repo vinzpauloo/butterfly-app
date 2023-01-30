@@ -1,16 +1,39 @@
-import { StyleSheet, Text, View } from "react-native";
 import React from "react";
+import { StyleSheet, Text, FlatList, View, ScrollView } from "react-native";
+import MaterialTopTabs from "layouts/navigators/MaterialTopTabs";
+
+import Container from "components/Container";
+
+import { momentSubNav } from "data/momentSubNav";
+import { officialCertificateList } from "data/officialCertificateList";
+
 
 type Props = {};
 
-const Moment = (props: Props) => {
+type certificateListProps = {
+  certificateName: string
+}
+
+const CertificateList = (props: certificateListProps) => {
   return (
     <View>
-      <Text>Moment</Text>
+      <Text style={styles.whiteText}>{props.certificateName}</Text>
     </View>
+  )
+}
+
+const Moment = (props: Props) => {
+  return (
+    <Container>      
+      <MaterialTopTabs data={momentSubNav} />
+    </Container>
   );
 };
 
 export default Moment;
 
-const styles = StyleSheet.create({});
+const styles = StyleSheet.create({
+  whiteText: {
+    color:"white"
+  }
+});

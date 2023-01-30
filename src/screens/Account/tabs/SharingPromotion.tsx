@@ -31,162 +31,103 @@ const SharingPromotion = () => {
         </View>
       </View>
 
-      <View
-        style={{
-          backgroundColor: "#FFFFFF",
-          height: 400,
-          marginHorizontal: 20,
-          borderRadius: 7,
-          marginTop: 20,
-        }}
-      >
-        <View
-          style={{
-            flexDirection: "row",
-            alignItems: "center",
-            justifyContent: "center",
-            marginTop: 25,
-          }}
-        >
+      {/* QRCODE */}
+      <View style={styles.qrCodeContainer}>
+        <View style={styles.qrCodeTitleContainer}>
           <Image
-            style={{
-              width: 35,
-              height: 35,
-            }}
+            style={styles.qrCodeTitleImage}
             source={require("../../../assets/images/profilePhoto.jpg")}
           />
-          <Text style={{ color: "grey" }}>
+          <Text style={styles.qrCodeTitle}>
             网黄UP主的性爱博客{"\n"}
             分享你我的性福生活
           </Text>
         </View>
 
-        <View style={{ alignItems: "center", justifyContent: "center" }}>
+        <View style={styles.qrCodeImageContainer}>
           <Image
-            style={{ width: 200, height: 200 }}
+            style={styles.qrCodeImage}
             source={require("../../../assets/images/qrcode.png")}
           />
 
-          <View style={{}}>
-            <Text style={{ color: "grey", textAlign: "justify" }}>
-              分享好友立赠糖心专享会员
-            </Text>
-            <Text style={{ color: "grey", textAlign: "justify" }}>
+          <View>
+            <Text style={styles.qrCodeDetails}>分享好友立赠糖心专享会员</Text>
+            <Text style={styles.qrCodeDetails}>
               邀请码:&nbsp;
-              <Text style={{ fontSize: 15, fontWeight: "600", color: "black" }}>
-                CDWQMC
-              </Text>
+              <Text style={styles.qrCodeDetails2}>CDWQMC</Text>
             </Text>
           </View>
         </View>
 
-        <View
-          style={{
-            flexDirection: "row",
-            alignItems: "center",
-            justifyContent: "space-between",
-            marginHorizontal: 50,
-            marginTop: 30,
-          }}
-        >
-          <View
-            style={{
-              backgroundColor: "#FAC690",
-              height: 30,
-              width: 110,
-              alignItems: "center",
-              justifyContent: "center",
-              borderRadius: 15,
-            }}
-          >
+        <View style={styles.qrCodeBtnContainer}>
+          <View style={styles.qrCodeBtn}>
             <Text>保存图片</Text>
           </View>
-          <View
-            style={{
-              backgroundColor: "#FAC690",
-              height: 30,
-              width: 110,
-              alignItems: "center",
-              justifyContent: "center",
-              borderRadius: 15,
-            }}
-          >
+          <View style={styles.qrCodeBtn}>
             <Text>复制链接</Text>
           </View>
         </View>
       </View>
 
-      <View
-        style={{
-          flexDirection: "row",
-          justifyContent: "space-between",
-          marginHorizontal: 40,
-          marginVertical: 40,
-        }}
-      >
-        <View style={{ alignItems: "center" }}>
-          <Text style={{ color: "#FFFFFF" }}>推广成功1人</Text>
-          <View style={{ marginVertical: 15, alignItems: "center" }}>
+      {/* Rewards */}
+      <View style={styles.rewardsContainer}>
+        <View style={styles.rewardsInnerContainer}>
+          <Text style={styles.rewardsText}>推广成功1人</Text>
+          <View style={styles.rewardsInnerContainer2}>
             <SimpleLineIcons name="diamond" size={34} color="#FAC690" />
-            <Text style={{ color: "#FFFFFF" }}>1天VIP</Text>
+            <Text style={styles.rewardsText}>1天VIP</Text>
           </View>
-          <Text style={{ color: "#FFFFFF" }}>推广成功1人</Text>
+          <Text style={styles.rewardsText}>推广成功1人</Text>
         </View>
 
-        <View style={{ alignItems: "center" }}>
-          <Text style={{ color: "#FFFFFF" }}>推广成功3人</Text>
-          <View style={{ marginVertical: 15, alignItems: "center" }}>
+        <View style={styles.rewardsInnerContainer}>
+          <Text style={styles.rewardsText}>推广成功3人</Text>
+          <View style={styles.rewardsInnerContainer2}>
             <SimpleLineIcons name="diamond" size={34} color="#FAC690" />
-            <Text style={{ color: "#FFFFFF" }}>3天VIP</Text>
+            <Text style={styles.rewardsText}>3天VIP</Text>
           </View>
-          <Text style={{ color: "#FFFFFF" }}>推广成功3人</Text>
+          <Text style={styles.rewardsText}>推广成功3人</Text>
         </View>
 
-        <View style={{ alignItems: "center" }}>
-          <Text style={{ color: "#FFFFFF" }}>推广成功10人</Text>
-          <View
-            style={{ marginTop: 10, marginBottom: 10, alignItems: "center" }}
-          >
-            <View
-              style={{
-                flexDirection: "row",
-                alignItems: "center",
-              }}
-            >
+        <View style={styles.rewardsInnerContainer}>
+          <Text style={styles.rewardsText}>推广成功10人</Text>
+          <View style={styles.rewardsThirdColumn}>
+            <View style={styles.rewardsThirdIconsContainer}>
               <SimpleLineIcons name="diamond" size={24} color="#FAC690" />
-              <Text style={{ color: "#FFFFFF" }}> + </Text>
+              <Text style={styles.rewardsText}> + </Text>
               <MaterialCommunityIcons
                 name="ticket-confirmation-outline"
                 size={24}
                 color="#FAC690"
               />
             </View>
-            <Text style={{ color: "#FFFFFF" }}>10天VIP+5元</Text>
-            <Text style={{ color: "#FFFFFF" }}>观影券</Text>
+            <Text style={styles.rewardsText}>10天VIP+5元</Text>
+            <Text style={styles.rewardsText}>观影券</Text>
           </View>
-          <Text style={{ color: "#FFFFFF" }}>推广成功10人</Text>
+          <Text style={styles.rewardsText}>推广成功10人</Text>
         </View>
       </View>
 
-      <View style={{ marginHorizontal: 40, marginBottom: 30 }}>
+      {/* Other Details */}
+      <View style={styles.otherDetailsContainer}>
         <View>
-          <Text style={{ color: "#FFFFFF" }}>推广说明 :</Text>
-          <Text style={{ color: "grey", marginTop: 10 }}>
+          <Text style={styles.rewardsText}>推广说明 :</Text>
+          <Text style={styles.otherDetailsText}>
             好友通过您的二维码或推广链接下载APP,并启动后 即算推广成功。
           </Text>
         </View>
 
-        <View style={{ marginVertical: 40 }}>
-          <Text style={{ color: "#FFFFFF" }}>操作说明 :</Text>
-          <Text style={{ color: "grey", marginTop: 10 }}>
+        <View style={styles.otherDetailsMargin}>
+          <Text style={styles.rewardsText}>操作说明 :</Text>
+          <Text style={styles.otherDetailsText}>
             点击各视频世界分享按钮,保存二维码及推广链接
             后,立即分享到微博、朋友圈,论坛分类。
           </Text>
         </View>
 
         <View>
-          <Text style={{ color: "#FFFFFF" }}>注意事项 :</Text>
-          <Text style={{ color: "grey", marginTop: 10 }}>
+          <Text style={styles.rewardsText}>注意事项 :</Text>
+          <Text style={styles.otherDetailsText}>
             观影优惠仅用于抵扣任意金币视频。
           </Text>
         </View>
@@ -219,6 +160,94 @@ const styles = StyleSheet.create({
     color: "#FFFFFF",
     textAlign: "center",
     fontSize: 20,
+  },
+  qrCodeContainer: {
+    backgroundColor: "#FFFFFF",
+    height: 400,
+    marginHorizontal: 20,
+    borderRadius: 7,
+    marginTop: 20,
+  },
+  qrCodeTitleContainer: {
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "center",
+    marginTop: 25,
+  },
+  qrCodeTitleImage: {
+    width: 35,
+    height: 35,
+  },
+  qrCodeTitle: {
+    color: "grey",
+  },
+  qrCodeImageContainer: {
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  qrCodeImage: {
+    width: 200,
+    height: 200,
+  },
+  qrCodeDetails: {
+    color: "grey",
+    textAlign: "justify",
+  },
+  qrCodeDetails2: {
+    fontSize: 15,
+    fontWeight: "600",
+    color: "black",
+  },
+  qrCodeBtnContainer: {
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between",
+    marginHorizontal: 50,
+    marginTop: 30,
+  },
+  qrCodeBtn: {
+    backgroundColor: "#FAC690",
+    height: 30,
+    width: 110,
+    alignItems: "center",
+    justifyContent: "center",
+    borderRadius: 15,
+  },
+  rewardsContainer: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    marginHorizontal: 40,
+    marginVertical: 40,
+  },
+  rewardsInnerContainer: {
+    alignItems: "center",
+  },
+  rewardsText: {
+    color: "#FFFFFF",
+  },
+  rewardsInnerContainer2: {
+    marginVertical: 15,
+    alignItems: "center",
+  },
+  rewardsThirdColumn: {
+    marginTop: 10,
+    marginBottom: 10,
+    alignItems: "center",
+  },
+  rewardsThirdIconsContainer: {
+    flexDirection: "row",
+    alignItems: "center",
+  },
+  otherDetailsContainer: {
+    marginHorizontal: 40,
+    marginBottom: 30,
+  },
+  otherDetailsText: {
+    color: "grey",
+    marginTop: 10,
+  },
+  otherDetailsMargin: {
+    marginVertical: 40,
   },
 });
 

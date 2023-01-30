@@ -3,7 +3,7 @@ import {
   Image,
   StyleSheet,
   Text,
-  TouchableOpacity,
+  Pressable,
   View,
 } from "react-native";
 import React from "react";
@@ -25,20 +25,21 @@ const SingleVideo = () => {
     });
   };
   return (
-    <TouchableOpacity
-      style={styles.container}
-      activeOpacity={1}
-      onPress={handlePress}
-    >
+    <Pressable style={styles.container} onPress={handlePress}>
       <Image source={banner10} style={styles.image} />
       <View style={styles.content}>
-        <Ionicons name="person-circle-outline" size={40} color={"#fff"} />
+        <Ionicons
+          name="person-circle-outline"
+          size={40}
+          color={"#fff"}
+          onPress={() => navigation.navigate("SingleUser")}
+        />
         <View style={styles.texts}>
           <Text style={styles.text}>The Color Green Frog</Text>
           <Text style={styles.text}>Frog</Text>
         </View>
       </View>
-    </TouchableOpacity>
+    </Pressable>
   );
 };
 

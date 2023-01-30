@@ -14,12 +14,13 @@ import Entypo from "react-native-vector-icons/Entypo";
 
 import { globalStyle } from "globalStyles";
 import BottomTabs from "layouts/navigators/BottomTabs";
+import PhotoGallery from "screens/PhotoGallery";
 import PortraitVideo from "layouts/PortraitVideo";
+import Preloading from "screens/Preloading";
+import Search from "screens/Search";
 import SingleSectionScreen from "screens/SingleSection";
 import SingleVideoScreen from "screens/SingleVideo";
-import PhotoGallery from "screens/PhotoGallery";
-import Search from "screens/Search";
-import Preloading from "screens/Preloading";
+import SingleUser from "screens/SingleUser";
 
 import { bottomNav } from "./bottomNav";
 import RecordingHistory from "../screens/Account/tabs/RecordingHistory";
@@ -123,20 +124,25 @@ export const stackScreens = {
       options: basicHeader,
     },
     {
-      name: 'RecordingHistory',
+      name: "RecordingHistory",
       component: RecordingHistory,
       options: { headerShown: false },
     },
     {
-      name: 'OfflineCache',
+      name: "OfflineCache",
       component: OfflineCache,
       options: { headerShown: false },
     },
     {
-      name: 'SharingPromotion',
+      name: "SharingPromotion",
       component: SharingPromotion,
       options: { headerShown: false },
-    }
+    },
+    {
+      name: "SingleUser",
+      component: SingleUser,
+      options: { headerShown: false },
+    },
   ],
 };
 

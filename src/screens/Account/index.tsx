@@ -67,15 +67,20 @@ const Summary = () => {
 };
 
 const LinkList = () => {
+
+  const navigation = useNavigation<any>();
+
   return (
     <View style={styles.innerContainer}>
       <View style={styles.fifthContainer}>
         {profileTabSubNav?.map((item, index) => (
           <View style={styles.sectionContainer} key={index}>
-            <View style={styles.textAndBtn}>
-              <Text style={styles.fifthText}>{item.title}</Text>
-              <FontAwesome5 name="angle-right" size={20} color="#FFFFFF" />
-            </View>
+            <TouchableOpacity onPress={() => navigation.navigate(`${item.screen}`)}>
+              <View style={styles.textAndBtn}>
+                <Text style={styles.fifthText}>{item.title}</Text>
+                <FontAwesome5 name="angle-right" size={20} color="#FFFFFF" />
+              </View>
+            </TouchableOpacity>
             <View style={styles.fifthHorizontalRule}></View>
           </View>
         ))}

@@ -22,6 +22,9 @@ import Search from "screens/Search";
 import Preloading from "screens/Preloading";
 
 import { bottomNav } from "./bottomNav";
+import RecordingHistory from "../screens/Account/tabs/RecordingHistory";
+import OfflineCache from "../screens/Account/tabs/OfflineCache";
+import SharingPromotion from "../screens/Account/tabs/SharingPromotion";
 
 const basicHeader = ({ navigation, route }: any) => ({
   headerTitle: route?.params.postTitle,
@@ -119,6 +122,21 @@ export const stackScreens = {
       component: SingleSectionScreen,
       options: basicHeader,
     },
+    {
+      name: 'RecordingHistory',
+      component: RecordingHistory,
+      options: { headerShown: false },
+    },
+    {
+      name: 'OfflineCache',
+      component: OfflineCache,
+      options: { headerShown: false },
+    },
+    {
+      name: 'SharingPromotion',
+      component: SharingPromotion,
+      options: { headerShown: false },
+    }
   ],
 };
 

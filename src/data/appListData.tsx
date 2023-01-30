@@ -1,42 +1,50 @@
+import appImg1 from "../assets/images/profilePhoto.jpg";
+import appImg2 from "../assets/images/ads-fullscreen.jpg";
+import appImg3 from "../assets/images/banner1.jpg";
+import appImg4 from "../assets/images/banner2.jpg";
+import appImg5 from "../assets/images/banner3.jpg";
+import appImg6 from "../assets/images/banner4.jpg";
+import appImg7 from "../assets/images/banner5.jpg";
+
 export const appListData = [
   {
-    source: require(`../assets/images/profilePhoto.jpg`),
+    source: appImg1,
     title: "51漫画",
     downloads: "4568852次下载",
     details: "成年人的二次元世界,你喜欢...",
   },
   {
-    source: require(`../assets/images/ads-fullscreen.jpg`),
+    source: appImg2,
     title: "51漫画",
     downloads: "4568852次下载",
     details: "成年人的二次元世界,你喜欢...",
   },
   {
-    source: require(`../assets/images/banner1.jpg`),
+    source: appImg3,
     title: "51漫画",
     downloads: "4568852次下载",
     details: "成年人的二次元世界,你喜欢...",
   },
   {
-    source: require(`../assets/images/banner2.jpg`),
+    source: appImg4,
     title: "51漫画",
     downloads: "4568852次下载",
     details: "成年人的二次元世界,你喜欢...",
   },
   {
-    source: require(`../assets/images/banner3.jpg`),
+    source: appImg5,
     title: "51漫画",
     downloads: "4568852次下载",
     details: "成年人的二次元世界,你喜欢...",
   },
   {
-    source: require(`../assets/images/banner4.jpg`),
+    source: appImg6,
     title: "51漫画",
     downloads: "4568852次下载",
     details: "成年人的二次元世界,你喜欢...",
   },
   {
-    source: require(`../assets/images/banner5.jpg`),
+    source: appImg7,
     title: "51漫画",
     downloads: "4568852次下载",
     details: "成年人的二次元世界,你喜欢...",

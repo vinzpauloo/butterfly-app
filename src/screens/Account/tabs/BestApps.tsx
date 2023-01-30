@@ -39,7 +39,7 @@ const BestApps = () => {
         </View>
 
         {appListData?.map((item, index) => (
-          <View style={styles.appContainer}>
+          <View style={styles.appContainer} key={index}>
             <View style={styles.appDetails}>
               <View>
                 <Image source={item.source} style={styles.appImage} />

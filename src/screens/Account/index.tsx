@@ -6,6 +6,8 @@ import {
   Dimensions,
   Image,
   TouchableOpacity,
+  Pressable,
+  Linking,
 } from "react-native";
 import React from "react";
 
@@ -19,15 +21,23 @@ import profilePhoto from "assets/images/profilePhoto.jpg";
 import { profileTabSubNav } from "data/profileTabSubNav";
 
 const Header = () => {
+  const navigation = useNavigation<any>();
+
+  const handlePressSettings = () => {
+    navigation.navigate("Settings", { postTitle: "设置" });
+  };
+
   return (
     <View style={styles.header}>
       <Fontisto name="bell" color="#fff" size={25} style={styles.icon} />
-      <Ionicons
-        name="settings-outline"
-        color="#fff"
-        size={25}
-        style={styles.icon}
-      />
+      <Pressable onPress={handlePressSettings}>
+        <Ionicons
+          name="settings-outline"
+          color="#fff"
+          size={25}
+          style={styles.icon}
+        />
+      </Pressable>
     </View>
   );
 };
@@ -67,7 +77,6 @@ const Summary = () => {
 };
 
 const LinkList = () => {
-
   const navigation = useNavigation<any>();
 
   return (
@@ -75,7 +84,13 @@ const LinkList = () => {
       <View style={styles.fifthContainer}>
         {profileTabSubNav?.map((item, index) => (
           <View style={styles.sectionContainer} key={index}>
-            <TouchableOpacity onPress={() => navigation.navigate(`${item.screen}`)}>
+            <TouchableOpacity
+              onPress={() => {
+                item.screen !== "OfficialGroup"
+                  ? navigation.navigate(`${item.screen}`)
+                  : Linking.openURL("https://t.me/StockPro_Official_BankNifty");
+              }}
+            >
               <View style={styles.textAndBtn}>
                 <Text style={styles.fifthText}>{item.title}</Text>
                 <FontAwesome5 name="angle-right" size={20} color="#FFFFFF" />

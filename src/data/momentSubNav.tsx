@@ -1,29 +1,80 @@
-import FeedList from "layouts/FeedList";
-import MasonryPhotos from "layouts/MasonryPhotos";
+import React from "react";
+import { StyleSheet, Text, View, FlatList, Pressable, Alert } from "react-native";
+import { HStack, Divider } from '@react-native-material/core'
 
+import { officialCertificateList } from "./officialCertificateList";
+import FeedList from "layouts/FeedList";
+import { globalStyle } from "globalStyles";
+
+const Header = () => {
+	return (
+		<View style={styles.certificateContainer}>
+			<FlatList
+				data={officialCertificateList}
+				renderItem={({ item }) =>
+					<Pressable onPress={() => Alert.alert("asdsad")}>
+						<HStack spacing={12} style={styles.certificateItem}>
+							<View style={styles.dot}></View>
+							<Text style={styles.whiteText}>{item.certificateName}</Text>
+						</HStack>
+					</Pressable>
+				}
+				keyExtractor={(item, index) => "" + index}
+				ItemSeparatorComponent={() => <Divider style={styles.divider} color='#999' />}
+			/>
+		</View>
+	)
+}
 
 export const momentSubNav = {
-	initialRoute: "推荐",
-	screens: [
+	Header,
+	tabItems: [
 		{
-			name: "推荐",
-			component: (props) => <FeedList {...props} title={"recommended"} />,
+			name: "recommended",
+			label: "推荐",
+			Content: <FeedList />,
 		},
 		{
-			name: "最新",
-			component: (props) => <FeedList {...props} title={"latest"} />,
+			name: "latest",
+			label: "最新",
+			Content: <FeedList />,
 		},
 		{
-			name: "视频",
-			component: (props) => <FeedList {...props} title={"videos"} />,
+			name: "videos",
+			label: "视频",
+			Content: <FeedList />,
 		},
 		{
-			name: "图片",
-			component: (props) => <FeedList {...props} title={"photo"} />,
+			name: "photo",
+			label: "图片",
+			Content: <FeedList />,
 		},
 		{
-			name: "服务",
-			component: (props) => <FeedList {...props} title={"services"} />,
+			name: "services",
+			label: "服务",
+			Content: <FeedList />,
 		},
 	],
 };
+
+const styles = StyleSheet.create({
+	certificateContainer: {
+		backgroundColor: globalStyle.headerBasicBg,
+		padding: 12,
+	},
+	whiteText: {
+		color: "white"
+	},
+	divider: {
+		marginVertical: 12
+	},
+	dot: {
+		backgroundColor: globalStyle.secondaryColor,
+		height: 8,
+		width: 8,
+		borderRadius: 4
+	},
+	certificateItem: {
+		alignItems: "center"
+	}
+});

@@ -6,6 +6,7 @@ import {
   Dimensions,
   Image,
   TouchableOpacity,
+  Pressable,
 } from "react-native";
 import React from "react";
 
@@ -19,15 +20,23 @@ import profilePhoto from "assets/images/profilePhoto.jpg";
 import { profileTabSubNav } from "data/profileTabSubNav";
 
 const Header = () => {
+  const navigation = useNavigation<any>();
+
+  const handlePressSettings = () => {
+    navigation.navigate("Settings", { postTitle: "设置" });
+  };
+
   return (
     <View style={styles.header}>
       <Fontisto name="bell" color="#fff" size={25} style={styles.icon} />
-      <Ionicons
-        name="settings-outline"
-        color="#fff"
-        size={25}
-        style={styles.icon}
-      />
+      <Pressable onPress={handlePressSettings}>
+        <Ionicons
+          name="settings-outline"
+          color="#fff"
+          size={25}
+          style={styles.icon}
+        />
+      </Pressable>
     </View>
   );
 };

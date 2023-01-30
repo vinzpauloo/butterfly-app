@@ -28,6 +28,8 @@ import OfflineCache from "../screens/Account/tabs/OfflineCache";
 import SharingPromotion from "../screens/Account/tabs/SharingPromotion";
 import AccountVerification from "screens/Account/tabs/AccountVerification";
 import Settings from "screens/Settings";
+import InformationScreen from "screens/InformationScreen";
+import SingleChatScreen from "screens/SingleChatScreen";
 
 const basicHeader = ({ navigation, route }: any) => ({
   headerTitle: route?.params.postTitle,
@@ -153,6 +155,16 @@ export const stackScreens = {
     {
       name: "Settings",
       component: Settings,
+      options: basicHeader,
+    },
+    {
+      name: "InformationScreen",
+      component: InformationScreen,
+      options: basicHeader,
+    },
+    {
+      name: "SingleChatScreen",
+      component: SingleChatScreen,
       options: basicHeader,
     },
   ],

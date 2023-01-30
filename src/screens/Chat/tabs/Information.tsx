@@ -13,6 +13,7 @@ import Container from 'components/Container'
 import BottomMessage from 'features/sectionList/components/BottomMessage';
 
 import { messageList } from 'data/messageList';
+import { useNavigation } from '@react-navigation/native';
 
 const windowWidth = Dimensions.get('window').width;
 
@@ -25,12 +26,14 @@ type MessageItemProps = {
 type Props = {}
 
 const MessageItem = (props: MessageItemProps) => {
+	const navigation = useNavigation<any>();
+
 	return (
 		<VStack style={styles.messageContainer}>
-			<Pressable onPress={() => { Alert.alert("View Message from " + props.userName) }}>
+			<Pressable onPress={() => { navigation.navigate("SingleChatScreen", { postTitle: props.userName }) }}>
 				<HStack spacing={12}>
 					<Pressable onPress={() => { Alert.alert("Go to " + props.userName + " profile") }}>
-						<Avatar label="Tang Xin" color='white' size={42} image={{ uri: props.imgURL }} />
+						<Avatar label={props.userName} color='white' size={42} image={{ uri: props.imgURL }} />
 					</Pressable>
 					<VStack spacing={4}>
 						<Text style={[styles.text,{maxWidth: windowWidth - 110}]}>{props.userName}</Text>
@@ -47,10 +50,12 @@ const MessageItem = (props: MessageItemProps) => {
 }
 
 const Information = (props: Props) => {
+	const navigation = useNavigation<any>();
+
 	return (
 		<Container>
 			<HStack spacing={12} style={styles.optionsList}>
-				<Pressable onPress={() => { Alert.alert("Open Fans Screen") }}>
+				<Pressable onPress={() => { navigation.navigate("InformationScreen", { postTitle: "粉丝" }) }}>
 					<VStack spacing={6}>
 						<Box style={styles.box}>
 							<Feather name="heart" color={"white"} size={24} />
@@ -58,7 +63,7 @@ const Information = (props: Props) => {
 						<Text style={styles.centerText}>粉丝</Text>
 					</VStack>
 				</Pressable>
-				<Pressable onPress={() => { Alert.alert("Open Likes Screen") }}>
+				<Pressable onPress={() => { navigation.navigate("InformationScreen", { postTitle: "点赞" }) }}>
 					<VStack spacing={6}>
 						<Box style={styles.box}>
 							<AntDesign name="like2" color={"white"} size={24} />
@@ -66,7 +71,7 @@ const Information = (props: Props) => {
 						<Text style={styles.centerText}>点赞</Text>
 					</VStack>
 				</Pressable>
-				<Pressable onPress={() => { Alert.alert("Open Comments Screen") }}>
+				<Pressable onPress={() => { navigation.navigate("InformationScreen", { postTitle: "评论" }) }}>
 					<VStack spacing={6}>
 						<Box style={styles.box}>
 							<FontAwesome name="comment-o" color={"white"} size={24} />
@@ -74,7 +79,7 @@ const Information = (props: Props) => {
 						<Text style={styles.centerText}>评论</Text>
 					</VStack>
 				</Pressable>
-				<Pressable onPress={() => { Alert.alert("Open Earnings Screen") }}>
+				<Pressable onPress={() => { navigation.navigate("InformationScreen", { postTitle: "收益" }) }}>
 					<VStack spacing={6}>
 						<Box style={styles.box}>
 							<Fontisto name="money-symbol" color={"white"} size={24} />
@@ -82,7 +87,7 @@ const Information = (props: Props) => {
 						<Text style={styles.centerText}>收益</Text>
 					</VStack>
 				</Pressable>
-				<Pressable onPress={() => { Alert.alert("Open System Screen") }}>
+				<Pressable onPress={() => { navigation.navigate("InformationScreen", { postTitle: "系统" }) }}>
 					<VStack spacing={6}>
 						<Box style={styles.box}>
 							<Octicons name="gear" color={"white"} size={24} />

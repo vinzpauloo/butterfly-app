@@ -3,7 +3,7 @@ import {
   Image,
   StyleSheet,
   Text,
-  TouchableOpacity,
+  Pressable,
   View,
   VirtualizedList,
 } from "react-native";
@@ -24,24 +24,28 @@ const Video = ({ navigation, index, data, item }: any) => {
     });
   };
   return (
-    <TouchableOpacity
+    <Pressable
       style={[
         styles.container,
         index === 0 ? { marginLeft: 15 } : null,
         index === data.length - 1 ? { marginRight: 15 } : null,
       ]}
-      activeOpacity={1}
       onPress={handlePress}
     >
       <Image source={item.video} style={styles.image} />
       <View style={styles.content}>
-        <Ionicons name="person-circle-outline" size={40} color={"#fff"} />
+        <Ionicons
+          name="person-circle-outline"
+          size={40}
+          color={"#fff"}
+          onPress={() => navigation.navigate("SingleUser")}
+        />
         <View style={styles.texts}>
           <Text style={styles.text}>The Color Green Frog</Text>
           <Text style={styles.text}>Frog</Text>
         </View>
       </View>
-    </TouchableOpacity>
+    </Pressable>
   );
 };
 

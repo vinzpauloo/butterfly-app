@@ -14,12 +14,13 @@ import Entypo from "react-native-vector-icons/Entypo";
 
 import { globalStyle } from "globalStyles";
 import BottomTabs from "layouts/navigators/BottomTabs";
+import PhotoGallery from "screens/PhotoGallery";
 import PortraitVideo from "layouts/PortraitVideo";
+import Preloading from "screens/Preloading";
+import Search from "screens/Search";
 import SingleSectionScreen from "screens/SingleSection";
 import SingleVideoScreen from "screens/SingleVideo";
-import PhotoGallery from "screens/PhotoGallery";
-import Search from "screens/Search";
-import Preloading from "screens/Preloading";
+import SingleUser from "screens/SingleUser";
 
 import { bottomNav } from "./bottomNav";
 
@@ -118,6 +119,11 @@ export const stackScreens = {
       name: "SingleSection",
       component: SingleSectionScreen,
       options: basicHeader,
+    },
+    {
+      name: "SingleUser",
+      component: SingleUser,
+      options: { headerShown: false },
     },
   ],
 };

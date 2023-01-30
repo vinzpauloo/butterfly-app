@@ -26,6 +26,7 @@ import { bottomNav } from "./bottomNav";
 import RecordingHistory from "../screens/Account/tabs/RecordingHistory";
 import OfflineCache from "../screens/Account/tabs/OfflineCache";
 import SharingPromotion from "../screens/Account/tabs/SharingPromotion";
+import AccountVerification from "screens/Account/tabs/AccountVerification";
 import Settings from "screens/Settings";
 
 const basicHeader = ({ navigation, route }: any) => ({
@@ -137,6 +138,11 @@ export const stackScreens = {
     {
       name: "SharingPromotion",
       component: SharingPromotion,
+      options: { headerShown: false },
+    },
+    {
+      name: "AccountVerification",
+      component: AccountVerification,
       options: { headerShown: false },
     },
     {

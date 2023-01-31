@@ -17,7 +17,7 @@ import {
 import { useNavigation } from "@react-navigation/native";
 
 import ImageTitle from "../../../assets/images/profilePhoto.jpg";
-import ImageBarcode from "../../../assets/images/qrcode.png";
+// import ImageBarcode from "../../../assets/images/qrcode.png";
 
 const AccountVerification = () => {
   const navigation = useNavigation<any>();
@@ -47,7 +47,7 @@ const AccountVerification = () => {
         </View>
 
         <View style={styles.qrCodeContainer}>
-          <Image style={styles.qrCodeImage} source={ImageBarcode} />
+          {/* <Image style={styles.qrCodeImage} source={ImageBarcode} /> */}
 
           <View>
             <Text style={styles.qrCodeText}>官网地址: txvlog.com</Text>

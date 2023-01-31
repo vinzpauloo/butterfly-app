@@ -15,7 +15,7 @@ import {
 import { useNavigation } from "@react-navigation/native";
 
 import ImageTitle from "../../../assets/images/profilePhoto.jpg";
-import ImageQRCode from "../../../assets/images/qrcode.png";
+// import ImageQRCode from "../../../assets/images/qrcode.png";
 
 const SharingPromotion = () => {
   const navigation = useNavigation<any>();
@@ -45,7 +45,7 @@ const SharingPromotion = () => {
         </View>
 
         <View style={styles.qrCodeImageContainer}>
-          <Image style={styles.qrCodeImage} source={ImageQRCode} />
+          {/* <Image style={styles.qrCodeImage} source={ImageQRCode} /> */}
 
           <View>
             <Text style={styles.qrCodeDetails}>分享好友立赠糖心专享会员</Text>

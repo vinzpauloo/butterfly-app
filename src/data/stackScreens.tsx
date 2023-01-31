@@ -27,9 +27,12 @@ import RecordingHistory from "../screens/Account/tabs/RecordingHistory";
 import OfflineCache from "../screens/Account/tabs/OfflineCache";
 import SharingPromotion from "../screens/Account/tabs/SharingPromotion";
 import AccountVerification from "screens/Account/tabs/AccountVerification";
+import OnlineCustomerService from "screens/Account/tabs/OnlineCustomerService";
+import BestApps from "screens/Account/tabs/BestApps";
 import Settings from "screens/Settings";
 import InformationScreen from "screens/InformationScreen";
 import SingleChatScreen from "screens/SingleChatScreen";
+import SingleTag from "screens/SingleTag";
 
 const basicHeader = ({ navigation, route }: any) => ({
   headerTitle: route?.params.postTitle,
@@ -148,6 +151,16 @@ export const stackScreens = {
       options: { headerShown: false },
     },
     {
+      name: "OnlineCustomerService",
+      component: OnlineCustomerService,
+      options: { headerShown: false },
+    },
+    {
+      name: "BestApps",
+      component: BestApps,
+      options: { headerShown: false },
+    },
+    {
       name: "SingleUser",
       component: SingleUser,
       options: { headerShown: false },
@@ -166,6 +179,11 @@ export const stackScreens = {
       name: "SingleChatScreen",
       component: SingleChatScreen,
       options: basicHeader,
+    },
+    {
+      name: "SingleTag",
+      component: SingleTag,
+      options: { headerShown: false },
     },
   ],
 };

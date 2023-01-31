@@ -16,6 +16,9 @@ import {
 } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
 
+import ImageTitle from "../../../assets/images/profilePhoto.jpg";
+// import ImageBarcode from "../../../assets/images/qrcode.png";
+
 const AccountVerification = () => {
   const navigation = useNavigation<any>();
 
@@ -36,10 +39,7 @@ const AccountVerification = () => {
       {/* QRCODE */}
       <View style={styles.qrCodeMainContainer}>
         <View style={styles.qrCodeTitleContainer}>
-          <Image
-            style={styles.titleImage}
-            source={require("../../../assets/images/profilePhoto.jpg")}
-          />
+          <Image style={styles.titleImage} source={ImageTitle} />
           <Text style={styles.qrTitle}>
             网黄UP主的性爱博客{"\n"}
             分享你我的性福生活
@@ -47,10 +47,7 @@ const AccountVerification = () => {
         </View>
 
         <View style={styles.qrCodeContainer}>
-          <Image
-            style={styles.qrCodeImage}
-            source={require("../../../assets/images/qrcode.png")}
-          />
+          {/* <Image style={styles.qrCodeImage} source={ImageBarcode} /> */}
 
           <View>
             <Text style={styles.qrCodeText}>官网地址: txvlog.com</Text>

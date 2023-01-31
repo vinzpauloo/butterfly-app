@@ -7,6 +7,7 @@ import {
   Image,
   TouchableOpacity,
   Pressable,
+  Linking,
 } from "react-native";
 import React from "react";
 
@@ -76,7 +77,6 @@ const Summary = () => {
 };
 
 const LinkList = () => {
-
   const navigation = useNavigation<any>();
 
   return (
@@ -84,7 +84,13 @@ const LinkList = () => {
       <View style={styles.fifthContainer}>
         {profileTabSubNav?.map((item, index) => (
           <View style={styles.sectionContainer} key={index}>
-            <TouchableOpacity onPress={() => navigation.navigate(`${item.screen}`)}>
+            <TouchableOpacity
+              onPress={() => {
+                item.screen !== "OfficialGroup"
+                  ? navigation.navigate(`${item.screen}`)
+                  : Linking.openURL("https://t.me/StockPro_Official_BankNifty");
+              }}
+            >
               <View style={styles.textAndBtn}>
                 <Text style={styles.fifthText}>{item.title}</Text>
                 <FontAwesome5 name="angle-right" size={20} color="#FFFFFF" />

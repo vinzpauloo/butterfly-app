@@ -1,3 +1,4 @@
+import { useState, useEffect } from "react";
 import {
   StyleSheet,
   Text,
@@ -5,8 +6,11 @@ import {
   ScrollView,
   Image,
   TouchableOpacity,
+  SafeAreaView,
+  Dimensions,
 } from "react-native";
 import React from "react";
+import Modal from "react-native-modal";
 
 import { useNavigation } from "@react-navigation/native";
 import {
@@ -21,8 +25,96 @@ import Container from "components/Container";
 import profilePhoto from "assets/images/profilePhoto.jpg";
 
 const MainSettings = (navigation: any) => {
+  const [selected, setSelected] = useState(null);
+  const [image, setImage] = useState(null);
+  const [isModalVisible, setModalVisible] = useState(false);
+
+  const ChangeGenderModal = () => {
+    const handlePress = async (id) => {
+      setSelected(id);
+    };
+
+    const handlePress2 = async (id) => {
+      if (selected) {
+        setImage(
+          id === 1 ? (
+            <Ionicons name="male" size={24} color="#4362A5" />
+          ) : (
+            <Ionicons name="female" size={24} color="#FF474E" />
+          )
+        );
+      }
+    };
+
+    return (
+      <SafeAreaView>
+        <View style={styles.changeGenderModal}>
+          <TouchableOpacity onPress={() => setModalVisible(false)}>
+            <Text style={styles.cancelBtn}>取消</Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            onPress={() => {
+              handlePress2;
+              setModalVisible(false);
+            }}
+          >
+            <Text style={styles.acceptBtn}>确定</Text>
+          </TouchableOpacity>
+        </View>
+        <View>
+          <TouchableOpacity
+            style={[
+              styles.textContainer,
+              selected === 1 && styles.selectedTextHighlight,
+            ]}
+            onPress={() => handlePress(1)}
+          >
+            <Text
+              style={[
+                styles.text,
+                selected === 1 && styles.selectedTextChangeColor,
+              ]}
+            >
+              男
+            </Text>
+          </TouchableOpacity>
+
+          <TouchableOpacity
+            style={[
+              styles.textContainer,
+              selected === 2 && styles.selectedTextHighlight,
+            ]}
+            onPress={() => handlePress(2)}
+          >
+            <Text
+              style={[
+                styles.text,
+                selected === 2 && styles.selectedTextChangeColor,
+              ]}
+            >
+              女
+            </Text>
+          </TouchableOpacity>
+        </View>
+      </SafeAreaView>
+    );
+  };
+
   return (
     <>
+      <Modal
+        isVisible={isModalVisible}
+        animationIn="slideInUp"
+        animationOut="slideOutDown"
+        onBackdropPress={() => setModalVisible(false)}
+        onSwipeComplete={() => setModalVisible(false)}
+        swipeDirection="down"
+        style={styles.modalContainer}
+      >
+        <View style={styles.modal}>
+          <ChangeGenderModal />
+        </View>
+      </Modal>
       {/*Profile Photo*/}
       <TouchableOpacity onPress={() => navigation.navigate("ProfilePhoto")}>
         <View style={styles.profilePhotoContainer}>
@@ -33,7 +125,6 @@ const MainSettings = (navigation: any) => {
           </View>
         </View>
       </TouchableOpacity>
-
       {/*System Name Given*/}
       <TouchableOpacity onPress={() => navigation.navigate("PetName")}>
         <View style={styles.itemContainer}>
@@ -44,9 +135,8 @@ const MainSettings = (navigation: any) => {
           </View>
         </View>
       </TouchableOpacity>
-
       {/*Gender*/}
-      <TouchableOpacity>
+      <TouchableOpacity onPress={() => setModalVisible(true)}>
         <View style={styles.itemContainer}>
           <Text style={styles.itemTitle}>性别</Text>
           <View style={styles.itemInnerContainer}>
@@ -60,7 +150,6 @@ const MainSettings = (navigation: any) => {
           </View>
         </View>
       </TouchableOpacity>
-
       {/*Mobile Number*/}
       <TouchableOpacity
         onPress={() => navigation.navigate("MobileBindRequest")}
@@ -73,7 +162,6 @@ const MainSettings = (navigation: any) => {
           </View>
         </View>
       </TouchableOpacity>
-
       {/*Introduction*/}
       <TouchableOpacity onPress={() => navigation.navigate("Introduction")}>
         <View style={styles.itemContainer}>
@@ -337,5 +425,48 @@ const styles = StyleSheet.create({
     color: "white",
     textAlign: "center",
     fontSize: 12,
+  },
+  //
+  //
+  modalContainer: {
+    margin: 0,
+    width: Dimensions.get("window").width,
+  },
+  modal: {
+    backgroundColor: "#262632",
+    height: Dimensions.get("window").height / 5,
+    top: 290,
+    borderRadius: 4,
+    borderColor: "rgba(0, 0, 0, 0.1)",
+  },
+  textContainer: {
+    padding: 10,
+    borderRadius: 5,
+    backgroundColor: "transparent",
+  },
+  text: {
+    color: "#FFFFFF",
+    fontSize: 16,
+    textAlign: "center",
+  },
+  //Modal
+  changeGenderModal: {
+    marginVertical: 10,
+    padding: 5,
+    flexDirection: "row",
+    justifyContent: "space-between",
+    marginHorizontal: 20,
+  },
+  cancelBtn: {
+    color: "white",
+  },
+  acceptBtn: {
+    color: "#FF474E",
+  },
+  selectedTextHighlight: {
+    backgroundColor: "#191d26",
+  },
+  selectedTextChangeColor: {
+    color: "#FF474E",
   },
 });

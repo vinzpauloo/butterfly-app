@@ -15,17 +15,21 @@ import Ionicons from "react-native-vector-icons/Ionicons";
 import ProfilePhoto from "assets/images/profilePhoto.jpg";
 import { useNavigation } from "@react-navigation/native";
 import { globalStyle } from "globalStyles";
+import MaterialTopTabs from "layouts/navigators/MaterialTopTabs";
+import Moment from "./tabs/Moment";
+import Projects from "./tabs/Projects";
+import Collection from "./tabs/Collection";
 
 const { height, width } = Dimensions.get("window");
 
 const sampleData = [
   {
     number: 7,
-    text: "Following",
+    text: "关注",
   },
   {
     number: 12724,
-    text: "Fans",
+    text: "粉丝",
   },
   {
     number: 0,
@@ -138,11 +142,40 @@ const Donators = () => {
   );
 };
 
+const Tabs = () => {
+  const data = {
+    initialRoute: "Projects",
+    screens: [
+      {
+        name: "动态",
+        component: (props) => <Moment {...props} />,
+      },
+      {
+        name: "Projects",
+        component: (props) => <Projects {...props} />,
+      },
+      {
+        name: "收藏",
+        component: (props) => <Collection {...props} />,
+      },
+    ],
+  };
+  return (
+    <MaterialTopTabs
+      data={data}
+      isEqualWidth={true}
+      height={50}
+      activeColor={globalStyle.secondaryColor}
+    />
+  );
+};
+
 const index = () => {
   return (
     <Container>
       <ProfileBanner />
       <Donators />
+      <Tabs />
     </Container>
   );
 };

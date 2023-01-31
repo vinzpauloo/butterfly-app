@@ -7,19 +7,25 @@ import { globalStyle } from "globalStyles";
 
 const TopTab = createMaterialTopTabNavigator();
 
-const MaterialTopTabs = ({ data, search = null, isEqualWidth = false }) => {
+const MaterialTopTabs = ({
+  data,
+  search = null,
+  isEqualWidth = false,
+  height = 40,
+  activeColor = "#fff",
+}) => {
   const { initialRoute, screens } = data;
   return (
     <>
       <TopTab.Navigator
         initialRouteName={initialRoute}
         screenOptions={{
-          tabBarActiveTintColor: "#fff",
+          tabBarActiveTintColor: activeColor,
           tabBarIndicatorStyle: { backgroundColor: globalStyle.secondaryColor },
           tabBarInactiveTintColor: "#999",
           tabBarStyle: {
             backgroundColor: globalStyle.primaryColor,
-            height: 40,
+            height: height,
           },
           tabBarAllowFontScaling: true,
           tabBarLabelStyle: {

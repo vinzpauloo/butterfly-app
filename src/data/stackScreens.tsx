@@ -30,6 +30,7 @@ import AccountVerification from "screens/Account/tabs/AccountVerification";
 import OnlineCustomerService from "screens/Account/tabs/OnlineCustomerService";
 import BestApps from "screens/Account/tabs/BestApps";
 import Settings from "screens/Settings";
+import SingleTag from "screens/SingleTag";
 
 const basicHeader = ({ navigation, route }: any) => ({
   headerTitle: route?.params.postTitle,
@@ -166,6 +167,11 @@ export const stackScreens = {
       name: "Settings",
       component: Settings,
       options: basicHeader,
+    },
+    {
+      name: "SingleTag",
+      component: SingleTag,
+      options: { headerShown: false },
     },
   ],
 };

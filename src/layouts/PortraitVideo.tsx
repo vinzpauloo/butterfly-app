@@ -31,7 +31,7 @@ type Props = {
   userName: string;
   description: string;
   isPortrait: boolean;
-  tags: string;
+  tags: string[];
   likes: number;
   amountOfComments: number;
   userImage: string;
@@ -44,6 +44,8 @@ const { width: windowWidth, height: windowHeight } = Dimensions.get("window");
 
 const PortraitVideoContent = (props: Props) => {
   const [modalVisible, setModalVisible] = useState(false);
+  const navigation = useNavigation<any>();
+
   return (
     <View
       style={[styles.container, { height: windowHeight - props.tabBarHeight }]}
@@ -89,14 +91,22 @@ const PortraitVideoContent = (props: Props) => {
           </Text>
         </Pressable>
         <Text style={styles.iconText}>{props.description}</Text>
-        <Pressable
-          onPress={() => {
-            Alert.alert("Search by Tag");
-          }}
-          pressEffect="none"
-        >
-          <Text style={styles.iconText}>{props.tags}</Text>
-        </Pressable>
+
+        {/* Tags list */}
+        <View style={styles.tags}>
+          {props.tags.map((item, index) => (
+            <Pressable
+              key={index}
+              style={styles.tag}
+              onPress={() => {
+                navigation.navigate("SingleTag", { tag: item });
+              }}
+            >
+              <Text style={styles.iconText}>#{item}</Text>
+            </Pressable>
+          ))}
+        </View>
+
         <Pressable
           onPress={() => {
             Alert.alert("Go to VIP purchase");
@@ -316,5 +326,14 @@ const styles = StyleSheet.create({
     textAlign: "center",
     marginVertical: 6,
     marginBottom: 48,
+  },
+
+  // Tags list
+  tags: {
+    flexDirection: "row",
+    gap: 10,
+  },
+  tag: {
+    marginRight: 5,
   },
 });

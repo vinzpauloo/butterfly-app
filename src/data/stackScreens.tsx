@@ -30,6 +30,8 @@ import AccountVerification from "screens/Account/tabs/AccountVerification";
 import OnlineCustomerService from "screens/Account/tabs/OnlineCustomerService";
 import BestApps from "screens/Account/tabs/BestApps";
 import Settings from "screens/Settings";
+import InformationScreen from "screens/InformationScreen";
+import SingleChatScreen from "screens/SingleChatScreen";
 import SingleTag from "screens/SingleTag";
 
 const basicHeader = ({ navigation, route }: any) => ({
@@ -166,6 +168,16 @@ export const stackScreens = {
     {
       name: "Settings",
       component: Settings,
+      options: basicHeader,
+    },
+    {
+      name: "InformationScreen",
+      component: InformationScreen,
+      options: basicHeader,
+    },
+    {
+      name: "SingleChatScreen",
+      component: SingleChatScreen,
       options: basicHeader,
     },
     {

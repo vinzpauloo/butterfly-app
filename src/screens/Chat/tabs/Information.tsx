@@ -18,9 +18,10 @@ import { useNavigation } from '@react-navigation/native';
 const windowWidth = Dimensions.get('window').width;
 
 type MessageItemProps = {
-	userName: string
-	message: string
-	imgURL: string
+	senderUserName: string
+	senderMessage: string
+	senderImgURL: string
+	senderTimeStamp: string
 }
 
 type Props = {}
@@ -30,16 +31,23 @@ const MessageItem = (props: MessageItemProps) => {
 
 	return (
 		<VStack style={styles.messageContainer}>
-			<Pressable onPress={() => { navigation.navigate("SingleChatScreen", { postTitle: props.userName }) }}>
+			<Pressable onPress={() => {
+				navigation.navigate("SingleChatScreen", {
+					postTitle: props.senderUserName,
+					senderMessage: props.senderMessage,
+					senderImgURL: props.senderImgURL,
+					senderTimeStamp: props.senderTimeStamp
+				})
+			}}>
 				<HStack spacing={12}>
-					<Pressable onPress={() => { Alert.alert("Go to " + props.userName + " profile") }}>
-						<Avatar label={props.userName} color='white' size={42} image={{ uri: props.imgURL }} />
+					<Pressable onPress={() => { Alert.alert("Go to " + props.senderUserName + " profile") }}>
+						<Avatar label={props.senderUserName} color='white' size={42} image={{ uri: props.senderImgURL }} />
 					</Pressable>
 					<VStack spacing={4}>
-						<Text style={[styles.text,{maxWidth: windowWidth - 110}]}>{props.userName}</Text>
-						<Text style={[styles.text,{maxWidth: windowWidth - 110}]}>{props.message}</Text>
+						<Text style={[styles.text,{maxWidth: windowWidth - 110}]}>{props.senderUserName}</Text>
+						<Text style={[styles.text, { maxWidth: windowWidth - 110 }]}>{props.senderMessage}</Text>
 					</VStack>
-					<Pressable onPress={() => { Alert.alert("Delete Message from " + props.userName) }} style={styles.deleteIcon}>
+					<Pressable onPress={() => { Alert.alert("Delete Message from " + props.senderUserName) }} style={styles.deleteIcon}>
 						<MaterialCommunityIcons name="delete-outline" color={"white"} size={24} />
 						{/* <Text style={styles.text}>删除</Text> */}
 					</Pressable>
@@ -100,7 +108,7 @@ const Information = (props: Props) => {
 			<FlatList
 				data={messageList}
 				scrollEnabled={true}
-				renderItem={({ item, index }) => <MessageItem userName={item.userName} message={item.message} imgURL={item.imgURL} />}
+				renderItem={({ item, index }) => <MessageItem senderUserName={item.userName} senderMessage={item.message} senderImgURL={item.imgURL} senderTimeStamp={item.timeStamp} />}
 				keyExtractor={(item, index) => "" + index}
 				ListFooterComponent={<BottomMessage />}
 			/>	

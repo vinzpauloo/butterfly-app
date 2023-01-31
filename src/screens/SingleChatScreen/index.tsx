@@ -1,6 +1,8 @@
-import React from 'react'
-import { StyleSheet, Text, View, TextInput, Pressable, Alert } from 'react-native'
-import { HStack } from '@react-native-material/core';
+import React, { useState } from 'react'
+import { StyleSheet, Text, View, TextInput, Pressable, Alert, ScrollView, Image, KeyboardAvoidingView } from 'react-native'
+import { HStack, VStack } from '@react-native-material/core';
+// import * as ImagePicker from 'expo-image-picker';
+// import { Camera, CameraType } from "expo-camera";
 
 import Container from 'components/Container';
 import { globalStyle } from 'globalStyles';
@@ -8,36 +10,129 @@ import { globalStyle } from 'globalStyles';
 import Entypo from "react-native-vector-icons/Entypo";
 import Feather from "react-native-vector-icons/Feather";
 
-import { useRoute } from '@react-navigation/native';
+import { useNavigation, useRoute } from '@react-navigation/native';
 
 type Props = {}
 
 const SingleChatScreen = (props: Props) => {
 	const route = useRoute<any>();
-	const [inputTextValue, onChangeinputTextValue] = React.useState("");
+	const navigation = useNavigation<any>();
+
+	const senderMessagesList = [route?.params.senderMessage]
+
+	const [messages, setMessages] = useState([]);
+	const [input, setInput] = useState('');
+
+	const getCurrentDate = (separator = '') => {
+		let date = new Date();
+		const d = new Date();
+		const monthNames = [`01-`,`02-`,`03-`,`04-`,`05-`,`06-`,`07-`,`08-`,`09-`,`10-`,`11-`,`12-`];
+
+		function formatTime() {
+			let hours = date.getHours();
+			let minutes = date.getMinutes();
+			let seconds = date.getSeconds();
+			let day = date.getDate();
+			let year = date.getFullYear();
+
+			hours = formatZeroes(hours);
+			minutes = formatZeroes(minutes);
+			seconds = formatZeroes(seconds);
+
+			return `${monthNames[d.getMonth()]}${day}-${year} ${hours}:${minutes}`;
+		}
+
+		function formatZeroes(time) {
+			time = time.toString();
+			return time.length < 2 ? `0` + time : time;
+		}
+
+		return (`${formatTime()}`)
+	}
+
+	const handleSend = () => {
+		if (!input) {
+			return;
+		}
+		setMessages([...messages, {
+			text: input,
+			user: 'You',
+			profile: "https://randomuser.me/api/portraits/men/4.jpg"
+		}]);
+		setInput('');
+	};
+
+	// const handleCamera = async () => {
+	// 	const { status } = await Camera.requestCameraPermissionsAsync();
+	// 	if (status === 'granted') {
+	// 		const image = await ImagePicker.launchImageLibraryAsync();
+	// 		if (!image.cancelled) {
+	// 			setMessages([...messages, {
+	// 				image: image.uri,
+	// 				user: 'You',
+	// 				profile: "https://randomuser.me/api/portraits/women/2.jpg"
+	// 			}]);
+	// 		}
+	// 	} else {
+	// 		Alert.alert('Permission not granted');
+	// 	}
+	// };
 
 	return (
 		<Container>
-			{/* WHEN THERE IS MESSAGE */}
-			
-			{/* WHEN THERE IS NO MESSAGE YET */}
-			<View style={styles.centeredContent}>
-				<Text style={styles.whiteText}>文明发言,才能触及彼岸珍惜每一位原创者</Text>
-			</View>
-			<Text style={[styles.whiteText, styles.smallText]}>请上拉刷新消息</Text>
+			{
+			messages.length > 0 || senderMessagesList.length > 0 ? 
+				<ScrollView>
+					{/* SENDER MESSAGES */}
+					<View style={styles.senderMessagesContainer}>
+						<Image style={styles.userImage} source={{ uri: route?.params.senderImgURL }} />
+						<VStack style={styles.senderMessageAndTimeStampContainer}>
+							<>
+									<View style={[styles.messageContainer, styles.senderSingleMessageContainer]}>
+									<Text style={styles.senderMessageText}>{senderMessagesList[0]}</Text>
+									{/* {message.image && <Image source={{ uri: message.image }} style={styles.yourSentImage} />} */}
+								</View>
+							</>
+							<Text style={styles.messageTimeStamp}>{route?.params.senderTimeStamp}</Text>
+						</VStack>
+					</View>
+					{/* YOUR MESSAGES */}
+					{messages.map((message, index) => (
+					<View key={index} style={styles.yourMessagesContainer}>
+						<Image style={styles.userImage} source={{ uri: message.profile }} />
+						<VStack style={styles.yourMessageAndTimeStampContainer}>
+							<>
+								<View style={styles.messageContainer}>
+									<Text style={styles.yourOwnMessageText}>{message.text}</Text>
+									{message.image && <Image source={{ uri: message.image }} style={styles.yourSentImage} />}
+								</View>
+							</>
+							<Text style={styles.messageTimeStamp}>{getCurrentDate()}</Text>
+						</VStack>
+					</View>))}
+				</ScrollView>
+				:	
+				<>
+					<View style={styles.centeredContent}>
+						<Text style={styles.whiteText}>文明发言,才能触及彼岸珍惜每一位原创者</Text>
+					</View>
+					<Text style={[styles.whiteText, styles.bottomText]}>请上拉刷新消息</Text>
+				</>
+			}
 			<HStack style={styles.bottomForm} justify={"between"}>
-				<Pressable onPress={() => Alert.alert("Upload Photo")}>
+				<Pressable onPress={() => Alert.alert("Upload Photo - WIP")}>
 					<Entypo name="camera" color={"white"} size={20} />
 				</Pressable>
 				<TextInput
+					multiline={true}
 					style={styles.textInput}
-					value={inputTextValue}
+					value={input}
 					placeholder="请输入您的消息"
 					placeholderTextColor="#999"
 					keyboardType="default"
-					onChangeText={onChangeinputTextValue}
+					onChangeText={text => setInput(text)}
 				/>
-				<Pressable onPress={() => Alert.alert("Send Message: " + inputTextValue)}>
+				<Pressable onPress={handleSend}>
 					<Feather name="send" color={globalStyle.secondaryColor} size={20} />
 				</Pressable>
 			</HStack>
@@ -48,14 +143,67 @@ const SingleChatScreen = (props: Props) => {
 export default SingleChatScreen
 
 const styles = StyleSheet.create({
+	senderMessagesContainer: {
+		flexDirection: 'row',
+		marginVertical: 12,
+		marginHorizontal: 20,
+		alignItems: 'center',
+	},
+	yourMessagesContainer: {
+		flexDirection: 'row-reverse',
+		marginVertical: 12,
+		marginHorizontal: 20,
+		alignItems: 'center',
+	},
+	senderMessageAndTimeStampContainer: {
+		marginLeft: 12,
+		alignItems: "flex-start"
+	},
+	yourMessageAndTimeStampContainer: {
+		marginRight: 12,
+		alignItems: "flex-end"
+	},
+	userImage: {
+		width: 42,
+		height: 42,
+		borderRadius: 21
+	},
+	senderSingleMessageContainer: {
+		backgroundColor: globalStyle.secondaryColor
+	},
+	messageContainer: {
+		paddingHorizontal: 12,
+		paddingVertical: 6,
+		backgroundColor: globalStyle.headerBasicBg,
+		borderRadius: 8,
+		maxWidth: 200
+	},
+	senderMessageText: {
+		color: 'white',
+		textAlign: "left"
+	},
+	yourOwnMessageText: {
+		color: 'white',
+		textAlign: "right"
+	},
+	yourSentImage: {
+		width: 200,
+		height: 200
+	},
+	messageTimeStamp: {
+		color: '#999',
+		fontSize: 8,
+		textAlign: 'right',
+		marginTop: 6
+	},
 	centeredContent: {
 		flex: 1,
 		justifyContent: "center",
 		alignItems: "center"
 	},
-	smallText: {
+	bottomText: {
 		fontSize: 10,
-		marginBottom: 8
+		marginBottom: 8,
 	},
 	whiteText: {
 		color: globalStyle.primaryTextColor,

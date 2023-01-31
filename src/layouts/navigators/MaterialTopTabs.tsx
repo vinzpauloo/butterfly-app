@@ -13,6 +13,7 @@ const MaterialTopTabs = ({
   isEqualWidth = false,
   height = 40,
   activeColor = "#fff",
+  tabBarColor = null,
 }) => {
   const { initialRoute, screens } = data;
   return (
@@ -24,7 +25,7 @@ const MaterialTopTabs = ({
           tabBarIndicatorStyle: { backgroundColor: globalStyle.secondaryColor },
           tabBarInactiveTintColor: "#999",
           tabBarStyle: {
-            backgroundColor: globalStyle.primaryColor,
+            backgroundColor: tabBarColor || globalStyle.primaryColor,
             height: height,
           },
           tabBarAllowFontScaling: true,

@@ -1,8 +1,8 @@
-import React, { useState } from 'react'
-import { StyleSheet, Text, View, TextInput, Pressable, Alert, ScrollView, Image, KeyboardAvoidingView } from 'react-native'
+import React, { useRef, useState } from 'react'
+import { StyleSheet, Text, View, TextInput, Pressable, Alert, ScrollView, Image } from 'react-native'
 import { HStack, VStack } from '@react-native-material/core';
-// import * as ImagePicker from 'expo-image-picker';
-// import { Camera, CameraType } from "expo-camera";
+import * as ImagePicker from 'expo-image-picker';
+import { Camera, CameraType } from "expo-camera";
 
 import Container from 'components/Container';
 import { globalStyle } from 'globalStyles';
@@ -17,6 +17,8 @@ type Props = {}
 const SingleChatScreen = (props: Props) => {
 	const route = useRoute<any>();
 	const navigation = useNavigation<any>();
+
+	const scrollViewRef = useRef(null)
 
 	const senderMessagesList = [route?.params.senderMessage]
 
@@ -60,29 +62,33 @@ const SingleChatScreen = (props: Props) => {
 			profile: "https://randomuser.me/api/portraits/men/4.jpg"
 		}]);
 		setInput('');
+		scrollViewRef.current.scrollToEnd({animated: true})
 	};
 
-	// const handleCamera = async () => {
-	// 	const { status } = await Camera.requestCameraPermissionsAsync();
-	// 	if (status === 'granted') {
-	// 		const image = await ImagePicker.launchImageLibraryAsync();
-	// 		if (!image.cancelled) {
-	// 			setMessages([...messages, {
-	// 				image: image.uri,
-	// 				user: 'You',
-	// 				profile: "https://randomuser.me/api/portraits/women/2.jpg"
-	// 			}]);
-	// 		}
-	// 	} else {
-	// 		Alert.alert('Permission not granted');
-	// 	}
-	// };
+	const handleCamera = async () => {
+		const { status } = await Camera.requestCameraPermissionsAsync();
+		if (status === 'granted') {
+			const image = await ImagePicker.launchImageLibraryAsync();
+			if (!image.cancelled) {
+				setMessages([...messages, {
+					image: image.uri,
+					text: input,
+					user: 'You',
+					profile: "https://randomuser.me/api/portraits/men/4.jpg"
+				}]);
+				setInput('');
+				scrollViewRef.current.scrollToEnd({ animated: true })
+			}
+		} else {
+			Alert.alert('Permission not granted');
+		}
+	};
 
 	return (
 		<Container>
 			{
 			messages.length > 0 || senderMessagesList.length > 0 ? 
-				<ScrollView>
+				<ScrollView ref={scrollViewRef} >
 					{/* SENDER MESSAGES */}
 					<View style={styles.senderMessagesContainer}>
 						<Image style={styles.userImage} source={{ uri: route?.params.senderImgURL }} />
@@ -90,6 +96,7 @@ const SingleChatScreen = (props: Props) => {
 							<>
 									<View style={[styles.messageContainer, styles.senderSingleMessageContainer]}>
 									<Text style={styles.senderMessageText}>{senderMessagesList[0]}</Text>
+									{/* SENDER SENT IMAGES */}
 									{/* {message.image && <Image source={{ uri: message.image }} style={styles.yourSentImage} />} */}
 								</View>
 							</>
@@ -120,7 +127,7 @@ const SingleChatScreen = (props: Props) => {
 				</>
 			}
 			<HStack style={styles.bottomForm} justify={"between"}>
-				<Pressable onPress={() => Alert.alert("Upload Photo - WIP")}>
+				<Pressable onPress={handleCamera}>
 					<Entypo name="camera" color={"white"} size={20} />
 				</Pressable>
 				<TextInput
@@ -176,7 +183,7 @@ const styles = StyleSheet.create({
 		paddingVertical: 6,
 		backgroundColor: globalStyle.headerBasicBg,
 		borderRadius: 8,
-		maxWidth: 200
+		maxWidth: 224
 	},
 	senderMessageText: {
 		color: 'white',
@@ -187,8 +194,9 @@ const styles = StyleSheet.create({
 		textAlign: "right"
 	},
 	yourSentImage: {
-		width: 200,
-		height: 200
+		minWidth: 200,
+		minHeight: 200,
+		maxHeight: 500,
 	},
 	messageTimeStamp: {
 		color: '#999',

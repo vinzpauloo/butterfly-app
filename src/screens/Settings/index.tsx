@@ -100,6 +100,8 @@ const MainSettings = (navigation: any) => {
     );
   };
 
+  const navigate = useNavigation<any>();
+
   return (
     <>
       <Modal
@@ -116,7 +118,7 @@ const MainSettings = (navigation: any) => {
         </View>
       </Modal>
       {/*Profile Photo*/}
-      <TouchableOpacity onPress={() => navigation.navigate("ProfilePhoto")}>
+      <TouchableOpacity onPress={() => navigate.navigate("ProfilePhoto")}>
         <View style={styles.profilePhotoContainer}>
           <Text style={styles.itemTitle}>头像</Text>
           <View style={styles.profilePhotoInnerContainer}>
@@ -126,7 +128,7 @@ const MainSettings = (navigation: any) => {
         </View>
       </TouchableOpacity>
       {/*System Name Given*/}
-      <TouchableOpacity onPress={() => navigation.navigate("PetName")}>
+      <TouchableOpacity onPress={() => navigate.navigate("PetName")}>
         <View style={styles.itemContainer}>
           <Text style={styles.itemTitle}>昵称</Text>
           <View style={styles.itemInnerContainer}>
@@ -151,9 +153,7 @@ const MainSettings = (navigation: any) => {
         </View>
       </TouchableOpacity>
       {/*Mobile Number*/}
-      <TouchableOpacity
-        onPress={() => navigation.navigate("MobileBindRequest")}
-      >
+      <TouchableOpacity onPress={() => navigate.navigate("MobileBindRequest")}>
         <View style={styles.itemContainer}>
           <Text style={styles.itemTitle}>手机号</Text>
           <View style={styles.itemInnerContainer}>
@@ -163,7 +163,7 @@ const MainSettings = (navigation: any) => {
         </View>
       </TouchableOpacity>
       {/*Introduction*/}
-      <TouchableOpacity onPress={() => navigation.navigate("Introduction")}>
+      <TouchableOpacity onPress={() => navigate.navigate("Introduction")}>
         <View style={styles.itemContainer}>
           <Text style={styles.itemTitle}>个人简介</Text>
           <View style={styles.itemInnerContainer}>

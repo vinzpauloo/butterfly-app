@@ -47,7 +47,7 @@ const AccountVerification = () => {
         </View>
 
         <View style={styles.qrCodeContainer}>
-          {/* <Image style={styles.qrCodeImage} source={ImageBarcode} /> */}
+          <Image style={styles.qrCodeImage} source={ImageTitle} />
 
           <View>
             <Text style={styles.qrCodeText}>官网地址: txvlog.com</Text>

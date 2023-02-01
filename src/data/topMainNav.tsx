@@ -1,4 +1,3 @@
-import Date from "screens/Home/tabs/Date";
 import Following from "screens/Home/tabs/Following";
 import Home from "screens/Home/tabs/Home";
 import Moment from "screens/Home/tabs/Moment";
@@ -18,10 +17,6 @@ export const topMainNav = {
     {
       name: "动态",
       component: (props) => <Moment {...props} />,
-    },
-    {
-      name: "写真",
-      component: (props) => <Date {...props} />,
     },
     {
       name: "约会",

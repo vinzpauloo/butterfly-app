@@ -44,6 +44,9 @@ import PrivacyPolicy from "screens/Settings/tabs/PrivacyPolicy";
 import ServiceProvisions from "screens/Settings/tabs/ServiceProvisions";
 import About from "screens/Settings/tabs/About";
 import PasscodeLock from "screens/Settings/tabs/PasscodeLock";
+import InformationScreen from "screens/InformationScreen";
+import SingleChatScreen from "screens/SingleChatScreen";
+import SingleTag from "screens/SingleTag";
 
 const basicHeader = ({ navigation, route }: any) => ({
   headerTitle: route?.params.postTitle,
@@ -249,6 +252,20 @@ export const stackScreens = {
     {
       name: "PasscodeLock",
       component: PasscodeLock,
+    },
+    {
+      name: "InformationScreen",
+      component: InformationScreen,
+      options: basicHeader,
+    },
+    {
+      name: "SingleChatScreen",
+      component: SingleChatScreen,
+      options: basicHeader,
+    },
+    {
+      name: "SingleTag",
+      component: SingleTag,
       options: { headerShown: false },
     },
   ],

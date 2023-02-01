@@ -215,18 +215,18 @@ const VideoList = () => {
 
 const SearchOutput = () => {
   const data = {
-    initialRoute: "Videos",
+    initialRoute: "视频",
     screens: [
       {
-        name: "Videos",
+        name: "视频",
         component: (props) => <Videos {...props} />,
       },
       {
-        name: "Users",
+        name: "用户",
         component: (props) => <Users {...props} />,
       },
       {
-        name: "Feeds",
+        name: "动态",
         component: (props) => <Feeds {...props} />,
       },
     ],

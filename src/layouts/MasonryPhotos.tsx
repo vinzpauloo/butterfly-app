@@ -4,6 +4,7 @@ import { VStack, HStack } from '@react-native-material/core';
 import { MasonryFlashList } from "@shopify/flash-list";
 
 import { masonryImages } from 'data/masonryImages';
+import { photoGalleryImages } from 'data/photoGalleryImages'
 import Container from 'components/Container';
 
 import { globalStyle } from "globalStyles";
@@ -24,7 +25,7 @@ const SingleImage = (props: SingleImageProp) => {
 	const route = useRoute<any>();
 	
 	return (
-		<Pressable onPress={() => { navigation.navigate("PhotoGallery", { postTitle: props.postTitle }) }}>
+		<Pressable onPress={() => { navigation.navigate("PhotoGallery", { postTitle: props.postTitle, imageList: photoGalleryImages, fromFeedItem: false }) }}>
 			<ImageBackground
 				source={{ uri: props.url }}
 				style={[styles.singleImage, {height: props.height}]}

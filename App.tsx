@@ -31,8 +31,7 @@ const sampleFetch = async (url: string) => {
 export default function App() {
   useEffect(() => {
     // initializePusher();
-
-    sampleFetch("http://192.168.50.9/api/test");
+    // sampleFetch("http://192.168.50.9/api/test");
   }, []);
 
   return (

@@ -1,24 +1,14 @@
-import {
-  StyleSheet,
-  Text,
-  View,
-  Dimensions,
-  FlatList,
-  Alert,
-  Modal,
-  TouchableOpacity,
-  Image,
-} from "react-native";
 import React, { useState } from "react";
-
+import { StyleSheet, Text, View, Dimensions, FlatList, Alert, Modal, TouchableOpacity, Image, } from "react-native";
 import { ResizeMode, Video } from "expo-av";
 import { useNavigation, useRoute } from "@react-navigation/native";
 import { Pressable, VStack } from "@react-native-material/core";
+import { NativeBaseProvider, useDisclose } from "native-base";
+import BottomComment from "components/BottomComment";
+
 import Ionicons from "react-native-vector-icons/Ionicons";
 import Feather from "react-native-vector-icons/Feather";
 import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons";
-
-import Comments from "features/comments";
 
 interface PortraitVideoDataType {
   reelsVideos?: any;
@@ -31,40 +21,23 @@ type Props = {
   userName: string;
   description: string;
   isPortrait: boolean;
-  tags: string;
+  tags: string[];
   likes: number;
   amountOfComments: number;
   userImage: string;
   isActive: boolean;
   activeVideoIndex: number;
   tabBarHeight: number;
+  openComments: () => void
 };
 
 const { width: windowWidth, height: windowHeight } = Dimensions.get("window");
 
 const PortraitVideoContent = (props: Props) => {
-  const [modalVisible, setModalVisible] = useState(false);
+  const navigation = useNavigation<any>();
+
   return (
-    <View
-      style={[styles.container, { height: windowHeight - props.tabBarHeight }]}
-    >
-      <Modal
-        statusBarTranslucent={true}
-        animationType="slide"
-        transparent={true}
-        visible={modalVisible}
-        onRequestClose={() => {
-          setModalVisible(!modalVisible);
-        }}
-      >
-        <TouchableOpacity
-          onPress={() => setModalVisible(!modalVisible)}
-          style={styles.blackLayer}
-        ></TouchableOpacity>
-        <View style={styles.modalContainer}>
-          <Comments />
-        </View>
-      </Modal>
+    <View style={[styles.container, { height: windowHeight - props.tabBarHeight }]}>
       {props.isActive && (
         <Video
           source={{ uri: props.uri }}
@@ -89,14 +62,19 @@ const PortraitVideoContent = (props: Props) => {
           </Text>
         </Pressable>
         <Text style={styles.iconText}>{props.description}</Text>
-        <Pressable
-          onPress={() => {
-            Alert.alert("Search by Tag");
-          }}
-          pressEffect="none"
-        >
-          <Text style={styles.iconText}>{props.tags}</Text>
-        </Pressable>
+        <View style={styles.tags}>
+          {props.tags.map((item, index) => (
+            <Pressable
+              key={index}
+              style={styles.tag}
+              onPress={() => {
+                navigation.navigate("SingleTag", { tag: item });
+              }}
+            >
+              <Text style={styles.iconText}>#{item}</Text>
+            </Pressable>
+          ))}
+        </View>
         <Pressable
           onPress={() => {
             Alert.alert("Go to VIP purchase");
@@ -141,7 +119,7 @@ const PortraitVideoContent = (props: Props) => {
         </View>
         <View style={styles.verticalBarItem}>
           <Pressable
-            onPress={() => setModalVisible(!modalVisible)}
+            onPress={() => props.openComments()}
             pressEffectColor="black"
             pressEffect="android-ripple"
           >
@@ -186,6 +164,8 @@ const PortraitVideo: React.FC<PortraitVideoDataType> = ({
   const navigation = useNavigation<any>();
   const route = useRoute<any>();
   const [activeVideoIndex, setActiveVideoIndex] = useState(0);
+  const { isOpen, onOpen, onClose } = useDisclose();
+  
   return (
     <View style={{ position: "relative", flex: 1 }}>
       {hasBackButton ? (
@@ -216,6 +196,7 @@ const PortraitVideo: React.FC<PortraitVideoDataType> = ({
             isActive={activeVideoIndex === index}
             activeVideoIndex={activeVideoIndex}
             tabBarHeight={bottomTabHeight}
+            openComments={onOpen}
           />
         )}
         onScroll={(e) => {
@@ -225,6 +206,9 @@ const PortraitVideo: React.FC<PortraitVideoDataType> = ({
           setActiveVideoIndex(index);
         }}
       />
+      <NativeBaseProvider>
+        <BottomComment isOpen={isOpen} onOpen={onOpen} onClose={onClose} />
+      </NativeBaseProvider>
     </View>
   );
 };
@@ -316,5 +300,14 @@ const styles = StyleSheet.create({
     textAlign: "center",
     marginVertical: 6,
     marginBottom: 48,
+  },
+
+  // Tags list
+  tags: {
+    flexDirection: "row",
+    gap: 10,
+  },
+  tag: {
+    marginRight: 5,
   },
 });

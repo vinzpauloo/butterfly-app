@@ -59,10 +59,13 @@ const Summary = () => {
                 <Text style={styles.profileDetails2}>免费观看 : 0</Text>
               </View>
             </View>
-            <View style={styles.homeButtonContainer}>
+            <TouchableOpacity
+              onPress={() => navigation.navigate("SingleUser")}
+              style={styles.homeButtonContainer}
+            >
               <Text style={styles.homeButton}>主页</Text>
               <FontAwesome5 name="angle-right" size={15} color="white" />
-            </View>
+            </TouchableOpacity>
           </View>
         </View>
         <View style={styles.horizontalRule}></View>

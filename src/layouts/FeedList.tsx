@@ -1,10 +1,13 @@
 import React from "react";
 import { StyleSheet, FlatList } from "react-native";
+import { NativeBaseProvider, useDisclose } from "native-base";
 
 import Container from "components/Container";
 import FeedItem from "components/FeedItem";
+import BottomComment from "components/BottomComment";
 
 const FeedList = ({ feedListData }) => {
+  const { isOpen, onOpen, onClose } = useDisclose();
   return (
     <Container>
       <FlatList
@@ -20,10 +23,14 @@ const FeedList = ({ feedListData }) => {
             addedContent={item.addedContent}
             totalComments={item.totalComments}
             totalLikes={item.totalLikes}
+            openComments={onOpen}
           />
         )}
         keyExtractor={(item, index) => "" + index}
       />
+      <NativeBaseProvider>
+        <BottomComment isOpen={isOpen} onOpen={onOpen} onClose={onClose} />
+      </NativeBaseProvider>
     </Container>
   );
 };

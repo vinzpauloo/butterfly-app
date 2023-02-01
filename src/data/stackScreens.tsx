@@ -30,9 +30,9 @@ import AccountVerification from "screens/Account/tabs/AccountVerification";
 import OnlineCustomerService from "screens/Account/tabs/OnlineCustomerService";
 import BestApps from "screens/Account/tabs/BestApps";
 import Settings from "screens/Settings";
-import ProfilePhoto from "screens/Settings/tabs/ProfilePhoto";
-import PetName from "screens/Settings/tabs/PetName";
-import MobileBindRequest from "screens/Settings/tabs/MobileBindRequest";
+import InformationScreen from "screens/InformationScreen";
+import SingleChatScreen from "screens/SingleChatScreen";
+import SingleTag from "screens/SingleTag";
 
 const basicHeader = ({ navigation, route }: any) => ({
   headerTitle: route?.params.postTitle,
@@ -171,18 +171,18 @@ export const stackScreens = {
       options: basicHeader,
     },
     {
-      name: "ProfilePhoto",
-      component: ProfilePhoto,
-      options: { headerShown: false },
+      name: "InformationScreen",
+      component: InformationScreen,
+      options: basicHeader,
     },
     {
-      name: "PetName",
-      component: PetName,
-      options: { headerShown: false },
+      name: "SingleChatScreen",
+      component: SingleChatScreen,
+      options: basicHeader,
     },
     {
-      name: "MobileBindRequest",
-      component: MobileBindRequest,
+      name: "SingleTag",
+      component: SingleTag,
       options: { headerShown: false },
     },
   ],

@@ -13,30 +13,41 @@ import Container from 'components/Container'
 import BottomMessage from 'features/sectionList/components/BottomMessage';
 
 import { messageList } from 'data/messageList';
+import { useNavigation } from '@react-navigation/native';
 
 const windowWidth = Dimensions.get('window').width;
 
 type MessageItemProps = {
-	userName: string
-	message: string
-	imgURL: string
+	senderUserName: string
+	senderMessage: string
+	senderImgURL: string
+	senderTimeStamp: string
 }
 
 type Props = {}
 
 const MessageItem = (props: MessageItemProps) => {
+	const navigation = useNavigation<any>();
+
 	return (
 		<VStack style={styles.messageContainer}>
-			<Pressable onPress={() => { Alert.alert("View Message from " + props.userName) }}>
+			<Pressable onPress={() => {
+				navigation.navigate("SingleChatScreen", {
+					postTitle: props.senderUserName,
+					senderMessage: props.senderMessage,
+					senderImgURL: props.senderImgURL,
+					senderTimeStamp: props.senderTimeStamp
+				})
+			}}>
 				<HStack spacing={12}>
-					<Pressable onPress={() => { Alert.alert("Go to " + props.userName + " profile") }}>
-						<Avatar label="Tang Xin" color='white' size={42} image={{ uri: props.imgURL }} />
+					<Pressable onPress={() => { Alert.alert("Go to " + props.senderUserName + " profile") }}>
+						<Avatar label={props.senderUserName} color='white' size={42} image={{ uri: props.senderImgURL }} />
 					</Pressable>
 					<VStack spacing={4}>
-						<Text style={[styles.text,{maxWidth: windowWidth - 110}]}>{props.userName}</Text>
-						<Text style={[styles.text,{maxWidth: windowWidth - 110}]}>{props.message}</Text>
+						<Text style={[styles.text,{maxWidth: windowWidth - 110}]}>{props.senderUserName}</Text>
+						<Text style={[styles.text, { maxWidth: windowWidth - 110 }]}>{props.senderMessage}</Text>
 					</VStack>
-					<Pressable onPress={() => { Alert.alert("Delete Message from " + props.userName) }} style={styles.deleteIcon}>
+					<Pressable onPress={() => { Alert.alert("Delete Message from " + props.senderUserName) }} style={styles.deleteIcon}>
 						<MaterialCommunityIcons name="delete-outline" color={"white"} size={24} />
 						{/* <Text style={styles.text}>删除</Text> */}
 					</Pressable>
@@ -47,10 +58,12 @@ const MessageItem = (props: MessageItemProps) => {
 }
 
 const Information = (props: Props) => {
+	const navigation = useNavigation<any>();
+
 	return (
 		<Container>
 			<HStack spacing={12} style={styles.optionsList}>
-				<Pressable onPress={() => { Alert.alert("Open Fans Screen") }}>
+				<Pressable onPress={() => { navigation.navigate("InformationScreen", { postTitle: "粉丝" }) }}>
 					<VStack spacing={6}>
 						<Box style={styles.box}>
 							<Feather name="heart" color={"white"} size={24} />
@@ -58,7 +71,7 @@ const Information = (props: Props) => {
 						<Text style={styles.centerText}>粉丝</Text>
 					</VStack>
 				</Pressable>
-				<Pressable onPress={() => { Alert.alert("Open Likes Screen") }}>
+				<Pressable onPress={() => { navigation.navigate("InformationScreen", { postTitle: "点赞" }) }}>
 					<VStack spacing={6}>
 						<Box style={styles.box}>
 							<AntDesign name="like2" color={"white"} size={24} />
@@ -66,7 +79,7 @@ const Information = (props: Props) => {
 						<Text style={styles.centerText}>点赞</Text>
 					</VStack>
 				</Pressable>
-				<Pressable onPress={() => { Alert.alert("Open Comments Screen") }}>
+				<Pressable onPress={() => { navigation.navigate("InformationScreen", { postTitle: "评论" }) }}>
 					<VStack spacing={6}>
 						<Box style={styles.box}>
 							<FontAwesome name="comment-o" color={"white"} size={24} />
@@ -74,7 +87,7 @@ const Information = (props: Props) => {
 						<Text style={styles.centerText}>评论</Text>
 					</VStack>
 				</Pressable>
-				<Pressable onPress={() => { Alert.alert("Open Earnings Screen") }}>
+				<Pressable onPress={() => { navigation.navigate("InformationScreen", { postTitle: "收益" }) }}>
 					<VStack spacing={6}>
 						<Box style={styles.box}>
 							<Fontisto name="money-symbol" color={"white"} size={24} />
@@ -82,7 +95,7 @@ const Information = (props: Props) => {
 						<Text style={styles.centerText}>收益</Text>
 					</VStack>
 				</Pressable>
-				<Pressable onPress={() => { Alert.alert("Open System Screen") }}>
+				<Pressable onPress={() => { navigation.navigate("InformationScreen", { postTitle: "系统" }) }}>
 					<VStack spacing={6}>
 						<Box style={styles.box}>
 							<Octicons name="gear" color={"white"} size={24} />
@@ -95,7 +108,7 @@ const Information = (props: Props) => {
 			<FlatList
 				data={messageList}
 				scrollEnabled={true}
-				renderItem={({ item, index }) => <MessageItem userName={item.userName} message={item.message} imgURL={item.imgURL} />}
+				renderItem={({ item, index }) => <MessageItem senderUserName={item.userName} senderMessage={item.message} senderImgURL={item.imgURL} senderTimeStamp={item.timeStamp} />}
 				keyExtractor={(item, index) => "" + index}
 				ListFooterComponent={<BottomMessage />}
 			/>	

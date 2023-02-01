@@ -45,7 +45,7 @@ const SharingPromotion = () => {
         </View>
 
         <View style={styles.qrCodeImageContainer}>
-          {/* <Image style={styles.qrCodeImage} source={ImageQRCode} /> */}
+          <Image style={styles.qrCodeImage} source={ImageTitle} />
 
           <View>
             <Text style={styles.qrCodeDetails}>分享好友立赠糖心专享会员</Text>

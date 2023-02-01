@@ -33,6 +33,17 @@ import Settings from "screens/Settings";
 import ProfilePhoto from "screens/Settings/tabs/ProfilePhoto";
 import PetName from "screens/Settings/tabs/PetName";
 import MobileBindRequest from "screens/Settings/tabs/MobileBindRequest";
+import Introduction from "screens/Settings/tabs/Introduction";
+import AccountCertificate from "screens/Settings/tabs/AccountCertificate";
+import AccountRetrieval from "screens/Settings/tabs/AccountRetrieval";
+import MobileRetrieval from "screens/Settings/AccountRetrievalTabs/MobileRetrieval";
+import CameraInit from "screens/Settings/AccountRetrievalTabs/CameraInit";
+import CustomerService from "screens/Settings/AccountRetrievalTabs/CustomerService";
+import RequestCode from "screens/Settings/tabs/RequestCode";
+import PrivacyPolicy from "screens/Settings/tabs/PrivacyPolicy";
+import ServiceProvisions from "screens/Settings/tabs/ServiceProvisions";
+import About from "screens/Settings/tabs/About";
+import PasscodeLock from "screens/Settings/tabs/PasscodeLock";
 
 const basicHeader = ({ navigation, route }: any) => ({
   headerTitle: route?.params.postTitle,
@@ -183,6 +194,61 @@ export const stackScreens = {
     {
       name: "MobileBindRequest",
       component: MobileBindRequest,
+      options: { headerShown: false },
+    },
+    {
+      name: "Introduction",
+      component: Introduction,
+      options: { headerShown: false },
+    },
+    {
+      name: "AccountCertificate",
+      component: AccountCertificate,
+      options: { headerShown: false },
+    },
+    {
+      name: "AccountRetrieval",
+      component: AccountRetrieval,
+      options: { headerShown: false },
+    },
+    {
+      name: "MobileRetrieval",
+      component: MobileRetrieval,
+      options: { headerShown: false },
+    },
+    {
+      name: "CameraInit",
+      component: CameraInit,
+      options: { headerShown: false },
+    },
+    {
+      name: "CustomerService",
+      component: CustomerService,
+      options: { headerShown: false },
+    },
+    {
+      name: "RequestCode",
+      component: RequestCode,
+      options: { headerShown: false },
+    },
+    {
+      name: "PrivacyPolicy",
+      component: PrivacyPolicy,
+      options: { headerShown: false },
+    },
+    {
+      name: "ServiceProvisions",
+      component: ServiceProvisions,
+      options: { headerShown: false },
+    },
+    {
+      name: "About",
+      component: About,
+      options: { headerShown: false },
+    },
+    {
+      name: "PasscodeLock",
+      component: PasscodeLock,
       options: { headerShown: false },
     },
   ],

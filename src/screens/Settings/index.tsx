@@ -177,6 +177,8 @@ const MainSettings = (navigation: any) => {
 };
 
 const AccountSettings = (navigation: any) => {
+  const navigate = useNavigation<any>();
+
   return (
     <>
       <View style={styles.actionAndOthersContainer}>
@@ -199,9 +201,7 @@ const AccountSettings = (navigation: any) => {
       </View>
 
       {/*Account Certificate*/}
-      <TouchableOpacity
-        onPress={() => navigation.navigate("AccountCertificate")}
-      >
+      <TouchableOpacity onPress={() => navigate.navigate("AccountCertificate")}>
         <View style={styles.itemContainer}>
           <View style={styles.itemInnerContainer}>
             <MaterialCommunityIcons
@@ -216,7 +216,7 @@ const AccountSettings = (navigation: any) => {
       </TouchableOpacity>
 
       {/*ACCOUNT RETRIEVAL*/}
-      <TouchableOpacity onPress={() => navigation.navigate("AccountRetrieval")}>
+      <TouchableOpacity onPress={() => navigate.navigate("AccountRetrieval")}>
         <View style={styles.itemContainer}>
           <View style={styles.itemInnerContainer}>
             <MaterialIcons name="person-search" size={20} color="white" />
@@ -230,7 +230,7 @@ const AccountSettings = (navigation: any) => {
       </TouchableOpacity>
 
       {/*Code*/}
-      <TouchableOpacity onPress={() => navigation.navigate("RequestCode")}>
+      <TouchableOpacity onPress={() => navigate.navigate("RequestCode")}>
         <View style={styles.itemContainer}>
           <View style={styles.itemInnerContainer}>
             <AntDesign name="codesquareo" size={20} color="white" />
@@ -247,13 +247,15 @@ const AccountSettings = (navigation: any) => {
 };
 
 const OtherSettings = (navigation: any) => {
+  const navigate = useNavigation<any>();
+
   return (
     <>
       <View style={styles.actionAndOthersContainer}>
         <Text style={styles.accountAndOthersTitle}>其他</Text>
       </View>
 
-      <TouchableOpacity onPress={() => navigation.navigate("Chat")}>
+      <TouchableOpacity onPress={() => navigate.navigate("CustomerService")}>
         <View style={styles.itemContainer}>
           <View style={styles.itemInnerContainer}>
             <AntDesign name="customerservice" size={20} color="white" />
@@ -266,7 +268,7 @@ const OtherSettings = (navigation: any) => {
       </TouchableOpacity>
 
       {/*Privacy Policy*/}
-      <TouchableOpacity onPress={() => navigation.navigate("PrivacyPolicy")}>
+      <TouchableOpacity onPress={() => navigate.navigate("PrivacyPolicy")}>
         <View style={styles.itemContainer}>
           <View style={styles.itemInnerContainer}>
             <MaterialIcons name="policy" size={20} color="white" />
@@ -279,9 +281,7 @@ const OtherSettings = (navigation: any) => {
       </TouchableOpacity>
 
       {/*Service Provisions*/}
-      <TouchableOpacity
-        onPress={() => navigation.navigate("ServiceProvisions")}
-      >
+      <TouchableOpacity onPress={() => navigate.navigate("ServiceProvisions")}>
         <View style={styles.itemContainer}>
           <View style={styles.itemInnerContainer}>
             <MaterialIcons name="notes" size={20} color="white" />
@@ -294,7 +294,7 @@ const OtherSettings = (navigation: any) => {
       </TouchableOpacity>
 
       {/*About*/}
-      <TouchableOpacity onPress={() => navigation.navigate("About")}>
+      <TouchableOpacity onPress={() => navigate.navigate("About")}>
         <View style={styles.itemContainer}>
           <View style={styles.itemInnerContainer}>
             <MaterialCommunityIcons
@@ -310,7 +310,7 @@ const OtherSettings = (navigation: any) => {
         </View>
       </TouchableOpacity>
 
-      <TouchableOpacity onPress={() => navigation.navigate("PasscodeLock")}>
+      <TouchableOpacity onPress={() => navigate.navigate("PasscodeLock")}>
         <View style={styles.itemContainer}>
           <View style={styles.itemInnerContainer}>
             <SimpleLineIcons name="lock" size={20} color="white" />

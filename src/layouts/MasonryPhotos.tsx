@@ -25,7 +25,7 @@ const SingleImage = (props: SingleImageProp) => {
 	const route = useRoute<any>();
 	
 	return (
-		<Pressable onPress={() => { navigation.navigate("PhotoGallery", { postTitle: props.postTitle, imageList: photoGalleryImages, fromFeedItem: false }) }}>
+		<Pressable onPress={() => { navigation.navigate("PhotoGallery", { postTitle: props.postTitle, imageList: photoGalleryImages}) }}>
 			<ImageBackground
 				source={{ uri: props.url }}
 				style={[styles.singleImage, {height: props.height}]}

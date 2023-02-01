@@ -34,6 +34,7 @@ const MessageItem = (props: MessageItemProps) => {
 			<Pressable onPress={() => {
 				navigation.navigate("SingleChatScreen", {
 					postTitle: props.senderUserName,
+					senderUserName: props.senderUserName,
 					senderMessage: props.senderMessage,
 					senderImgURL: props.senderImgURL,
 					senderTimeStamp: props.senderTimeStamp

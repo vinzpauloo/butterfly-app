@@ -51,20 +51,18 @@ const FeedItem = (props: Props) => {
 					</Pressable>
 				)}
 			</HStack>
-			{/* ADD A SCREEN HRERE TO PHOTO GALLER WITH DIFFERENT PROP, to not make it doujinshi page */}
-			{/* useroute */}
-			<Pressable onPress={() => navigation.navigate("PhotoGallery", { postTitle: props.userName, imageList: props.addedContent, fromFeedItem: true })}>
-				<VStack spacing={12}>
-					<Text style={styles.whiteText}>{props.description}</Text>
-					{/* ADDED CONTENT HERE */}
+			<VStack spacing={12}>
+				<Text style={styles.whiteText}>{props.description}</Text>
+				{/* ADDED CONTENT HERE */}
+				<Pressable onPress={() => navigation.navigate("PhotoGallery", { postTitle: props.userName, imageList: props.addedContent, fromFeedItem: true })}>
 					<Flex wrap={true} direction={'row'}>
 						{props.addedContent.length > 0 ?
 							props.addedContent.map(item => 
 								props.addedContentType === "picture" ?
 									<Box style={
-											 	props.addedContent.length === 1 ? styles.singleContent
+												props.addedContent.length === 1 ? styles.singleContent
 													:props.addedContent.length % 3 === 0 ? styles.tripleContent
-											 				:styles.doubleContent} m={3}>
+															:styles.doubleContent} m={3}>
 										<Image style={styles.imageInBox} source={{ uri: item.contentURL }} resizeMode={ResizeMode.COVER} />
 									</Box>
 									: props.addedContentType === "video" ?
@@ -77,14 +75,13 @@ const FeedItem = (props: Props) => {
 									/> : null
 						): null } 
 					</Flex>
-					{props.location?
-						<HStack style={styles.locationButton}>
-							<Entypo name="location-pin" color={"#fff"} size={16} />
-							<Text style={styles.whiteText}>{props.location}</Text>
-						</HStack> : null
-					}
-				</VStack>
-			</Pressable>
+				</Pressable>
+				{props.location?
+					<HStack style={styles.locationButton}>
+						<Entypo name="location-pin" color={"#fff"} size={16} />
+						<Text style={styles.whiteText}>{props.location}</Text>
+					</HStack> : null}
+			</VStack>
 			<HStack style={styles.bottom}>
 				<Pressable onPress={()=> Alert.alert("Share Post")}>
 					<FontAwesome name="share-square-o" color={"#999"} size={16} />

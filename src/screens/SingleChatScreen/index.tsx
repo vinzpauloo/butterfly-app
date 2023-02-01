@@ -96,6 +96,7 @@ const SingleChatScreen = (props: Props) => {
 						<Image style={styles.userImage} source={{ uri: route?.params.senderImgURL }} />
 						<VStack style={styles.senderMessageAndTimeStampContainer}>
 							<>
+									<Text style={{ color: "white", marginBottom: 4 }}>{route?.params.senderUserName}</Text>
 									<View style={[styles.messageContainer, styles.senderSingleMessageContainer]}>
 									<Text style={styles.senderMessageText}>{senderMessagesList[0]}</Text>
 									{/* SENDER SENT IMAGES */}

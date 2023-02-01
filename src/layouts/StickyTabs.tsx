@@ -36,7 +36,7 @@ const StickyTabs: React.FC<IStickyTabsProps> = ({ data }) => {
       See documentation note: https://github.com/PedroBern/react-native-collapsible-tab-view#scroll-on-header
     */
     return (
-      <View pointerEvents="none">
+      <View pointerEvents="box-none">
         <Header />
       </View>
     );

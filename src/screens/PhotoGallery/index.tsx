@@ -23,7 +23,7 @@ const PhotoGallery = () => {
 					pagingEnabled={true}
 					horizontal={true}
 					data={imageList}
-					renderItem={({ item }) =>
+					renderItem={({ item } : any) =>
 						<View style={styles.imageContainer}>
 							<Image style={[styles.postImage, styles.imageContained]} source={{ uri: item.contentURL }} />
 						</View>}
@@ -33,7 +33,7 @@ const PhotoGallery = () => {
 			:
 				<FlashList
 					data={imageList}
-					renderItem={({ item }) =>
+					renderItem={({ item } : any) =>
 						<View style={styles.imageContainer}>
 							<Image style={[styles.postImage, styles.imageCovered]} source={{ uri: item.imgUrl }} />
 						</View>}

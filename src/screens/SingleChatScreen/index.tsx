@@ -1,5 +1,5 @@
 import React, { useRef, useState } from 'react'
-import { StyleSheet, Text, View, TextInput, Pressable, Alert, ScrollView, Image } from 'react-native'
+import { StyleSheet, Text, View, TextInput, Pressable, Alert, ScrollView, Image, Dimensions } from 'react-native'
 import { HStack, VStack } from '@react-native-material/core';
 import * as ImagePicker from 'expo-image-picker';
 import { Camera, CameraType } from "expo-camera";
@@ -11,6 +11,8 @@ import Entypo from "react-native-vector-icons/Entypo";
 import Feather from "react-native-vector-icons/Feather";
 
 import { useNavigation, useRoute } from '@react-navigation/native';
+
+const windowWidth = Dimensions.get('window').width;
 
 type Props = {}
 
@@ -126,7 +128,7 @@ const SingleChatScreen = (props: Props) => {
 					<Text style={[styles.whiteText, styles.bottomText]}>请上拉刷新消息</Text>
 				</>
 			}
-			<HStack style={styles.bottomForm} justify={"between"}>
+			<HStack style={styles.bottomForm} spacing={12}>
 				<Pressable onPress={handleCamera}>
 					<Entypo name="camera" color={"white"} size={20} />
 				</Pressable>
@@ -154,13 +156,13 @@ const styles = StyleSheet.create({
 		flexDirection: 'row',
 		marginVertical: 12,
 		marginHorizontal: 20,
-		alignItems: 'center',
+		alignItems: 'flex-start',
 	},
 	yourMessagesContainer: {
 		flexDirection: 'row-reverse',
 		marginVertical: 12,
 		marginHorizontal: 20,
-		alignItems: 'center',
+		alignItems: 'flex-start',
 	},
 	senderMessageAndTimeStampContainer: {
 		marginLeft: 12,
@@ -226,6 +228,6 @@ const styles = StyleSheet.create({
 		backgroundColor: "white",
 		paddingHorizontal: 12,
 		borderRadius: 16,
-		width: 320,
+		width: windowWidth - 88,
 	}
 })

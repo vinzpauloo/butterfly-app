@@ -1,6 +1,6 @@
 import React from 'react'
-import { StyleSheet, Text, Pressable, Alert, Image } from 'react-native'
-import { VStack, HStack, Avatar, Divider } from '@react-native-material/core'
+import { StyleSheet, Text, Pressable, Alert, Image, Dimensions } from 'react-native'
+import { VStack, HStack, Avatar, Divider, Box, Flex } from '@react-native-material/core'
 import { Video, ResizeMode } from 'expo-av';
 
 import Entypo from "react-native-vector-icons/Entypo";
@@ -9,6 +9,9 @@ import Fontisto from "react-native-vector-icons/Fontisto";
 import AntDesign from "react-native-vector-icons/AntDesign";
 
 import { globalStyle } from 'globalStyles'
+import { useNavigation } from '@react-navigation/native';
+
+const windowWidth = Dimensions.get('window').width;
 
 type Props = {
 	userPictureURL: string
@@ -21,10 +24,13 @@ type Props = {
 	addedContent?: { contentURL: string}[]
 	totalComments: number
 	totalLikes: number
+	openComments: () => void
 }
 
 const FeedItem = (props: Props) => {
 	const video = React.useRef(null);
+	const navigation = useNavigation<any>();
+	
 	return (
 		<VStack p={16} spacing={8}>
 			<HStack>
@@ -45,20 +51,22 @@ const FeedItem = (props: Props) => {
 					</Pressable>
 				)}
 			</HStack>
-			<Pressable onPress={() => Alert.alert("View Post")}>
+			{/* ADD A SCREEN HRERE TO PHOTO GALLER WITH DIFFERENT PROP, to not make it doujinshi page */}
+			{/* useroute */}
+			<Pressable onPress={() => navigation.navigate("PhotoGallery", { postTitle: props.userName, imageList: props.addedContent, fromFeedItem: true })}>
 				<VStack spacing={12}>
 					<Text style={styles.whiteText}>{props.description}</Text>
 					{/* ADDED CONTENT HERE */}
-					<HStack wrap={true}>
+					<Flex wrap={true} direction={'row'}>
 						{props.addedContent.length > 0 ?
 							props.addedContent.map(item => 
 								props.addedContentType === "picture" ?
-									<Image
-										style={
-											props.addedContent.length === 1 ? styles.singleContent
-												: props.addedContent.length % 2 === 0 ? styles.doubleContent
-														: styles.tripleContent}
-										source={{ uri: item.contentURL }} />
+									<Box style={
+											 	props.addedContent.length === 1 ? styles.singleContent
+													:props.addedContent.length % 3 === 0 ? styles.tripleContent
+											 				:styles.doubleContent} m={3}>
+										<Image style={styles.imageInBox} source={{ uri: item.contentURL }} resizeMode={ResizeMode.COVER} />
+									</Box>
 									: props.addedContentType === "video" ?
 									<Video
 										ref = { video }
@@ -68,7 +76,7 @@ const FeedItem = (props: Props) => {
 										resizeMode={ResizeMode.STRETCH}
 									/> : null
 						): null } 
-					</HStack>
+					</Flex>
 					{props.location?
 						<HStack style={styles.locationButton}>
 							<Entypo name="location-pin" color={"#fff"} size={16} />
@@ -81,7 +89,7 @@ const FeedItem = (props: Props) => {
 				<Pressable onPress={()=> Alert.alert("Share Post")}>
 					<FontAwesome name="share-square-o" color={"#999"} size={16} />
 				</Pressable>
-				<Pressable onPress={() => Alert.alert("View Post")}>
+				<Pressable onPress={() => props.openComments()}>
 					<HStack spacing={4} style={styles.bottomIcon}>
 						<Fontisto name="commenting" color={"#999"} size={16} />
 						<Text style={styles.bottomText}>{props.totalComments}</Text>
@@ -140,16 +148,20 @@ const styles = StyleSheet.create({
 	divider: {
 		marginTop: 12
 	},
+	imageInBox: {
+		width: "100%",
+		height: "100%"
+	},
 	singleContent: {
 		height: 200,
 		width: "100%"
 	},
 	doubleContent: {
-		height: 200,
-		width: "50%"
+		height: (windowWidth / 2) - 22,
+		width: (windowWidth / 2) - 22
 	},
 	tripleContent: {
-		height: 200,
-		width: "33%"
+		height: (windowWidth / 3) - 17,
+		width: (windowWidth / 3) - 17
 	},
 })

@@ -7,7 +7,7 @@ import {
   Pressable,
   Alert,
 } from "react-native";
-import { HStack, Divider } from "@react-native-material/core";
+import { HStack, Divider } from "native-base";
 
 import FeedList from "layouts/FeedList";
 import { officialCertificateList } from "./officialCertificateList";
@@ -21,7 +21,7 @@ const Header = () => {
         data={officialCertificateList}
         renderItem={({ item }) => (
           <Pressable onPress={() => Alert.alert("asdsad")}>
-            <HStack spacing={12} style={styles.certificateItem}>
+            <HStack space={3} style={styles.certificateItem}>
               <View style={styles.dot}></View>
               <Text style={styles.whiteText}>{item.certificateName}</Text>
             </HStack>

@@ -1,6 +1,6 @@
 import React from 'react'
 import { StyleSheet, Text, Pressable, Alert, Image, Dimensions } from 'react-native'
-import { VStack, HStack, Avatar, Divider, Box, Flex } from '@react-native-material/core'
+import { VStack, HStack, Avatar, Divider, Box, Flex } from 'native-base'
 import { Video, ResizeMode } from 'expo-av';
 
 import Entypo from "react-native-vector-icons/Entypo";
@@ -41,11 +41,11 @@ const FeedItem = (props: Props) => {
 	}
 	
 	return (
-		<VStack p={16} spacing={8}>
+		<VStack p={4} space={2}>
 			<HStack>
 				<Pressable onPress={() => { Alert.alert("Go to " + props.userName + " profile") }}>
-					<HStack spacing={8} style={styles.top}>
-						<Avatar image={{ uri: props.userPictureURL }} size={28} />
+					<HStack space={2} style={styles.top}>
+						<Avatar source={{ uri: props.userPictureURL }} size={28} />
 						<Text style={styles.whiteText}>{props.userName }</Text>
 					</HStack>
 				</Pressable>
@@ -53,25 +53,25 @@ const FeedItem = (props: Props) => {
 					<Text style={styles.privateMessageText}>私信</Text>
 				</Pressable>
 			</HStack>
-			<HStack spacing={8}>
+			<HStack space={2}>
 				{props.tags.map(tag =>
 					<Pressable onPress={()=>{Alert.alert("Go to " + tag + " tag page")}}>
 						<Text style={styles.tags}>{tag}</Text>
 					</Pressable>
 				)}
 			</HStack>
-			<VStack spacing={12}>
+			<VStack space={2}>
 				<Text style={styles.whiteText}>{props.description}</Text>
 				{/* ADDED CONTENT HERE */}
 				<Pressable onPress={ props.addedContentType === "picture" ? goToPhotoGallery : null}>
-					<Flex wrap={true} direction={'row'}>
+					<Flex wrap="wrap" direction="row">
 						{props.addedContent.length > 0 ?
 							props.addedContent.map(item => 
 								props.addedContentType === "picture" ?
 									<Box style={
 												props.addedContent.length === 1 ? styles.singleContent
 													:props.addedContent.length % 3 === 0 ? styles.tripleContent
-															:styles.doubleContent} m={3}>
+															:styles.doubleContent} m={0.5}>
 										<Image style={styles.imageInBox} source={{ uri: item.contentURL }} resizeMode={ResizeMode.COVER} />
 									</Box>
 									: props.addedContentType === "video" ?
@@ -96,13 +96,13 @@ const FeedItem = (props: Props) => {
 					<FontAwesome name="share-square-o" color={"#999"} size={16} />
 				</Pressable>
 				<Pressable onPress={() => props.openComments()}>
-					<HStack spacing={4} style={styles.bottomIcon}>
+					<HStack space={1} style={styles.bottomIcon}>
 						<Fontisto name="commenting" color={"#999"} size={16} />
 						<Text style={styles.bottomText}>{props.totalComments}</Text>
 					</HStack>
 				</Pressable>
 				<Pressable onPress={() => Alert.alert("Like Post")}>
-					<HStack spacing={4} style={styles.bottomIcon}>
+					<HStack space={1} style={styles.bottomIcon}>
 						<AntDesign name="hearto" color={"#999"} size={16} />
 						<Text style={styles.bottomText}>{props.totalLikes}</Text>
 					</HStack>
@@ -163,11 +163,11 @@ const styles = StyleSheet.create({
 		width: "100%"
 	},
 	doubleContent: {
-		height: (windowWidth / 2) - 22,
-		width: (windowWidth / 2) - 22
+		height: (windowWidth / 2) - 20,
+		width: (windowWidth / 2) - 20
 	},
 	tripleContent: {
-		height: (windowWidth / 3) - 17,
-		width: (windowWidth / 3) - 17
+		height: (windowWidth / 3) - 15,
+		width: (windowWidth / 3) - 15
 	},
 })

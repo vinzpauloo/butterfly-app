@@ -12,18 +12,11 @@ import {
 import { AntDesign } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
 
+import AreaText from "../../../components/forms/AreaText";
+import Buttons from "../../../components/forms/Buttons";
+
 const Introduction = () => {
   const navigation = useNavigation<any>();
-
-  const [text, setText] = useState("用户很懒,什么也没留下");
-  const [charactersLeft, setCharactersLeft] = useState(100);
-  const handleTextChange = (input) => {
-    if (input.length > 100) {
-      return;
-    }
-    setText(input);
-    setCharactersLeft(100 - input.length);
-  };
 
   return (
     <ScrollView style={styles.container}>
@@ -34,24 +27,17 @@ const Introduction = () => {
             <AntDesign name="left" size={24} color="white" />
           </TouchableOpacity>
         </View>
-        <View style={{}}>
+        <View>
           <Text style={styles.title}>签名</Text>
         </View>
       </View>
 
-      <View style={styles.textInputContainer}>
-        <TextInput
-          style={styles.textInput}
-          onChangeText={handleTextChange}
-          value={text}
-          maxLength={100}
-        />
-
-        <Text style={styles.charactersLeftText}>{charactersLeft}/100</Text>
+      <View style={styles.textArea}>
+        <AreaText placeholder='用户很懒,什么也没留下' placeholderTextColor='grey' maxLength={100}/>
       </View>
 
       <View style={styles.btnContainer}>
-        <Button title="提交" color="#FF474E"></Button>
+        <Buttons props={'提交'}/>
       </View>
     </ScrollView>
   );
@@ -80,30 +66,13 @@ const styles = StyleSheet.create({
     textAlign: "center",
     fontSize: 20,
   },
-  textInputContainer: {
-    borderWidth: 1,
-    borderColor: "#FFFFFF",
-    marginHorizontal: 15,
-    borderRadius: 5,
-    height: 300,
-    marginTop: 20,
-  },
-  textInput: {
-    color: "white",
-    padding: 10,
-    borderRadius: 5,
-  },
-  charactersLeftText: {
-    textAlign: "right",
-    position: "absolute",
-    bottom: 20,
-    right: 20,
-    color: "#FFFFFF",
-  },
   btnContainer: {
     marginTop: 20,
     marginHorizontal: 15,
   },
+  textArea: {
+    padding: 15
+  }
 });
 
 export default Introduction;

@@ -9,7 +9,7 @@ import {
   Text,
   View,
 } from "react-native";
-import { useNavigation } from "@react-navigation/native";
+import { useNavigation, useRoute } from "@react-navigation/native";
 
 import Banner10 from "assets/images/banner10.jpg";
 import ProfilePhoto from "assets/images/profilePhoto.jpg";
@@ -18,6 +18,7 @@ import Moment from "screens/SingleUser/tabs/Moment";
 import Projects from "screens/SingleUser/tabs/Projects";
 import Collection from "screens/SingleUser/tabs/Collection";
 import Container from "components/Container";
+import { Entypo } from '@expo/vector-icons';
 
 const { width, height } = Dimensions.get("window");
 
@@ -38,6 +39,10 @@ const sampleData = [
 
 const ProfileBanner = () => {
   const navigation = useNavigation();
+
+  const route = useRoute();
+  const previousScreen = (route.params && route.params['previousScreen']) || 'Default';
+
   return (
     <View style={styles.bannerContainer}>
       <ImageBackground
@@ -53,13 +58,17 @@ const ProfileBanner = () => {
           style={styles.backIcon}
           onPress={() => navigation.goBack()}
         />
-        <Ionicons
-          name="md-chatbox-ellipses-outline"
-          color="#fff"
-          size={25}
-          style={styles.messageIcon}
-          onPress={() => navigation.goBack()}
-        />
+        {previousScreen === 'Account' ? (
+            <Entypo name="dots-three-vertical" size={30} color='#FFFFFF' style={styles.messageIcon} />
+        ): (
+            <Ionicons
+                name="md-chatbox-ellipses-outline"
+                color="#fff"
+                size={35}
+                style={styles.messageIcon}
+                onPress={() => navigation.goBack()}
+            />
+        )}
         <Image source={ProfilePhoto} style={styles.profileImg} />
         <View style={styles.usernameContainer}>
           <View style={styles.usernameContent}>

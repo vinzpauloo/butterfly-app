@@ -5,18 +5,16 @@ import {
   ScrollView,
   Dimensions,
   TouchableOpacity,
-  Button,
-  TextInput,
   StyleSheet,
 } from "react-native";
 import { AntDesign } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
 
+import InputText from "../../../components/forms/InputText";
+import Buttons from "../../../components/forms/Buttons";
+
 const MobileBindRequest = () => {
   const navigation = useNavigation<any>();
-
-  const [message1, setMessage1] = useState("请输入需要绑定的手机号");
-  const [message2, setMessage2] = useState("请输入短信验证码");
 
   return (
     <ScrollView style={styles.container}>
@@ -33,32 +31,22 @@ const MobileBindRequest = () => {
       </View>
 
       <View style={styles.textInputContainer}>
-        <TextInput
-          onChangeText={setMessage1}
-          value={message1}
-          style={styles.textInput}
-        />
+        <InputText placeholder='请输入需要绑定的手机号' placeholderTextColor='grey' maxLength={null}/>
       </View>
 
       <View style={styles.textInputContainer2}>
-        <View style={styles.textInputInnerContainer2}>
-          <TextInput
-            onChangeText={setMessage2}
-            value={message2}
-            style={styles.textInput2}
-            placeholder="Enter your message here"
-          />
+
+        <View style={styles.flexOne}>
+          <InputText placeholder='请输入短信验证码' placeholderTextColor='grey' maxLength={null}/>
         </View>
 
-        <View style={styles.firstBtnContainer}>
-          <TouchableOpacity style={styles.firstBtnInnerContainer}>
-            <Text style={styles.firstBtn}>获取短信验证码</Text>
-          </TouchableOpacity>
+        <View style={styles.flexTwo}>
+          <Buttons props={'获取短信验证码'}/>
         </View>
       </View>
 
-      <View style={styles.secondBtnContainer}>
-        <Button title="绑定邀请码" color="#FF474E"></Button>
+      <View style={{marginHorizontal: 20}}>
+        <Buttons props={'绑定邀请码'}/>
       </View>
     </ScrollView>
   );
@@ -89,26 +77,15 @@ const styles = StyleSheet.create({
     fontSize: 20,
   },
   textInputContainer: {
-    marginHorizontal: 25,
-  },
-  textInput: {
-    borderWidth: 1,
-    borderColor: "#FFFFFF",
-    color: "#FFFFFF",
-    padding: 10,
-    borderRadius: 5,
-    marginTop: 20,
+    marginHorizontal: 20,
+    marginTop: 25
   },
   textInputContainer2: {
-    marginTop: 20,
-    flexDirection: "row",
-    alignItems: "center",
-    marginHorizontal: 25,
-  },
-  textInputInnerContainer2: {
-    flex: 6,
-    flexDirection: "row",
-    alignItems: "center",
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    marginHorizontal: 20,
+    marginVertical: 25
   },
   textInput2: {
     borderWidth: 1,
@@ -118,23 +95,13 @@ const styles = StyleSheet.create({
     borderRadius: 5,
     height: 50,
   },
-  firstBtnContainer: {
-    flex: 4,
-    backgroundColor: "#FF474E",
-    borderRadius: 5,
+  flexOne: {
+    flex: 0.6
   },
-  firstBtnInnerContainer: {
-    height: 51,
-    justifyContent: "center",
-  },
-  firstBtn: {
-    textAlign: "center",
-    color: "#FFFFFF",
-  },
-  secondBtnContainer: {
-    marginTop: 20,
-    marginHorizontal: 25,
-  },
+  flexTwo: {
+    flex: 0.4,
+    marginLeft: 10
+  }
 });
 
 export default MobileBindRequest;

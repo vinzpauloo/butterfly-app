@@ -201,7 +201,7 @@ const AccountSettings = (navigation: any) => {
       </View>
 
       {/*Account Certificate*/}
-      <TouchableOpacity onPress={() => navigate.navigate("AccountCertificate")}>
+      <TouchableOpacity onPress={() => navigate.navigate("AccountVerification")}>
         <View style={styles.itemContainer}>
           <View style={styles.itemInnerContainer}>
             <MaterialCommunityIcons

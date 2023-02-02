@@ -12,10 +12,12 @@ import {
 import { AntDesign } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
 
+import InputText from "../../../components/forms/InputText";
+import Buttons from "../../../components/forms/Buttons";
+
 const MobileRetrieval = () => {
   const navigation = useNavigation<any>();
 
-  const [message1, setMessage1] = useState("请输入原来绑定的手机号");
   const [message2, setMessage2] = useState("请输入验证码");
 
   return (
@@ -34,32 +36,26 @@ const MobileRetrieval = () => {
       </View>
 
       <View style={styles.textInputContainer}>
-        <TextInput
-          onChangeText={setMessage1}
-          value={message1}
-          style={styles.textInput}
+        <InputText
+            placeholder='请输入原来绑定的手机号'
+            placeholderTextColor='grey'
+            maxLength={null}
         />
       </View>
 
-      <View style={styles.textInputAndBtnContainer}>
-        <View style={styles.textInputContainer2}>
-          <TextInput
-            onChangeText={setMessage2}
-            value={message2}
-            style={styles.textInput2}
-            placeholder="Enter your message here"
-          />
+      <View style={styles.textInputContainer2}>
+
+        <View style={styles.flexOne}>
+          <InputText placeholder='请输入短信验证码' placeholderTextColor='grey' maxLength={null}/>
         </View>
 
-        <View style={styles.firstBtnContainer}>
-          <TouchableOpacity style={styles.firstBtnInnerContainer}>
-            <Text style={styles.firstBtnText}>获取验证码</Text>
-          </TouchableOpacity>
+        <View style={styles.flexTwo}>
+          <Buttons props={'获取短信验证码'}/>
         </View>
       </View>
 
-      <View style={styles.secondBtnContainer}>
-        <TouchableOpacity style={styles.secondBtnInnerContainer}>
+      <View style={styles.btnAndFooter}>
+        <TouchableOpacity style={styles.secondBtn}>
           <Text style={styles.secondBtnText}>注意</Text>
         </TouchableOpacity>
 
@@ -69,7 +65,7 @@ const MobileRetrieval = () => {
       </View>
 
       <View style={styles.thirdBtnContainer}>
-        <Button title="确定" color="#FF474E"></Button>
+        <Buttons props={'确定'}/>
       </View>
     </ScrollView>
   );
@@ -100,33 +96,21 @@ const styles = StyleSheet.create({
   },
   textInputContainer: {
     marginHorizontal: 25,
-  },
-  textInput: {
-    borderWidth: 1,
-    borderColor: "#FFFFFF",
-    color: "#FFFFFF",
-    padding: 10,
-    borderRadius: 5,
-    marginTop: 20,
-  },
-  textInputAndBtnContainer: {
-    marginTop: 20,
-    flexDirection: "row",
-    alignItems: "center",
-    marginHorizontal: 25,
+    marginTop: 20
   },
   textInputContainer2: {
-    flex: 6,
-    flexDirection: "row",
-    alignItems: "center",
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    marginHorizontal: 25,
+    marginVertical: 20
   },
-  textInput2: {
-    borderWidth: 1,
-    borderColor: "#FFFFFF",
-    color: "white",
-    padding: 10,
-    borderRadius: 5,
-    height: 50,
+  flexOne: {
+    flex: 0.6
+  },
+  flexTwo: {
+    flex: 0.4,
+    marginLeft: 10
   },
   firstBtnContainer: {
     flex: 4,
@@ -141,11 +125,10 @@ const styles = StyleSheet.create({
     textAlign: "center",
     color: "#FFFFFF",
   },
-  secondBtnContainer: {
-    marginTop: 20,
+  btnAndFooter: {
     marginHorizontal: 25,
   },
-  secondBtnInnerContainer: {
+  secondBtn: {
     justifyContent: "center",
     backgroundColor: "#FF474E",
     width: 40,
@@ -163,8 +146,8 @@ const styles = StyleSheet.create({
     marginHorizontal: 2,
   },
   thirdBtnContainer: {
-    marginTop: 25,
     marginHorizontal: 25,
+    marginVertical: 20
   },
 });
 

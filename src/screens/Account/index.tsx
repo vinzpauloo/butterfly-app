@@ -60,7 +60,7 @@ const Summary = () => {
               </View>
             </View>
             <TouchableOpacity
-              onPress={() => navigation.navigate("SingleUser")}
+              onPress={() => navigation.navigate("SingleUser", {previousScreen: 'Account'})}
               style={styles.homeButtonContainer}
             >
               <Text style={styles.homeButton}>主页</Text>

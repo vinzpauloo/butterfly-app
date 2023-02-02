@@ -34,7 +34,6 @@ import ProfilePhoto from "screens/Settings/tabs/ProfilePhoto";
 import PetName from "screens/Settings/tabs/PetName";
 import MobileBindRequest from "screens/Settings/tabs/MobileBindRequest";
 import Introduction from "screens/Settings/tabs/Introduction";
-import AccountCertificate from "screens/Settings/tabs/AccountCertificate";
 import AccountRetrieval from "screens/Settings/tabs/AccountRetrieval";
 import MobileRetrieval from "screens/Settings/AccountRetrievalTabs/MobileRetrieval";
 import CameraInit from "screens/Settings/AccountRetrievalTabs/CameraInit";
@@ -206,11 +205,6 @@ export const stackScreens = {
       options: { headerShown: false },
     },
     {
-      name: "AccountCertificate",
-      component: AccountCertificate,
-      options: { headerShown: false },
-    },
-    {
       name: "AccountRetrieval",
       component: AccountRetrieval,
       options: { headerShown: false },
@@ -253,6 +247,7 @@ export const stackScreens = {
     {
       name: "PasscodeLock",
       component: PasscodeLock,
+      options: { headerShown: false },
     },
     {
       name: "InformationScreen",

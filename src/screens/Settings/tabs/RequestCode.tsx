@@ -13,10 +13,11 @@ import {
 import { AntDesign } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
 
+import InputText from "../../../components/forms/InputText";
+import Buttons from "../../../components/forms/Buttons";
+
 const RequestCode = () => {
   const navigation = useNavigation<any>();
-
-  const [message1, setMessage1] = useState("请填写邀请码");
   return (
     <KeyboardAvoidingView behavior="height" style={{ flex: 1 }}>
       <ScrollView style={styles.container}>
@@ -33,15 +34,11 @@ const RequestCode = () => {
         </View>
 
         <View style={styles.textInputContainer}>
-          <TextInput
-            onChangeText={setMessage1}
-            value={message1}
-            style={styles.textInput}
-          />
+          <InputText placeholder='请填写邀请码' placeholderTextColor='grey' maxLength={null}/>
         </View>
 
         <View style={styles.btnContainer}>
-          <Button title="确定" color="#FF474E"></Button>
+          <Buttons props={'确定'}/>
         </View>
       </ScrollView>
     </KeyboardAvoidingView>
@@ -78,19 +75,12 @@ const styles = StyleSheet.create({
   },
   textInputContainer: {
     marginTop: 20,
-    marginHorizontal: 15,
-  },
-  textInput: {
-    borderWidth: 1,
-    borderColor: "#FF474E",
-    color: "#FFFFFF",
-    padding: 10,
-    borderRadius: 5,
+    marginHorizontal: 20,
   },
   btnContainer: {
-    marginTop: 150,
-    marginHorizontal: 15,
-  },
+    marginVertical: 20,
+    marginHorizontal: 20
+  }
 });
 
 export default RequestCode;

@@ -6,13 +6,15 @@ import {
   Text,
   View,
 } from "react-native";
-import React from "react";
+import React, { useEffect } from "react";
 
 import * as Linking from "expo-linking";
 import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons";
 
 // import { ScrollView } from "react-native-gesture-handler";
 import { globalStyle } from "globalStyles";
+import { useDisclose } from "native-base";
+import CenteredModal from "components/CenteredModal";
 
 const adsURL = "https://google.com/";
 
@@ -29,62 +31,58 @@ const sampleData = [
   "sunt in culpa qui officia deserunt mollit anim id est laborum",
 ];
 
-const Announcement = ({ setcloseAnnouncement }) => {
-  const handleCloseAds = (e) => {
-    e.stopPropagation();
-    setcloseAnnouncement(false);
-  };
+const Content = ({ onClose }) => {
   const handleAdPress = () => {
     Linking.openURL(adsURL);
   };
 
   return (
-    <Pressable style={styles.container} onPress={handleCloseAds}>
-      <Pressable style={styles.content}>
-        <MaterialCommunityIcons
-          name="bell-ring"
-          size={50}
-          color="#cdcffe"
-          style={styles.bellIcon}
-        />
-        <Text style={styles.title}>Announcement</Text>
-        <ScrollView style={styles.textsContent}>
-          <View>
-            {sampleData.map((text, index) => (
-              <Text key={index} style={styles.text}>
-                {text}
-              </Text>
-            ))}
-          </View>
-        </ScrollView>
-        <View style={styles.buttons}>
-          <Pressable style={styles.button} onPress={handleAdPress}>
-            <Text style={styles.buttonText}>App Store</Text>
-          </Pressable>
-          <Pressable style={styles.button} onPress={handleCloseAds}>
-            <Text style={styles.buttonText}>I know</Text>
-          </Pressable>
+    <Pressable style={styles.content}>
+      <MaterialCommunityIcons
+        name="bell-ring"
+        size={50}
+        color="#cdcffe"
+        style={styles.bellIcon}
+      />
+      <Text style={styles.title}>Announcement</Text>
+      <ScrollView style={styles.textsContent}>
+        <View>
+          {sampleData.map((text, index) => (
+            <Text key={index} style={styles.text}>
+              {text}
+            </Text>
+          ))}
         </View>
-      </Pressable>
+      </ScrollView>
+      <View style={styles.buttons}>
+        <Pressable style={styles.button} onPress={handleAdPress}>
+          <Text style={styles.buttonText}>App Store</Text>
+        </Pressable>
+        <Pressable style={styles.button} onPress={onClose}>
+          <Text style={styles.buttonText}>I know</Text>
+        </Pressable>
+      </View>
     </Pressable>
+  );
+};
+
+const Announcement = () => {
+  const { isOpen, onOpen, onClose } = useDisclose();
+  useEffect(() => {
+    //@ts-ignore
+    onOpen(() => true);
+  }, []);
+
+  return (
+    <CenteredModal isOpen={isOpen} onClose={onClose}>
+      <Content onClose={onClose} />
+    </CenteredModal>
   );
 };
 
 export default Announcement;
 
 const styles = StyleSheet.create({
-  container: {
-    position: "absolute",
-    top: 0,
-    left: 0,
-    right: 0,
-    bottom: 0,
-    flex: 1,
-    backgroundColor: "rgba(0,0,0,0.3)",
-    zIndex: 50,
-    alignItems: "center",
-    justifyContent: "center",
-  },
   title: {
     marginBottom: 10,
     color: globalStyle.inactiveTextColor,

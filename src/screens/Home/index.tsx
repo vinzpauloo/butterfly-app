@@ -7,6 +7,9 @@ import { useNavigation } from "@react-navigation/native";
 import MaterialTopTabs from "layouts/navigators/MaterialTopTabs";
 import { topMainNav } from "data/topMainNav";
 
+import Advertisements from "screens/InitialLoad/Advertisements";
+import Announcement from "screens/InitialLoad/Announcement";
+
 //Search Icon
 const Search = () => {
   const navigation = useNavigation<any>();
@@ -26,7 +29,13 @@ const Search = () => {
 };
 
 const HomeTab = () => {
-  return <MaterialTopTabs data={topMainNav} search={<Search />} />;
+  return (
+    <>
+      <MaterialTopTabs data={topMainNav} search={<Search />} />
+      <Announcement />
+      <Advertisements />
+    </>
+  );
 };
 
 export default HomeTab;

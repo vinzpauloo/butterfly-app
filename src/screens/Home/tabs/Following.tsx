@@ -25,7 +25,7 @@ import { followImages } from "data/gridImages";
 import { globalStyle } from "globalStyles";
 import { NoFollowingImages } from "data/gridImages";
 import { reelsVideos } from "data/reelsVideos";
-import Modal from "components/Modal";
+import Modal from "components/BottomModal";
 import VIPTag from "components/VIPTag";
 
 const { width } = Dimensions.get("window");

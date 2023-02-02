@@ -17,7 +17,7 @@ import { Center, NativeBaseProvider, useDisclose } from "native-base";
 
 import { globalStyle } from "globalStyles";
 import { reelsVideos } from "data/reelsVideos";
-import Modal from "components/Modal";
+import Modal from "components/BottomModal";
 import VIPTag from "components/VIPTag";
 
 const { width } = Dimensions.get("window");
@@ -112,11 +112,8 @@ const GridVideos = ({ videos, isFollowingScreen = false }) => {
         )}
         keyExtractor={(_, index) => "" + index}
       />
-      <NativeBaseProvider>
-        <Center flex={1} px="3">
-          <Modal isOpen={isOpen} onOpen={onOpen} onClose={onClose} />
-        </Center>
-      </NativeBaseProvider>
+
+      <Modal isOpen={isOpen} onOpen={onOpen} onClose={onClose} />
     </>
   );
 };

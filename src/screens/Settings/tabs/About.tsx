@@ -1,3 +1,4 @@
+import React from "react";
 import {
   Dimensions,
   ScrollView,
@@ -7,11 +8,12 @@ import {
   Image,
   StyleSheet,
 } from "react-native";
-import { AntDesign } from "@expo/vector-icons";
-import React from "react";
+
 import { useNavigation } from "@react-navigation/native";
 
-import Logo from "../../../assets/images/profilePhoto4.jpg";
+import { AntDesign } from "@expo/vector-icons";
+
+import Logo from "assets/images/profilePhoto4.jpg";
 
 const About = () => {
   const navigation = useNavigation<any>();

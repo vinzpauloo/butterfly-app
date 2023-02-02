@@ -72,7 +72,7 @@ const ProfileBanner = () => {
         <Image source={ProfilePhoto} style={styles.profileImg} />
         <View style={styles.usernameContainer}>
           <View style={styles.usernameContent}>
-            <Text style={styles.usernameText}>Nana Taipie</Text>
+            <Text style={styles.usernameText}>Nana Taipei</Text>
             <Text style={styles.usernameUp}>UP</Text>
           </View>
           <Pressable style={styles.followBtn}>

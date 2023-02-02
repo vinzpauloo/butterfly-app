@@ -7,19 +7,19 @@ import {
   StyleSheet,
   Image,
   Linking,
-  Button,
 } from "react-native";
+
+import { useNavigation } from "@react-navigation/native";
+
 import {
   AntDesign,
   SimpleLineIcons,
   MaterialCommunityIcons,
 } from "@expo/vector-icons";
-import { useNavigation } from "@react-navigation/native";
 
-import ImageTitle from "../../../assets/images/profilePhoto.jpg";
-// import ImageBarcode from "../../../assets/images/qrcode.png";
 
-import Buttons from "../../../components/forms/Buttons";
+import ImageTitle from "assets/images/profilePhoto.jpg";
+import Buttons from "components/forms/Buttons";
 const AccountVerification = () => {
   const navigation = useNavigation<any>();
 

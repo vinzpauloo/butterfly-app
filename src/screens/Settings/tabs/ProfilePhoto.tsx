@@ -13,7 +13,7 @@ import { useNavigation } from "@react-navigation/native";
 
 import { AntDesign } from "@expo/vector-icons";
 
-import mainPhoto from "../../../assets/images/profilePhoto.jpg";
+import mainPhoto from "assets/images/profilePhoto.jpg";
 import { modelListData } from "data/modelListData";
 
 const ProfilePhoto = () => {

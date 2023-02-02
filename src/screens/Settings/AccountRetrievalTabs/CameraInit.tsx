@@ -1,5 +1,5 @@
+import React, { useState, useEffect } from "react";
 import {
-  Alert,
   Dimensions,
   ScrollView,
   Text,
@@ -7,11 +7,13 @@ import {
   View,
   StyleSheet,
 } from "react-native";
-import React, { useState, useEffect } from "react";
+
+import { useNavigation } from "@react-navigation/native";
+
 import { Camera, CameraType } from "expo-camera";
 import * as ImagePicker from "expo-image-picker";
 import { MaterialIcons, FontAwesome, Fontisto } from "@expo/vector-icons";
-import { useNavigation } from "@react-navigation/native";
+
 
 const CameraInit = () => {
   const navigate = useNavigation<any>();

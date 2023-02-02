@@ -11,9 +11,11 @@ import {
   Button,
 } from "react-native";
 import Modal from "react-native-modal";
-import { AntDesign, FontAwesome5 } from "@expo/vector-icons";
+
 import { useNavigation } from "@react-navigation/native";
-import { Camera, CameraType } from "expo-camera";
+
+import { AntDesign, FontAwesome5 } from "@expo/vector-icons";
+
 import * as ImagePicker from "expo-image-picker";
 
 const AccountRetrieval = () => {

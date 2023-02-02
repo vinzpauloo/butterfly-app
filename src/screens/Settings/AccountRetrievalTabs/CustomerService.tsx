@@ -11,14 +11,16 @@ import {
   Image,
   TextInput,
 } from "react-native";
-import { AntDesign } from "@expo/vector-icons";
+
 import { useNavigation, useRoute } from "@react-navigation/native";
 import * as ImagePicker from "expo-image-picker";
-import { Camera, CameraType } from "expo-camera";
+import { Camera } from "expo-camera";
 
+import { AntDesign } from "@expo/vector-icons";
 import Entypo from "react-native-vector-icons/Entypo";
 import Feather from "react-native-vector-icons/Feather";
 import { HStack, VStack } from "@react-native-material/core";
+
 import { globalStyle } from "globalStyles";
 
 const CustomerService = () => {

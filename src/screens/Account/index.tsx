@@ -12,6 +12,7 @@ import {
 import React from "react";
 
 import { useNavigation } from "@react-navigation/native";
+
 import Fontisto from "react-native-vector-icons/Fontisto";
 import Ionicons from "react-native-vector-icons/Ionicons";
 import { FontAwesome5 } from "@expo/vector-icons";

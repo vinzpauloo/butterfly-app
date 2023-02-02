@@ -7,10 +7,11 @@ import {
   Image,
   StyleSheet,
 } from "react-native";
-import { AntDesign } from "@expo/vector-icons";
+
 import { useNavigation } from "@react-navigation/native";
 
-import ImageCache from "../../../assets/images/cacheImage.jpg";
+import { AntDesign } from "@expo/vector-icons";
+
 import NoCacheMessage from "features/sectionList/components/NoCacheMessage";
 
 const OfflineCache = () => {

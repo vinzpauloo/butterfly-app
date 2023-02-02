@@ -9,11 +9,12 @@ import {
   View,
   StyleSheet,
 } from "react-native";
+
 import { AntDesign } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
 
-import AreaText from "../../../components/forms/AreaText";
-import Buttons from "../../../components/forms/Buttons";
+import AreaText from "components/forms/AreaText";
+import Buttons from "components/forms/Buttons";
 
 const Introduction = () => {
   const navigation = useNavigation<any>();

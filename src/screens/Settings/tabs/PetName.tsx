@@ -9,11 +9,12 @@ import {
   TextInput,
   Button,
 } from "react-native";
+
 import { AntDesign } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
 
-import InputText from "../../../components/forms/InputText";
-import Buttons from "../../../components/forms/Buttons";
+import InputText from "components/forms/InputText";
+import Buttons from "components/forms/Buttons";
 
 const PetName = () => {
 

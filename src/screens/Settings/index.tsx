@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import {
   StyleSheet,
   Text,
@@ -9,10 +9,10 @@ import {
   SafeAreaView,
   Dimensions,
 } from "react-native";
-import React from "react";
 import Modal from "react-native-modal";
 
 import { useNavigation } from "@react-navigation/native";
+
 import {
   Ionicons,
   AntDesign,

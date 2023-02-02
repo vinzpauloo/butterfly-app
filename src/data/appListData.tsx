@@ -1,10 +1,10 @@
-import appImg1 from "../assets/images/profilePhoto.jpg";
-import appImg2 from "../assets/images/ads-fullscreen.jpg";
-import appImg3 from "../assets/images/banner1.jpg";
-import appImg4 from "../assets/images/banner2.jpg";
-import appImg5 from "../assets/images/banner3.jpg";
-import appImg6 from "../assets/images/banner4.jpg";
-import appImg7 from "../assets/images/banner5.jpg";
+import appImg1 from "assets/images/profilePhoto.jpg";
+import appImg2 from "assets/images/ads-fullscreen.jpg";
+import appImg3 from "assets/images/banner1.jpg";
+import appImg4 from "assets/images/banner2.jpg";
+import appImg5 from "assets/images/banner3.jpg";
+import appImg6 from "assets/images/banner4.jpg";
+import appImg7 from "assets/images/banner5.jpg";
 
 export const appListData = [
   {

@@ -18,7 +18,7 @@ import { Camera, CameraType } from "expo-camera";
 
 import Entypo from "react-native-vector-icons/Entypo";
 import Feather from "react-native-vector-icons/Feather";
-import { HStack, VStack } from "@react-native-material/core";
+import { HStack, VStack } from "native-base";
 import { globalStyle } from "globalStyles";
 
 const CustomerService = () => {
@@ -192,7 +192,7 @@ const CustomerService = () => {
           </Text>
         </>
         {/* )} */}
-        <HStack style={styles.bottomForm} justify={"between"}>
+        <HStack style={styles.bottomForm} justifyContent="between">
           <Pressable onPress={handleCamera}>
             <Entypo name="camera" color={"white"} size={20} />
           </Pressable>

@@ -7,7 +7,7 @@ import {
   FlatList,
   Dimensions,
 } from "react-native";
-import { VStack, Box, HStack, Avatar } from "@react-native-material/core";
+import { VStack, Box, HStack, Avatar } from "native-base";
 
 import Feather from "react-native-vector-icons/Feather";
 import AntDesign from "react-native-vector-icons/AntDesign";
@@ -49,20 +49,19 @@ const MessageItem = (props: MessageItemProps) => {
           });
         }}
       >
-        <HStack spacing={12}>
+        <HStack space={3}>
           <Pressable
             onPress={() => {
               Alert.alert("Go to " + props.senderUserName + " profile");
             }}
           >
             <Avatar
-              label={props.senderUserName}
               color="white"
               size={42}
-              image={{ uri: props.senderImgURL }}
+              source={{ uri: props.senderImgURL }}
             />
           </Pressable>
-          <VStack spacing={4}>
+          <VStack space={1}>
             <Text style={[styles.text, { maxWidth: windowWidth - 110 }]}>
               {props.senderUserName}
             </Text>
@@ -94,13 +93,13 @@ const Information = (props: Props) => {
 
   return (
     <Container>
-      <HStack spacing={12} style={styles.optionsList}>
+      <HStack space={3} style={styles.optionsList}>
         <Pressable
           onPress={() => {
             navigation.navigate("InformationScreen", { postTitle: "粉丝" });
           }}
         >
-          <VStack spacing={6}>
+          <VStack space={1.5}>
             <Box style={styles.box}>
               <Feather name="heart" color={"white"} size={24} />
             </Box>
@@ -112,7 +111,7 @@ const Information = (props: Props) => {
             navigation.navigate("InformationScreen", { postTitle: "点赞" });
           }}
         >
-          <VStack spacing={6}>
+          <VStack space={1.5}>
             <Box style={styles.box}>
               <AntDesign name="like2" color={"white"} size={24} />
             </Box>
@@ -124,7 +123,7 @@ const Information = (props: Props) => {
             navigation.navigate("InformationScreen", { postTitle: "评论" });
           }}
         >
-          <VStack spacing={6}>
+          <VStack space={1.5}>
             <Box style={styles.box}>
               <FontAwesome name="comment-o" color={"white"} size={24} />
             </Box>
@@ -136,7 +135,7 @@ const Information = (props: Props) => {
             navigation.navigate("InformationScreen", { postTitle: "收益" });
           }}
         >
-          <VStack spacing={6}>
+          <VStack space={1.5}>
             <Box style={styles.box}>
               <Fontisto name="money-symbol" color={"white"} size={24} />
             </Box>
@@ -148,7 +147,7 @@ const Information = (props: Props) => {
             navigation.navigate("InformationScreen", { postTitle: "系统" });
           }}
         >
-          <VStack spacing={6}>
+          <VStack space={1.5}>
             <Box style={styles.box}>
               <Octicons name="gear" color={"white"} size={24} />
             </Box>

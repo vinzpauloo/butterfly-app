@@ -6,7 +6,7 @@ import {
   Text,
   Pressable,
 } from "react-native";
-import { VStack, HStack } from "@react-native-material/core";
+import { VStack, HStack } from "native-base";
 import { MasonryFlashList } from "@shopify/flash-list";
 
 import { masonryImages } from "data/masonryImages";
@@ -48,7 +48,7 @@ const SingleImage = (props: SingleImageProp) => {
         <VIPTag />
         <VStack style={styles.blackContainer}>
           <Text style={styles.whiteText}>{props.postTitle}</Text>
-          <HStack spacing={4}>
+          <HStack space={1}>
             <MaterialCommunityIcons
               name="heart"
               color={globalStyle.secondaryColor}

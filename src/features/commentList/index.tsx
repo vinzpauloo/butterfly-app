@@ -1,6 +1,12 @@
+<<<<<<< HEAD
+import React, { useState } from 'react'
+import { FlatList, StyleSheet, Text, Pressable, Alert} from 'react-native'
+import { VStack, Avatar, HStack, Divider } from "native-base";
+=======
 import React, { useState } from "react";
 import { FlatList, StyleSheet, Text, Pressable, Alert } from "react-native";
 import { VStack, Avatar, HStack, Divider } from "@react-native-material/core";
+>>>>>>> master
 
 import { comments } from "data/comments";
 import BottomMessage from "components/BottomMessage";
@@ -24,6 +30,49 @@ const CommentItem = (props: commentItemProps) => {
   const [repliesIsShown, setrepliesIsShown] = useState(false);
   const [amountOfCommentShown, setAmountOfCommentShown] = useState(10);
 
+<<<<<<< HEAD
+	return (
+		<HStack space={2}>
+			<Pressable onPress={() => Alert.alert("go to " + props.userName + " profile")}>
+				<Avatar size={42} source={{ uri: props.userImgURL }} />
+			</Pressable>
+			<VStack space={1} style={{ flex: 1, paddingHorizontal: 6 }}>
+				<Text style={styles.whiteText}>{props.userName}</Text>
+				<Text style={styles.whiteText}>{props.comment}</Text>
+				<Pressable onPress={() => Alert.alert("reply to " + props.userName)}>
+					<HStack space={1.5} style={styles.alignCenter}>
+						<Fontisto name='commenting' color={globalStyle.inactiveTextColor} size={14} />
+						<Text style={styles.secondaryText}>回复</Text>
+					</HStack>
+				</Pressable>
+				<Pressable onPress={() => { setrepliesIsShown(!repliesIsShown)}}>
+					{props.replies.length > 0 ? 
+						<Text style={styles.secondaryColor}>查看 {props.replies.length} 则回复</Text>
+					: null}
+				</Pressable>
+				<VStack space={4} mt={8} style={repliesIsShown ? { display: "flex" } : { display: "none" }}>
+					{props.replies.slice(0, amountOfCommentShown).map((reply, index) => 
+						<HStack key={index} space={2}>
+							<Pressable onPress={() => Alert.alert("go to " + reply.userName + " profile")}>
+								<Avatar size={42} source={{ uri: reply.userImgURL }} />
+							</Pressable>
+							<VStack space={1} style={{ flex: 1, paddingHorizontal: 6 }}>
+								<Text style={styles.whiteText}>{reply.userName}</Text>
+								<Text style={styles.whiteText}>{reply.comment}</Text>
+							</VStack>
+						</HStack>
+					)}
+					{props.replies.length >= 10 && amountOfCommentShown < props.replies.length ? 
+						<Pressable onPress={() => setAmountOfCommentShown(amountOfCommentShown + 10)}>
+							<Text style={styles.loadMoreComments}>更多裝載</Text>
+						</Pressable>
+					: null }
+				</VStack>
+			</VStack>
+		</HStack>
+	)
+}
+=======
   return (
     <HStack spacing={8}>
       <Pressable
@@ -98,6 +147,7 @@ const CommentItem = (props: commentItemProps) => {
     </HStack>
   );
 };
+>>>>>>> master
 
 const CommentList = (props: Props) => {
   return (

@@ -1,9 +1,8 @@
 import React, { useState } from "react";
-import { StyleSheet, Text, View, Dimensions, FlatList, Alert, Modal, TouchableOpacity, Image, } from "react-native";
+import { StyleSheet, Text, View, Dimensions, FlatList, Alert, Pressable, Image, } from "react-native";
 import { ResizeMode, Video } from "expo-av";
 import { useNavigation, useRoute } from "@react-navigation/native";
-import { Pressable, VStack } from "@react-native-material/core";
-import { NativeBaseProvider, useDisclose } from "native-base";
+import { VStack, NativeBaseProvider, useDisclose } from "native-base";
 import BottomComment from "components/BottomComment";
 
 import Ionicons from "react-native-vector-icons/Ionicons";
@@ -50,12 +49,11 @@ const PortraitVideoContent = (props: Props) => {
           useNativeControls={false}
         />
       )}
-      <VStack spacing={8} style={styles.bottomSection}>
+      <VStack space={2} style={styles.bottomSection}>
         <Pressable
           onPress={() => {
             Alert.alert("Go to user Profile!");
           }}
-          pressEffect="none"
         >
           <Text style={[styles.userName, styles.iconText]}>
             @{props.userName}
@@ -79,18 +77,16 @@ const PortraitVideoContent = (props: Props) => {
           onPress={() => {
             Alert.alert("Go to VIP purchase");
           }}
-          pressEffect="none"
         >
           <Text style={styles.subscribe}>Subscription needed or gold coin</Text>
         </Pressable>
       </VStack>
-      <VStack spacing={8} style={styles.verticalBar}>
+      <VStack space={2} style={styles.verticalBar}>
         <View style={styles.verticalBarItem}>
           <Pressable
             onPress={() => {
               Alert.alert("Go to user Profile!");
             }}
-            pressEffect="none"
           >
             <Image style={styles.userLogo} source={{ uri: props.userImage }} />
           </Pressable>
@@ -99,7 +95,6 @@ const PortraitVideoContent = (props: Props) => {
               onPress={() => {
                 Alert.alert("Follow User!");
               }}
-              pressEffect="none"
             >
               <Feather name="plus" color={"white"} size={16} />
             </Pressable>
@@ -110,8 +105,6 @@ const PortraitVideoContent = (props: Props) => {
             onPress={() => {
               Alert.alert("Like!");
             }}
-            pressEffectColor="red"
-            pressEffect="android-ripple"
           >
             <Ionicons name="heart" color={"white"} size={40} />
           </Pressable>
@@ -120,8 +113,6 @@ const PortraitVideoContent = (props: Props) => {
         <View style={styles.verticalBarItem}>
           <Pressable
             onPress={() => props.openComments()}
-            pressEffectColor="black"
-            pressEffect="android-ripple"
           >
             <MaterialCommunityIcons name="comment" color={"white"} size={40} />
           </Pressable>
@@ -132,8 +123,6 @@ const PortraitVideoContent = (props: Props) => {
             onPress={() => {
               Alert.alert("Add to Fave");
             }}
-            pressEffectColor="yellow"
-            pressEffect="android-ripple"
           >
             <Ionicons name="star" color={"white"} size={40} />
           </Pressable>
@@ -144,8 +133,6 @@ const PortraitVideoContent = (props: Props) => {
             onPress={() => {
               Alert.alert("Download Video");
             }}
-            pressEffectColor="black"
-            pressEffect="android-ripple"
           >
             <MaterialCommunityIcons name="download" color={"white"} size={40} />
           </Pressable>

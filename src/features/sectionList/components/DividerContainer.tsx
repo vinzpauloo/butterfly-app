@@ -1,4 +1,4 @@
-import { Divider } from "@react-native-material/core";
+import { Divider } from "native-base";
 import { StyleSheet } from "react-native";
 
 const DividerContainer = () => {

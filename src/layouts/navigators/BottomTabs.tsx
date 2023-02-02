@@ -1,24 +1,14 @@
-import {} from "react-native";
-import React, { useState } from "react";
+import React from "react";
 
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 
 import { globalStyle } from "../../globalStyles";
-import Advertisements from "screens/InitialLoad/Advertisements";
-import Announcement from "screens/InitialLoad/Announcement";
 
 const BottomTab = createBottomTabNavigator();
 
 const BottomTabs = ({ data }) => {
-  const [closeAds, setCloseAds] = useState(true);
-  const [closeAnnouncement, setcloseAnnouncement] = useState(true);
   return (
     <>
-      {closeAds ? <Advertisements setCloseAds={setCloseAds} /> : null}
-      {closeAnnouncement ? (
-        <Announcement setcloseAnnouncement={setcloseAnnouncement} />
-      ) : null}
-
       <BottomTab.Navigator
         screenOptions={{
           headerShown: false,

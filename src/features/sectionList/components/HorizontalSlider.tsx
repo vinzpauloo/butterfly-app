@@ -12,6 +12,7 @@ import React from "react";
 import Ionicons from "react-native-vector-icons/Ionicons";
 
 import { bannerImage } from "data/bannerImages";
+import VIPTag from "components/VIPTag";
 
 const { width } = Dimensions.get("window");
 
@@ -23,6 +24,7 @@ const Video = ({ navigation, index, data, item }: any) => {
       subTitle: "123456789",
     });
   };
+
   return (
     <Pressable
       style={[
@@ -32,7 +34,10 @@ const Video = ({ navigation, index, data, item }: any) => {
       ]}
       onPress={handlePress}
     >
-      <Image source={item.video} style={styles.image} />
+      <View style={styles.thumbnailContainer}>
+        <VIPTag isAbsolute={true} />
+        <Image source={item.video} style={styles.image} />
+      </View>
       <View style={styles.content}>
         <Ionicons
           name="person-circle-outline"
@@ -76,6 +81,9 @@ const HorizontalSlider = ({ navigation }) => {
 export default HorizontalSlider;
 
 const styles = StyleSheet.create({
+  thumbnailContainer: {
+    position: "relative",
+  },
   container: {
     borderColor: "#fff",
     borderWidth: 1,

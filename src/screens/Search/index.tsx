@@ -44,7 +44,7 @@ const SearchBar = ({ setSearches, hasSearch, setHasSearch }) => {
   };
   return (
     <>
-      <StatusBar backgroundColor="#262632" />
+      {/* <StatusBar backgroundColor="#262632" /> */}
       <View style={styles.headerContainer}>
         <Ionicons
           name="chevron-back"
@@ -57,20 +57,20 @@ const SearchBar = ({ setSearches, hasSearch, setHasSearch }) => {
             name="search"
             color="#aaa"
             size={20}
-            style={{ marginHorizontal: 10 }}
+            style={[styles.textInputIcon, { left: 0 }]}
           />
           <TextInput
             value={search}
             onChangeText={(text: string) => setSearch(text)}
             placeholder="search model name"
-            style={styles.inputField}
+            // style={styles.inputField}
           />
           {search.length > 0 ? (
             <AntDesign
               name="closecircle"
               color="#aaa"
               size={15}
-              style={{ marginHorizontal: 10 }}
+              style={[styles.textInputIcon, { right: 0 }]}
               onPress={searchClear}
             />
           ) : (
@@ -271,20 +271,30 @@ const styles = StyleSheet.create({
   headerContainer: {
     flexDirection: "row",
     alignItems: "center",
+    justifyContent: "space-evenly",
     height: 50,
     width: width,
     backgroundColor: "#262632",
     paddingHorizontal: 10,
   },
   inputFieldContainer: {
+    position: "relative",
     flexDirection: "row",
     alignItems: "center",
     backgroundColor: "#fff",
-    marginLeft: 10,
+    margin: 10,
+    flexGrow: 1,
+    paddingHorizontal: 40,
+    overflow: "hidden",
+    width: width / 2,
   },
-  inputField: {
-    width: width * 0.48,
+  textInputIcon: {
+    position: "absolute",
+    marginHorizontal: 10,
   },
+  // inputField: {
+  //   minWidth: 170,
+  // },
   searchBtn: {
     backgroundColor: globalStyle.secondaryColor,
     paddingVertical: 5,
@@ -323,7 +333,7 @@ const styles = StyleSheet.create({
     margin: 10,
     paddingHorizontal: 2,
     paddingVertical: 1,
-    width: width * 0.27,
+    minWidth: width * 0.22,
     borderRadius: 20,
   },
   searchesText: {

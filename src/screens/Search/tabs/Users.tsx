@@ -9,12 +9,14 @@ import {
 } from "react-native";
 import React from "react";
 
-import Container from "components/Container";
+import Octicons from "react-native-vector-icons/Octicons";
 import Feather from "react-native-vector-icons/Feather";
+
+import Container from "components/Container";
 import banner2 from "assets/images/banner2.jpg";
 import girl from "assets/images/girl.jpg";
 import { globalStyle } from "globalStyles";
-import Octicons from "react-native-vector-icons/Octicons";
+import VIPTag from "components/VIPTag";
 
 const { width } = Dimensions.get("window");
 
@@ -41,7 +43,10 @@ const VideoContainer = () => {
   return (
     <View style={styles.videoContainer}>
       <View style={styles.videoContent}>
-        <Image source={banner2} style={styles.video} />
+        <View style={styles.thumbnailContainer}>
+          <VIPTag isAbsolute={true} />
+          <Image source={banner2} style={styles.video} />
+        </View>
         <View style={styles.watchCount}>
           <Octicons name="video" size={15} color="#fff" />
           <Text style={styles.watchCountText}>105.1w</Text>
@@ -82,6 +87,10 @@ const Users = () => {
 export default Users;
 
 const styles = StyleSheet.create({
+  thumbnailContainer: {
+    position: "relative",
+  },
+
   //Header component
   headerContainer: {
     flexDirection: "row",

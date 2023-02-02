@@ -13,11 +13,12 @@ import Entypo from "react-native-vector-icons/Entypo";
 import Foundation from "react-native-vector-icons/Foundation";
 import { MasonryFlashList } from "@shopify/flash-list";
 import { useNavigation } from "@react-navigation/native";
+import { Center, NativeBaseProvider, useDisclose } from "native-base";
 
 import { globalStyle } from "globalStyles";
 import { reelsVideos } from "data/reelsVideos";
-import { Center, NativeBaseProvider, useDisclose } from "native-base";
-import Modal from "components/Modal";
+import Modal from "components/BottomModal";
+import VIPTag from "components/VIPTag";
 
 const { width } = Dimensions.get("window");
 
@@ -76,13 +77,15 @@ const Video = ({ item, isFollowingScreen, onOpen }: any) => {
       style={styles.videoContainer}
       onPress={handlePress}
     >
-      <View>
+      <View style={styles.thumbnailContainer}>
+        <VIPTag isAbsolute={true} />
         <Image
           source={item.video}
           style={[styles.video, { height: videoHeight }]}
         />
-        <Text style={[styles.text, styles.title]}>Title and Description</Text>
       </View>
+
+      <Text style={[styles.text, styles.title]}>Title and Description</Text>
       {isFollowingScreen ? (
         <FollowingBottomContent item={item} />
       ) : (
@@ -94,6 +97,7 @@ const Video = ({ item, isFollowingScreen, onOpen }: any) => {
 
 const GridVideos = ({ videos, isFollowingScreen = false }) => {
   const { isOpen, onOpen, onClose } = useDisclose();
+
   return (
     <>
       <MasonryFlashList
@@ -108,11 +112,8 @@ const GridVideos = ({ videos, isFollowingScreen = false }) => {
         )}
         keyExtractor={(_, index) => "" + index}
       />
-      <NativeBaseProvider>
-        <Center flex={1} px="3">
-          <Modal isOpen={isOpen} onOpen={onOpen} onClose={onClose} />
-        </Center>
-      </NativeBaseProvider>
+
+      <Modal isOpen={isOpen} onOpen={onOpen} onClose={onClose} />
     </>
   );
 };
@@ -120,6 +121,9 @@ const GridVideos = ({ videos, isFollowingScreen = false }) => {
 export default GridVideos;
 
 const styles = StyleSheet.create({
+  thumbnailContainer: {
+    position: "relative",
+  },
   videoContainer: {
     margin: 5,
     borderWidth: 1,

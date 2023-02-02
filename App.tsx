@@ -7,6 +7,7 @@ import axios, { AxiosError } from "axios";
 import StackNavigators from "layouts/navigators/StackNavigators";
 import { globalStyle } from "globalStyles";
 import { stackScreens } from "data/stackScreens";
+import { NativeBaseProvider } from "native-base";
 
 // Set axios defaults
 axios.defaults.headers.common["Accept"] = "application/json";
@@ -35,12 +36,14 @@ export default function App() {
   }, []);
 
   return (
-    <NavigationContainer>
-      <StatusBar
-        barStyle={"light-content"}
-        backgroundColor={globalStyle.primaryColor}
-      />
-      <StackNavigators data={stackScreens} />
-    </NavigationContainer>
+    <NativeBaseProvider>
+      <NavigationContainer>
+        <StatusBar
+          barStyle={"light-content"}
+          backgroundColor={globalStyle.primaryColor}
+        />
+        <StackNavigators data={stackScreens} />
+      </NavigationContainer>
+    </NativeBaseProvider>
   );
 }

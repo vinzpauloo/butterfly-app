@@ -1,55 +1,45 @@
-import {
-  Dimensions,
-  Image,
-  Pressable,
-  StyleSheet,
-  Text,
-  View,
-} from "react-native";
-import React, { useEffect } from "react";
+import { Dimensions, Image, Pressable, StyleSheet } from "react-native";
+import React, { useState } from "react";
 
 import * as Linking from "expo-linking";
 
 import Girl from "assets/images/profilePhoto.jpg";
 import AntDesign from "react-native-vector-icons/AntDesign";
-import { useDisclose } from "native-base";
-import CenteredModal from "components/CenteredModal";
+import { Modal } from "native-base";
+import PopupAds from "features/ads/components/PopupAds";
 
 const adsURL = "https://google.com/";
 
 const { width, height } = Dimensions.get("window");
 
-const Content = ({ onClose }) => {
+const Content = ({ setOpen }) => {
   const handleAdPress = () => {
     Linking.openURL(adsURL);
   };
   return (
-    <View style={styles.content}>
-      <Pressable onPress={handleAdPress}>
-        <Image source={Girl} style={styles.ads} />
-      </Pressable>
-      <AntDesign
-        name="close"
-        size={25}
-        color="#fff"
-        style={styles.closeBtn}
-        onPress={onClose}
-      />
-    </View>
+    <Modal.Content backgroundColor="contrastThreshold" width={width}>
+      <Modal.Body alignItems="center">
+        <Pressable onPress={handleAdPress}>
+          <Image source={Girl} style={styles.ads} />
+        </Pressable>
+        <AntDesign
+          name="close"
+          size={25}
+          color="#fff"
+          style={styles.closeBtn}
+          onPress={() => setOpen(false)}
+        />
+      </Modal.Body>
+    </Modal.Content>
   );
 };
 
 const Advertisements = () => {
-  const { isOpen, onOpen, onClose } = useDisclose();
-  useEffect(() => {
-    //@ts-ignore
-    onOpen(() => true);
-  }, []);
-
+  const [open, setOpen] = useState(true);
   return (
-    <CenteredModal isOpen={isOpen} onClose={onClose}>
-      <Content onClose={onClose} />
-    </CenteredModal>
+    <PopupAds open={open} setOpen={setOpen}>
+      <Content setOpen={setOpen} />
+    </PopupAds>
   );
 };
 
@@ -57,7 +47,7 @@ export default Advertisements;
 
 const styles = StyleSheet.create({
   content: {
-    marginBottom: 50,
+    width: width,
     alignItems: "center",
   },
   ads: {

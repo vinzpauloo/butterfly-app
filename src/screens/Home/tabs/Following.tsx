@@ -27,6 +27,7 @@ import { NoFollowingImages } from "data/gridImages";
 import { reelsVideos } from "data/reelsVideos";
 import Modal from "components/BottomModal";
 import VIPTag from "components/VIPTag";
+import BottomMessage from "components/BottomMessage";
 
 const { width } = Dimensions.get("window");
 
@@ -106,6 +107,7 @@ const NoFollowing = ({ onOpen }) => {
           <DividerContainer />
         </React.Fragment>
       ))}
+      <BottomMessage />
     </>
   );
 };
@@ -143,7 +145,7 @@ const styles = StyleSheet.create({
   image: {
     width: width,
     height: 150,
-    resizeMode: "contain",
+    resizeMode: "cover",
   },
   popular: {
     color: "#fff",

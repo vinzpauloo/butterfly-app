@@ -12,6 +12,7 @@ import GridVideos from "features/sectionList/components/GridVideos";
 import { followImages } from "./gridImages";
 import { globalStyle } from "globalStyles";
 import BannerAds from "features/ads/components/BannerAds";
+import CommentList from "features/commentList";
 
 const Header = () => {
   return (
@@ -122,7 +123,7 @@ export const singleVideoSubNav = {
     {
       name: "TabComments",
       label: "评论",
-      Content: <Text style={{ color: "white" }}>Comments tab content</Text>,
+      Content: <CommentList />
     },
   ],
 };

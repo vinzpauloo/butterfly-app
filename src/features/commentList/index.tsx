@@ -22,6 +22,7 @@ type commentItemProps = {
 
 const CommentItem = (props: commentItemProps) => {
 	const [repliesIsShown, setrepliesIsShown] = useState(false)
+	const [amountOfCommentShown, setAmountOfCommentShown] = useState(10)
 
 	return (
 		<HStack spacing={8}>
@@ -37,13 +38,13 @@ const CommentItem = (props: commentItemProps) => {
 						<Text style={styles.secondaryText}>回复</Text>
 					</HStack>
 				</Pressable>
-				<Pressable onPress={() => setrepliesIsShown(!repliesIsShown)}>
+				<Pressable onPress={() => { setrepliesIsShown(!repliesIsShown)}}>
 					{props.replies.length > 0 ? 
 						<Text style={styles.secondaryColor}>查看 {props.replies.length} 则回复</Text>
 					: null}
 				</Pressable>
-				<VStack spacing={12} mt={12} style={ repliesIsShown ? {display:"flex"} :  {display:"none"} }>
-					{props.replies.map((reply, index) =>
+				<VStack spacing={16} mt={8} style={repliesIsShown ? { display: "flex" } : { display: "none" }}>
+					{props.replies.slice(0, amountOfCommentShown).map((reply, index) => 
 						<HStack key={index} spacing={8}>
 							<Pressable onPress={() => Alert.alert("go to " + reply.userName + " profile")}>
 								<Avatar label={reply.userName} autoColor size={42} image={{ uri: reply.userImgURL }} />
@@ -54,6 +55,11 @@ const CommentItem = (props: commentItemProps) => {
 							</VStack>
 						</HStack>
 					)}
+					{props.replies.length >= 10 && amountOfCommentShown < props.replies.length ? 
+						<Pressable onPress={() => setAmountOfCommentShown(amountOfCommentShown + 10)}>
+							<Text style={styles.loadMoreComments}>更多裝載</Text>
+						</Pressable>
+					: null }
 				</VStack>
 			</VStack>
 		</HStack>
@@ -99,5 +105,9 @@ const styles = StyleSheet.create({
 	},
 	commentsContainer: {
 		padding: 12
+	},
+	loadMoreComments: {
+		textAlign: "center",
+		color: globalStyle.inactiveTextColor
 	}
 })

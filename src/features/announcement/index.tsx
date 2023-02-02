@@ -1,11 +1,11 @@
-import { Dimensions, StyleSheet } from "react-native";
+import { StyleSheet } from "react-native";
 import React, { useState } from "react";
 
-// import { ScrollView } from "react-native-gesture-handler";
-import { globalStyle } from "globalStyles";
-import { Button, HStack, Modal, Text, useDisclose, VStack } from "native-base";
-import PopupAds from "features/ads/components/PopupAds";
+import { Button, HStack, Modal, Text, VStack } from "native-base";
 import FontAwesome from "react-native-vector-icons/FontAwesome";
+
+import { globalStyle } from "globalStyles";
+import CustomModal from "components/CustomModal";
 
 const Content = ({ setOpen }) => {
   return (
@@ -18,7 +18,7 @@ const Content = ({ setOpen }) => {
             size={30}
             color={globalStyle.secondaryColor}
           />
-          <Text fontSize="lg">Announcement Title hehe</Text>
+          <Text fontSize="lg">Announcement Title</Text>
         </VStack>
 
         {/* Announcement details */}
@@ -50,9 +50,9 @@ const Announcement = () => {
   const [open, setOpen] = useState(true);
 
   return (
-    <PopupAds open={open} setOpen={setOpen}>
+    <CustomModal open={open} setOpen={setOpen}>
       <Content setOpen={setOpen} />
-    </PopupAds>
+    </CustomModal>
   );
 };
 

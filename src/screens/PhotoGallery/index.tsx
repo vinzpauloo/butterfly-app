@@ -14,11 +14,10 @@ type Props = {}
 const PhotoGallery = () => {
 	const route = useRoute<any>();
 	const imageList = route?.params.imageList
-	const fromFeedItem = route?.params.fromFeedItem
 	
 	return (
 		<View style={styles.container}>
-			{fromFeedItem ?
+			{!!route?.params.fromFeedItem ?
 				<FlashList
 					pagingEnabled={true}
 					horizontal={true}

@@ -37,7 +37,6 @@ const SingleImage = (props: SingleImageProp) => {
         navigation.navigate("PhotoGallery", {
           postTitle: props.postTitle,
           imageList: photoGalleryImages,
-          fromFeedItem: false,
         });
       }}
     >

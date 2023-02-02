@@ -30,6 +30,15 @@ type Props = {
 const FeedItem = (props: Props) => {
 	const video = React.useRef(null);
 	const navigation = useNavigation<any>();
+
+	function goToPhotoGallery() {
+		navigation.navigate("PhotoGallery",
+			{
+				postTitle: props.userName,
+				imageList: props.addedContent,
+				fromFeedItem: true
+			})
+	}
 	
 	return (
 		<VStack p={16} spacing={8}>
@@ -54,7 +63,7 @@ const FeedItem = (props: Props) => {
 			<VStack spacing={12}>
 				<Text style={styles.whiteText}>{props.description}</Text>
 				{/* ADDED CONTENT HERE */}
-				<Pressable onPress={() => navigation.navigate("PhotoGallery", { postTitle: props.userName, imageList: props.addedContent, fromFeedItem: true })}>
+				<Pressable onPress={ props.addedContentType === "picture" ? goToPhotoGallery : null}>
 					<Flex wrap={true} direction={'row'}>
 						{props.addedContent.length > 0 ?
 							props.addedContent.map(item => 

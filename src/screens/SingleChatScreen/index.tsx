@@ -89,7 +89,7 @@ const SingleChatScreen = (props: Props) => {
 	return (
 		<Container>
 			{
-			messages.length > 0 || senderMessagesList.length > 0 ? 
+				messages.length > 0 || !!route?.params.senderUserName ? 
 				<ScrollView ref={scrollViewRef} >
 					{/* SENDER MESSAGES */}
 					<View style={styles.senderMessagesContainer}>

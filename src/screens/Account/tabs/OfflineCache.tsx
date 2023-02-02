@@ -11,6 +11,7 @@ import { AntDesign } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
 
 import ImageCache from "../../../assets/images/cacheImage.jpg";
+import NoCacheMessage from "features/sectionList/components/NoCacheMessage";
 
 const OfflineCache = () => {
   const navigation = useNavigation<any>();
@@ -28,11 +29,7 @@ const OfflineCache = () => {
           <Text style={styles.title}>离线缓存</Text>
         </View>
       </View>
-
-      <View style={styles.noCacheContainer}>
-        <Image source={ImageCache} style={styles.cacheImage} />
-        <Text style={styles.cacheText}>抱歉， 没有找到你想要的内容~</Text>
-      </View>
+      <NoCacheMessage/>
     </ScrollView>
   );
 };

@@ -1,12 +1,13 @@
 import { StyleSheet, Text, View, Image } from 'react-native'
 import React from 'react'
+import cacheImage from "../../../assets/images/cacheImage.jpg"
 
 type Props = {}
 
 const NoCacheMessage = (props: Props) => {
 	return (
 		<View style={styles.noCacheContainer}>
-			<Image source={require('../../../assets/images/cacheImage.jpg')} style={styles.cacheImage} />
+			<Image source={cacheImage} style={styles.cacheImage} />
 			<Text style={styles.cacheText}>抱歉， 没有找到你想要的内容~</Text>
 		</View>
 	)

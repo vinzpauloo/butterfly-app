@@ -1,10 +1,11 @@
 import { Dimensions, StyleSheet } from "react-native";
 import React from "react";
+
 import { Actionsheet, Box, Center } from "native-base";
 
 const { width, height } = Dimensions.get("window");
 
-const CenteredModal = ({ isOpen, onClose, children }) => {
+const CenteredActionSheet = ({ isOpen, onClose, children }) => {
   return (
     <Center>
       <Actionsheet isOpen={isOpen} onClose={onClose} hideDragIndicator>
@@ -14,7 +15,7 @@ const CenteredModal = ({ isOpen, onClose, children }) => {
   );
 };
 
-export default CenteredModal;
+export default CenteredActionSheet;
 
 const styles = StyleSheet.create({
   container: {

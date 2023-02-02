@@ -2,7 +2,7 @@ import { StyleSheet, View } from "react-native";
 
 import { ScrollView } from "react-native-gesture-handler";
 
-import BottomMessage from "features/sectionList/components/BottomMessage";
+import BottomMessage from "components/BottomMessage";
 import CarouselContainer from "features/ads/components/CarouselContainer";
 import DividerContainer from "features/sectionList/components/DividerContainer";
 import GridVideos from "features/sectionList/components/GridVideos";

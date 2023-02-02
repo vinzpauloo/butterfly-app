@@ -1,72 +1,60 @@
-import { StyleSheet } from "react-native";
-import { useState } from "react";
+import { Dimensions, Image, Pressable, StyleSheet } from "react-native";
+import React, { useState } from "react";
 
-import {
-  Button,
-  HStack,
-  Modal,
-  NativeBaseProvider,
-  Text,
-  VStack,
-} from "native-base";
-import { FontAwesome } from "@expo/vector-icons";
-import { globalStyle } from "globalStyles";
+import * as Linking from "expo-linking";
+import AntDesign from "react-native-vector-icons/AntDesign";
+import { Modal } from "native-base";
+
+import Girl from "assets/images/profilePhoto.jpg";
+import CustomModal from "components/CustomModal";
+
+const adsURL = "https://google.com/";
+
+const { width } = Dimensions.get("window");
+
+const Content = ({ setOpen }) => {
+  const handleAdPress = () => {
+    Linking.openURL(adsURL);
+  };
+  return (
+    <Modal.Content backgroundColor="contrastThreshold" width={width}>
+      <Modal.Body alignItems="center">
+        <Pressable onPress={handleAdPress}>
+          <Image source={Girl} style={styles.ads} />
+        </Pressable>
+        <AntDesign
+          name="close"
+          size={25}
+          color="#fff"
+          style={styles.closeBtn}
+          onPress={() => setOpen(false)}
+        />
+      </Modal.Body>
+    </Modal.Content>
+  );
+};
 
 const PopupAds = () => {
   const [open, setOpen] = useState(true);
-
-  const closeModal = () => {
-    setOpen(false);
-  };
-
   return (
-    <NativeBaseProvider>
-      <Modal isOpen={open} onClose={() => setOpen(false)} safeAreaTop={true}>
-        <Modal.Content maxWidth="350">
-          <Modal.Body>
-            {/* Icon & Title */}
-            <VStack alignItems="center" space={5} style={{ marginBottom: 10 }}>
-              <FontAwesome
-                name="bell"
-                size={30}
-                color={globalStyle.secondaryColor}
-              />
-              <Text fontSize="lg">Announcement Title hehe</Text>
-            </VStack>
-
-            {/* Announcement details */}
-            <VStack space={2} style={{ marginBottom: 20 }}>
-              <Text>Lorem Ipsum is</Text>
-              <Text>simply dummy text</Text>
-              <Text>of the printing and</Text>
-              <Text>typesetting industry.</Text>
-              <Text>Lorem Ipsum has been</Text>
-              <Text>the industry's standard dummy text.</Text>
-            </VStack>
-
-            {/* Button */}
-            <HStack space={3} justifyContent="center">
-              <Button
-                size="sm"
-                style={styles.button}
-                onPress={() => closeModal()}
-              >
-                I know
-              </Button>
-            </HStack>
-          </Modal.Body>
-        </Modal.Content>
-      </Modal>
-    </NativeBaseProvider>
+    <CustomModal open={open} setOpen={setOpen}>
+      <Content setOpen={setOpen} />
+    </CustomModal>
   );
 };
 
 export default PopupAds;
 
 const styles = StyleSheet.create({
-  button: {
-    backgroundColor: globalStyle.secondaryColor,
-    borderRadius: 20,
-    width: 80,
+  content: {
+    width: width,
+    alignItems: "center",
+  },
+  ads: {
+    height: 400,
+    width: width,
+  },
+  closeBtn: {
+    marginVertical: 30,
   },
 });

@@ -28,7 +28,7 @@ const AccountVerification = () => {
       {/*Title and Back Button  */}
       <View style={styles.titleAndBackContainer}>
         <View style={styles.backBtn}>
-          <TouchableOpacity onPress={() => navigation.navigate("Account")}>
+          <TouchableOpacity onPress={() => navigation.goBack()}>
             <AntDesign name="left" size={24} color="white" />
           </TouchableOpacity>
         </View>

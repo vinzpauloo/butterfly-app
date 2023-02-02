@@ -1,5 +1,14 @@
 import React, { useState } from "react";
-import { StyleSheet, Text, View, Dimensions, FlatList, Alert, Pressable, Image, } from "react-native";
+import {
+  StyleSheet,
+  Text,
+  View,
+  Dimensions,
+  FlatList,
+  Alert,
+  Pressable,
+  Image,
+} from "react-native";
 import { ResizeMode, Video } from "expo-av";
 import { useNavigation, useRoute } from "@react-navigation/native";
 import { VStack, NativeBaseProvider, useDisclose } from "native-base";
@@ -27,7 +36,7 @@ type Props = {
   isActive: boolean;
   activeVideoIndex: number;
   tabBarHeight: number;
-  openComments: () => void
+  openComments: () => void;
 };
 
 const { width: windowWidth, height: windowHeight } = Dimensions.get("window");
@@ -36,7 +45,9 @@ const PortraitVideoContent = (props: Props) => {
   const navigation = useNavigation<any>();
 
   return (
-    <View style={[styles.container, { height: windowHeight - props.tabBarHeight }]}>
+    <View
+      style={[styles.container, { height: windowHeight - props.tabBarHeight }]}
+    >
       {props.isActive && (
         <Video
           source={{ uri: props.uri }}
@@ -111,9 +122,7 @@ const PortraitVideoContent = (props: Props) => {
           <Text style={styles.iconText}>{props.likes}</Text>
         </View>
         <View style={styles.verticalBarItem}>
-          <Pressable
-            onPress={() => props.openComments()}
-          >
+          <Pressable onPress={() => props.openComments()}>
             <MaterialCommunityIcons name="comment" color={"white"} size={40} />
           </Pressable>
           <Text style={styles.iconText}>{props.amountOfComments}</Text>
@@ -152,7 +161,7 @@ const PortraitVideo: React.FC<PortraitVideoDataType> = ({
   const route = useRoute<any>();
   const [activeVideoIndex, setActiveVideoIndex] = useState(0);
   const { isOpen, onOpen, onClose } = useDisclose();
-  
+
   return (
     <View style={{ position: "relative", flex: 1 }}>
       {hasBackButton ? (
@@ -193,9 +202,7 @@ const PortraitVideo: React.FC<PortraitVideoDataType> = ({
           setActiveVideoIndex(index);
         }}
       />
-      <NativeBaseProvider>
-        <BottomComment isOpen={isOpen} onOpen={onOpen} onClose={onClose} />
-      </NativeBaseProvider>
+      <BottomComment isOpen={isOpen} onOpen={onOpen} onClose={onClose} />
     </View>
   );
 };

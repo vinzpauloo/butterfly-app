@@ -127,11 +127,9 @@ const Following = () => {
           )}
         </Container>
       </ScrollView>
-      <NativeBaseProvider>
-        <Center flex={1} px="3">
-          <Modal isOpen={isOpen} onOpen={onOpen} onClose={onClose} />
-        </Center>
-      </NativeBaseProvider>
+      <Center flex={1} px="3">
+        <Modal isOpen={isOpen} onOpen={onOpen} onClose={onClose} />
+      </Center>
     </>
   );
 };

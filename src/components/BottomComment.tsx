@@ -14,6 +14,7 @@ const BottomComment = ({ onOpen, isOpen, onClose }) => {
 		<Center>
 			<Actionsheet isOpen={isOpen} onClose={onClose} hideDragIndicator>
 				<Actionsheet.Content
+					padding={0}
 					borderTopRadius="0"
 					backgroundColor={globalStyle.primaryColor}
 				>

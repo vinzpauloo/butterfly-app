@@ -25,7 +25,9 @@ import { followImages } from "data/gridImages";
 import { globalStyle } from "globalStyles";
 import { NoFollowingImages } from "data/gridImages";
 import { reelsVideos } from "data/reelsVideos";
-import Modal from "components/Modal";
+import Modal from "components/BottomModal";
+import VIPTag from "components/VIPTag";
+import BottomMessage from "components/BottomMessage";
 
 const { width } = Dimensions.get("window");
 
@@ -44,6 +46,7 @@ const Video = ({ item, index, onOpen }: any) => {
       });
     }
   };
+
   return (
     <TouchableOpacity
       activeOpacity={1}
@@ -53,10 +56,11 @@ const Video = ({ item, index, onOpen }: any) => {
       ]}
       onPress={handlePress}
     >
-      <View>
+      <View style={styles.thumbnailContainer}>
+        <VIPTag isAbsolute={true} />
         <Image source={item.video} style={styles.video} />
-        <Text style={[styles.text, styles.title]}>Title and Description</Text>
       </View>
+      <Text style={[styles.text, styles.title]}>Title and Description</Text>
       <View style={styles.textContent}>
         <Text style={styles.text}>Nana Taipei</Text>
         <Pressable
@@ -103,6 +107,7 @@ const NoFollowing = ({ onOpen }) => {
           <DividerContainer />
         </React.Fragment>
       ))}
+      <BottomMessage />
     </>
   );
 };
@@ -110,6 +115,7 @@ const NoFollowing = ({ onOpen }) => {
 const Following = () => {
   const noFollowing = true;
   const { isOpen, onOpen, onClose } = useDisclose();
+
   return (
     <>
       <ScrollView>
@@ -133,10 +139,13 @@ const Following = () => {
 export default Following;
 
 const styles = StyleSheet.create({
+  thumbnailContainer: {
+    position: "relative",
+  },
   image: {
     width: width,
     height: 150,
-    resizeMode: "contain",
+    resizeMode: "cover",
   },
   popular: {
     color: "#fff",

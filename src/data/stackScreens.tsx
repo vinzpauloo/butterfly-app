@@ -47,6 +47,7 @@ import PasscodeLock from "screens/Settings/tabs/PasscodeLock";
 import InformationScreen from "screens/InformationScreen";
 import SingleChatScreen from "screens/SingleChatScreen";
 import SingleTag from "screens/SingleTag";
+import InitialLoad from "screens/InitialLoad";
 
 const basicHeader = ({ navigation, route }: any) => ({
   headerTitle: route?.params.postTitle,
@@ -74,7 +75,7 @@ const basicHeader = ({ navigation, route }: any) => ({
 });
 
 export const stackScreens = {
-  initialRoute: "Preloading",
+  initialRoute: "InitialLoad",
   screenOptions: { animation: "slide_from_right" },
   screens: [
     {
@@ -266,6 +267,11 @@ export const stackScreens = {
     {
       name: "SingleTag",
       component: SingleTag,
+      options: { headerShown: false },
+    },
+    {
+      name: "InitialLoad",
+      component: InitialLoad,
       options: { headerShown: false },
     },
   ],

@@ -11,7 +11,7 @@ import { useState, useEffect } from "react";
 import * as Linking from "expo-linking";
 
 import adsFullscreen from "assets/images/ads-fullscreen.jpg";
-import { useNavigation } from "@react-navigation/native";
+import { StackActions, useNavigation } from "@react-navigation/native";
 
 const adsURL = "https://google.com/";
 const { height } = Dimensions.get("window");
@@ -25,7 +25,7 @@ const Preloading = ({}) => {
   };
 
   const handleButtonpress = () => {
-    !counter && navigation.navigate("BottomNav");
+    !counter && navigation.dispatch(StackActions.replace("BottomNav"));
   };
 
   useEffect(() => {

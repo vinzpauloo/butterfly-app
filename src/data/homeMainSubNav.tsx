@@ -27,6 +27,9 @@ const data = {
   ],
   latest: [
     {
+      layout: "sectionHeader",
+    },
+    {
       layout: "singleVideoList",
     },
     {

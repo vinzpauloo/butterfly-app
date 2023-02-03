@@ -28,9 +28,7 @@ const FeedList = ({ feedListData }) => {
         )}
         keyExtractor={(item, index) => "" + index}
       />
-      <NativeBaseProvider>
-        <BottomComment isOpen={isOpen} onOpen={onOpen} onClose={onClose} />
-      </NativeBaseProvider>
+      <BottomComment isOpen={isOpen} onOpen={onOpen} onClose={onClose} />
     </Container>
   );
 };

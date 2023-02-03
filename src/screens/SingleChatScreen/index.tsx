@@ -1,8 +1,8 @@
 import React, { useRef, useState } from 'react'
 import { StyleSheet, Text, View, TextInput, Pressable, Alert, ScrollView, Image, Dimensions } from 'react-native'
-import { useNavigation, useRoute } from '@react-navigation/native';
 
-import { HStack, VStack } from '@react-native-material/core';
+import { useNavigation, useRoute } from '@react-navigation/native';
+import { HStack, VStack } from 'native-base';
 
 import * as ImagePicker from 'expo-image-picker';
 import { Camera, CameraType } from "expo-camera";
@@ -102,7 +102,7 @@ const SingleChatScreen = (props: Props) => {
 					<Text style={[styles.whiteText, styles.bottomText]}>请上拉刷新消息</Text>
 				</>
 			}
-			<HStack style={styles.bottomForm} spacing={12}>
+			<HStack style={styles.bottomForm} space={3}>
 				<Pressable onPress={handleCamera}>
 					<Entypo name="camera" color={"white"} size={20} />
 				</Pressable>

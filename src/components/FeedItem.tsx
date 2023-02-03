@@ -54,8 +54,8 @@ const FeedItem = (props: Props) => {
 				</Pressable>
 			</HStack>
 			<HStack space={2}>
-				{props.tags.map(tag =>
-					<Pressable onPress={()=>{Alert.alert("Go to " + tag + " tag page")}}>
+				{props.tags.map((tag, index) =>
+					<Pressable key={index} onPress={()=>{Alert.alert("Go to " + tag + " tag page")}}>
 						<Text style={styles.tags}>{tag}</Text>
 					</Pressable>
 				)}
@@ -66,16 +66,19 @@ const FeedItem = (props: Props) => {
 				<Pressable onPress={ props.addedContentType === "picture" ? goToPhotoGallery : null}>
 					<Flex wrap="wrap" direction="row">
 						{props.addedContent.length > 0 ?
-							props.addedContent.map(item => 
+							props.addedContent.map((item, index) => 
 								props.addedContentType === "picture" ?
-									<Box style={
+									<Box
+										key={index}
+										style={
 												props.addedContent.length === 1 ? styles.singleContent
 													:props.addedContent.length % 3 === 0 ? styles.tripleContent
 															:styles.doubleContent} m={0.5}>
 										<Image style={styles.imageInBox} source={{ uri: item.contentURL }} resizeMode={ResizeMode.COVER} />
 									</Box>
 									: props.addedContentType === "video" ?
-									<Video
+										<Video
+										key={index}
 										ref = { video }
 										style={styles.singleContent }
 										source = {{uri: item.contentURL}}

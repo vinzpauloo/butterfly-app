@@ -12,17 +12,18 @@ const windowHeight = Dimensions.get('window').height;
 const BottomComment = ({ onOpen, isOpen, onClose }) => {
 	return (
 		<Center>
-			<Actionsheet isOpen={isOpen} onClose={onClose} hideDragIndicator>
+			<Actionsheet isOpen={isOpen} onClose={onClose}>
 				<Actionsheet.Content
+					_dragIndicator={{marginTop: 1}}
 					padding={0}
-					borderTopRadius="0"
+					borderTopRadius="24"
 					backgroundColor={globalStyle.primaryColor}
 				>
 					<Box w={"100%"} h={windowHeight / 2.5} p={2}>
 						<CommentList/>
 					</Box>
 				</Actionsheet.Content>
-				<CommentTextInput/>
+				<CommentTextInput />
 			</Actionsheet>
 		</Center>
 	);

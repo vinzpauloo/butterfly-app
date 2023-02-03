@@ -104,6 +104,7 @@ const NoFollowing = ({ onOpen }) => {
                 <Video item={item} index={index} onOpen={onOpen} />
               )}
               keyExtractor={(_, index) => "" + index}
+              estimatedItemSize={12}
             />
           </View>
           {sampleData.length - 1 !== index ? <DividerContainer /> : null}

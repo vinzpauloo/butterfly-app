@@ -103,7 +103,7 @@ const MasonryPhotos = (props: Props) => {
                 setOpen={setOpen}
               />
             )}
-            estimatedItemSize={25}
+            estimatedItemSize={250}
             keyExtractor={(item, index) => "" + index}
           />
         </View>

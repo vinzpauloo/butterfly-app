@@ -13,18 +13,17 @@ import { useNavigation } from "@react-navigation/native";
 
 import {
   AntDesign,
-  SimpleLineIcons,
-  MaterialCommunityIcons,
 } from "@expo/vector-icons";
-
 
 import ImageTitle from "assets/images/profilePhoto.jpg";
 import Buttons from "components/forms/Buttons";
+
 const AccountVerification = () => {
   const navigation = useNavigation<any>();
 
   return (
     <ScrollView style={styles.container}>
+
       {/*Title and Back Button  */}
       <View style={styles.titleAndBackContainer}>
         <View style={styles.backBtn}>

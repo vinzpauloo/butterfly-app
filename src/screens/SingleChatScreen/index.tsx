@@ -5,7 +5,7 @@ import { useNavigation, useRoute } from '@react-navigation/native';
 import { HStack, VStack } from '@react-native-material/core';
 
 import * as ImagePicker from 'expo-image-picker';
-import { Camera, CameraType } from "expo-camera";
+import { Camera } from "expo-camera";
 
 import Entypo from "react-native-vector-icons/Entypo";
 import Feather from "react-native-vector-icons/Feather";
@@ -76,7 +76,7 @@ const SingleChatScreen = (props: Props) => {
 									{/* {message.image && <Image source={{ uri: message.image }} style={styles.yourSentImage} />} */}
 								</View>
 							</>
-							<Text style={styles.messageTimeStamp}>{route?.params.senderTimeStamp}</Text>
+							<Text style={styles.messageTimeStamp}>{formatDate()}</Text>
 						</VStack>
 					</View>
 					{/* YOUR MESSAGES */}

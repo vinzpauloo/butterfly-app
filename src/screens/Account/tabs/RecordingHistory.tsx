@@ -10,6 +10,7 @@ const RecordingHistory = () => {
 
     return (
         <ScrollView style={styles.container}>
+
             {/*Title and Back Button  */}
             <View
                 style={styles.titleAndBackContainer}

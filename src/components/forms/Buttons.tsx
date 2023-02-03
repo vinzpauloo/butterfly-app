@@ -1,7 +1,5 @@
 import React from 'react';
 import {StyleSheet, Text, TouchableOpacity} from "react-native";
-
-
 const Buttons = ({props}) => {
     return (
         <TouchableOpacity style={styles.container}>

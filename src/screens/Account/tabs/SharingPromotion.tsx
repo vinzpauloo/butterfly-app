@@ -23,6 +23,7 @@ const SharingPromotion = () => {
 
   return (
     <ScrollView style={styles.container}>
+
       {/*Title and Back Button  */}
       <View style={styles.titleAndBackContainer}>
         <View style={styles.backBtn}>

@@ -38,9 +38,6 @@ const styles = StyleSheet.create({
     },
     characterCount: {
         textAlign: "right",
-        // position: "absolute",
-        // bottom: 20,
-        // right: 20,
         color: "#FFFFFF",
         fontSize: 12
     }

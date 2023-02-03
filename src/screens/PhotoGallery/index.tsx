@@ -26,7 +26,7 @@ const PhotoGallery = () => {
 						<View style={styles.imageContainer}>
 							<Image style={[styles.postImage, styles.imageContained]} source={{ uri: item.contentURL }} />
 						</View>}
-					estimatedItemSize={12}
+					estimatedItemSize={674}
 				/>
 			
 			:
@@ -36,7 +36,7 @@ const PhotoGallery = () => {
 						<View style={styles.imageContainer}>
 							<Image style={[styles.postImage, styles.imageCovered]} source={{ uri: item.imgUrl }} />
 						</View>}
-					estimatedItemSize={12}
+					estimatedItemSize={674}
 				/>}
 		</View>
 	)

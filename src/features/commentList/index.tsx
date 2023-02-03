@@ -1,6 +1,7 @@
-import React, { useState } from "react";
-import { FlatList, StyleSheet, Text, Pressable, Alert } from "react-native";
-import { VStack, Avatar, HStack, Divider } from "native-base";
+import React, { useEffect, useState } from "react";
+import { StyleSheet, Text, Pressable, Alert, View } from "react-native";
+import { VStack, Avatar, HStack, Divider, Skeleton } from "native-base";
+import { FlashList } from "@shopify/flash-list";
 
 import { comments } from "data/comments";
 import BottomMessage from "components/BottomMessage";
@@ -89,29 +90,63 @@ const CommentItem = (props: commentItemProps) => {
   );
 };
 
-const CommentList = (props: Props) => {
+
+const CommentListSkeleton = () => {
   return (
-    <FlatList
-      style={styles.commentsContainer}
-      showsVerticalScrollIndicator={false}
-      data={comments}
-      ListHeaderComponent={
-        <Text style={styles.commentHeader}>全部评论 {comments.length}</Text>
+    <>
+      <Skeleton.Text lines={1} w="1/6" mb="18px" />
+      <HStack space={2}>
+        <Skeleton size={42} rounded="full" />
+        <VStack space={4} style={{ flex: 1, paddingHorizontal: 6 }}>
+          <Skeleton.Text lines={1} w="1/6" />
+          <Skeleton.Text lines={3} w="full" />
+          <HStack space={1.5} alignItems="center">
+            <Skeleton w="14px" h="14px" rounded="full" />
+            <Skeleton.Text lines={1} w="1/6" />
+          </HStack>
+        </VStack>
+      </HStack>
+      <Skeleton h="1px" w="full" mt={3} />
+    </>
+  )
+}
+
+const CommentList = (props: Props) => {
+  const [commentListIsLoaded, setCommentListIsLoaded] = useState(false)
+
+  useEffect(() => {
+    setTimeout(() => setCommentListIsLoaded(true), 1500);
+  });
+
+  return (
+    <View style={styles.commentsContainer}>
+      {commentListIsLoaded ?
+        <FlashList
+          removeClippedSubviews={true}
+          estimatedItemSize={117}
+          showsVerticalScrollIndicator={false}
+          data={comments}
+          ListHeaderComponent={
+            <Text style={styles.commentHeader}>全部评论 {comments.length}</Text>
+          }
+          ListFooterComponent={<BottomMessage />}
+          keyExtractor={(_, index) => "" + index}
+          renderItem={({ item }) => (
+            <CommentItem
+              userName={item.userName}
+              userImgURL={item.userImgURL}
+              comment={item.comment}
+              replies={item.replies}
+            />
+          )}
+          ItemSeparatorComponent={() => (
+            <Divider color="#999" style={styles.divider} />
+          )}
+          />
+      :
+        <CommentListSkeleton/>
       }
-      ListFooterComponent={<BottomMessage />}
-      keyExtractor={(_, index) => "" + index}
-      renderItem={({ item }) => (
-        <CommentItem
-          userName={item.userName}
-          userImgURL={item.userImgURL}
-          comment={item.comment}
-          replies={item.replies}
-        />
-      )}
-      ItemSeparatorComponent={() => (
-        <Divider color="#999" style={styles.divider} />
-      )}
-    />
+    </View>
   );
 };
 
@@ -139,6 +174,7 @@ const styles = StyleSheet.create({
   },
   commentsContainer: {
     padding: 12,
+    flex :1
   },
   loadMoreComments: {
     textAlign: "center",

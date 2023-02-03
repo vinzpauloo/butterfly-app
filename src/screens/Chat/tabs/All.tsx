@@ -1,5 +1,6 @@
 import React from "react";
-import { StyleSheet, Text, FlatList } from "react-native";
+import { StyleSheet, Text } from "react-native";
+import { FlashList } from "@shopify/flash-list";
 
 import Container from "components/Container";
 import UserProfilePicList from "features/sectionList/components/UserProfilePicList";
@@ -12,7 +13,8 @@ type Props = {};
 const All = (props: Props) => {
   return (
     <Container>
-      <FlatList
+      <FlashList
+        estimatedItemSize={399}
         data={allChatCategories}
         scrollEnabled={true}
         renderItem={({ item, index }) => (

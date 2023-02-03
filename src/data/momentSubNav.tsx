@@ -1,26 +1,21 @@
 import React from "react";
-import {
-  StyleSheet,
-  Text,
-  View,
-  FlatList,
-  Pressable,
-  Alert,
-} from "react-native";
+import { StyleSheet, Text, View, Pressable, Alert } from "react-native";
 import { HStack, Divider } from "native-base";
 
 import FeedList from "layouts/FeedList";
 import { officialCertificateList } from "./officialCertificateList";
 import { feedListData } from "data/feedListData";
 import { globalStyle } from "globalStyles";
+import { FlashList } from "@shopify/flash-list";
 
 const Header = () => {
   return (
     <View style={styles.certificateContainer}>
-      <FlatList
+      <FlashList
+        estimatedItemSize={31}
         data={officialCertificateList}
         renderItem={({ item }) => (
-          <Pressable onPress={() => Alert.alert("asdsad")}>
+          <Pressable onPress={() => Alert.alert("go to " + item.certificateName)}>
             <HStack space={3} style={styles.certificateItem}>
               <View style={styles.dot}></View>
               <Text style={styles.whiteText}>{item.certificateName}</Text>
@@ -71,6 +66,7 @@ const styles = StyleSheet.create({
   certificateContainer: {
     backgroundColor: globalStyle.headerBasicBg,
     padding: 12,
+    flex: 1
   },
   whiteText: {
     color: "white",

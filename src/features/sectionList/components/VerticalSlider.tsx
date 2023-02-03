@@ -31,6 +31,7 @@ const Video = ({ item, index, data, navigation }: any) => {
       activeOpacity={1}
     >
       <Image source={item.video} style={styles.image} />
+      <Image source={item.video} style={styles.modelImg} />
       <View style={styles.textContent}>
         <Text style={styles.text}>Title and Description</Text>
       </View>
@@ -75,6 +76,16 @@ const styles = StyleSheet.create({
   image: {
     height: "100%",
     width: "100%",
+  },
+  modelImg: {
+    position: "absolute",
+    height: 40,
+    width: 40,
+    borderRadius: 20,
+    top: 15,
+    left: 15,
+    borderColor: "#fff",
+    borderWidth: 1,
   },
   textContent: {
     position: "absolute",

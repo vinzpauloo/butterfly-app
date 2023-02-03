@@ -1,6 +1,6 @@
 import React from 'react'
 import { StyleSheet, Text, KeyboardAvoidingView, TextInput, Pressable, Alert, Dimensions } from 'react-native'
-import { HStack } from '@react-native-material/core'
+import { HStack } from 'native-base'
 
 import { globalStyle } from 'globalStyles'
 

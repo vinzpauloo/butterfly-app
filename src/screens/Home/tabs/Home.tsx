@@ -65,6 +65,7 @@ export const DynamicScreen = ({ title, navigation }) => {
         <SingleVideo />
       </View>
     ),
+    sectionHeader: <SectionHeader title="Single Videos" />,
   };
   return (
     <ScrollView style={styles.container}>

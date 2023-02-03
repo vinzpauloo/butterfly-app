@@ -89,7 +89,7 @@ const SingleChatScreen = (props: Props) => {
 	return (
 		<Container>
 			{
-				messages.length > 0 || !!route?.params.senderUserName ? 
+				messages.length > 0 || !!route?.params.senderUserName ?
 				<ScrollView ref={scrollViewRef} >
 					{/* SENDER MESSAGES */}
 					<View style={styles.senderMessagesContainer}>
@@ -121,7 +121,7 @@ const SingleChatScreen = (props: Props) => {
 						</VStack>
 					</View>))}
 				</ScrollView>
-				:	
+				:
 				<>
 					<View style={styles.centeredContent}>
 						<Text style={styles.whiteText}>文明发言,才能触及彼岸珍惜每一位原创者</Text>

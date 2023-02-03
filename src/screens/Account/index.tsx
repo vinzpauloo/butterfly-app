@@ -91,7 +91,13 @@ const LinkList = () => {
             <TouchableOpacity
               onPress={() => {
                 item.screen !== "OfficialGroup"
-                  ? navigation.navigate(`${item.screen}`)
+                  ? navigation.navigate(`${item.screen}`, {
+                      postTitle: 'Test Sender',
+                      senderUserName: 'Test Sender Username',
+                      senderMessage: 'Test Sender Message',
+                      senderImgURL: 'https://randomuser.me/api/portraits/men/3.jpg',
+                      senderTimeStamp: 'Test Date',
+                    })
                   : Linking.openURL("https://t.me/StockPro_Official_BankNifty");
               }}
             >

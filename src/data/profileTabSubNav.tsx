@@ -18,6 +18,13 @@ export const profileTabSubNav = [
   {
     title: "在线客服",
     screen: "CustomerService",
+    params: {
+      postTitle: 'Test Sender',
+      senderUserName: 'Test Sender Username',
+      senderMessage: 'Test Sender Message',
+      senderImgURL: 'https://randomuser.me/api/portraits/men/3.jpg',
+      senderTimeStamp: 'Test Date',
+    }
   },
   {
     title: "精品应用",

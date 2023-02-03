@@ -85,15 +85,11 @@ const LinkList = () => {
           <View style={styles.sectionContainer} key={index}>
             <TouchableOpacity
               onPress={() => {
-                item.screen !== "OfficialGroup"
-                  ? navigation.navigate(`${item.screen}`, {
-                      postTitle: 'Test Sender',
-                      senderUserName: 'Test Sender Username',
-                      senderMessage: 'Test Sender Message',
-                      senderImgURL: 'https://randomuser.me/api/portraits/men/3.jpg',
-                      senderTimeStamp: 'Test Date',
-                    })
-                  : Linking.openURL("https://t.me/StockPro_Official_BankNifty");
+                item.screen === 'OfficialGroup'
+                    ? Linking.openURL("https://t.me/StockPro_Official_BankNifty")
+                    : item.screen === 'CustomerService'
+                        ? navigation.navigate(`${item.screen}`, item.params)
+                        : navigation.navigate(`${item.screen}`);
               }}
             >
               <View style={styles.textAndBtn}>

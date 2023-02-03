@@ -1,38 +1,24 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import {
   StyleSheet,
   Text,
   View,
   ScrollView,
   Dimensions,
-  TouchableOpacity,
-  TextInput,
-  Button,
 } from "react-native";
 
-import { AntDesign } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
 
 import InputText from "components/forms/InputText";
 import Buttons from "components/forms/Buttons";
+import UserProfileSettingsHeader from "components/UserProfileSettingsHeader";
 
 const PetName = () => {
-
-  const navigation = useNavigation<any>();
 
   return (
     <ScrollView style={styles.container}>
       {/*Title and Back Button  */}
-      <View style={styles.titleContainer}>
-        <View style={styles.backBtn}>
-          <TouchableOpacity onPress={() => navigation.goBack()}>
-            <AntDesign name="left" size={24} color="white" />
-          </TouchableOpacity>
-        </View>
-        <View style={styles.titleTextContainer}>
-          <Text style={styles.titleText}>昵称</Text>
-        </View>
-      </View>
+      <UserProfileSettingsHeader title='昵称' btnRight={null}/>
 
       <View>
         <View style={styles.inputContainer}>
@@ -59,27 +45,6 @@ const styles = StyleSheet.create({
     maxHeight: Dimensions.get("window").height,
     marginVertical: 0,
     backgroundColor: "#191d26",
-  },
-  titleContainer: {
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "center",
-    marginVertical: 0,
-    backgroundColor: "#262632",
-    height: 50,
-  },
-  backBtn: {
-    position: "absolute",
-    left: 5,
-  },
-  titleTextContainer: {
-    flexDirection: "row",
-    alignItems: "center",
-  },
-  titleText: {
-    color: "#FFFFFF",
-    textAlign: "center",
-    fontSize: 20,
   },
   details1: {
     textAlign: "center",

@@ -9,32 +9,17 @@ import {
   Linking,
 } from "react-native";
 
-import { useNavigation } from "@react-navigation/native";
-
-import {
-  AntDesign,
-} from "@expo/vector-icons";
-
 import ImageTitle from "assets/images/profilePhoto.jpg";
 import Buttons from "components/forms/Buttons";
+import UserProfileSettingsHeader from "components/UserProfileSettingsHeader";
 
 const AccountVerification = () => {
-  const navigation = useNavigation<any>();
 
   return (
     <ScrollView style={styles.container}>
 
       {/*Title and Back Button  */}
-      <View style={styles.titleAndBackContainer}>
-        <View style={styles.backBtn}>
-          <TouchableOpacity onPress={() => navigation.goBack()}>
-            <AntDesign name="left" size={24} color="white" />
-          </TouchableOpacity>
-        </View>
-        <View>
-          <Text style={styles.title}>账号凭证</Text>
-        </View>
-      </View>
+      <UserProfileSettingsHeader title='账号凭证' btnRight={null}/>
 
       {/* QRCODE */}
       <View style={styles.qrCodeMainContainer}>
@@ -110,23 +95,6 @@ const styles = StyleSheet.create({
     marginVertical: 0,
     maxWidth: Dimensions.get("window").width,
     backgroundColor: "#191d26",
-  },
-  titleAndBackContainer: {
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "center",
-    marginVertical: 0,
-    backgroundColor: "#262632",
-    height: 50,
-  },
-  backBtn: {
-    position: "absolute",
-    left: 5,
-  },
-  title: {
-    color: "#FFFFFF",
-    textAlign: "center",
-    fontSize: 20,
   },
   qrCodeMainContainer: {
     backgroundColor: "#FFFFFF",

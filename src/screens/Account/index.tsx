@@ -49,36 +49,31 @@ const Summary = () => {
   return (
     <View style={styles.innerContainer}>
       <View style={styles.firstContainer}>
-        <View style={styles.profilePhotoContainer}>
-          <Image style={styles.profilePhoto} source={profilePhoto} />
-          <View style={styles.profileDetails}>
-            <View>
-              <Text style={styles.profileName}>受伤的期待</Text>
-              <View style={styles.coinTicketFreeWatchContainer}>
-                <Text style={styles.goldCoin}>金币: 0</Text>
-                <Text style={styles.profileDetails2}>观影券: 0</Text>
-                <Text style={styles.profileDetails2}>免费观看 : 0</Text>
-              </View>
-            </View>
-            <TouchableOpacity
-              onPress={() => navigation.navigate("SingleUser", {previousScreen: 'Account'})}
-              style={styles.homeButtonContainer}
-            >
-              <Text style={styles.homeButton}>主页</Text>
-              <FontAwesome5 name="angle-right" size={15} color="white" />
-            </TouchableOpacity>
+        <View style={styles.firstInnerContainer}>
+          <View style={styles.alignment}>
+            <Image style={styles.profileImage} source={profilePhoto} />
+            <Text style={styles.givenName}>受伤的期待</Text>
           </View>
-        </View>
-        <View style={styles.horizontalRule}></View>
-        <View style={styles.profileDetails3}>
-          <Text style={styles.profileDetails3Text}>动态 0</Text>
-          <Text style={styles.profileDetails3Text}>关注 0</Text>
-          <Text style={styles.profileDetails3Text}>粉丝 0</Text>
+          <TouchableOpacity
+              onPress={() => navigation.navigate("SingleUser", {previousScreen: 'Account'})}
+              style={styles.alignment}
+          >
+            <Text style={styles.homeBtn}>主页</Text>
+            <FontAwesome5 name="angle-right" size={15} color="white" />
+          </TouchableOpacity>
         </View>
       </View>
     </View>
   );
 };
+
+const VIP = () => {
+  return (
+      <View style={styles.firstContainer}>
+        <Text style={styles.copyBtn}>VIP Section</Text>
+      </View>
+  )
+}
 
 const LinkList = () => {
   const navigation = useNavigation<any>();
@@ -133,6 +128,7 @@ const AccountTab = () => {
           showsVerticalScrollIndicator={false}
         >
           <Summary />
+          <VIP/>
           <LinkList />
         </ScrollView>
       </View>
@@ -172,67 +168,34 @@ const styles = StyleSheet.create({
   firstContainer: {
     backgroundColor: "#262632",
     borderRadius: 5,
-    height: 100,
+    height: 80,
     flex: 1,
+    justifyContent: 'center'
   },
-  profilePhotoContainer: {
-    flexDirection: "row",
-    padding: 10,
+  firstInnerContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    marginHorizontal: 20
   },
-  profilePhoto: {
+  alignment: {
+    flexDirection: 'row',
+    alignItems: 'center'
+  },
+  profileImage: {
     width: 40,
     height: 40,
     borderRadius: 20,
+    marginRight: 15
   },
-  profileDetails: {
-    flexDirection: "row",
-    alignItems: "center",
-    paddingLeft: 8,
-  },
-  profileName: {
+  givenName: {
     color: "white",
     fontSize: 15,
     fontWeight: "600",
   },
-  coinTicketFreeWatchContainer: {
-    flexDirection: "row",
-    paddingHorizontal: gap / -2,
-  },
-  goldCoin: {
-    color: "white",
-    fontSize: 11,
-  },
-  profileDetails2: {
-    color: "white",
-    fontSize: 11,
-    marginHorizontal: gap / 2,
-  },
-  homeButtonContainer: {
-    flexDirection: "row",
-    alignItems: "center",
-    position: "absolute",
-    right: -100,
-  },
-  homeButton: {
+  homeBtn: {
     color: "white",
     fontSize: 13,
     marginRight: 5,
-  },
-  horizontalRule: {
-    borderTopColor: "white",
-    borderTopWidth: StyleSheet.hairlineWidth,
-    marginHorizontal: 10,
-  },
-  profileDetails3: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    marginHorizontal: 50,
-    paddingTop: 5,
-  },
-  profileDetails3Text: {
-    color: "white",
-    fontSize: 13,
-    fontWeight: "600",
   },
 
   // Fifth Container

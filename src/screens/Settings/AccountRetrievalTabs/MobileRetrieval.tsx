@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import {
   Dimensions,
   ScrollView,
@@ -8,32 +8,17 @@ import {
   StyleSheet,
 } from "react-native";
 
-import { useNavigation } from "@react-navigation/native";
-
-import { AntDesign } from "@expo/vector-icons";
-
 import InputText from "components/forms/InputText";
 import Buttons from "components/forms/Buttons";
+import UserProfileSettingsHeader from "components/UserProfileSettingsHeader";
 
 const MobileRetrieval = () => {
-  const navigation = useNavigation<any>();
-
-  const [message2, setMessage2] = useState("请输入验证码");
 
   return (
     <ScrollView style={styles.container}>
-      <View style={styles.titleAndBackBtnContainer}>
-        <View style={styles.backBtn}>
-          <TouchableOpacity
-            onPress={() => navigation.navigate("AccountRetrieval")}
-          >
-            <AntDesign name="left" size={24} color="white" />
-          </TouchableOpacity>
-        </View>
-        <View>
-          <Text style={styles.title}>手机号找</Text>
-        </View>
-      </View>
+
+      {/*Header*/}
+      <UserProfileSettingsHeader title={'手机号找'} btnRight={null}/>
 
       <View style={styles.textInputContainer}>
         <InputText
@@ -77,22 +62,6 @@ const styles = StyleSheet.create({
     maxHeight: Dimensions.get("window").height,
     maxWidth: Dimensions.get("window").width,
     backgroundColor: "#191d26",
-  },
-  titleAndBackBtnContainer: {
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "center",
-    backgroundColor: "#262632",
-    height: 50,
-  },
-  backBtn: {
-    position: "absolute",
-    left: 5,
-  },
-  title: {
-    color: "#FFFFFF",
-    textAlign: "center",
-    fontSize: 20,
   },
   textInputContainer: {
     marginHorizontal: 25,

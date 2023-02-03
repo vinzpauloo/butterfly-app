@@ -4,21 +4,15 @@ import {
   Text,
   Dimensions,
   View,
-  TouchableOpacity,
   StyleSheet,
 } from "react-native";
 
-import { useNavigation } from "@react-navigation/native";
-
-import { AntDesign } from "@expo/vector-icons";
+import UserProfileSettingsHeader from "components/UserProfileSettingsHeader";
 
 
 const PasscodeLock = () => {
-  const navigation = useNavigation<any>();
-
   const [selectedDots, setSelectedDots] = useState([]);
   const [lines, setLines] = useState([]);
-
   const [dots, setDots] = useState([
     { id: 1, x: 1, y: 1 },
     { id: 2, x: 1, y: 1 },
@@ -46,16 +40,7 @@ const PasscodeLock = () => {
   return (
     <ScrollView style={styles.container}>
       {/*Title and Back Button  */}
-      <View style={styles.titleAndBackContainer}>
-        <View style={styles.backBtn}>
-          <TouchableOpacity onPress={() => navigation.goBack()}>
-            <AntDesign name="left" size={24} color="white" />
-          </TouchableOpacity>
-        </View>
-        <View>
-          <Text style={styles.title}>应用锁</Text>
-        </View>
-      </View>
+      <UserProfileSettingsHeader title={'应用锁'} btnRight={null}/>
 
       <Text style={{ textAlign: "center" }}>
         Selected Dots: {selectedDots.join(", ")}
@@ -117,23 +102,6 @@ const styles = StyleSheet.create({
     marginVertical: 0,
     maxWidth: Dimensions.get("window").width,
     backgroundColor: "#191d26",
-  },
-  titleAndBackContainer: {
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "center",
-    marginVertical: 0,
-    backgroundColor: "#262632",
-    height: 50,
-  },
-  backBtn: {
-    position: "absolute",
-    left: 5,
-  },
-  title: {
-    color: "#FFFFFF",
-    textAlign: "center",
-    fontSize: 20,
   },
   lockContainer: {
     flexDirection: "row",

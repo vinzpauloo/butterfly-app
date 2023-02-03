@@ -1,31 +1,15 @@
-import {ScrollView, Text, Dimensions, View, TouchableOpacity, StyleSheet} from "react-native";
+import {ScrollView, Dimensions, StyleSheet} from "react-native";
 
-import {useNavigation} from "@react-navigation/native";
+import UserProfileSettingsHeader from "../../../components/UserProfileSettingsHeader";
 
-import { AntDesign } from "@expo/vector-icons";
 
 const RecordingHistory = () => {
-
-    const navigation = useNavigation<any>();
 
     return (
         <ScrollView style={styles.container}>
 
             {/*Title and Back Button  */}
-            <View
-                style={styles.titleAndBackContainer}
-            >
-                <View style={styles.backBtn}>
-                    <TouchableOpacity onPress={() => navigation.navigate("Account")}>
-                        <AntDesign name="left" size={24} color="white" />
-                    </TouchableOpacity>
-                </View>
-                <View>
-                    <Text style={styles.title}>
-                        历史记录
-                    </Text>
-                </View>
-            </View>
+            <UserProfileSettingsHeader title='历史记录'/>
         </ScrollView>
     )
 }
@@ -38,23 +22,6 @@ const styles = StyleSheet.create({
         maxWidth: Dimensions.get("window").width,
         backgroundColor: '#191d26'
     },
-    titleAndBackContainer: {
-        flexDirection: "row",
-        alignItems: "center",
-        justifyContent: "center",
-        marginVertical: 0,
-        backgroundColor: "#262632",
-        height: 50,
-    },
-    backBtn: {
-        position: "absolute",
-        left: 5
-    },
-    title: {
-        color: "#FFFFFF",
-        textAlign: "center",
-        fontSize: 20
-    }
 })
 
 export default RecordingHistory

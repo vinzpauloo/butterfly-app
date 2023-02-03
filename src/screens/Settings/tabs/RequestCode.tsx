@@ -1,38 +1,22 @@
-import React, { useState } from "react";
+import React from "react";
 import {
   Dimensions,
   ScrollView,
-  Text,
-  TouchableOpacity,
   View,
-  TextInput,
-  Button,
   KeyboardAvoidingView,
   StyleSheet,
 } from "react-native";
 
-import { AntDesign } from "@expo/vector-icons";
-import { useNavigation } from "@react-navigation/native";
-
 import InputText from "components/forms/InputText";
 import Buttons from "components/forms/Buttons";
+import UserProfileSettingsHeader from "components/UserProfileSettingsHeader";
 
 const RequestCode = () => {
-  const navigation = useNavigation<any>();
   return (
     <KeyboardAvoidingView behavior="height" style={{ flex: 1 }}>
       <ScrollView style={styles.container}>
         {/*Title and Back Button  */}
-        <View style={styles.titleAndBackBtnContainer}>
-          <View style={styles.backBtnContainer}>
-            <TouchableOpacity onPress={() => navigation.goBack()}>
-              <AntDesign name="left" size={24} color="white" />
-            </TouchableOpacity>
-          </View>
-          <View style={styles.titleContainer}>
-            <Text style={styles.title}>填写邀请码</Text>
-          </View>
-        </View>
+        <UserProfileSettingsHeader title={'填写邀请码'} btnRight={null}/>
 
         <View style={styles.textInputContainer}>
           <InputText placeholder='请填写邀请码' placeholderTextColor='grey' maxLength={null}/>
@@ -52,27 +36,6 @@ const styles = StyleSheet.create({
     maxHeight: Dimensions.get("window").height,
     maxWidth: Dimensions.get("window").width,
     backgroundColor: "#191d26",
-  },
-  titleAndBackBtnContainer: {
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "center",
-    marginVertical: 10,
-    backgroundColor: "#262632",
-    height: 50,
-  },
-  backBtnContainer: {
-    position: "absolute",
-    left: 5,
-  },
-  titleContainer: {
-    flexDirection: "row",
-    alignItems: "center",
-  },
-  title: {
-    color: "#FFFFFF",
-    textAlign: "center",
-    fontSize: 20,
   },
   textInputContainer: {
     marginTop: 20,

@@ -3,38 +3,25 @@ import {
   Text,
   Dimensions,
   View,
-  TouchableOpacity,
   StyleSheet,
   Image,
 } from "react-native";
 
-import { useNavigation } from "@react-navigation/native";
-
 import {
-  AntDesign,
   SimpleLineIcons,
   MaterialCommunityIcons,
 } from "@expo/vector-icons";
 
 import ImageTitle from "assets/images/profilePhoto.jpg";
+import UserProfileSettingsHeader from "../../../components/UserProfileSettingsHeader";
 
 const SharingPromotion = () => {
-  const navigation = useNavigation<any>();
 
   return (
     <ScrollView style={styles.container}>
 
       {/*Title and Back Button  */}
-      <View style={styles.titleAndBackContainer}>
-        <View style={styles.backBtn}>
-          <TouchableOpacity onPress={() => navigation.navigate("Account")}>
-            <AntDesign name="left" size={24} color="white" />
-          </TouchableOpacity>
-        </View>
-        <View>
-          <Text style={styles.title}>分享推广</Text>
-        </View>
-      </View>
+      <UserProfileSettingsHeader title='分享推广'/>
 
       {/* QRCODE */}
       <View style={styles.qrCodeContainer}>
@@ -142,23 +129,6 @@ const styles = StyleSheet.create({
     marginVertical: 0,
     maxWidth: Dimensions.get("window").width,
     backgroundColor: "#262632",
-  },
-  titleAndBackContainer: {
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "center",
-    marginVertical: 0,
-    backgroundColor: "#262632",
-    height: 50,
-  },
-  backBtn: {
-    position: "absolute",
-    left: 5,
-  },
-  title: {
-    color: "#FFFFFF",
-    textAlign: "center",
-    fontSize: 20,
   },
   qrCodeContainer: {
     backgroundColor: "#FFFFFF",

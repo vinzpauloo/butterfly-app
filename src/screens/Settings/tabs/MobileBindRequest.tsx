@@ -1,35 +1,20 @@
-import React, { useState, useEffect } from "react";
+import React from "react";
 import {
-  Text,
   View,
   ScrollView,
   Dimensions,
-  TouchableOpacity,
   StyleSheet,
 } from "react-native";
 
-import { AntDesign } from "@expo/vector-icons";
-import { useNavigation } from "@react-navigation/native";
-
 import InputText from "components/forms/InputText";
 import Buttons from "components/forms/Buttons";
+import UserProfileSettingsHeader from "components/UserProfileSettingsHeader";
 
 const MobileBindRequest = () => {
-  const navigation = useNavigation<any>();
-
   return (
     <ScrollView style={styles.container}>
       {/*Title and Back Button  */}
-      <View style={styles.titleContainer}>
-        <View style={styles.backBtn}>
-          <TouchableOpacity onPress={() => navigation.goBack()}>
-            <AntDesign name="left" size={24} color="white" />
-          </TouchableOpacity>
-        </View>
-        <View>
-          <Text style={styles.titleTextContainer}>绑定邀请码</Text>
-        </View>
-      </View>
+      <UserProfileSettingsHeader title='绑定邀请码' btnRight={null}/>
 
       <View style={styles.textInputContainer}>
         <InputText placeholder='请输入需要绑定的手机号' placeholderTextColor='grey' maxLength={null}/>
@@ -59,23 +44,6 @@ const styles = StyleSheet.create({
     maxHeight: Dimensions.get("window").height,
     maxWidth: Dimensions.get("window").width,
     backgroundColor: "#191d26",
-  },
-  titleContainer: {
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "center",
-    marginVertical: 0,
-    backgroundColor: "#262632",
-    height: 50,
-  },
-  backBtn: {
-    position: "absolute",
-    left: 5,
-  },
-  titleTextContainer: {
-    color: "#FFFFFF",
-    textAlign: "center",
-    fontSize: 20,
   },
   textInputContainer: {
     marginHorizontal: 20,

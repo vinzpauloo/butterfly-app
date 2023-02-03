@@ -11,5 +11,6 @@ const styles = StyleSheet.create({
   divider: {
     marginVertical: 15,
     marginHorizontal: 15,
+    width: "auto",
   },
 });

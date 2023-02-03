@@ -78,13 +78,15 @@ const Video = ({ item, index, onOpen }: any) => {
   );
 };
 
+const sampleData = [1, 2, 3, 4, 5, 6];
+
 const NoFollowing = ({ onOpen }) => {
   return (
     <>
       <Image source={NoFollowingImg} style={styles.image} />
       <Text style={styles.popular}>近期热门用户</Text>
       {[...Array(6)].map((_, index) => (
-        <React.Fragment key={index}>
+        <View key={index}>
           <View style={styles.usersCategoryContainer}>
             <View style={styles.headerContent}>
               <View style={{ flexDirection: "row", alignItems: "center" }}>
@@ -104,8 +106,8 @@ const NoFollowing = ({ onOpen }) => {
               keyExtractor={(_, index) => "" + index}
             />
           </View>
-          <DividerContainer />
-        </React.Fragment>
+          {sampleData.length - 1 !== index ? <DividerContainer /> : null}
+        </View>
       ))}
       <BottomMessage />
     </>

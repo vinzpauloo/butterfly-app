@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import {
   StyleSheet,
   Text,
@@ -9,10 +9,10 @@ import {
   SafeAreaView,
   Dimensions,
 } from "react-native";
-import React from "react";
 import Modal from "react-native-modal";
 
 import { useNavigation } from "@react-navigation/native";
+
 import {
   Ionicons,
   AntDesign,
@@ -23,7 +23,6 @@ import {
 
 import Container from "components/Container";
 import profilePhoto from "assets/images/profilePhoto.jpg";
-
 const MainSettings = (navigation: any) => {
   const [selected, setSelected] = useState(null);
   const [image, setImage] = useState(null);
@@ -201,7 +200,7 @@ const AccountSettings = (navigation: any) => {
       </View>
 
       {/*Account Certificate*/}
-      <TouchableOpacity onPress={() => navigate.navigate("AccountCertificate")}>
+      <TouchableOpacity onPress={() => navigate.navigate("AccountVerification")}>
         <View style={styles.itemContainer}>
           <View style={styles.itemInnerContainer}>
             <MaterialCommunityIcons
@@ -246,7 +245,7 @@ const AccountSettings = (navigation: any) => {
   );
 };
 
-const OtherSettings = (navigation: any) => {
+const OtherSettings = (props) => {
   const navigate = useNavigation<any>();
 
   return (
@@ -255,7 +254,14 @@ const OtherSettings = (navigation: any) => {
         <Text style={styles.accountAndOthersTitle}>其他</Text>
       </View>
 
-      <TouchableOpacity onPress={() => navigate.navigate("CustomerService")}>
+      {/*Customer Service*/}
+      <TouchableOpacity onPress={() => navigate.navigate("CustomerService", {
+        postTitle: 'Test Sender',
+        senderUserName: 'Test Sender Username',
+        senderMessage: 'Test Sender Message',
+        senderImgURL: 'https://randomuser.me/api/portraits/men/3.jpg',
+        senderTimeStamp: 'Test Date',
+      })}>
         <View style={styles.itemContainer}>
           <View style={styles.itemInnerContainer}>
             <AntDesign name="customerservice" size={20} color="white" />

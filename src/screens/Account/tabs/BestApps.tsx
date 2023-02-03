@@ -7,9 +7,9 @@ import {
   StyleSheet,
   Image,
 } from "react-native";
-import { AntDesign } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
 
+import { AntDesign } from "@expo/vector-icons";
 import { appListData } from "data/appListData";
 
 const BestApps = () => {
@@ -17,6 +17,7 @@ const BestApps = () => {
 
   return (
     <ScrollView style={styles.container}>
+
       {/*Title and Back Button  */}
       <View style={styles.titleAndBackContainer}>
         <View style={styles.backBtn}>

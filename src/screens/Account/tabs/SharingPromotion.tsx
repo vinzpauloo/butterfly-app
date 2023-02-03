@@ -7,21 +7,23 @@ import {
   StyleSheet,
   Image,
 } from "react-native";
+
+import { useNavigation } from "@react-navigation/native";
+
 import {
   AntDesign,
   SimpleLineIcons,
   MaterialCommunityIcons,
 } from "@expo/vector-icons";
-import { useNavigation } from "@react-navigation/native";
 
-import ImageTitle from "../../../assets/images/profilePhoto.jpg";
-// import ImageQRCode from "../../../assets/images/qrcode.png";
+import ImageTitle from "assets/images/profilePhoto.jpg";
 
 const SharingPromotion = () => {
   const navigation = useNavigation<any>();
 
   return (
     <ScrollView style={styles.container}>
+
       {/*Title and Back Button  */}
       <View style={styles.titleAndBackContainer}>
         <View style={styles.backBtn}>

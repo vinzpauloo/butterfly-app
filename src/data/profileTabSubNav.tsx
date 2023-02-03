@@ -17,7 +17,7 @@ export const profileTabSubNav = [
   },
   {
     title: "在线客服",
-    screen: "OnlineCustomerService",
+    screen: "CustomerService",
   },
   {
     title: "精品应用",

@@ -9,21 +9,14 @@ import {
   TextInput,
   Button,
 } from "react-native";
+
 import { AntDesign } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
 
-const PetName = () => {
-  const [text, setText] = useState("请输入新的昵称");
-  const [charactersLeft, setCharactersLeft] = useState(10);
-  const handleTextChange = (input) => {
-    if (input.length > 10) {
-      return;
-    }
-    setText(input);
-    setCharactersLeft(10 - input.length);
-  };
+import InputText from "components/forms/InputText";
+import Buttons from "components/forms/Buttons";
 
-  const [message, setMessage] = useState(`受伤的期待`);
+const PetName = () => {
 
   const navigation = useNavigation<any>();
 
@@ -41,14 +34,10 @@ const PetName = () => {
         </View>
       </View>
 
-      <View style={styles.innerContainer}>
-        <TextInput
-          style={styles.textInput}
-          onChangeText={handleTextChange}
-          value={text}
-          maxLength={10}
-        />
-        <Text style={styles.charactersLeft}>{charactersLeft}/10</Text>
+      <View>
+        <View style={styles.inputContainer}>
+          <InputText maxLength={10} placeholder='受伤的期待' placeholderTextColor='grey'/>
+        </View>
 
         <Text style={styles.details1}>每个自然月仅允许修改一次</Text>
 
@@ -57,7 +46,7 @@ const PetName = () => {
         </Text>
 
         <View style={styles.btnContainer}>
-          <Button title="提交" color="#FF474E"></Button>
+          <Buttons props={'提交'}/>
         </View>
       </View>
     </ScrollView>
@@ -92,24 +81,9 @@ const styles = StyleSheet.create({
     textAlign: "center",
     fontSize: 20,
   },
-  innerContainer: {
-    marginTop: 50,
-  },
-  textInput: {
-    borderBottomWidth: 1,
-    borderBottomColor: "#FF474E",
-    marginHorizontal: 40,
-    color: "white",
-  },
-  charactersLeft: {
-    textAlign: "right",
-    marginHorizontal: 40,
-    color: "white",
-    fontSize: 10,
-  },
   details1: {
     textAlign: "center",
-    marginTop: 50,
+    marginTop: 35,
     marginHorizontal: 40,
     color: "white",
     fontSize: 12,
@@ -120,10 +94,14 @@ const styles = StyleSheet.create({
     color: "white",
     fontSize: 12,
   },
-  btnContainer: {
-    marginTop: 20,
-    marginHorizontal: 20,
+  inputContainer: {
+    marginHorizontal: 21,
+    marginTop: 20
   },
+  btnContainer: {
+    marginVertical: 20,
+    marginHorizontal: 20
+  }
 });
 
 export default PetName;

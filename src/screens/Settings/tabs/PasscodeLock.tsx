@@ -6,10 +6,12 @@ import {
   View,
   TouchableOpacity,
   StyleSheet,
-  TextInput,
 } from "react-native";
-import { AntDesign } from "@expo/vector-icons";
+
 import { useNavigation } from "@react-navigation/native";
+
+import { AntDesign } from "@expo/vector-icons";
+
 
 const PasscodeLock = () => {
   const navigation = useNavigation<any>();

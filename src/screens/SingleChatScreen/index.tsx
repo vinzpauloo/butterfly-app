@@ -1,18 +1,18 @@
 import React, { useRef, useState } from 'react'
 import { StyleSheet, Text, View, TextInput, Pressable, Alert, ScrollView, Image, Dimensions } from 'react-native'
-import { HStack, VStack } from 'native-base';
-import * as ImagePicker from 'expo-image-picker';
-import { Camera, CameraType } from "expo-camera";
 
-import Container from 'components/Container';
-import { globalStyle } from 'globalStyles';
+import { useNavigation, useRoute } from '@react-navigation/native';
+import { HStack, VStack } from 'native-base';
+
+import * as ImagePicker from 'expo-image-picker';
+import { Camera } from "expo-camera";
 
 import Entypo from "react-native-vector-icons/Entypo";
 import Feather from "react-native-vector-icons/Feather";
 
-import { useNavigation, useRoute } from '@react-navigation/native';
-
-const windowWidth = Dimensions.get('window').width;
+import Container from 'components/Container';
+import { globalStyle } from 'globalStyles';
+import formatDate from "../../utils/formatDate";
 
 type Props = {}
 
@@ -26,33 +26,6 @@ const SingleChatScreen = (props: Props) => {
 
 	const [messages, setMessages] = useState([]);
 	const [input, setInput] = useState('');
-
-	const getCurrentDate = (separator = '') => {
-		let date = new Date();
-		const d = new Date();
-		const monthNames = [`01-`,`02-`,`03-`,`04-`,`05-`,`06-`,`07-`,`08-`,`09-`,`10-`,`11-`,`12-`];
-
-		function formatTime() {
-			let hours = date.getHours();
-			let minutes = date.getMinutes();
-			let seconds = date.getSeconds();
-			let day = date.getDate();
-			let year = date.getFullYear();
-
-			hours = formatZeroes(hours);
-			minutes = formatZeroes(minutes);
-			seconds = formatZeroes(seconds);
-
-			return `${monthNames[d.getMonth()]}${day}-${year} ${hours}:${minutes}`;
-		}
-
-		function formatZeroes(time) {
-			time = time.toString();
-			return time.length < 2 ? `0` + time : time;
-		}
-
-		return (`${formatTime()}`)
-	}
 
 	const handleSend = () => {
 		if (!input) {
@@ -89,7 +62,7 @@ const SingleChatScreen = (props: Props) => {
 	return (
 		<Container>
 			{
-				messages.length > 0 || !!route?.params.senderUserName ? 
+				messages.length > 0 || !!route?.params.senderUserName ?
 				<ScrollView ref={scrollViewRef} >
 					{/* SENDER MESSAGES */}
 					<View style={styles.senderMessagesContainer}>
@@ -103,7 +76,7 @@ const SingleChatScreen = (props: Props) => {
 									{/* {message.image && <Image source={{ uri: message.image }} style={styles.yourSentImage} />} */}
 								</View>
 							</>
-							<Text style={styles.messageTimeStamp}>{route?.params.senderTimeStamp}</Text>
+							<Text style={styles.messageTimeStamp}>{formatDate()}</Text>
 						</VStack>
 					</View>
 					{/* YOUR MESSAGES */}
@@ -117,11 +90,11 @@ const SingleChatScreen = (props: Props) => {
 									{message.image && <Image source={{ uri: message.image }} style={styles.yourSentImage} />}
 								</View>
 							</>
-							<Text style={styles.messageTimeStamp}>{getCurrentDate()}</Text>
+							<Text style={styles.messageTimeStamp}>{formatDate()}</Text>
 						</VStack>
 					</View>))}
 				</ScrollView>
-				:	
+				:
 				<>
 					<View style={styles.centeredContent}>
 						<Text style={styles.whiteText}>文明发言,才能触及彼岸珍惜每一位原创者</Text>
@@ -229,6 +202,6 @@ const styles = StyleSheet.create({
 		backgroundColor: "white",
 		paddingHorizontal: 12,
 		borderRadius: 16,
-		width: windowWidth - 88,
+		width: Dimensions.get('window').width - 88,
 	}
 })

@@ -1,7 +1,8 @@
 import {ScrollView, Text, Dimensions, View, TouchableOpacity, StyleSheet} from "react-native";
-import { AntDesign } from "@expo/vector-icons";
+
 import {useNavigation} from "@react-navigation/native";
 
+import { AntDesign } from "@expo/vector-icons";
 
 const RecordingHistory = () => {
 
@@ -9,6 +10,7 @@ const RecordingHistory = () => {
 
     return (
         <ScrollView style={styles.container}>
+
             {/*Title and Back Button  */}
             <View
                 style={styles.titleAndBackContainer}

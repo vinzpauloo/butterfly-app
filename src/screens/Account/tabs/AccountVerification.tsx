@@ -7,27 +7,27 @@ import {
   StyleSheet,
   Image,
   Linking,
-  Button,
 } from "react-native";
-import {
-  AntDesign,
-  SimpleLineIcons,
-  MaterialCommunityIcons,
-} from "@expo/vector-icons";
+
 import { useNavigation } from "@react-navigation/native";
 
-import ImageTitle from "../../../assets/images/profilePhoto.jpg";
-// import ImageBarcode from "../../../assets/images/qrcode.png";
+import {
+  AntDesign,
+} from "@expo/vector-icons";
+
+import ImageTitle from "assets/images/profilePhoto.jpg";
+import Buttons from "components/forms/Buttons";
 
 const AccountVerification = () => {
   const navigation = useNavigation<any>();
 
   return (
     <ScrollView style={styles.container}>
+
       {/*Title and Back Button  */}
       <View style={styles.titleAndBackContainer}>
         <View style={styles.backBtn}>
-          <TouchableOpacity onPress={() => navigation.navigate("Account")}>
+          <TouchableOpacity onPress={() => navigation.goBack()}>
             <AntDesign name="left" size={24} color="white" />
           </TouchableOpacity>
         </View>
@@ -68,9 +68,9 @@ const AccountVerification = () => {
       </View>
 
       {/* Button */}
-      <View style={styles.btnContainer}>
-        <Button title="保存账号凭证到手机" color="#FF474E"></Button>
-      </View>
+     <View style={styles.btnContainer}>
+       <Buttons props={'保存账号凭证到手机'}/>
+     </View>
 
       {/* WARNING */}
       <View style={styles.warning}>
@@ -196,10 +196,6 @@ const styles = StyleSheet.create({
     fontSize: 14,
     color: "grey",
   },
-  btnContainer: {
-    marginTop: 20,
-    marginHorizontal: 15,
-  },
   warning: {
     marginTop: 20,
   },
@@ -225,6 +221,10 @@ const styles = StyleSheet.create({
   linkTextColor: {
     color: "#4362A5",
   },
+  btnContainer: {
+    marginHorizontal: 20,
+    marginTop: 20
+  }
 });
 
 export default AccountVerification;

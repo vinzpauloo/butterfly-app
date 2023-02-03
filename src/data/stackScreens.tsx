@@ -27,14 +27,12 @@ import RecordingHistory from "../screens/Account/tabs/RecordingHistory";
 import OfflineCache from "../screens/Account/tabs/OfflineCache";
 import SharingPromotion from "../screens/Account/tabs/SharingPromotion";
 import AccountVerification from "screens/Account/tabs/AccountVerification";
-import OnlineCustomerService from "screens/Account/tabs/OnlineCustomerService";
 import BestApps from "screens/Account/tabs/BestApps";
 import Settings from "screens/Settings";
 import ProfilePhoto from "screens/Settings/tabs/ProfilePhoto";
 import PetName from "screens/Settings/tabs/PetName";
 import MobileBindRequest from "screens/Settings/tabs/MobileBindRequest";
 import Introduction from "screens/Settings/tabs/Introduction";
-import AccountCertificate from "screens/Settings/tabs/AccountCertificate";
 import AccountRetrieval from "screens/Settings/tabs/AccountRetrieval";
 import MobileRetrieval from "screens/Settings/AccountRetrievalTabs/MobileRetrieval";
 import CameraInit from "screens/Settings/AccountRetrievalTabs/CameraInit";
@@ -166,11 +164,6 @@ export const stackScreens = {
       options: { headerShown: false },
     },
     {
-      name: "OnlineCustomerService",
-      component: OnlineCustomerService,
-      options: { headerShown: false },
-    },
-    {
       name: "BestApps",
       component: BestApps,
       options: { headerShown: false },
@@ -203,11 +196,6 @@ export const stackScreens = {
     {
       name: "Introduction",
       component: Introduction,
-      options: { headerShown: false },
-    },
-    {
-      name: "AccountCertificate",
-      component: AccountCertificate,
       options: { headerShown: false },
     },
     {
@@ -253,6 +241,7 @@ export const stackScreens = {
     {
       name: "PasscodeLock",
       component: PasscodeLock,
+      options: { headerShown: false },
     },
     {
       name: "InformationScreen",

@@ -12,6 +12,7 @@ import {
 import React from "react";
 
 import { useNavigation } from "@react-navigation/native";
+
 import Fontisto from "react-native-vector-icons/Fontisto";
 import Ionicons from "react-native-vector-icons/Ionicons";
 import { FontAwesome5 } from "@expo/vector-icons";
@@ -60,7 +61,7 @@ const Summary = () => {
               </View>
             </View>
             <TouchableOpacity
-              onPress={() => navigation.navigate("SingleUser")}
+              onPress={() => navigation.navigate("SingleUser", {previousScreen: 'Account'})}
               style={styles.homeButtonContainer}
             >
               <Text style={styles.homeButton}>主页</Text>
@@ -90,7 +91,13 @@ const LinkList = () => {
             <TouchableOpacity
               onPress={() => {
                 item.screen !== "OfficialGroup"
-                  ? navigation.navigate(`${item.screen}`)
+                  ? navigation.navigate(`${item.screen}`, {
+                      postTitle: 'Test Sender',
+                      senderUserName: 'Test Sender Username',
+                      senderMessage: 'Test Sender Message',
+                      senderImgURL: 'https://randomuser.me/api/portraits/men/3.jpg',
+                      senderTimeStamp: 'Test Date',
+                    })
                   : Linking.openURL("https://t.me/StockPro_Official_BankNifty");
               }}
             >

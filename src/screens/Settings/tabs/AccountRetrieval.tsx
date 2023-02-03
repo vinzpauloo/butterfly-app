@@ -11,9 +11,11 @@ import {
   Button,
 } from "react-native";
 import Modal from "react-native-modal";
-import { AntDesign, FontAwesome5 } from "@expo/vector-icons";
+
 import { useNavigation } from "@react-navigation/native";
-import { Camera, CameraType } from "expo-camera";
+
+import { AntDesign, FontAwesome5 } from "@expo/vector-icons";
+
 import * as ImagePicker from "expo-image-picker";
 
 const AccountRetrieval = () => {
@@ -123,7 +125,13 @@ const AccountRetrieval = () => {
         {/*THIRD BUTTON*/}
         <View>
           <TouchableOpacity
-            onPress={() => navigation.navigate("CustomerService")}
+            onPress={() => navigation.navigate("CustomerService", {
+              postTitle: 'Test Sender',
+              senderUserName: 'Test Sender Username',
+              senderMessage: 'Test Sender Message',
+              senderImgURL: 'https://randomuser.me/api/portraits/men/3.jpg',
+              senderTimeStamp: 'Test Date',
+            })}
           >
             <View style={styles.tabInnerContainer}>
               <Text style={styles.tabText}>联系客服找回</Text>

@@ -25,6 +25,7 @@ import Videos from "./tabs/Videos";
 import { globalStyle } from "globalStyles";
 import { multipleImages } from "data/gridImages";
 import { useNavigation } from "@react-navigation/native";
+import { FlashList } from "@shopify/flash-list";
 
 const { width } = Dimensions.get("window");
 
@@ -234,7 +235,7 @@ const SearchOutput = () => {
   return <MaterialTopTabs data={data} isEqualWidth={true} />;
 };
 
-const index = () => {
+const Search = () => {
   const [hasSearch, setHasSearch] = useState(false);
   const [searches, setSearches] = useState<string[]>([
     "Mark",
@@ -264,7 +265,7 @@ const index = () => {
   );
 };
 
-export default index;
+export default Search;
 
 const styles = StyleSheet.create({
   //SEARCH BAR STYLES

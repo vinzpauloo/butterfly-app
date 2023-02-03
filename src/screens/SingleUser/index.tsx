@@ -5,7 +5,7 @@ import Container from "components/Container";
 import StickyTabs from "layouts/StickyTabs";
 import { singleUserSubNav } from "data/singleUserSubNav";
 
-const index = () => {
+const SingleUser = () => {
   return (
     <Container>
       <StickyTabs data={singleUserSubNav} />
@@ -13,6 +13,6 @@ const index = () => {
   );
 };
 
-export default index;
+export default SingleUser;
 
 const styles = StyleSheet.create({});

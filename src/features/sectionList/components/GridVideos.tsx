@@ -99,8 +99,9 @@ const GridVideos = ({ videos, isFollowingScreen = false }) => {
   const { isOpen, onOpen, onClose } = useDisclose();
 
   return (
-    <>
+    <View style={{flex: 1}}>
       <MasonryFlashList
+        estimatedItemSize={166}
         numColumns={2}
         data={videos}
         renderItem={({ item }: any) => (
@@ -114,7 +115,7 @@ const GridVideos = ({ videos, isFollowingScreen = false }) => {
       />
 
       <Modal isOpen={isOpen} onOpen={onOpen} onClose={onClose} />
-    </>
+    </View>
   );
 };
 

@@ -29,7 +29,7 @@ export const topSubNav = {
     },
     {
       name: "网黄",
-      component: (props) => <DynamicScreen {...props} title={"pornStart"} />,
+      component: (props) => <DynamicScreen {...props} title={"pornStars"} />,
     },
     {
       name: "萝莉",

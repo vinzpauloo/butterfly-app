@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { StyleSheet, Text } from "react-native";
+import { StyleSheet, Text, View } from "react-native";
 import { useDisclose, VStack, Avatar, HStack, Skeleton } from "native-base";
 import { FlashList } from "@shopify/flash-list";
 
@@ -48,7 +48,7 @@ const FeedList = ({ feedListData }) => {
   return (
     <Container>
       {feedIsLoaded ?
-        <>
+        <View style={styles.wrapper}>
           <FlashList
             estimatedItemSize={479}
             data={feedListData}
@@ -70,7 +70,7 @@ const FeedList = ({ feedListData }) => {
             keyExtractor={(item, index) => "" + index}
           />
           <BottomComment isOpen={isOpen} onOpen={onOpen} onClose={onClose} />
-        </>
+        </View>
         :
         <FeedItemSkeleton />
       }
@@ -80,4 +80,9 @@ const FeedList = ({ feedListData }) => {
 
 export default FeedList;
 
-const styles = StyleSheet.create({});
+const styles = StyleSheet.create({
+  wrapper: {
+    flex: 1,
+    minHeight: 100
+  }
+});

@@ -72,6 +72,10 @@ const basicHeader = ({ navigation, route }: any) => ({
   ),
 });
 
+const VlogScreen = () => {
+  <PortraitVideo hasBackButton={true} />
+}
+
 export const stackScreens = {
   initialRoute: "InitialLoad",
   screenOptions: { animation: "slide_from_right" },
@@ -125,7 +129,7 @@ export const stackScreens = {
     },
     {
       name: "VlogScreen",
-      component: () => <PortraitVideo hasBackButton={true} />,
+      component: VlogScreen ,
       options: { headerShown: false },
     },
     {

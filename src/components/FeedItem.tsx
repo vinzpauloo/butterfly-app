@@ -74,7 +74,7 @@ const FeedItem = (props: Props) => {
 												props.addedContent.length === 1 ? styles.singleContent
 													:props.addedContent.length % 3 === 0 ? styles.tripleContent
 															:styles.doubleContent} m={0.5}>
-										<Image style={styles.imageInBox} source={{ uri: item.contentURL }} resizeMode={ResizeMode.COVER} />
+										<Image style={styles.imageInBox} source={{ uri: item.contentURL, cache: 'only-if-cached' }} resizeMode={ResizeMode.COVER} />
 									</Box>
 									: props.addedContentType === "video" ?
 										<Video

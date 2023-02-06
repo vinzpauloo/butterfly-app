@@ -174,7 +174,8 @@ const styles = StyleSheet.create({
   },
   commentsContainer: {
     padding: 12,
-    flex :1
+    flex: 1,
+    minHeight: 100
   },
   loadMoreComments: {
     textAlign: "center",

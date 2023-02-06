@@ -1,9 +1,10 @@
-import { StyleSheet, Text, View } from "react-native";
+import { StyleSheet, ActivityIndicator, View } from "react-native";
 import React from "react";
 
 import { createMaterialTopTabNavigator } from "@react-navigation/material-top-tabs";
 
 import { globalStyle } from "globalStyles";
+import Container from "components/Container";
 
 const TopTab = createMaterialTopTabNavigator();
 
@@ -41,6 +42,13 @@ const MaterialTopTabs = ({
             : styles.equalWidthTabBarItemStyle,
           tabBarScrollEnabled: !isEqualWidth,
           animationEnabled: false,
+          lazy: true,
+          lazyPlaceholder: () =>
+            <Container>
+              <View style={styles.loaderContainer}>
+                <ActivityIndicator size="large" color="white" />
+              </View>
+            </Container>
         }}
       >
         {screens?.map((item, index) => (
@@ -66,4 +74,9 @@ const styles = StyleSheet.create({
     margin: 0,
     padding: 0,
   },
+  loaderContainer: {
+    justifyContent: "center",
+    alignItems: "center",
+    flex: 1
+  }
 });

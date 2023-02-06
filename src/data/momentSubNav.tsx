@@ -66,7 +66,8 @@ const styles = StyleSheet.create({
   certificateContainer: {
     backgroundColor: globalStyle.headerBasicBg,
     padding: 12,
-    flex: 1
+    flex: 1,
+    minHeight: 100
   },
   whiteText: {
     color: "white",

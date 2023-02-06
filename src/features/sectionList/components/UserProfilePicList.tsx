@@ -1,6 +1,8 @@
 import React from 'react'
-import { StyleSheet, FlatList, Text, Pressable, Alert } from 'react-native'
+import { StyleSheet, FlatList, Text, Pressable, Alert, View } from 'react-native'
+import { FlashList } from '@shopify/flash-list'
 import { Avatar, VStack } from 'native-base'
+
 
 type Props = {
 	userNames: {name: string, imgURL: string}[]
@@ -13,7 +15,7 @@ type UserProfilePicItem = {
 
 const UserProfilePicItem = (props: UserProfilePicItem) => {
 	return (
-		<Pressable onPress={()=>{Alert.alert("Go to Profile " + props.name)}}>
+		<Pressable style={styles.profPicItem} onPress={()=>{Alert.alert("Go to Profile " + props.name)}}>
 			<VStack space={2} style={{alignItems:"center", maxWidth:60}}>
 				<Avatar source={{ uri: props.imgURL }} />
 				<Text style={styles.whiteText}>{props.name}</Text>
@@ -24,14 +26,17 @@ const UserProfilePicItem = (props: UserProfilePicItem) => {
 
 const UserProfilePicList = (props: Props) => {
 	return (
-		<FlatList
-			scrollEnabled={true}
-			columnWrapperStyle={styles.wrapper}
-			numColumns={4}
-			data={props.userNames}
-			renderItem={({ item, index }) => <UserProfilePicItem name={item.name} imgURL={item.imgURL} />}
-			keyExtractor={(item, index) => "" + index}
-		/>
+		<View style={styles.wrapper}>
+			<FlashList
+				scrollEnabled={true}
+				estimatedItemSize={83}
+				numColumns={4}
+				data={props.userNames}
+				renderItem={({ item, index }) =>
+						<UserProfilePicItem name={item.name} imgURL={item.imgURL} />}
+				keyExtractor={(item, index) => "" + index}
+			/>
+		</View>
 	)
 }
 
@@ -40,9 +45,13 @@ export default UserProfilePicList
 const styles = StyleSheet.create({
 	wrapper: {
 		justifyContent: "space-between",
-		margin: 24,
+		minHeight: 100
+		
 	},
 	whiteText: {
 		color: "white"
+	},
+	profPicItem: {
+		margin: 24
 	}
 })

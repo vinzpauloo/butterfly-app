@@ -21,7 +21,7 @@ const Introduction = () => {
       </View>
 
       <View style={styles.btnContainer}>
-        <Buttons props={'提交'}/>
+        <Buttons title={'提交'} onPress={() => alert('Test Introduction')}/>
       </View>
     </ScrollView>
   );

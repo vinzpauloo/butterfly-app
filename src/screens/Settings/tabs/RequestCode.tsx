@@ -23,7 +23,7 @@ const RequestCode = () => {
         </View>
 
         <View style={styles.btnContainer}>
-          <Buttons props={'确定'}/>
+          <Buttons title={'确定'} onPress={() => alert('Test RequestCode Btn')}/>
         </View>
       </ScrollView>
     </KeyboardAvoidingView>

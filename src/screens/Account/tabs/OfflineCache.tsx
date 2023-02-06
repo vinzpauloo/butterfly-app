@@ -12,7 +12,7 @@ const OfflineCache = () => {
   return (
     <ScrollView style={styles.container}>
       {/*Title and Back Button  */}
-      <UserProfileSettingsHeader title='离线缓存'/>
+      <UserProfileSettingsHeader title='离线缓存' btnRight={null}/>
       <NoCacheMessage/>
     </ScrollView>
   );

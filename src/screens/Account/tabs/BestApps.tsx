@@ -7,16 +7,16 @@ import {
   StyleSheet,
   Image,
 } from "react-native";
+import {FlatList, HStack, VStack} from "native-base";
 
 import { appListData } from "data/appListData";
 import UserProfileSettingsHeader from "components/UserProfileSettingsHeader";
+import {globalStyle} from "globalStyles";
 
 const BestApps = () => {
 
   return (
     <ScrollView style={styles.container}>
-
-      {/*Title and Back Button  */}
       <UserProfileSettingsHeader title='应用中心' btnRight={null}/>
 
       <View style={styles.innerContainer}>
@@ -28,27 +28,23 @@ const BestApps = () => {
           <Text style={styles.hottestTitle}>热门应用</Text>
         </View>
 
-        {appListData?.map((item, index) => (
-          <View style={styles.appContainer} key={index}>
-            <View style={styles.appDetails}>
-              <View>
-                <Image source={item.source} style={styles.appImage} />
-              </View>
-
-              <View style={styles.detailsContainer}>
-                <Text style={styles.detailsTitle}>{item.title}</Text>
-                <Text style={styles.details}>{item.downloads}</Text>
-                <Text style={styles.details}>{item.details}</Text>
-              </View>
-            </View>
-
-            <TouchableOpacity>
-              <View style={styles.btnContainer}>
-                <Text style={styles.downloadBtn}>前往下载</Text>
-              </View>
-            </TouchableOpacity>
-          </View>
-        ))}
+        <FlatList data={appListData} renderItem={({item}) =>
+            <VStack mb={4}>
+              <HStack alignItems={'center'} justifyContent={'space-between'}>
+                <HStack>
+                  <Image source={item.source} style={styles.appImage}/>
+                  <VStack>
+                    <Text style={styles.detailsTitle}>{item.title}</Text>
+                    <Text style={styles.details}>{item.downloads}</Text>
+                    <Text style={styles.details}>{item.details}</Text>
+                  </VStack>
+                </HStack>
+                <TouchableOpacity style={styles.btnContainer}>
+                  <Text style={styles.downloadBtn}>前往下载</Text>
+                </TouchableOpacity>
+              </HStack>
+            </VStack>
+        }/>
       </View>
     </ScrollView>
   );
@@ -58,9 +54,8 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     maxHeight: Dimensions.get("window").height,
-    marginVertical: 0,
     maxWidth: Dimensions.get("window").width,
-    backgroundColor: "#262632",
+    backgroundColor: globalStyle.headerBasicBg,
   },
   innerContainer: {
     padding: 10,
@@ -70,46 +65,32 @@ const styles = StyleSheet.create({
     height: 150,
   },
   alibaba: {
-    color: "#FFFFFF",
+    color: globalStyle.primaryTextColor,
     fontWeight: "600",
   },
   hottestContainer: {
     marginVertical: 20,
   },
   hottestTitle: {
-    color: "#FFFFFF",
+    color: globalStyle.primaryTextColor,
     fontWeight: "600",
-  },
-  appContainer: {
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "space-between",
-    marginTop: 20,
-  },
-  appDetails: {
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "center",
   },
   appImage: {
     width: 50,
     height: 50,
     borderRadius: 5,
-  },
-  detailsContainer: {
-    marginLeft: 10,
+    marginRight: 10
   },
   detailsTitle: {
-    color: "#FFFFFF",
+    color: globalStyle.primaryTextColor,
     fontSize: 14,
     fontWeight: "400",
   },
   details: {
-    color: "#FFFFFF",
+    color: globalStyle.primaryTextColor,
     fontSize: 12,
   },
   btnContainer: {
-    marginRight: 10,
     backgroundColor: "#FF474E",
     height: 40,
     width: 80,
@@ -118,7 +99,7 @@ const styles = StyleSheet.create({
     borderRadius: 20,
   },
   downloadBtn: {
-    color: "#FFFFFF",
+    color: globalStyle.primaryTextColor,
     fontWeight: "900",
   },
 });

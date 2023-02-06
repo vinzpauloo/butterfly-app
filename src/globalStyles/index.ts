@@ -4,4 +4,5 @@ export const globalStyle = {
   secondaryColor: "#e15655",
   primaryTextColor: "#fff",
   inactiveTextColor: "#999",
+  btnColor: '#FF474E'
 };

@@ -3,31 +3,19 @@ import {
   Dimensions,
   ScrollView,
   Text,
-  TouchableOpacity,
   View,
   Image,
   StyleSheet,
 } from "react-native";
 
-import { useNavigation } from "@react-navigation/native";
-
-import { AntDesign } from "@expo/vector-icons";
-
 import Logo from "assets/images/profilePhoto3.jpg";
+import UserProfileSettingsHeader from "components/UserProfileSettingsHeader";
 
 const PrivacyPolicy = () => {
-  const navigation = useNavigation<any>();
-
   return (
     <ScrollView style={styles.container}>
       {/*Title and Back Button  */}
-      <View style={styles.backBtnContainer}>
-        <View style={styles.backBtnInnerContainer}>
-          <TouchableOpacity onPress={() => navigation.goBack()}>
-            <AntDesign name="left" size={24} color="white" />
-          </TouchableOpacity>
-        </View>
-      </View>
+      <UserProfileSettingsHeader title={null} btnRight={null}/>
 
       <View style={styles.contentContainer}>
         <Image style={styles.logoImage} source={Logo} />
@@ -69,17 +57,6 @@ const styles = StyleSheet.create({
     maxHeight: Dimensions.get("window").height,
     maxWidth: Dimensions.get("window").width,
     backgroundColor: "#191d26",
-  },
-  backBtnContainer: {
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "center",
-    marginVertical: 10,
-    height: 50,
-  },
-  backBtnInnerContainer: {
-    position: "absolute",
-    left: 5,
   },
   contentContainer: {
     marginHorizontal: 30,

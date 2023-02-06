@@ -1,6 +1,5 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import {
-  Text,
   View,
   ScrollView,
   Dimensions,
@@ -9,17 +8,12 @@ import {
   StyleSheet,
 } from "react-native";
 
-import { useNavigation } from "@react-navigation/native";
-
-import { AntDesign } from "@expo/vector-icons";
-
 import mainPhoto from "assets/images/profilePhoto.jpg";
 import { modelListData } from "data/modelListData";
+import UserProfileSettingsHeader from "components/UserProfileSettingsHeader";
 
 const ProfilePhoto = () => {
-  const navigation = useNavigation<any>();
 
-  const [tempImage, setTempImage] = useState(mainPhoto);
   const [mainImage, setMainImage] = useState(mainPhoto);
 
   //Changes Main Profile Photo placeholder on hover
@@ -30,19 +24,7 @@ const ProfilePhoto = () => {
   return (
     <ScrollView style={styles.container}>
       {/*Title and Back Button  */}
-      <View style={styles.titleAndBackBtn}>
-        <View style={styles.btnContainer}>
-          <TouchableOpacity onPress={() => navigation.goBack()}>
-            <AntDesign name="left" size={24} color="white" />
-          </TouchableOpacity>
-        </View>
-        <View style={styles.titleContainer}>
-          <Text style={styles.textDesign}>修改头像</Text>
-        </View>
-        <TouchableOpacity style={styles.acceptBtn}>
-          <Text style={styles.acceptBtnColor}>完成</Text>
-        </TouchableOpacity>
-      </View>
+      <UserProfileSettingsHeader title='修改头像' btnRight/>
 
       {/*Main Profile Photo*/}
       <View style={styles.mainPhotoContainer}>
@@ -69,37 +51,9 @@ const styles = StyleSheet.create({
     maxWidth: Dimensions.get("window").width,
     backgroundColor: "#191d26",
   },
-  titleAndBackBtn: {
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "center",
-    marginVertical: 0,
-    backgroundColor: "#262632",
-    height: 50,
-  },
-  btnContainer: {
-    position: "absolute",
-    left: 5,
-  },
-  titleContainer: {
-    flexDirection: "row",
-    alignItems: "center",
-  },
-  textDesign: {
-    color: "#FFFFFF",
-    textAlign: "center",
-    fontSize: 20,
-  },
-  acceptBtn: {
-    position: "absolute",
-    right: 23,
-  },
-  acceptBtnColor: {
-    color: "#FF474E",
-  },
   mainPhotoContainer: {
     alignItems: "center",
-    marginBottom: 20,
+    marginVertical: 20
   },
   mainPhoto: {
     flex: 1,

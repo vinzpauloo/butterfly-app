@@ -1,22 +1,19 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import {
   Dimensions,
-  SafeAreaView,
-  ScrollView,
   StyleSheet,
   Text,
   TouchableOpacity,
   View,
-  PanResponder,
-  Button,
 } from "react-native";
 import Modal from "react-native-modal";
 
 import { useNavigation } from "@react-navigation/native";
 
-import { AntDesign, FontAwesome5 } from "@expo/vector-icons";
-
+import { FontAwesome5 } from "@expo/vector-icons";
 import * as ImagePicker from "expo-image-picker";
+
+import UserProfileSettingsHeader from "components/UserProfileSettingsHeader";
 
 const AccountRetrieval = () => {
   const navigation = useNavigation<any>();
@@ -86,16 +83,7 @@ const AccountRetrieval = () => {
       </Modal>
       {/*============================================================================*/}
       {/*Title and Back Button  */}
-      <View style={styles.titleAndBackBtnContainer}>
-        <View style={styles.backBtnContainer}>
-          <TouchableOpacity onPress={() => navigation.goBack()}>
-            <AntDesign name="left" size={24} color="white" />
-          </TouchableOpacity>
-        </View>
-        <View>
-          <Text style={styles.title}>账号找回</Text>
-        </View>
-      </View>
+      <UserProfileSettingsHeader title={'账号找回'} btnRight={null}/>
 
       <View style={styles.tabContainer}>
         {/*FIRST BUTTON*/}
@@ -202,22 +190,6 @@ const styles = StyleSheet.create({
     maxHeight: Dimensions.get("window").height,
     maxWidth: Dimensions.get("window").width,
     backgroundColor: "#191d26",
-  },
-  titleAndBackBtnContainer: {
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "center",
-    backgroundColor: "#262632",
-    height: 50,
-  },
-  backBtnContainer: {
-    position: "absolute",
-    left: 5,
-  },
-  title: {
-    color: "#FFFFFF",
-    textAlign: "center",
-    fontSize: 20,
   },
   tabContainer: {
     backgroundColor: "#262632",

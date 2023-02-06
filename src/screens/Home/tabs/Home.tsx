@@ -22,13 +22,13 @@ const LayoutContainer = ({ title, children }) => {
     <>
       <SectionHeader title={title} />
       {children}
-      <DividerContainer />
     </>
   );
 };
 
 export const DynamicScreen = ({ title, navigation }) => {
   const screenData = homeMainSubNav?.filter((screen) => screen.name === title);
+  const finalScreenData = screenData[0].data;
 
   const SectionLayouts = {
     videoSlider: (
@@ -70,9 +70,14 @@ export const DynamicScreen = ({ title, navigation }) => {
   return (
     <ScrollView style={styles.container}>
       <CarouselContainer images={bannerImage} />
-      {screenData.map((screen, index) =>
-        screen.data.map((item) => SectionLayouts[item.layout])
-      )}
+      {finalScreenData.map((item, index) => {
+        return (
+          <>
+            {SectionLayouts[item.layout]}
+            {finalScreenData.length - 1 !== index && <DividerContainer />}
+          </>
+        );
+      })}
       <BottomMessage />
     </ScrollView>
   );

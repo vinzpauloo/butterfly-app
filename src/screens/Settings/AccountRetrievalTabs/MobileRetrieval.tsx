@@ -35,7 +35,7 @@ const MobileRetrieval = () => {
         </View>
 
         <View style={styles.flexTwo}>
-          <Buttons props={'获取短信验证码'}/>
+          <Buttons title={'获取短信验证码'} onPress={() => alert('Test MobileBind Btn 1')}/>
         </View>
       </View>
 
@@ -50,7 +50,7 @@ const MobileRetrieval = () => {
       </View>
 
       <View style={styles.thirdBtnContainer}>
-        <Buttons props={'确定'}/>
+        <Buttons title={'确定'} onPress={() => alert('Test MobileRetrieval Btn 2')}/>
       </View>
     </ScrollView>
   );

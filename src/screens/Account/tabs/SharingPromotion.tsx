@@ -21,7 +21,7 @@ const SharingPromotion = () => {
     <ScrollView style={styles.container}>
 
       {/*Title and Back Button  */}
-      <UserProfileSettingsHeader title='分享推广'/>
+      <UserProfileSettingsHeader title='分享推广' btnRight={null}/>
 
       {/* QRCODE */}
       <View style={styles.qrCodeContainer}>

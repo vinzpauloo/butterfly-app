@@ -27,12 +27,12 @@ const MobileBindRequest = () => {
         </View>
 
         <View style={styles.flexTwo}>
-          <Buttons props={'获取短信验证码'}/>
+          <Buttons title={'获取短信验证码'} onPress={() => alert('Test MobileBind Btn 1')}/>
         </View>
       </View>
 
       <View style={{marginHorizontal: 20}}>
-        <Buttons props={'绑定邀请码'}/>
+        <Buttons title={'绑定邀请码'} onPress={() => alert('Test MobileBind Btn 2')}/>
       </View>
     </ScrollView>
   );

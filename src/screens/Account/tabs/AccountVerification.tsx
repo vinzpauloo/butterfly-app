@@ -54,7 +54,7 @@ const AccountVerification = () => {
 
       {/* Button */}
      <View style={styles.btnContainer}>
-       <Buttons props={'保存账号凭证到手机'}/>
+       <Buttons title={'保存账号凭证到手机'} onPress={() => alert('Test Verification Button')}/>
      </View>
 
       {/* WARNING */}

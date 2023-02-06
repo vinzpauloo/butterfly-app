@@ -17,7 +17,7 @@ const BestApps = () => {
     <ScrollView style={styles.container}>
 
       {/*Title and Back Button  */}
-      <UserProfileSettingsHeader title='应用中心'/>
+      <UserProfileSettingsHeader title='应用中心' btnRight={null}/>
 
       <View style={styles.innerContainer}>
         <View style={styles.alibabaContainer}>

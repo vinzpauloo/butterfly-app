@@ -1,6 +1,6 @@
 import {ScrollView, Dimensions, StyleSheet} from "react-native";
 
-import UserProfileSettingsHeader from "../../../components/UserProfileSettingsHeader";
+import UserProfileSettingsHeader from "components/UserProfileSettingsHeader";
 
 
 const RecordingHistory = () => {
@@ -9,7 +9,7 @@ const RecordingHistory = () => {
         <ScrollView style={styles.container}>
 
             {/*Title and Back Button  */}
-            <UserProfileSettingsHeader title='历史记录'/>
+            <UserProfileSettingsHeader title='历史记录' btnRight={null}/>
         </ScrollView>
     )
 }

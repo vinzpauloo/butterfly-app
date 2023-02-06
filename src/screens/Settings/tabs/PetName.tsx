@@ -32,7 +32,7 @@ const PetName = () => {
         </Text>
 
         <View style={styles.btnContainer}>
-          <Buttons props={'提交'}/>
+          <Buttons title={'提交'} onPress={() => alert('PetName button test')}/>
         </View>
       </View>
     </ScrollView>

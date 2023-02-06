@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import {View, StyleSheet, TextInput, Text} from "react-native";
+import {View, StyleSheet, Text} from "react-native";
 import {TextArea} from "native-base";
 
 const AreaText = ({placeholder, placeholderTextColor, maxLength}) => {

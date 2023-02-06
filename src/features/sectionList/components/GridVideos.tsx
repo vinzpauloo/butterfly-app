@@ -99,7 +99,7 @@ const GridVideos = ({ videos, isFollowingScreen = false }) => {
   const { isOpen, onOpen, onClose } = useDisclose();
 
   return (
-    <View style={{flex: 1}}>
+    <View style={styles.gridVideoContainer}>
       <MasonryFlashList
         estimatedItemSize={166}
         numColumns={2}
@@ -122,6 +122,10 @@ const GridVideos = ({ videos, isFollowingScreen = false }) => {
 export default GridVideos;
 
 const styles = StyleSheet.create({
+  gridVideoContainer: {
+    flex: 1,
+    minHeight: 100
+  },
   thumbnailContainer: {
     position: "relative",
   },

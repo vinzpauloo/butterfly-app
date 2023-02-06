@@ -157,6 +157,8 @@ const styles = StyleSheet.create({
     marginVertical: 15,
   },
   usersCategoryContainer: {
+    flex: 1,
+    minHeight: 100,
     marginHorizontal: 15,
     marginVertical: 5,
   },

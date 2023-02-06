@@ -11,6 +11,7 @@ const BottomTabs = ({ data }) => {
     <>
       <BottomTab.Navigator
         screenOptions={{
+          lazy: true,
           headerShown: false,
           tabBarActiveTintColor: globalStyle.secondaryColor,
           tabBarInactiveTintColor: "#fff",

@@ -60,12 +60,12 @@ const StickyTabs: React.FC<IStickyTabsProps> = ({ data }) => {
   */
   return (
     <Tabs.Container
-      lazy
+      lazy={true}
       renderHeader={CustomTabHeader}
       renderTabBar={CustomTabBar}
     >
       {tabItems.map((item, index) => (
-        <Tabs.Tab name={item.name} label={item.label}>
+        <Tabs.Tab key={index} name={item.name} label={item.label} >
           {/* 
             Type error workaround when using Tab.ScrollView
             See issue: https://github.com/PedroBern/react-native-collapsible-tab-view/issues/139

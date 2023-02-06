@@ -66,7 +66,7 @@ const SingleChatScreen = (props: Props) => {
 				<ScrollView ref={scrollViewRef} >
 					{/* SENDER MESSAGES */}
 					<View style={styles.senderMessagesContainer}>
-						<Image style={styles.userImage} source={{ uri: route?.params.senderImgURL }} />
+						<Image style={styles.userImage} source={{ uri: route?.params.senderImgURL, cache: 'only-if-cached' }} />
 						<VStack style={styles.senderMessageAndTimeStampContainer}>
 							<>
 									<Text style={{ color: "white", marginBottom: 4 }}>{route?.params.senderUserName}</Text>
@@ -82,12 +82,12 @@ const SingleChatScreen = (props: Props) => {
 					{/* YOUR MESSAGES */}
 					{messages.map((message, index) => (
 					<View key={index} style={styles.yourMessagesContainer}>
-						<Image style={styles.userImage} source={{ uri: message.profile }} />
+						<Image style={styles.userImage} source={{ uri: message.profile, cache: 'only-if-cached' }} />
 						<VStack style={styles.yourMessageAndTimeStampContainer}>
 							<>
 								<View style={styles.messageContainer}>
 									<Text style={styles.yourOwnMessageText}>{message.text}</Text>
-									{message.image && <Image source={{ uri: message.image }} style={styles.yourSentImage} />}
+									{message.image && <Image source={{ uri: message.image, cache: 'only-if-cached' }} style={styles.yourSentImage} />}
 								</View>
 							</>
 							<Text style={styles.messageTimeStamp}>{formatDate()}</Text>

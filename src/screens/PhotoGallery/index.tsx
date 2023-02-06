@@ -24,7 +24,7 @@ const PhotoGallery = () => {
 					data={imageList}
 					renderItem={({ item } : any) =>
 						<View style={styles.imageContainer}>
-							<Image style={[styles.postImage, styles.imageContained]} source={{ uri: item.contentURL }} />
+							<Image style={[styles.postImage, styles.imageContained]} source={{ uri: item.contentURL, cache: 'only-if-cached' }} />
 						</View>}
 					estimatedItemSize={674}
 				/>
@@ -34,7 +34,7 @@ const PhotoGallery = () => {
 					data={imageList}
 					renderItem={({ item } : any) =>
 						<View style={styles.imageContainer}>
-							<Image style={[styles.postImage, styles.imageCovered]} source={{ uri: item.imgUrl }} />
+							<Image style={[styles.postImage, styles.imageCovered]} source={{ uri: item.imgUrl, cache: 'only-if-cached' }} />
 						</View>}
 					estimatedItemSize={674}
 				/>}
@@ -48,6 +48,7 @@ const styles = StyleSheet.create({
 	container: {
 		flex: 1,
 		backgroundColor: globalStyle.primaryColor,
+		minHeight: 100
 	},
 	imageContainer: {
 		// backgroundColor:"red"

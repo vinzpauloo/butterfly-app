@@ -9,7 +9,7 @@ const BannerAds = (props: Props) => {
 		<Pressable onPress={() => { Alert.alert("Go to: " + bannerAdsInfo.externalLinkURL) }}>
 			<Image
 				style={styles.bannerAds}
-				source={{ uri: bannerAdsInfo.imgURL }}
+				source={{ uri: bannerAdsInfo.imgURL, cache: 'only-if-cached' }}
 				resizeMode={"cover"}
 			/>
 		</Pressable>

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import {
   StyleSheet,
   Text,
@@ -7,7 +7,7 @@ import {
   FlatList,
   Dimensions,
 } from "react-native";
-import { VStack, Box, HStack, Avatar } from "native-base";
+import { VStack, Box, HStack, Avatar, Skeleton } from "native-base";
 
 import Feather from "react-native-vector-icons/Feather";
 import AntDesign from "react-native-vector-icons/AntDesign";
@@ -88,8 +88,48 @@ const MessageItem = (props: MessageItemProps) => {
   );
 };
 
+const MessageItemSkeleton = () => {
+  return (
+    <>
+      <VStack style={styles.messageContainer}>
+        <HStack space={3}>
+          <Skeleton size={42} rounded="full"/>
+          <VStack space={1} w="full">
+            <Skeleton.Text lines={1} w="1/6"/>
+            <Skeleton.Text lines={2} w="5/6" mt={3}/>
+          </VStack>
+        </HStack>
+      </VStack>
+      <VStack style={styles.messageContainer}>
+        <HStack space={3}>
+          <Skeleton size={42} rounded="full"/>
+          <VStack space={1} w="full">
+            <Skeleton.Text lines={1} w="1/6"/>
+            <Skeleton.Text lines={2} w="5/6" mt={3}/>
+          </VStack>
+        </HStack>
+      </VStack>
+      <VStack style={styles.messageContainer}>
+        <HStack space={3}>
+          <Skeleton size={42} rounded="full"/>
+          <VStack space={1} w="full">
+            <Skeleton.Text lines={1} w="1/6"/>
+            <Skeleton.Text lines={2} w="5/6" mt={3}/>
+          </VStack>
+        </HStack>
+      </VStack>
+    </>
+  )
+}
+
 const Information = (props: Props) => {
   const navigation = useNavigation<any>();
+
+  const [messageListIsLoaded, setmessageListIsLoaded] = useState(false)
+
+  useEffect(() => {
+    setTimeout(() => setmessageListIsLoaded(true), 1500);
+  },);
 
   return (
     <Container>
@@ -156,20 +196,23 @@ const Information = (props: Props) => {
         </Pressable>
       </HStack>
       <Text style={styles.categoryText}>私信列表</Text>
-      <FlatList
-        data={messageList}
-        scrollEnabled={true}
-        renderItem={({ item, index }) => (
-          <MessageItem
-            senderUserName={item.userName}
-            senderMessage={item.message}
-            senderImgURL={item.imgURL}
-            senderTimeStamp={item.timeStamp}
-          />
-        )}
-        keyExtractor={(item, index) => "" + index}
-        ListFooterComponent={<BottomMessage />}
-      />
+      {messageListIsLoaded ? 
+        <FlatList
+          data={messageList}
+          scrollEnabled={true}
+          renderItem={({ item, index }) => (
+            <MessageItem
+              senderUserName={item.userName}
+              senderMessage={item.message}
+              senderImgURL={item.imgURL}
+              senderTimeStamp={item.timeStamp}
+            />
+          )}
+          keyExtractor={(item, index) => "" + index}
+          ListFooterComponent={<BottomMessage />}
+        />
+      : 
+        <MessageItemSkeleton/>}
     </Container>
   );
 };

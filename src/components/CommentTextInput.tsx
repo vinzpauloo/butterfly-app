@@ -9,16 +9,20 @@ const windowWidth = Dimensions.get('window').width;
 type Props = {}
 
 const CommentTextInput = (props: Props) => {
+	const [text, onTextChange] = React.useState("");
+
 	return (
 		<KeyboardAvoidingView behavior={'position'}>
 			<HStack style={styles.bottomForm}>
 				<TextInput
 					style={styles.textInput}
+					value={text}
 					cursorColor={"white"}
 					placeholder="发表评论"
 					placeholderTextColor="#999"
+					onChangeText={text => onTextChange(text)}
 					keyboardType="default" />
-				<Pressable onPress={() => { Alert.alert("Add comment") }}>
+				<Pressable onPress={() => { Alert.alert("Add comment: " + text); onTextChange("") }}>
 					<Text style={styles.whiteText}>发送</Text>
 				</Pressable>
 			</HStack>

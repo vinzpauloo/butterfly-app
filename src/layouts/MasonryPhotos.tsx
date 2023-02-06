@@ -62,7 +62,7 @@ const SingleImage = (props: SingleImageProp) => {
   return (
     <Pressable onPress={props.idx === 0 ? openVIPModal : handlePress}>
       <ImageBackground
-        source={{ uri: props.url }}
+        source={{ uri: props.url, cache: 'only-if-cached'}}
         style={[styles.singleImage, { height: props.height }]}
         resizeMode="cover"
       >
@@ -120,6 +120,7 @@ export default MasonryPhotos;
 const styles = StyleSheet.create({
   masonryContainer: {
     flex: 1,
+    minHeight: 100
   },
   singleImage: {
     margin: 4,

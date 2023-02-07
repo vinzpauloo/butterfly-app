@@ -6,6 +6,7 @@ import {
 
 import NoCacheMessage from "features/sectionList/components/NoCacheMessage";
 import UserProfileSettingsHeader from "components/UserProfileSettingsHeader";
+import {globalStyle} from "globalStyles";
 
 const OfflineCache = () => {
 
@@ -22,9 +23,8 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     maxHeight: Dimensions.get("window").height,
-    marginVertical: 0,
     maxWidth: Dimensions.get("window").width,
-    backgroundColor: "#191d26",
+    backgroundColor: globalStyle.primaryColor,
   },
 });
 

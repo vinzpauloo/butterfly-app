@@ -7,7 +7,7 @@ import {
   Image,
   TouchableOpacity,
   SafeAreaView,
-  Dimensions,
+  Dimensions, Linking,
 } from "react-native";
 import Modal from "react-native-modal";
 
@@ -18,11 +18,14 @@ import {
   AntDesign,
   SimpleLineIcons,
   MaterialCommunityIcons,
-  MaterialIcons,
+  MaterialIcons, FontAwesome5,
 } from "@expo/vector-icons";
 
 import Container from "components/Container";
 import profilePhoto from "assets/images/profilePhoto.jpg";
+import {globalStyle} from "../../globalStyles";
+import {HStack, VStack} from "native-base";
+import {settingsOthersList} from "../../data/settingsOthersList";
 const MainSettings = (navigation: any) => {
   const [selected, setSelected] = useState(null);
   const [image, setImage] = useState(null);
@@ -249,85 +252,31 @@ const OtherSettings = (props) => {
   const navigate = useNavigation<any>();
 
   return (
-    <>
-      <View style={styles.actionAndOthersContainer}>
+      <VStack backgroundColor={globalStyle.primaryColor} style={styles.otherSettings} space={5} mt={5} mb={5}>
         <Text style={styles.accountAndOthersTitle}>其他</Text>
-      </View>
-
-      {/*Customer Service*/}
-      <TouchableOpacity onPress={() => navigate.navigate("CustomerService", {
-        postTitle: 'Test Sender',
-        senderUserName: 'Test Sender Username',
-        senderMessage: 'Test Sender Message',
-        senderImgURL: 'https://randomuser.me/api/portraits/men/3.jpg',
-        senderTimeStamp: 'Test Date',
-      })}>
-        <View style={styles.itemContainer}>
-          <View style={styles.itemInnerContainer}>
-            <AntDesign name="customerservice" size={20} color="white" />
-            <Text style={styles.accountAndOthersSection}>联系客服</Text>
-          </View>
-          <View style={styles.itemInnerContainer}>
-            <AntDesign name="right" size={18} color="white" />
-          </View>
-        </View>
-      </TouchableOpacity>
-
-      {/*Privacy Policy*/}
-      <TouchableOpacity onPress={() => navigate.navigate("PrivacyPolicy")}>
-        <View style={styles.itemContainer}>
-          <View style={styles.itemInnerContainer}>
-            <MaterialIcons name="policy" size={20} color="white" />
-            <Text style={styles.accountAndOthersSection}>隐私政策</Text>
-          </View>
-          <View style={styles.itemInnerContainer}>
-            <AntDesign name="right" size={18} color="white" />
-          </View>
-        </View>
-      </TouchableOpacity>
-
-      {/*Service Provisions*/}
-      <TouchableOpacity onPress={() => navigate.navigate("ServiceProvisions")}>
-        <View style={styles.itemContainer}>
-          <View style={styles.itemInnerContainer}>
-            <MaterialIcons name="notes" size={20} color="white" />
-            <Text style={styles.accountAndOthersSection}>服务条款</Text>
-          </View>
-          <View style={styles.itemInnerContainer}>
-            <AntDesign name="right" size={18} color="white" />
-          </View>
-        </View>
-      </TouchableOpacity>
-
-      {/*About*/}
-      <TouchableOpacity onPress={() => navigate.navigate("About")}>
-        <View style={styles.itemContainer}>
-          <View style={styles.itemInnerContainer}>
-            <MaterialCommunityIcons
-              name="heart-pulse"
-              size={20}
-              color="white"
-            />
-            <Text style={styles.accountAndOthersSection}>关于糖心</Text>
-          </View>
-          <View style={styles.itemInnerContainer}>
-            <AntDesign name="right" size={18} color="white" />
-          </View>
-        </View>
-      </TouchableOpacity>
-
-      <TouchableOpacity onPress={() => navigate.navigate("PasscodeLock")}>
-        <View style={styles.itemContainer}>
-          <View style={styles.itemInnerContainer}>
-            <SimpleLineIcons name="lock" size={20} color="white" />
-            <Text style={styles.accountAndOthersSection}>应用锁</Text>
-          </View>
-          <View style={styles.itemInnerContainer}>
-            <AntDesign name="right" size={18} color="white" />
-          </View>
-        </View>
-      </TouchableOpacity>
-    </>
+        {settingsOthersList?.map((item, index) => (
+            <VStack key={index}>
+              <TouchableOpacity
+                  onPress={() => {
+                    item.screen === 'OfficialGroup'
+                        ? Linking.openURL("https://t.me/StockPro_Official_BankNifty")
+                        : item.screen === 'CustomerService'
+                            ? navigate.navigate(`${item.screen}`, item.params)
+                            : navigate.navigate(`${item.screen}`);
+                  }}
+              >
+                <HStack justifyContent={'space-between'}>
+                  <HStack alignItems={'center'}>
+                    {item.logo}
+                    <Text style={styles.accountAndOthersSection}>{item.title}</Text>
+                  </HStack>
+                  <AntDesign name="right" size={18} color="white" />
+                </HStack>
+              </TouchableOpacity>
+              <View></View>
+            </VStack>
+        ))}
+      </VStack>
   );
 };
 
@@ -431,6 +380,9 @@ const styles = StyleSheet.create({
     color: "white",
     textAlign: "center",
     fontSize: 12,
+  },
+  otherSettings: {
+    marginHorizontal: 10,
   },
   //
   //

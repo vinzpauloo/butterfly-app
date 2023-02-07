@@ -4,8 +4,9 @@ import {
   Dimensions,
   View,
   StyleSheet,
-  Image,
+  Image, TouchableOpacity,
 } from "react-native";
+import {FlatList, HStack, VStack} from "native-base";
 
 import {
   SimpleLineIcons,
@@ -13,111 +14,100 @@ import {
 } from "@expo/vector-icons";
 
 import ImageTitle from "assets/images/profilePhoto.jpg";
-import UserProfileSettingsHeader from "../../../components/UserProfileSettingsHeader";
+import UserProfileSettingsHeader from "components/UserProfileSettingsHeader";
+import {globalStyle} from "globalStyles";
+import {sharingPromotionData} from "data/sharingPromotionData";
 
-const SharingPromotion = () => {
-
+const QRCode = () => {
   return (
-    <ScrollView style={styles.container}>
-
-      {/*Title and Back Button  */}
-      <UserProfileSettingsHeader title='分享推广' btnRight={null}/>
-
-      {/* QRCODE */}
-      <View style={styles.qrCodeContainer}>
-        <View style={styles.qrCodeTitleContainer}>
+      <VStack justifyContent={'center'} alignItems={'center'} space={3} p={5} mx={5} mt={1} bg={globalStyle.primaryTextColor}>
+        <HStack>
           <Image style={styles.qrCodeTitleImage} source={ImageTitle} />
           <Text style={styles.qrCodeTitle}>
             网黄UP主的性爱博客{"\n"}
             分享你我的性福生活
           </Text>
+        </HStack>
+
+        <Image style={styles.qrCodeImage} source={ImageTitle} />
+
+        <View>
+          <Text style={styles.qrCodeDetails}>分享好友立赠糖心专享会员</Text>
+          <Text style={styles.qrCodeDetails}>
+            邀请码:&nbsp;
+            <Text style={styles.qrCodeDetails2}>CDWQMC</Text>
+          </Text>
         </View>
 
-        <View style={styles.qrCodeImageContainer}>
-          <Image style={styles.qrCodeImage} source={ImageTitle} />
-
-          <View>
-            <Text style={styles.qrCodeDetails}>分享好友立赠糖心专享会员</Text>
-            <Text style={styles.qrCodeDetails}>
-              邀请码:&nbsp;
-              <Text style={styles.qrCodeDetails2}>CDWQMC</Text>
-            </Text>
-          </View>
-        </View>
-
-        <View style={styles.qrCodeBtnContainer}>
-          <View style={styles.qrCodeBtn}>
+        <HStack space={4}>
+          <TouchableOpacity style={styles.qrCodeBtn}>
             <Text>保存图片</Text>
-          </View>
-          <View style={styles.qrCodeBtn}>
+          </TouchableOpacity>
+          <TouchableOpacity style={styles.qrCodeBtn}>
             <Text>复制链接</Text>
-          </View>
-        </View>
-      </View>
+          </TouchableOpacity>
+        </HStack>
+      </VStack>
+  )
+}
 
-      {/* Rewards */}
-      <View style={styles.rewardsContainer}>
-        <View style={styles.rewardsInnerContainer}>
-          <Text style={styles.rewardsText}>推广成功1人</Text>
-          <View style={styles.rewardsInnerContainer2}>
-            <SimpleLineIcons name="diamond" size={34} color="#FAC690" />
-            <Text style={styles.rewardsText}>1天VIP</Text>
-          </View>
-          <Text style={styles.rewardsText}>推广成功1人</Text>
-        </View>
+const Rewards = () => {
+ return (
+     <HStack justifyContent={'center'} alignItems={'center'} space={10} p={5}>
+       <VStack alignItems={'center'} space={2}>
+         <Text style={styles.rewardsText}>推广成功1人</Text>
+         <SimpleLineIcons name="diamond" size={34} color="#FAC690" />
+         <Text style={styles.rewardsText}>1天VIP</Text>
+         <Text style={styles.rewardsText}>推广成功1人</Text>
+       </VStack>
 
-        <View style={styles.rewardsInnerContainer}>
-          <Text style={styles.rewardsText}>推广成功3人</Text>
-          <View style={styles.rewardsInnerContainer2}>
-            <SimpleLineIcons name="diamond" size={34} color="#FAC690" />
-            <Text style={styles.rewardsText}>3天VIP</Text>
-          </View>
-          <Text style={styles.rewardsText}>推广成功3人</Text>
-        </View>
+       <VStack alignItems={'center'} space={2}>
+         <Text style={styles.rewardsText}>推广成功3人</Text>
+         <SimpleLineIcons name="diamond" size={34} color="#FAC690" />
+         <Text style={styles.rewardsText}>3天VIP</Text>
+         <Text style={styles.rewardsText}>推广成功3人</Text>
+       </VStack>
 
-        <View style={styles.rewardsInnerContainer}>
-          <Text style={styles.rewardsText}>推广成功10人</Text>
-          <View style={styles.rewardsThirdColumn}>
-            <View style={styles.rewardsThirdIconsContainer}>
-              <SimpleLineIcons name="diamond" size={24} color="#FAC690" />
-              <Text style={styles.rewardsText}> + </Text>
-              <MaterialCommunityIcons
-                name="ticket-confirmation-outline"
-                size={24}
-                color="#FAC690"
-              />
+       <VStack alignItems={'center'} space={1.5}>
+         <Text style={styles.rewardsText}>推广成功10人</Text>
+         <HStack alignItems={'center'}>
+           <SimpleLineIcons name="diamond" size={18} color="#FAC690" />
+           <Text style={styles.rewardsText}> + </Text>
+           <MaterialCommunityIcons
+               name="ticket-confirmation-outline"
+               size={24}
+               color="#FAC690"
+           />
+         </HStack>
+         <VStack alignItems={'center'}>
+           <Text style={styles.rewardsText}>10天VIP+5元</Text>
+           <Text style={styles.rewardsText}>观影券</Text>
+         </VStack>
+         <Text style={styles.rewardsText}>推广成功10人</Text>
+       </VStack>
+     </HStack>
+ )
+}
+
+const OtherDetails = () => {
+  return (
+        <FlatList data={sharingPromotionData} renderItem={({item}) => <VStack p={3.5} mx={1} >
+            <View>
+                <Text style={styles.rewardsText}>{item.rewards}</Text>
+                <Text style={styles.otherDetailsText}>{item.details}</Text>
             </View>
-            <Text style={styles.rewardsText}>10天VIP+5元</Text>
-            <Text style={styles.rewardsText}>观影券</Text>
-          </View>
-          <Text style={styles.rewardsText}>推广成功10人</Text>
-        </View>
-      </View>
+        </VStack>
+        }/>
+  )
+}
 
-      {/* Other Details */}
-      <View style={styles.otherDetailsContainer}>
-        <View>
-          <Text style={styles.rewardsText}>推广说明 :</Text>
-          <Text style={styles.otherDetailsText}>
-            好友通过您的二维码或推广链接下载APP,并启动后 即算推广成功。
-          </Text>
-        </View>
-
-        <View style={styles.otherDetailsMargin}>
-          <Text style={styles.rewardsText}>操作说明 :</Text>
-          <Text style={styles.otherDetailsText}>
-            点击各视频世界分享按钮,保存二维码及推广链接
-            后,立即分享到微博、朋友圈,论坛分类。
-          </Text>
-        </View>
-
-        <View>
-          <Text style={styles.rewardsText}>注意事项 :</Text>
-          <Text style={styles.otherDetailsText}>
-            观影优惠仅用于抵扣任意金币视频。
-          </Text>
-        </View>
-      </View>
+const SharingPromotion = () => {
+  return (
+    <ScrollView style={styles.container}>
+      <UserProfileSettingsHeader title='分享推广' btnRight={null}/>
+      <QRCode/>
+      <Rewards/>
+      <OtherDetails/>
     </ScrollView>
   );
 };
@@ -126,22 +116,8 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     maxHeight: Dimensions.get("window").height,
-    marginVertical: 0,
     maxWidth: Dimensions.get("window").width,
-    backgroundColor: "#262632",
-  },
-  qrCodeContainer: {
-    backgroundColor: "#FFFFFF",
-    height: 400,
-    marginHorizontal: 20,
-    borderRadius: 7,
-    marginTop: 20,
-  },
-  qrCodeTitleContainer: {
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "center",
-    marginTop: 25,
+    backgroundColor: globalStyle.headerBasicBg,
   },
   qrCodeTitleImage: {
     width: 35,
@@ -149,10 +125,6 @@ const styles = StyleSheet.create({
   },
   qrCodeTitle: {
     color: "grey",
-  },
-  qrCodeImageContainer: {
-    alignItems: "center",
-    justifyContent: "center",
   },
   qrCodeImage: {
     width: 200,
@@ -167,13 +139,6 @@ const styles = StyleSheet.create({
     fontWeight: "600",
     color: "black",
   },
-  qrCodeBtnContainer: {
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "space-between",
-    marginHorizontal: 50,
-    marginTop: 30,
-  },
   qrCodeBtn: {
     backgroundColor: "#FAC690",
     height: 30,
@@ -182,41 +147,12 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     borderRadius: 15,
   },
-  rewardsContainer: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    marginHorizontal: 40,
-    marginVertical: 40,
-  },
-  rewardsInnerContainer: {
-    alignItems: "center",
-  },
   rewardsText: {
-    color: "#FFFFFF",
-  },
-  rewardsInnerContainer2: {
-    marginVertical: 15,
-    alignItems: "center",
-  },
-  rewardsThirdColumn: {
-    marginTop: 10,
-    marginBottom: 10,
-    alignItems: "center",
-  },
-  rewardsThirdIconsContainer: {
-    flexDirection: "row",
-    alignItems: "center",
-  },
-  otherDetailsContainer: {
-    marginHorizontal: 40,
-    marginBottom: 30,
+    color: globalStyle.primaryTextColor,
   },
   otherDetailsText: {
     color: "grey",
     marginTop: 10,
-  },
-  otherDetailsMargin: {
-    marginVertical: 40,
   },
 });
 

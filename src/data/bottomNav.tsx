@@ -21,6 +21,7 @@ export const bottomNav = [
     name: "Vlog",
     component: Vlog,
     label: "Vlog",
+    unmountOnBlur: true,
     icon: ({ color, size }) => (
       <MaterialCommunityIcons
         name="play-box-outline"

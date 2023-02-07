@@ -16,6 +16,9 @@ import { globalStyle } from "globalStyles";
 import { homeMainSubNav } from "data/homeMainSubNav";
 import { multipleImages } from "data/gridImages";
 import { topSubNav } from "data/topSubNav";
+import { useEffect, useState } from "react";
+import VideoListSkeleton from "components/skeletons/VideoListSkeleton";
+import CarouselSkeleton from "components/skeletons/CarouselSkeleton";
 
 const LayoutContainer = ({ title, children }) => {
   return (
@@ -29,6 +32,12 @@ const LayoutContainer = ({ title, children }) => {
 
 export const DynamicScreen = ({ title, navigation }) => {
   const screenData = homeMainSubNav?.filter((screen) => screen.name === title);
+
+  const [videoListIsLoaded, setVideoListIsLoaded] = useState(false)
+
+  useEffect(() => {
+    setTimeout(() => setVideoListIsLoaded(true), 1000);
+  });
 
   const SectionLayouts = {
     videoSlider: (
@@ -69,11 +78,18 @@ export const DynamicScreen = ({ title, navigation }) => {
   };
   return (
     <ScrollView style={styles.container}>
-      <CarouselContainer images={bannerImage} />
-      {screenData.map((screen, index) =>
-        screen.data.map((item) => SectionLayouts[item.layout])
-      )}
-      <BottomMessage />
+      { videoListIsLoaded ? 
+        <>
+          <CarouselContainer images={bannerImage} />
+          {screenData.map((screen, index) => screen.data.map((item) => SectionLayouts[item.layout]))}
+          <BottomMessage />
+        </>
+      :
+        <>
+          <CarouselSkeleton />
+          <VideoListSkeleton />
+        </>
+      }
     </ScrollView>
   );
 };

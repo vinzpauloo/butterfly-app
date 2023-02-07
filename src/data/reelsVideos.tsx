@@ -47,7 +47,7 @@ export const reelsVideos: reelsVideo[] = [
   {
     id: 25,
     userName: "Landscape Video 2",
-    uri: "http://amssamples.streaming.mediaservices.windows.net/69fbaeba-8e92-4740-aedc-ce09ae945073/AzurePromo.ism/manifest(format=m3u8-aapl)",
+    uri: "https://cph-p2p-msl.akamaized.net/hls/live/2000341/test/master.m3u8",
     isPortrait: false,
     description: "Landscape video testing",
     tags: ["landscape", "HLS"],

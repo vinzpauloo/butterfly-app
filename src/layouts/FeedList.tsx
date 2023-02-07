@@ -1,48 +1,20 @@
 import React, { useEffect, useState } from "react";
-import { StyleSheet, Text, View } from "react-native";
-import { useDisclose, VStack, Avatar, HStack, Skeleton } from "native-base";
+import { StyleSheet, View } from "react-native";
+import { useDisclose } from "native-base";
 import { FlashList } from "@shopify/flash-list";
 
 import Container from "components/Container";
 import FeedItem from "components/FeedItem";
 import BottomComment from "components/BottomComment";
+import FeedItemSkeleton from "components/skeletons/FeedItemSkeleton";
 
-
-
-const FeedItemSkeleton = () => {
-  return (
-    <VStack p={4} space={4}>
-      <HStack alignItems="center" justifyContent="space-between">
-        <HStack space={2} alignItems="center">
-          <Skeleton size={28} rounded="full"/>
-          <Skeleton.Text size={28} lines={1} w="1/3"/>
-        </HStack>
-        <Skeleton.Text size={28} lines={1} w="1/6"/>
-      </HStack>
-      <HStack space={2}>
-        <Skeleton.Text size={28} lines={1} w="1/6"/>
-        <Skeleton.Text size={28} lines={1} w="1/6"/>
-        <Skeleton.Text size={28} lines={1} w="1/6"/>
-      </HStack>
-      <Skeleton.Text size={28} lines={3} w="full"/>
-      <Skeleton h={200} w="full"/>
-      <Skeleton.Text size={28} lines={1} w="1/6"/>
-      <HStack justifyContent="space-between">
-        <Skeleton h="20px" w="20px" rounded="full"/>
-        <Skeleton h="20px" w="20px" rounded="full"/>
-        <Skeleton h="20px" w="20px" rounded="full"/>
-      </HStack>
-        <Skeleton h="1px" w="full"/>
-    </VStack>
-  )
-}
 
 const FeedList = ({ feedListData }) => {
   const { isOpen, onOpen, onClose } = useDisclose();
   const [feedIsLoaded, setFeedIsLoaded] = useState(false)
   
   useEffect(() => {
-    setTimeout(() => setFeedIsLoaded(true), 1500);
+    setTimeout(() => setFeedIsLoaded(true), 1000);
   });
 
   return (

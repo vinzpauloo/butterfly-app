@@ -77,7 +77,7 @@ const All = (props: Props) => {
   const [profilePicListIsLoaded, setprofilePicListIsLoaded] = useState(false)
 
   useEffect(() => {
-    setTimeout(() => setprofilePicListIsLoaded(true), 1500);
+    setTimeout(() => setprofilePicListIsLoaded(true), 1000);
   });
   
   return (

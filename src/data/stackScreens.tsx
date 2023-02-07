@@ -130,7 +130,7 @@ export const stackScreens = {
     {
       name: "VlogScreen",
       component: VlogScreen ,
-      options: { headerShown: false },
+      options: { headerShown: false }
     },
     {
       name: "Preloading",

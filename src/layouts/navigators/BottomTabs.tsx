@@ -10,6 +10,7 @@ const BottomTabs = ({ data }) => {
   return (
     <>
       <BottomTab.Navigator
+        detachInactiveScreens={true}
         screenOptions={{
           lazy: true,
           headerShown: false,
@@ -30,6 +31,7 @@ const BottomTabs = ({ data }) => {
             options={{
               tabBarLabel: item.label,
               tabBarIcon: item.icon,
+              unmountOnBlur: item.unmountOnBlur
             }}
           />
         ))}

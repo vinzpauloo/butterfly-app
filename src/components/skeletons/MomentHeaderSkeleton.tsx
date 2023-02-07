@@ -6,7 +6,7 @@ type Props = {}
 
 const MomentHeaderSkeleton = (props: Props) => {
 	return (
-		<VStack>
+		<VStack space={1}>
 			<HStack space={3} alignItems="center">
 				<Skeleton rounded="full" size={2} />
 				<Skeleton.Text lines={1} w="3/4" />

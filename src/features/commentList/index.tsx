@@ -115,7 +115,7 @@ const CommentList = (props: Props) => {
   const [commentListIsLoaded, setCommentListIsLoaded] = useState(false)
 
   useEffect(() => {
-    setTimeout(() => setCommentListIsLoaded(true), 1500);
+    setTimeout(() => setCommentListIsLoaded(true), 1000);
   });
 
   return (

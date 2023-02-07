@@ -1,3 +1,4 @@
+import React from "react";
 import {
   ScrollView,
   Text,
@@ -8,55 +9,54 @@ import {
   Image,
   Linking,
 } from "react-native";
+import {HStack, VStack} from "native-base";
 
 import ImageTitle from "assets/images/profilePhoto.jpg";
 import Buttons from "components/forms/Buttons";
 import UserProfileSettingsHeader from "components/UserProfileSettingsHeader";
+import {globalStyle} from "globalStyles";
 
-const AccountVerification = () => {
-
+const QRCode= () => {
   return (
-    <ScrollView style={styles.container}>
-
-      {/*Title and Back Button  */}
-      <UserProfileSettingsHeader title='账号凭证' btnRight={null}/>
-
-      {/* QRCODE */}
-      <View style={styles.qrCodeMainContainer}>
-        <View style={styles.qrCodeTitleContainer}>
+      <VStack justifyContent={'center'} alignItems={'center'} bg={globalStyle.primaryTextColor} p={5} mx={5} space={2} mt={2}>
+        <HStack>
           <Image style={styles.titleImage} source={ImageTitle} />
           <Text style={styles.qrTitle}>
             网黄UP主的性爱博客{"\n"}
             分享你我的性福生活
           </Text>
+        </HStack>
+
+        <Image style={styles.qrCodeImage} source={ImageTitle} />
+
+        <View>
+          <Text style={styles.qrCodeText}>官网地址: txvlog.com</Text>
+          <Text style={styles.qrCodeText}>备用地址: tangxin.one</Text>
+          <Text style={styles.qrCodeText2}> tangxin.best</Text>
         </View>
 
-        <View style={styles.qrCodeContainer}>
-          <Image style={styles.qrCodeImage} source={ImageTitle} />
-
-          <View>
-            <Text style={styles.qrCodeText}>官网地址: txvlog.com</Text>
-            <Text style={styles.qrCodeText}>备用地址: tangxin.one</Text>
-            <Text style={styles.qrCodeText2}> tangxin.best</Text>
+        <HStack justifyContent={'space-between'} mx={-3}>
+          <View style={styles.qrCircle}></View>
+          <View style={styles.qrCodeDetails}>
+            <Text style={styles.qrCodeDetailsText}>
+              如果账号丢失,请到设置-找回账号-账号凭证 找回,上传凭证或扫描凭证
+            </Text>
           </View>
-        </View>
+          <View style={styles.qrCircle}></View>
+        </HStack>
+      </VStack>
+  )
+}
+const AccountVerification = () => {
 
-        <View style={styles.qrLeftCircle}></View>
-
-        <View style={styles.qrCodeDetails}>
-          <Text style={styles.qrCodeDetailsText}>
-            如果账号丢失,请到设置-找回账号-账号凭证 找回,上传凭证或扫描凭证
-          </Text>
-        </View>
-
-        <View style={styles.qrRightCircle}></View>
-      </View>
-
+  return (
+    <ScrollView style={styles.container}>
+      <UserProfileSettingsHeader title='账号凭证' btnRight={null}/>
+      <QRCode/>
       {/* Button */}
      <View style={styles.btnContainer}>
        <Buttons title={'保存账号凭证到手机'} onPress={() => alert('Test Verification Button')}/>
      </View>
-
       {/* WARNING */}
       <View style={styles.warning}>
         <Text style={styles.warningText}>账号丢失不用愁, 保存凭证解君忧!</Text>
@@ -96,29 +96,12 @@ const styles = StyleSheet.create({
     maxWidth: Dimensions.get("window").width,
     backgroundColor: "#191d26",
   },
-  qrCodeMainContainer: {
-    backgroundColor: "#FFFFFF",
-    height: 400,
-    marginHorizontal: 20,
-    borderRadius: 7,
-    marginTop: 10,
-  },
-  qrCodeTitleContainer: {
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "center",
-    marginTop: 10,
-  },
   titleImage: {
     width: 35,
     height: 35,
   },
   qrTitle: {
     color: "grey",
-  },
-  qrCodeContainer: {
-    alignItems: "center",
-    justifyContent: "center",
   },
   qrCodeImage: {
     width: 200,
@@ -133,32 +116,18 @@ const styles = StyleSheet.create({
     textAlign: "justify",
     paddingLeft: 60,
   },
-  qrLeftCircle: {
+  qrCircle: {
     width: 20,
     height: 20,
     borderRadius: 60,
     backgroundColor: "#191d26",
-    position: "absolute",
-    bottom: 60,
-    left: -10,
-    zIndex: 1,
   },
   qrCodeDetails: {
     borderTopWidth: 0.2,
     borderTopColor: "black",
     marginHorizontal: 25,
-    top: 25,
+    top: 12,
     padding: 5,
-  },
-  qrRightCircle: {
-    width: 20,
-    height: 20,
-    borderRadius: 60,
-    backgroundColor: "#191d26",
-    position: "absolute",
-    bottom: 60,
-    right: -10,
-    zIndex: 1,
   },
   qrCodeDetailsText: {
     fontSize: 14,

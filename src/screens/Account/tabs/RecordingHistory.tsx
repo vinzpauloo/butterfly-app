@@ -1,14 +1,12 @@
 import {ScrollView, Dimensions, StyleSheet} from "react-native";
 
 import UserProfileSettingsHeader from "components/UserProfileSettingsHeader";
+import {globalStyle} from "globalStyles";
 
 
 const RecordingHistory = () => {
-
     return (
         <ScrollView style={styles.container}>
-
-            {/*Title and Back Button  */}
             <UserProfileSettingsHeader title='历史记录' btnRight={null}/>
         </ScrollView>
     )
@@ -18,9 +16,8 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         maxHeight: Dimensions.get("window").height,
-        marginVertical: 0,
         maxWidth: Dimensions.get("window").width,
-        backgroundColor: '#191d26'
+        backgroundColor: globalStyle.primaryColor
     },
 })
 

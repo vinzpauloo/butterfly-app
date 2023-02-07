@@ -2,8 +2,6 @@ import {
   Dimensions,
   FlatList,
   Pressable,
-  ScrollView,
-  StatusBar,
   StyleSheet,
   Text,
   TextInput,
@@ -32,64 +30,65 @@ const { width } = Dimensions.get("window");
 const SearchBar = ({ setSearches, hasSearch, setHasSearch }) => {
   const navigation = useNavigation<any>();
   const [search, setSearch] = useState<string>("");
+
   const handlePress = () => {
     navigation.navigate("BottomNav");
   };
+
   const searchWords = () => {
     setHasSearch(true);
     setSearches((prev) => [...prev, search]);
   };
+
   const searchClear = () => {
     setHasSearch(false);
     setSearch("");
   };
+
   return (
-    <>
-      {/* <StatusBar backgroundColor="#262632" /> */}
-      <View style={styles.headerContainer}>
-        <Ionicons
-          name="chevron-back"
-          color="#fff"
-          size={30}
-          onPress={handlePress}
+    <View style={styles.headerContainer}>
+      <Ionicons
+        name="chevron-back"
+        color="#fff"
+        size={30}
+        onPress={handlePress}
+      />
+      <View style={styles.inputFieldContainer}>
+        <Feather
+          name="search"
+          color="#aaa"
+          size={20}
+          style={[styles.textInputIcon, { left: 0 }]}
         />
-        <View style={styles.inputFieldContainer}>
-          <Feather
-            name="search"
+        <TextInput
+          value={search}
+          onChangeText={(text: string) => setSearch(text)}
+          placeholder="search model name"
+          style={styles.inputField}
+        />
+        {search.length > 0 ? (
+          <AntDesign
+            name="closecircle"
             color="#aaa"
-            size={20}
-            style={[styles.textInputIcon, { left: 0 }]}
+            size={15}
+            style={[styles.textInputIcon, { right: 0 }]}
+            onPress={searchClear}
           />
-          <TextInput
-            value={search}
-            onChangeText={(text: string) => setSearch(text)}
-            placeholder="search model name"
-            // style={styles.inputField}
-          />
-          {search.length > 0 ? (
-            <AntDesign
-              name="closecircle"
-              color="#aaa"
-              size={15}
-              style={[styles.textInputIcon, { right: 0 }]}
-              onPress={searchClear}
-            />
-          ) : (
-            //use to not adjust the parent container if the cross button is hidden
-            <View style={{ width: 35 }} />
-          )}
-        </View>
-        {hasSearch ? (
-          <Pressable style={styles.searchBtn} onPress={searchClear}>
-            <Text style={styles.searchText}>Clear</Text>
-          </Pressable>
         ) : (
-          <Pressable style={styles.searchBtn} onPress={searchWords}>
-            <Text style={styles.searchText}>Search</Text>
-          </Pressable>
+          //use to not adjust the parent container if the cross button is hidden
+          <View style={{ width: 35 }} />
         )}
       </View>
-    </>
+      {hasSearch ? (
+        <Pressable style={styles.searchBtn} onPress={searchClear}>
+          <Text style={styles.searchText}>Clear</Text>
+        </Pressable>
+      ) : (
+        <Pressable style={styles.searchBtn} onPress={searchWords}>
+          <Text style={styles.searchText}>Search</Text>
+        </Pressable>
+      )}
+    </View>
   );
 };
 
@@ -285,7 +284,7 @@ const styles = StyleSheet.create({
     backgroundColor: "#fff",
     margin: 10,
     flexGrow: 1,
-    paddingHorizontal: 40,
+    // paddingHorizontal: 40,
     overflow: "hidden",
     width: width / 2,
   },
@@ -293,9 +292,10 @@ const styles = StyleSheet.create({
     position: "absolute",
     marginHorizontal: 10,
   },
-  // inputField: {
-  //   minWidth: 170,
-  // },
+  inputField: {
+    width: "100%",
+    paddingLeft: 40,
+  },
   searchBtn: {
     backgroundColor: globalStyle.secondaryColor,
     paddingVertical: 5,

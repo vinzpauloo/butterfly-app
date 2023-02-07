@@ -9,8 +9,6 @@ import {
 import React from "react";
 
 import Ionicons from "react-native-vector-icons/Ionicons";
-import Feather from "react-native-vector-icons/Feather";
-import Entypo from "react-native-vector-icons/Entypo";
 
 import { globalStyle } from "globalStyles";
 import BottomTabs from "layouts/navigators/BottomTabs";

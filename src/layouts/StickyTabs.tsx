@@ -50,6 +50,7 @@ const StickyTabs: React.FC<IStickyTabsProps> = ({ data }) => {
         inactiveColor={globalStyle.inactiveTextColor}
         tabStyle={styles.tabStyle}
         indicatorStyle={styles.indicatorStyle}
+        scrollEnabled
       />
     );
   };

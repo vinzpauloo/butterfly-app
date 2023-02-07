@@ -1,47 +1,55 @@
 import { DynamicScreen } from "screens/Home/tabs/Home";
+import CarouselContainer from "features/ads/components/CarouselContainer";
+import { bannerImage } from "data/bannerImages";
+
+const Header = () => {
+  return (
+    <CarouselContainer images={bannerImage} />
+  )
+}
 
 export const topSubNav = {
-  initialRoute: "精选",
-  screens: [
-    {
-      name: "精选",
-      component: (props) => <DynamicScreen {...props} title={"selections"} />,
+  Header,
+  tabItems: [
+    { name : "selections",
+      label: "精选",
+      Content: <DynamicScreen title={"selections"} />,
     },
-    {
-      name: "最新",
-      component: (props) => <DynamicScreen {...props} title={"latest"} />,
+    { name : "latest",
+      label: "最新",
+      Content: <DynamicScreen title={"latest"} />,
     },
-    {
-      name: "原创",
-      component: (props) => <DynamicScreen {...props} title={"original"} />,
+    { name : "original",
+      label: "原创",
+      Content: <DynamicScreen title={"original"} />,
     },
-    {
-      name: "自制",
-      component: (props) => <DynamicScreen {...props} title={"homeMade"} />,
+    { name : "homeMade",
+      label: "自制",
+      Content: <DynamicScreen title={"homeMade"} />,
     },
-    {
-      name: "热门",
-      component: (props) => <DynamicScreen {...props} title={"hot"} />,
+    { name : "hot",
+      label: "热门",
+      Content: <DynamicScreen title={"hot"} />,
     },
-    {
-      name: "国产",
-      component: (props) => <DynamicScreen {...props} title={"local"} />,
+    { name : "local",
+      label: "国产",
+      Content: <DynamicScreen title={"local"} />,
     },
-    {
-      name: "网黄",
-      component: (props) => <DynamicScreen {...props} title={"pornStars"} />,
+    { name : "pornStars",
+      label: "网黄",
+      Content: <DynamicScreen title={"pornStars"} />,
     },
-    {
-      name: "萝莉",
-      component: (props) => <DynamicScreen {...props} title={"loli"} />,
+    { name : "loli",
+      label: "萝莉",
+      Content: <DynamicScreen title={"loli"} />,
     },
-    {
-      name: "AV",
-      component: (props) => <DynamicScreen {...props} title={"avModels"} />,
+    { name : "avModels",
+      label: "AV",
+      Content: <DynamicScreen title={"avModels"} />,
     },
-    {
-      name: "动漫",
-      component: (props) => <DynamicScreen {...props} title={"hentai"} />,
+    { name : "hentai",
+      label: "动漫",
+      Content: <DynamicScreen title={"hentai"} />,
     },
   ],
 };

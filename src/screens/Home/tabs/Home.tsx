@@ -1,6 +1,7 @@
 import { StyleSheet, View } from "react-native";
 
 import { ScrollView } from "react-native-gesture-handler";
+import { useNavigation } from '@react-navigation/native';
 
 import BottomMessage from "components/BottomMessage";
 import CarouselContainer from "features/ads/components/CarouselContainer";
@@ -19,6 +20,8 @@ import { topSubNav } from "data/topSubNav";
 import { useEffect, useState } from "react";
 import VideoListSkeleton from "components/skeletons/VideoListSkeleton";
 import CarouselSkeleton from "components/skeletons/CarouselSkeleton";
+import Container from "components/Container";
+import StickyTabs from "layouts/StickyTabs";
 
 const LayoutContainer = ({ title, children }) => {
   return (
@@ -29,7 +32,8 @@ const LayoutContainer = ({ title, children }) => {
   );
 };
 
-export const DynamicScreen = ({ title, navigation }) => {
+export function DynamicScreen ({ title }) {
+  const navigation = useNavigation();
   const screenData = homeMainSubNav?.filter((screen) => screen.name === title);
   const finalScreenData = screenData[0].data;
 
@@ -80,7 +84,6 @@ export const DynamicScreen = ({ title, navigation }) => {
     <ScrollView style={styles.container}>
       { videoListIsLoaded ? 
         <>
-          <CarouselContainer images={bannerImage} />
           {finalScreenData.map((item, index) => {
             return (
               <>
@@ -102,7 +105,11 @@ export const DynamicScreen = ({ title, navigation }) => {
 };
 
 const Home = ({ navigation }) => {
-  return <MaterialTopTabs data={topSubNav} />;
+  return (
+    <Container>
+      <StickyTabs data={topSubNav} />
+    </Container>
+  )
 };
 
 export default Home;

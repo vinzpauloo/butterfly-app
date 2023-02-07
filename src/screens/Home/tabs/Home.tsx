@@ -81,7 +81,7 @@ export function DynamicScreen ({ title }) {
     sectionHeader: <SectionHeader title="Single Videos" />,
   };
   return (
-    <ScrollView style={styles.container}>
+    <ScrollView style={[styles.container,styles.verticalSpacer]}>
       { videoListIsLoaded ? 
         <>
           {finalScreenData.map((item, index) => {
@@ -119,4 +119,7 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: globalStyle.primaryColor,
   },
+  verticalSpacer : {
+    paddingTop:15
+  }
 });

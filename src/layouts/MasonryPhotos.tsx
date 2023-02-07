@@ -1,8 +1,8 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { StyleSheet, View, ImageBackground, Pressable } from "react-native";
 
 import { useNavigation } from "@react-navigation/native";
-import { VStack, HStack, Modal, Button, Text } from "native-base";
+import { VStack, HStack, Modal, Button, Text, Skeleton } from "native-base";
 import { MasonryFlashList } from "@shopify/flash-list";
 import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons";
 
@@ -12,6 +12,7 @@ import Container from "components/Container";
 import { globalStyle } from "globalStyles";
 import VIPTag from "components/VIPTag";
 import CustomModal from "components/CustomModal";
+import MasonrySkeleton from "components/skeletons/MasonrySkeleton";
 
 type Props = {};
 
@@ -86,31 +87,42 @@ const SingleImage = (props: SingleImageProp) => {
 const MasonryPhotos = (props: Props) => {
   const [open, setOpen] = useState(false);
 
+  const [masonryPhotosIsLoaded, setmasonryPhotosIsLoaded] = useState(false)
+
+  useEffect(() => {
+    setTimeout(() => setmasonryPhotosIsLoaded(true), 1000);
+  });
+
   return (
     <>
-      <Container>
-        <View style={styles.masonryContainer}>
-          <MasonryFlashList
-            data={masonryImages}
-            numColumns={2}
-            renderItem={({ item, index }) => (
-              <SingleImage
-                idx={index}
-                url={item.imgURL}
-                postTitle={item.postTitle}
-                totalLikes={item.totalLikes}
-                height={item.height}
-                setOpen={setOpen}
+      {masonryPhotosIsLoaded ?
+        <>
+          <Container>
+            <View style={styles.masonryContainer}>
+              <MasonryFlashList
+                data={masonryImages}
+                numColumns={2}
+                renderItem={({ item, index }) => (
+                  <SingleImage
+                    idx={index}
+                    url={item.imgURL}
+                    postTitle={item.postTitle}
+                    totalLikes={item.totalLikes}
+                    height={item.height}
+                    setOpen={setOpen}
+                  />
+                )}
+                estimatedItemSize={250}
+                keyExtractor={(item, index) => "" + index}
               />
-            )}
-            estimatedItemSize={250}
-            keyExtractor={(item, index) => "" + index}
-          />
-        </View>
-      </Container>
-      <CustomModal open={open} setOpen={setOpen}>
-        <Content setOpen={setOpen} />
-      </CustomModal>
+            </View>
+          </Container>
+          <CustomModal open={open} setOpen={setOpen}>
+            <Content setOpen={setOpen} />
+          </CustomModal>
+        </>
+      :
+        <MasonrySkeleton />}
     </>
   );
 };

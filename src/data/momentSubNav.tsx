@@ -1,32 +1,43 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { StyleSheet, Text, View, Pressable, Alert } from "react-native";
-import { HStack, Divider } from "native-base";
+import { HStack, Divider, Skeleton, VStack } from "native-base";
 
 import FeedList from "layouts/FeedList";
 import { officialCertificateList } from "./officialCertificateList";
 import { feedListData } from "data/feedListData";
 import { globalStyle } from "globalStyles";
 import { FlashList } from "@shopify/flash-list";
+import MomentHeaderSkeleton from "components/skeletons/MomentHeaderSkeleton";
 
 const Header = () => {
+  const [certificateListIsLoaded, setCertificateListIsLoaded] = useState(false)
+
+  useEffect(() => {
+    setTimeout(() => setCertificateListIsLoaded(true), 1000);
+  });
+
   return (
     <View style={styles.certificateContainer}>
-      <FlashList
-        estimatedItemSize={31}
-        data={officialCertificateList}
-        renderItem={({ item }) => (
-          <Pressable onPress={() => Alert.alert("go to " + item.certificateName)}>
-            <HStack space={3} style={styles.certificateItem}>
-              <View style={styles.dot}></View>
-              <Text style={styles.whiteText}>{item.certificateName}</Text>
-            </HStack>
-          </Pressable>
-        )}
-        keyExtractor={(item, index) => "" + index}
-        ItemSeparatorComponent={() => (
-          <Divider style={styles.divider} color="#999" />
-        )}
-      />
+      {certificateListIsLoaded ?  
+        <FlashList
+          estimatedItemSize={31}
+          data={officialCertificateList}
+          renderItem={({ item }) => (
+            <Pressable onPress={() => Alert.alert("go to " + item.certificateName)}>
+              <HStack space={3} alignItems="center">
+                <View style={styles.dot}></View>
+                <Text style={styles.whiteText}>{item.certificateName}</Text>
+              </HStack>
+            </Pressable>
+          )}
+          keyExtractor={(item, index) => "" + index}
+          ItemSeparatorComponent={() => (
+            <Divider style={styles.divider} color="#999" />
+          )}
+        />
+      :
+        <MomentHeaderSkeleton/>
+      }
     </View>
   );
 };
@@ -80,8 +91,5 @@ const styles = StyleSheet.create({
     height: 8,
     width: 8,
     borderRadius: 4,
-  },
-  certificateItem: {
-    alignItems: "center",
   },
 });

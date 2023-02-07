@@ -8,11 +8,11 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
-import React from "react";
+import React, { useEffect, useState } from "react";
 
 import Entypo from "react-native-vector-icons/Entypo";
 import { MasonryFlashList } from "@shopify/flash-list";
-import { Center, NativeBaseProvider, useDisclose } from "native-base";
+import { Center, useDisclose, Skeleton, HStack, VStack } from "native-base";
 import { ScrollView } from "react-native-gesture-handler";
 import { useNavigation } from "@react-navigation/native";
 
@@ -28,6 +28,8 @@ import { reelsVideos } from "data/reelsVideos";
 import Modal from "components/BottomModal";
 import VIPTag from "components/VIPTag";
 import BottomMessage from "components/BottomMessage";
+import VideoListSkeleton from "components/skeletons/VideoListSkeleton";
+import MasonrySkeleton from "components/skeletons/MasonrySkeleton";
 
 const { width } = Dimensions.get("window");
 
@@ -119,21 +121,33 @@ const Following = () => {
   const noFollowing = true;
   const { isOpen, onOpen, onClose } = useDisclose();
 
+  const [followingDataIsLoaded, setFollowingDataIsLoaded] = useState(false)
+
+  useEffect(() => {
+    setTimeout(() => setFollowingDataIsLoaded(true), 1000);
+  });
+
   return (
-    <>
+    <Container>
       <ScrollView>
         <Container>
           {noFollowing ? (
-            <NoFollowing onOpen={onOpen} />
+            followingDataIsLoaded?
+              <NoFollowing onOpen={onOpen} />
+            :
+              <VideoListSkeleton/>
           ) : (
-            <GridVideos videos={followImages} isFollowingScreen={true} />
+            followingDataIsLoaded ?
+              <GridVideos videos={followImages} isFollowingScreen={true} />
+            :
+              <MasonrySkeleton/>    
           )}
         </Container>
       </ScrollView>
       <Center flex={1} px="3">
         <Modal isOpen={isOpen} onOpen={onOpen} onClose={onClose} />
-      </Center>
-    </>
+      </Center>        
+    </Container>
   );
 };
 

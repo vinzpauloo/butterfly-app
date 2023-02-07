@@ -42,10 +42,6 @@ const MessageItem = (props: MessageItemProps) => {
         onPress={() => {
           navigation.navigate("SingleChatScreen", {
             postTitle: props.senderUserName,
-            senderUserName: props.senderUserName,
-            senderMessage: props.senderMessage,
-            senderImgURL: props.senderImgURL,
-            senderTimeStamp: props.senderTimeStamp,
           });
         }}
       >
@@ -128,7 +124,7 @@ const Information = (props: Props) => {
   const [messageListIsLoaded, setmessageListIsLoaded] = useState(false)
 
   useEffect(() => {
-    setTimeout(() => setmessageListIsLoaded(true), 1500);
+    setTimeout(() => setmessageListIsLoaded(true), 1000);
   },);
 
   return (

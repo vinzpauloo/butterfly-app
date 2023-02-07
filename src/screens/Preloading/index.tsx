@@ -17,7 +17,6 @@ const adsURL = "https://google.com/";
 const { height } = Dimensions.get("window");
 
 const Preloading = ({}) => {
-  const [counter, setCounter] = useState(5);
   const navigation = useNavigation<any>();
 
   const handleAdPress = () => {
@@ -25,14 +24,8 @@ const Preloading = ({}) => {
   };
 
   const handleButtonpress = () => {
-    !counter && navigation.dispatch(StackActions.replace("BottomNav"));
+    navigation.dispatch(StackActions.replace("BottomNav"));
   };
-
-  useEffect(() => {
-    const timer =
-      counter > 0 && setInterval(() => setCounter(counter - 1), 1000);
-    return () => clearInterval(timer);
-  }, [counter]);
 
   return (
     <ScrollView>
@@ -43,9 +36,7 @@ const Preloading = ({}) => {
           style={styles.image}
         >
           <Pressable style={styles.button} onPress={handleButtonpress}>
-            <Text style={styles.text}>
-              {counter ? `${counter}s` : "Go to Home"}
-            </Text>
+            <Text style={styles.text}>Go to Home</Text>
           </Pressable>
         </ImageBackground>
       </Pressable>

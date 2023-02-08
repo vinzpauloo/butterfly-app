@@ -107,7 +107,7 @@ export function DynamicScreen ({ title }) {
 const Home = ({ navigation }) => {
   return (
     <Container>
-      <StickyTabs data={topSubNav} />
+      <StickyTabs scrollEnabled data={topSubNav} />
     </Container>
   )
 };

@@ -117,6 +117,5 @@ const styles = StyleSheet.create({
   },
   userContainer: {
     flex: 1,
-    minHeight: 100
   }
 });

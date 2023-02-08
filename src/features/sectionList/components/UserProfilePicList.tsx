@@ -1,5 +1,5 @@
 import React from 'react'
-import { StyleSheet, FlatList, Text, Pressable, Alert, View } from 'react-native'
+import { StyleSheet, Text, Pressable, Alert, View } from 'react-native'
 import { FlashList } from '@shopify/flash-list'
 import { Avatar, VStack } from 'native-base'
 
@@ -45,8 +45,7 @@ export default UserProfilePicList
 const styles = StyleSheet.create({
 	wrapper: {
 		justifyContent: "space-between",
-		minHeight: 100
-		
+		minHeight: 430
 	},
 	whiteText: {
 		color: "white"

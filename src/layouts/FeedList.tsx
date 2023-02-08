@@ -55,6 +55,5 @@ export default FeedList;
 const styles = StyleSheet.create({
   wrapper: {
     flex: 1,
-    minHeight: 100
   }
 });

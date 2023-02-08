@@ -1,12 +1,11 @@
 import React, { useEffect, useState } from "react";
 import { StyleSheet, Text, View, Pressable, Alert } from "react-native";
-import { HStack, Divider, Skeleton, VStack } from "native-base";
+import { HStack, Divider,  } from "native-base";
 
 import FeedList from "layouts/FeedList";
 import { officialCertificateList } from "./officialCertificateList";
 import { feedListData } from "data/feedListData";
 import { globalStyle } from "globalStyles";
-import { FlashList } from "@shopify/flash-list";
 import MomentHeaderSkeleton from "components/skeletons/MomentHeaderSkeleton";
 
 const Header = () => {
@@ -19,22 +18,15 @@ const Header = () => {
   return (
     <View style={styles.certificateContainer}>
       {certificateListIsLoaded ?  
-        <FlashList
-          estimatedItemSize={31}
-          data={officialCertificateList}
-          renderItem={({ item }) => (
-            <Pressable onPress={() => Alert.alert("go to " + item.certificateName)}>
-              <HStack space={3} alignItems="center">
-                <View style={styles.dot}></View>
-                <Text style={styles.whiteText}>{item.certificateName}</Text>
-              </HStack>
-            </Pressable>
-          )}
-          keyExtractor={(item, index) => "" + index}
-          ItemSeparatorComponent={() => (
-            <Divider style={styles.divider} color="#999" />
-          )}
-        />
+        officialCertificateList.map((certificate, index) => 
+          <Pressable key={index} onPress={() => Alert.alert("go to " + certificate.certificateName)}>
+            <HStack space={3} alignItems="center">
+              <View style={styles.dot}></View>
+              <Text style={styles.whiteText}>{certificate.certificateName}</Text>
+            </HStack>
+            {index === officialCertificateList.length - 1 ? null
+              : <Divider style={styles.divider} color="#999" />}
+          </Pressable>)
       :
         <MomentHeaderSkeleton/>
       }
@@ -78,7 +70,6 @@ const styles = StyleSheet.create({
     backgroundColor: globalStyle.headerBasicBg,
     padding: 12,
     flex: 1,
-    minHeight: 100
   },
   whiteText: {
     color: "white",

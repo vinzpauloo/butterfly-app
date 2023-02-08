@@ -1,7 +1,7 @@
 import { StyleSheet, View } from "react-native";
 
 import { ScrollView } from "react-native-gesture-handler";
-import { useNavigation } from '@react-navigation/native';
+import { useNavigation } from "@react-navigation/native";
 
 import BottomMessage from "components/BottomMessage";
 import CarouselContainer from "features/ads/components/CarouselContainer";
@@ -22,6 +22,8 @@ import VideoListSkeleton from "components/skeletons/VideoListSkeleton";
 import CarouselSkeleton from "components/skeletons/CarouselSkeleton";
 import Container from "components/Container";
 import StickyTabs from "layouts/StickyTabs";
+import { useQuery } from "@tanstack/react-query";
+import SubNav from "hooks/useSabNav";
 
 const LayoutContainer = ({ title, children }) => {
   return (
@@ -32,12 +34,22 @@ const LayoutContainer = ({ title, children }) => {
   );
 };
 
-export function DynamicScreen ({ title }) {
+export function DynamicScreen({ title }) {
   const navigation = useNavigation();
   const screenData = homeMainSubNav?.filter((screen) => screen.name === title);
   const finalScreenData = screenData[0].data;
 
-  const [videoListIsLoaded, setVideoListIsLoaded] = useState(false)
+  //syntax of fetching data
+  const {
+    data: subNavData,
+    isLoading,
+    isSuccess,
+    isError,
+  } = useQuery([`${title}`], () => SubNav.getSubNav("selection"));
+
+  console.log("!!!", subNavData);
+
+  const [videoListIsLoaded, setVideoListIsLoaded] = useState(false);
 
   useEffect(() => {
     setTimeout(() => setVideoListIsLoaded(true), 1000);
@@ -81,8 +93,8 @@ export function DynamicScreen ({ title }) {
     sectionHeader: <SectionHeader title="Single Videos" />,
   };
   return (
-    <ScrollView style={[styles.container,styles.verticalSpacer]}>
-      { videoListIsLoaded ? 
+    <ScrollView style={[styles.container, styles.verticalSpacer]}>
+      {videoListIsLoaded ? (
         <>
           {finalScreenData.map((item, index) => {
             return (
@@ -94,22 +106,22 @@ export function DynamicScreen ({ title }) {
           })}
           <BottomMessage />
         </>
-      :
+      ) : (
         <>
           <CarouselSkeleton />
           <VideoListSkeleton />
         </>
-      }
+      )}
     </ScrollView>
   );
-};
+}
 
 const Home = ({ navigation }) => {
   return (
     <Container>
       <StickyTabs scrollEnabled data={topSubNav} />
     </Container>
-  )
+  );
 };
 
 export default Home;
@@ -119,7 +131,7 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: globalStyle.primaryColor,
   },
-  verticalSpacer : {
-    paddingTop:15
-  }
+  verticalSpacer: {
+    paddingTop: 15,
+  },
 });

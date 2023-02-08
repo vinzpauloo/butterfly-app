@@ -2,12 +2,23 @@ import { StatusBar } from "react-native";
 import { useEffect } from "react";
 
 import { NavigationContainer } from "@react-navigation/native";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import axios, { AxiosError } from "axios";
 
 import StackNavigators from "layouts/navigators/StackNavigators";
 import { globalStyle } from "globalStyles";
 import { stackScreens } from "data/stackScreens";
 import { NativeBaseProvider } from "native-base";
+
+// Create a client
+const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      refetchOnWindowFocus: false,
+      retry: false,
+    },
+  },
+});
 
 // Set axios defaults
 axios.defaults.headers.common["Accept"] = "application/json";
@@ -36,14 +47,17 @@ export default function App() {
   }, []);
 
   return (
-    <NativeBaseProvider>
-      <NavigationContainer>
-        <StatusBar
-          barStyle={"light-content"}
-          backgroundColor={globalStyle.primaryColor}
-        />
-        <StackNavigators data={stackScreens} />
-      </NavigationContainer>
-    </NativeBaseProvider>
+    //Provide the client to your App
+    <QueryClientProvider client={queryClient}>
+      <NativeBaseProvider>
+        <NavigationContainer>
+          <StatusBar
+            barStyle={"light-content"}
+            backgroundColor={globalStyle.primaryColor}
+          />
+          <StackNavigators data={stackScreens} />
+        </NavigationContainer>
+      </NativeBaseProvider>
+    </QueryClientProvider>
   );
 }

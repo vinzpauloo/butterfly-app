@@ -1,25 +1,26 @@
 import React from 'react';
 import {StyleSheet, Text, TouchableOpacity} from "react-native";
-const Buttons = ({title, onPress}) => {
+const Buttons = ({title, onPress, backgroundColor, color}) => {
+
+    const dynamicStyles = StyleSheet.create({
+        container: {
+            backgroundColor,
+            height: 50,
+            borderRadius: 5,
+            alignItems:'center',
+            justifyContent: 'center',
+            padding: 10
+        },
+        text: {
+            color,
+        }
+    })
+
     return (
-        <TouchableOpacity style={styles.container} onPress={onPress}>
-            <Text style={styles.text}>{title}</Text>
+        <TouchableOpacity style={dynamicStyles.container} onPress={onPress}>
+            <Text style={dynamicStyles.text}>{title}</Text>
         </TouchableOpacity>
     )
 }
-
-const styles = StyleSheet.create({
-    container: {
-        backgroundColor: '#FF474E',
-        height: 50,
-        borderRadius: 5,
-        alignItems:'center',
-        justifyContent: 'center',
-        padding: 10
-    },
-    text: {
-        color: '#FFFFFF'
-    }
-})
 
 export default Buttons;

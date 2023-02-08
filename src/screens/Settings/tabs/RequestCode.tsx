@@ -10,6 +10,7 @@ import {
 import InputText from "components/forms/InputText";
 import Buttons from "components/forms/Buttons";
 import UserProfileSettingsHeader from "components/UserProfileSettingsHeader";
+import {globalStyle} from "../../../globalStyles";
 
 const RequestCode = () => {
   return (
@@ -23,7 +24,7 @@ const RequestCode = () => {
         </View>
 
         <View style={styles.btnContainer}>
-          <Buttons title={'确定'} onPress={() => alert('Test RequestCode Btn')}/>
+          <Buttons title={'确定'} onPress={() => alert('Test RequestCode Btn')} backgroundColor={globalStyle.btnColor} color={globalStyle.primaryTextColor}/>
         </View>
       </ScrollView>
     </KeyboardAvoidingView>

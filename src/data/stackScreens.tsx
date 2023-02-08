@@ -46,6 +46,7 @@ import InformationScreen from "screens/InformationScreen";
 import SingleChatScreen from "screens/SingleChatScreen";
 import SingleTag from "screens/SingleTag";
 import InitialLoad from "screens/InitialLoad";
+import TermsOfService from "../screens/TermsOfService";
 
 const basicHeader = ({ navigation, route }: any) => ({
   headerTitle: route?.params.postTitle,
@@ -131,6 +132,11 @@ export const stackScreens = {
     {
       name: "Preloading",
       component: Preloading,
+      options: { headerShown: false },
+    },
+    {
+      name: 'TermsOfService',
+      component: TermsOfService,
       options: { headerShown: false },
     },
     {

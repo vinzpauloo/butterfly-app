@@ -11,6 +11,7 @@ import {
 import { globalStyle } from "globalStyles";
 
 interface IStickyTabsProps {
+  scrollEnabled? : boolean,
   data: {
     Header: any;
     tabItems: ITabItems[];
@@ -23,7 +24,7 @@ interface ITabItems {
   Content: JSX.Element;
 }
 
-const StickyTabs: React.FC<IStickyTabsProps> = ({ data }) => {
+const StickyTabs: React.FC<IStickyTabsProps> = ({ data, scrollEnabled=false }) => {
   const { Header, tabItems } = data;
 
   const CustomTabHeader = () => {
@@ -50,6 +51,7 @@ const StickyTabs: React.FC<IStickyTabsProps> = ({ data }) => {
         inactiveColor={globalStyle.inactiveTextColor}
         tabStyle={styles.tabStyle}
         indicatorStyle={styles.indicatorStyle}
+        scrollEnabled={scrollEnabled}
       />
     );
   };

@@ -12,7 +12,7 @@ import {
 } from "react-native";
 import { ResizeMode, Video } from "expo-av";
 import { useNavigation, useRoute } from "@react-navigation/native";
-import { VStack, useDisclose } from "native-base";
+import { VStack, useDisclose, HStack, Slider } from "native-base";
 import Animated, { ZoomIn, ZoomOut } from 'react-native-reanimated';
 
 import BottomComment from "components/BottomComment";
@@ -21,7 +21,7 @@ import Container from "components/Container";
 import Ionicons from "react-native-vector-icons/Ionicons";
 import Feather from "react-native-vector-icons/Feather";
 import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons";
-import AntDesign from "react-native-vector-icons/AntDesign";
+import { globalStyle } from "globalStyles";
 
 interface PortraitVideoDataType {
   reelsVideos?: any[];
@@ -58,16 +58,14 @@ const PortraitVideoContent = (props: Props) => {
 
   function pausePlayVideo() {
     setisVideoPlaying((prev) => !prev)
-  }
-
-  function pressedRecently() {
-    setShowPlayPauseButton((prev) => !prev)
+    isVideoPlaying ? 
+      setShowPlayPauseButton(true) : setTimeout(() => setShowPlayPauseButton(false), 500)
   }
 
   return (
     <View style={[styles.container, { height: windowHeight - props.tabBarHeight }]}>
       {props.isActive && (
-        <Pressable style={styles.videoContainer} onPress={pressedRecently}>
+        <Pressable style={styles.videoContainer} onPress={pausePlayVideo}>
           <Video
             source={{ uri: props.uri }}
             style={styles.video}
@@ -80,13 +78,11 @@ const PortraitVideoContent = (props: Props) => {
           />
           {showPlayPauseButton ?
             <Animated.View style={styles.playPauseIcon} entering={ZoomIn} exiting={ZoomOut} >
-              <Pressable onPress={pausePlayVideo}>
                 {isVideoPlaying ?
-                  <AntDesign name="pausecircleo" size={72} color="white" />
+                  <Ionicons name="play" size={48} color="white" />
                   :
-                  <AntDesign name="playcircleo" size={72} color="white" />
+                  <Ionicons name="pause" size={48} color="white" />
                 }
-              </Pressable>
             </Animated.View>
             : null
           }
@@ -180,6 +176,17 @@ const PortraitVideoContent = (props: Props) => {
           <Text style={styles.iconText}>DL</Text>
         </View>
       </VStack>
+      {/* {isVideoPlaying ? null : 
+      <HStack style={styles.bottomSliderContainer} space={2}>
+          <Text style={{ color: "white" }}>00:00</Text>
+          <Slider size="sm" w={windowWidth - 100} defaultValue={50} minValue={0} maxValue={100} step={1}>
+            <Slider.Track bg={globalStyle.inactiveTextColor}>
+              <Slider.FilledTrack bg={globalStyle.secondaryColor} />
+            </Slider.Track>
+            <Slider.Thumb bg={globalStyle.secondaryColor} />
+          </Slider>
+        <Text style={{color:"white"}}>00:30</Text>
+      </HStack>} */}
     </View>
   );
 };
@@ -267,12 +274,6 @@ const styles = StyleSheet.create({
     height: windowHeight,
     backgroundColor: "#191d26",
   },
-  blackLayer: {
-    height: "50%",
-    marginBottom: "auto",
-    backgroundColor: "#191d26",
-    opacity: 0.5,
-  },
   video: {
     position: "absolute",
     width: "100%",
@@ -286,6 +287,14 @@ const styles = StyleSheet.create({
     bottom: 0,
     paddingHorizontal: 8,
     paddingBottom: 16,
+  },
+  bottomSliderContainer: {
+    position: "absolute",
+    bottom: 0,
+    backgroundColor: "rgba(0,0,0,0.5)",
+    width: "100%",
+    padding: 6,
+    alignItems: "center"
   },
   userName: {
     fontWeight: "bold",
@@ -369,8 +378,12 @@ const styles = StyleSheet.create({
     marginBottom: "auto",
     elevation: 1,
     backgroundColor: 'rgba(0,0,0,0.25)',
-    borderRadius: 36,
-    opacity: 0.9
+    width: 64,
+    height: 64,
+    borderRadius: 32,
+    opacity: 0.9,
+    alignItems: "center",
+    justifyContent:"center"
   },
   videoContainer: {
     width: "100%",

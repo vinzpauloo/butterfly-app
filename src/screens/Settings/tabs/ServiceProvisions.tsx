@@ -9,7 +9,7 @@ const ServiceProvisions = () => {
         <SafeAreaView style={styles.container}>
             <UserProfileSettingsHeader title={null} btnRight={null}/>
             <WebView
-                source={{ html: `<div style="color: #FFF"><div style="display: flex; justify-content: center"><img src='https://cdn.pixabay.com/photo/2017/02/01/00/32/butterfly-2028591_960_720.png' style="width: 80;"/></div>${serviceProvisionsData.map((item) =>  item.chinese.description).join('')}</div>` }}
+                source={{ html: `<div style="color: #FFF"><div style="display: flex; justify-content: center"><img src='https://cdn.pixabay.com/photo/2017/02/01/00/32/butterfly-2028591_960_720.png' style="width: 80;"/></div>${serviceProvisionsData.map((item) =>  item.chinese.description)}</div>` }}
                 style={styles.htmlStyle}
                 scalesPageToFit={false}
             />

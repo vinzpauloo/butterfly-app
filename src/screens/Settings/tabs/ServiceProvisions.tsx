@@ -1,20 +1,15 @@
 import React from "react";
-import {Image, SafeAreaView, StyleSheet, Text, View} from "react-native";
+import {SafeAreaView, StyleSheet} from "react-native";
 import { WebView } from 'react-native-webview'
 
 import UserProfileSettingsHeader from "components/UserProfileSettingsHeader";
 import {serviceProvisionsData} from "data/serviceProvisionsData";
-import Logo from 'assets/images/butterfly.png'
 const ServiceProvisions = () => {
     return (
         <SafeAreaView style={styles.container}>
             <UserProfileSettingsHeader title={null} btnRight={null}/>
-            <View style={styles.titleContainer}>
-                <Image source={Logo} style={styles.image}/>
-                <Text style={styles.title}>Service Provisions</Text>
-            </View>
             <WebView
-                source={{ html: serviceProvisionsData.map((item) => item.english.description).join('')}}
+                source={{ html: `<div style="color: #FFF"><div style="display: flex; justify-content: center"><img src='https://cdn.pixabay.com/photo/2017/02/01/00/32/butterfly-2028591_960_720.png' style="width: 80;"/></div>${serviceProvisionsData.map((item) =>  item.chinese.description).join('')}</div>` }}
                 style={styles.htmlStyle}
                 scalesPageToFit={false}
             />

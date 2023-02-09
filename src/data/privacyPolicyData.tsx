@@ -23,7 +23,7 @@ export const  privacyPolicyData = [
                 '                        集所有您创建帐户时的资讯,以及使用服务来发送或接\n' +
                 '                        收的讯息(包含透过我们的服务「糖心」所拍摄的照片\n' +
                 '                        或影片,以及透过客服或与其他方式与我们沟通时所产\n' +
-                '                        生的讯息。)我们可能收集的资讯包含用户名称、帐户\n' +
+                '                        生的讯息。)我们可能收集的资讯包含用户名称、账户\n' +
                 '                        密码、电子邮件地址、电话号码、年龄、性别以及任何\n' +
                 '                        您选择提供的其他资讯。</p>\n' +
                 '                    <p>我们诚心地建议您提供您拥有版权的内容(例如讯息、\n' +
@@ -96,7 +96,7 @@ export const  privacyPolicyData = [
                 '                </div>\n' +
                 '\n' +
                 '                <div>\n' +
-                '                    <h4>管理您的帐号,并提供我们的服务给您</h4>\n' +
+                '                    <h4>管理您的账号,并提供我们的服务给您</h4>\n' +
                 '                    <ul>\n' +
                 '                        <li>建立和管理您的帐号</li>\n' +
                 '                        <li>为您提供客户支援,和回应您的要求</li>\n' +
@@ -159,7 +159,7 @@ export const  privacyPolicyData = [
                 '                        的资讯收集、储存和处理做法,以更新我们的实体、技\n' +
                 '                        术和组织安全措施。如果我们怀疑或发现任何违反安全\n' +
                 '                        的行为,我们可以暂停您使用所有或部分服务,恕不另\n' +
-                '                        行通知。如果您认为您的帐号或资讯不再安全,请立即\n' +
+                '                        行通知。如果您认为您的账号或资讯不再安全,请立即\n' +
                 '                        通知我们。</p>\n' +
                 '                </div>\n' +
                 '\n' +
@@ -175,7 +175,7 @@ export const  privacyPolicyData = [
                 '                <div>\n' +
                 '                    <h4>其他</h4>\n' +
                 '                    <h5>帐户资讯</h5>\n' +
-                '                    <p>您可以在 app 中编辑您的帐号设定,更新您的个人资\n' +
+                '                    <p>您可以在 app 中编辑您的账号设定,更新您的个人资\n' +
                 '                        讯。如您有任何问题,请在 linnannan101@gmail.com 与我们联系。</p>\n' +
                 '\n' +
                 '                    <h5>推播通知</h5>\n' +
@@ -312,7 +312,7 @@ export const  privacyPolicyData = [
                 '    <div>\n' +
                 '        <h4>PREVENT, DETECT, AND COMBAT FRAUDULENT, ILLEGAL, OR UNAUTHORIZED BEHAVIOR.</h4>\n' +
                 '        <ul>\n' +
-                '            <li>Address any current or alleged misconduct (whether or not it occurs on the Platform)</li>\n' +
+                '            <li>Address any current or alleged misconduct (whether it occurs on the Platform)</li>\n' +
                 '            <li>Analyze data to gain a better understanding of such activities and to devise countermeasures.</li>\n' +
                 '            <li>Record keeping of fraudulent activities to prevent them from happening again.</li>\n' +
                 '        </ul>\n' +

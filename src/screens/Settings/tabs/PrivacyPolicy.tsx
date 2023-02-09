@@ -12,6 +12,7 @@ const PrivacyPolicy = () => {
         <WebView
             source={{ html: privacyPolicyData.map((item) => item.chinese.description).join('') }}
             style={{flex: 1}}
+            scalesPageToFit={false}
         />
       </>
   );

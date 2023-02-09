@@ -12,6 +12,7 @@ const ServiceProvisions = () => {
             <WebView
                 source={{ html: serviceProvisionsData.map((item) => item.chinese.description).join('') }}
                 style={{flex: 1}}
+                scalesPageToFit={false}
             />
         </>
     )

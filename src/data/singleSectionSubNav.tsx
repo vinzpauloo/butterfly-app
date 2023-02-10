@@ -3,6 +3,7 @@ import { ScrollView } from "react-native-gesture-handler";
 import Container from "components/Container";
 import GridVideos from "features/sectionList/components/GridVideos";
 import { followImages } from "./gridImages";
+import { globalStyle } from "globalStyles";
 
 export const singleSectionSubNav = {
   initialRoute: "最近更新",
@@ -10,9 +11,11 @@ export const singleSectionSubNav = {
     {
       name: "最近更新",
       component: () => (
-        <ScrollView>
+        <ScrollView
+          style={{ flex: 1, backgroundColor: globalStyle.primaryColor }}
+        >
           <Container>
-            <GridVideos videos={followImages} isFollowingScreen={true} />
+            <GridVideos data={followImages} isFollowingScreen={true} />
           </Container>
         </ScrollView>
       ),
@@ -20,9 +23,11 @@ export const singleSectionSubNav = {
     {
       name: "最多观看",
       component: () => (
-        <ScrollView>
+        <ScrollView
+          style={{ flex: 1, backgroundColor: globalStyle.primaryColor }}
+        >
           <Container>
-            <GridVideos videos={followImages} isFollowingScreen={true} />
+            <GridVideos data={followImages} isFollowingScreen={true} />
           </Container>
         </ScrollView>
       ),
@@ -30,9 +35,11 @@ export const singleSectionSubNav = {
     {
       name: "最多收藏",
       component: () => (
-        <ScrollView>
+        <ScrollView
+          style={{ flex: 1, backgroundColor: globalStyle.primaryColor }}
+        >
           <Container>
-            <GridVideos videos={followImages} isFollowingScreen={true} />
+            <GridVideos data={followImages} isFollowingScreen={true} />
           </Container>
         </ScrollView>
       ),

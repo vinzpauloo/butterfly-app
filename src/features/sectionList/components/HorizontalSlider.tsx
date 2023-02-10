@@ -22,6 +22,7 @@ const Video = ({ index, data, item }: any) => {
       image: video.thumbnail_url,
       title: video.title,
       subTitle: "123456789",
+      id: video._id,
     });
   };
 

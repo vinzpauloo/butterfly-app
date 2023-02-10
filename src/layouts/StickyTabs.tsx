@@ -11,7 +11,7 @@ import {
 import { globalStyle } from "globalStyles";
 
 interface IStickyTabsProps {
-  scrollEnabled? : boolean,
+  scrollEnabled?: boolean;
   data: {
     Header: any;
     tabItems: ITabItems[];
@@ -24,7 +24,10 @@ interface ITabItems {
   Content: JSX.Element;
 }
 
-const StickyTabs: React.FC<IStickyTabsProps> = ({ data, scrollEnabled=false }) => {
+const StickyTabs: React.FC<IStickyTabsProps> = ({
+  data,
+  scrollEnabled = false,
+}) => {
   const { Header, tabItems } = data;
 
   const CustomTabHeader = () => {
@@ -67,7 +70,7 @@ const StickyTabs: React.FC<IStickyTabsProps> = ({ data, scrollEnabled=false }) =
       renderTabBar={CustomTabBar}
     >
       {tabItems.map((item, index) => (
-        <Tabs.Tab key={index} name={item.name} label={item.label} >
+        <Tabs.Tab key={index} name={item.name} label={item.label}>
           {/* 
             Type error workaround when using Tab.ScrollView
             See issue: https://github.com/PedroBern/react-native-collapsible-tab-view/issues/139

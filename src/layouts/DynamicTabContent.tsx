@@ -8,7 +8,7 @@ import DividerContainer from "features/sectionList/components/DividerContainer";
 import GridVideos from "features/sectionList/components/GridVideos";
 import SectionHeader from "features/sectionList/components/SectionHeader";
 import { useQuery } from "@tanstack/react-query";
-import SubNav from "hooks/useSabNav";
+import { SubNav } from "hooks/useSubNav";
 import BottomMessage from "components/BottomMessage";
 
 const LayoutContainer = ({ title, dataLength, index, children }) => {
@@ -51,9 +51,10 @@ const SectionContent = ({
 };
 
 const DynamicTabContent = ({ tabTitle }) => {
+  const { getWorkGroup } = SubNav();
   const { data, isLoading, isSuccess, isError } = useQuery(
     [`tabName${tabTitle}`],
-    () => SubNav.getWorkGroup(tabTitle)
+    () => getWorkGroup(tabTitle)
   );
 
   useEffect(() => {

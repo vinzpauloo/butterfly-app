@@ -7,20 +7,27 @@ import AntDesign from "react-native-vector-icons/AntDesign";
 import Fontisto from "react-native-vector-icons/Fontisto";
 import Zocial from "react-native-vector-icons/Zocial";
 
+import BannerAds from "features/ads/components/BannerAds";
+import CommentList from "features/commentList";
 import Container from "components/Container";
 import GridVideos from "features/sectionList/components/GridVideos";
 import { followImages } from "./gridImages";
 import { globalStyle } from "globalStyles";
-import BannerAds from "features/ads/components/BannerAds";
-import CommentList from "features/commentList";
+import { SingleVideo } from "hooks/useSingleVideo";
+import { useQuery } from "@tanstack/react-query";
 
-export const Header = () => {
+export const Header = ({ data }) => {
+  const { getLikesCount } = SingleVideo();
+  const {
+    data: likesCount,
+    isSuccess,
+    isError,
+    isLoading,
+  } = useQuery([`likesCount-${data._id}`], () => getLikesCount(data._id));
   return (
     <>
       <View style={styles.container}>
-        <Text style={styles.title}>
-          Components in the header need to interact with the screen component
-        </Text>
+        <Text style={styles.title}>{data?.title}</Text>
         <View style={styles.watchContent}>
           <View style={styles.item}>
             <MaterialCommunityIcons
@@ -29,7 +36,7 @@ export const Header = () => {
               size={15}
               style={styles.icon}
             />
-            <Text style={styles.text}>56554 | 时长: 45:12</Text>
+            <Text style={styles.text}>56554 | 时长: {data?.duration}</Text>
           </View>
           <View style={styles.item}>
             <AntDesign
@@ -42,9 +49,11 @@ export const Header = () => {
           </View>
         </View>
         <View style={styles.tags}>
-          <Text style={styles.tag}>Cosplay</Text>
-          <Text style={styles.tag}>Nana</Text>
-          <Text style={styles.tag}>Hentai</Text>
+          {data?.tags.map((item, index) => (
+            <Text style={styles.tag} key={index}>
+              {item}
+            </Text>
+          ))}
         </View>
         <View style={styles.buttonsContent}>
           <View style={styles.buttonItem}>
@@ -54,7 +63,7 @@ export const Header = () => {
               size={15}
               style={styles.icon}
             />
-            <Text style={styles.text}>314738</Text>
+            <Text style={styles.text}>{likesCount}</Text>
           </View>
           <View style={styles.buttonItem}>
             <MaterialIcons
@@ -99,7 +108,7 @@ export const Header = () => {
   );
 };
 
-const ContentTemplate = () => {
+export const ContentTemplate = () => {
   return (
     <Container>
       <GridVideos data={followImages} isFollowingScreen={true} />

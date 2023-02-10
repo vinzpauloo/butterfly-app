@@ -1,24 +1,73 @@
-import React, { useState } from "react";
 import { Dimensions, Pressable, StyleSheet, Text, View } from "react-native";
+import React from "react";
 
 import * as ScreenOrientation from "expo-screen-orientation";
-import { Video, ResizeMode } from "expo-av";
-
-import { globalStyle } from "globalStyles";
+import { Video, AVPlaybackStatus, ResizeMode } from "expo-av";
 
 import StickyTabs from "layouts/StickyTabs";
-import { singleVideoSubNav } from "data/singleVideoSubNav";
+import { globalStyle } from "globalStyles";
+import {
+  ContentTemplate,
+  Header,
+  singleVideoSubNav,
+} from "data/singleVideoSubNav";
+import { SubNav } from "hooks/useSubNav";
+import { useQuery } from "@tanstack/react-query";
+import { useRoute } from "@react-navigation/native";
+import CommentList from "features/commentList";
 
 const { width, height } = Dimensions.get("window");
 
 const SingleVideoScreen = () => {
+  const { getWork } = SubNav();
   const video = React.useRef(null);
+  const route = useRoute<any>();
   const [status, setStatus] = React.useState({});
-  const [videoOrientation, setVideoOrientation] = useState("")
+
+  const { data, isLoading, isError, isSuccess } = useQuery(
+    [`work-${route.params.id}`],
+    () => getWork(route.params.id)
+  );
+
+  console.log("!!!", data);
 
   const setOrientation = () => {
-    height > width ? ScreenOrientation.lockAsync(ScreenOrientation.OrientationLock.LANDSCAPE)
-      : ScreenOrientation.lockAsync(ScreenOrientation.OrientationLock.PORTRAIT)
+    if (Dimensions.get("window").height > Dimensions.get("window").width) {
+      //Device is in portrait mode, rotate to landscape mode.
+      ScreenOrientation.lockAsync(ScreenOrientation.OrientationLock.LANDSCAPE);
+    } else {
+      //Device is in landscape mode, rotate to portrait mode.
+      ScreenOrientation.lockAsync(ScreenOrientation.OrientationLock.PORTRAIT);
+    }
+  };
+
+  const stickyTabsData = {
+    Header: () => <Header data={data} />,
+    tabItems: [
+      {
+        name: "TabOthers",
+        label: "TA的视频",
+        Content: <ContentTemplate />,
+      },
+      {
+        name: "TabRecommended",
+        label: "更多推荐",
+        Content: <ContentTemplate />,
+      },
+      {
+        name: "TabComments",
+        label: "评论",
+        Content: <CommentList />,
+      },
+    ],
+  };
+
+  if (isLoading) {
+    return (
+      <View>
+        <Text>Loading....</Text>
+      </View>
+    );
   }
 
   return (
@@ -30,18 +79,17 @@ const SingleVideoScreen = () => {
         <Video
           ref={video}
           style={styles.video}
-          source={{uri: "https://d23dyxeqlo5psv.cloudfront.net/big_buck_bunny.mp4"}}
+          source={{
+            uri: data?.video_url,
+          }}
           useNativeControls
-          resizeMode={videoOrientation === "portrait" ? ResizeMode.STRETCH : ResizeMode.CONTAIN}
+          resizeMode={ResizeMode.CONTAIN}
           isLooping
           onPlaybackStatusUpdate={(status) => setStatus(() => status)}
           onFullscreenUpdate={setOrientation}
-          onReadyForDisplay={event => {
-            setVideoOrientation(event.naturalSize.orientation)
-          }}
         />
       </View>
-      <StickyTabs data={singleVideoSubNav} />
+      <StickyTabs data={stickyTabsData} />
     </View>
   );
 };
@@ -56,7 +104,9 @@ const styles = StyleSheet.create({
   videoContent: {
     position: "relative",
     height: 200,
-    zIndex: 1,
+
+    // Make the video on top of the sticky tab bar
+    zIndex: 2,
     backgroundColor: "black",
   },
   watermarkContainer: {

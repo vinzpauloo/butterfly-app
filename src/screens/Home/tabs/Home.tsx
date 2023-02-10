@@ -7,19 +7,20 @@ import CarouselContainer from "features/ads/components/CarouselContainer";
 import { bannerImage } from "data/bannerImages";
 import Container from "components/Container";
 import StickyTabs from "layouts/StickyTabs";
-import SubNav from "hooks/useSabNav";
+import { SubNav } from "hooks/useSubNav";
 import DynamicTabContent from "layouts/DynamicTabContent";
 
 const Header = () => {
-  return <CarouselContainer images={bannerImage} />;
+  return <CarouselContainer />;
 };
 
 const Home = () => {
   const [tabItems, setTabItems] = useState([]);
+  const { getSubNav } = SubNav();
 
   const { data, isLoading, isSuccess, isError } = useQuery(
     ["subnav"],
-    SubNav.getSubNav
+    getSubNav
   );
 
   useEffect(() => {

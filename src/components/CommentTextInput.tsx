@@ -6,13 +6,15 @@ import { globalStyle } from 'globalStyles'
 
 const windowWidth = Dimensions.get('window').width;
 
-type Props = {}
+type Props = {
+	keyboardAvoidingBehavior?: any
+}
 
 const CommentTextInput = (props: Props) => {
 	const [text, onTextChange] = React.useState("");
 
 	return (
-		<KeyboardAvoidingView behavior={'position'}>
+		<KeyboardAvoidingView behavior={props.keyboardAvoidingBehavior}>
 			<HStack style={styles.bottomForm}>
 				<TextInput
 					style={styles.textInput}

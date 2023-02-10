@@ -24,7 +24,7 @@ type Props = {
 	addedContent?: { contentURL: string}[]
 	totalComments: number
 	totalLikes: number
-	openComments: () => void
+	openComments?: () => void
 }
 
 const FeedItem = (props: Props) => {
@@ -98,7 +98,7 @@ const FeedItem = (props: Props) => {
 				<Pressable onPress={()=> Alert.alert("Share Post")}>
 					<FontAwesome name="share-square-o" color={"#999"} size={16} />
 				</Pressable>
-				<Pressable onPress={() => props.openComments()}>
+				<Pressable onPress={() => props.openComments === undefined ? null : props.openComments()}>
 					<HStack space={1} style={styles.bottomIcon}>
 						<Fontisto name="commenting" color={"#999"} size={16} />
 						<Text style={styles.bottomText}>{props.totalComments}</Text>

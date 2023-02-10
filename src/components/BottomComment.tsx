@@ -1,5 +1,5 @@
 import React from "react";
-import { Dimensions, StyleSheet } from "react-native";
+import { Dimensions, StyleSheet, View } from "react-native";
 import { Actionsheet, Box, Center } from "native-base";
 
 import { globalStyle } from "globalStyles";
@@ -11,21 +11,19 @@ const windowHeight = Dimensions.get('window').height;
 
 const BottomComment = ({ onOpen, isOpen, onClose }) => {
 	return (
-		<Center>
-			<Actionsheet isOpen={isOpen} onClose={onClose}>
-				<Actionsheet.Content
-					_dragIndicator={{marginTop: 1}}
-					padding={0}
-					borderTopRadius="24"
-					backgroundColor={globalStyle.primaryColor}
-				>
-					<Box w={"100%"} h={windowHeight / 2.5} p={2}>
-						<CommentList/>
-					</Box>
-				</Actionsheet.Content>
-				<CommentTextInput />
-			</Actionsheet>
-		</Center>
+		<Actionsheet isOpen={isOpen} onClose={onClose}>
+			<Actionsheet.Content
+				_dragIndicator={{marginTop: 1}}
+				padding={0}
+				borderTopRadius="24"
+				backgroundColor={globalStyle.primaryColor}
+			>
+				<Box w={"100%"} h={windowHeight / 2.5} p={2}>
+					<CommentList/>
+				</Box>
+			</Actionsheet.Content>
+			<CommentTextInput keyboardAvoidingBehavior="position" />
+		</Actionsheet>
 	);
 };
 

@@ -7,8 +7,10 @@ import { officialCertificateList } from "./officialCertificateList";
 import { feedListData } from "data/feedListData";
 import { globalStyle } from "globalStyles";
 import MomentHeaderSkeleton from "components/skeletons/MomentHeaderSkeleton";
+import { useNavigation } from "@react-navigation/native";
 
 const Header = () => {
+  const navigation = useNavigation<any>();
   const [certificateListIsLoaded, setCertificateListIsLoaded] = useState(false)
 
   useEffect(() => {
@@ -19,7 +21,7 @@ const Header = () => {
     <View style={styles.certificateContainer}>
       {certificateListIsLoaded ?  
         officialCertificateList.map((certificate, index) => 
-          <Pressable key={index} onPress={() => Alert.alert("go to " + certificate.certificateName)}>
+          <Pressable key={index} onPress={() => navigation.navigate("SingleFeedScreen", { postTitle: "详情" })}>
             <HStack space={3} alignItems="center">
               <View style={styles.dot}></View>
               <Text style={styles.whiteText}>{certificate.certificateName}</Text>

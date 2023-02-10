@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import {
   StyleSheet,
   Text,
@@ -12,8 +12,8 @@ import {
 } from "react-native";
 import { ResizeMode, Video } from "expo-av";
 import { useNavigation, useRoute } from "@react-navigation/native";
-import { VStack, useDisclose } from "native-base";
-import Animated, { ZoomIn, ZoomOut } from 'react-native-reanimated';
+import { VStack, useDisclose, HStack, Slider } from "native-base";
+import Animated, { PinwheelIn, PinwheelOut, ZoomIn, ZoomOut } from 'react-native-reanimated';
 
 import BottomComment from "components/BottomComment";
 import Container from "components/Container";
@@ -21,7 +21,7 @@ import Container from "components/Container";
 import Ionicons from "react-native-vector-icons/Ionicons";
 import Feather from "react-native-vector-icons/Feather";
 import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons";
-import AntDesign from "react-native-vector-icons/AntDesign";
+import { globalStyle } from "globalStyles";
 
 interface PortraitVideoDataType {
   reelsVideos?: any[];
@@ -33,7 +33,7 @@ type Props = {
   uri: string;
   userName: string;
   description: string;
-  isPortrait: boolean;
+  thumbnail: string
   tags: string[];
   likes: number;
   amountOfComments: number;
@@ -48,51 +48,74 @@ const { width: windowWidth, height: windowHeight } = Dimensions.get("window");
 
 const PortraitVideoContent = (props: Props) => {
   const navigation = useNavigation<any>();
-  
+
   const [isVideoPlaying, setisVideoPlaying] = useState(false) 
   const [showPlayPauseButton, setShowPlayPauseButton] = useState(false) 
+  const [userSeekTime, setUserSeekTime] = useState(0)
+  const [videoCurrentTime, setVideoCurrentTime] = useState(0)
+  const [videoTotalDuration, setVideoTotalDuration] = useState(0)
+  const [videoOrientation, setVideoOrientation] = useState("")
+  const [videoIsLoaded, setVideoIsLoaded] = useState(false)
+  const videoCurrentTimeDisplay = Math.round(videoCurrentTime / 1000)
+  const videoTotalDurationDisplay = Math.round(videoTotalDuration / 1000)
 
+  const [videoIsLiked, setVideoIsLiked] = useState(false)
+  const [videoIsFaved, setVideoIsFaved] = useState(false)
+    
   useEffect(() => {
     setisVideoPlaying(true)
   }, [props.isActive]);
 
   function pausePlayVideo() {
     setisVideoPlaying((prev) => !prev)
-  }
-
-  function pressedRecently() {
-    setShowPlayPauseButton((prev) => !prev)
+    isVideoPlaying ? setShowPlayPauseButton(true) :
+    setTimeout(() => setShowPlayPauseButton(false), 500);
+    setUserSeekTime(videoCurrentTime);
+    setVideoCurrentTime(userSeekTime);
   }
 
   return (
     <View style={[styles.container, { height: windowHeight - props.tabBarHeight }]}>
       {props.isActive && (
-        <Pressable style={styles.videoContainer} onPress={pressedRecently}>
+        <Pressable style={styles.videoContainer} onPress={pausePlayVideo}>
           <Video
             source={{ uri: props.uri }}
             style={styles.video}
             resizeMode={
-              props.isPortrait ? ResizeMode.STRETCH : ResizeMode.CONTAIN
+              videoOrientation === "portrait" ? ResizeMode.STRETCH : ResizeMode.CONTAIN
             }
             isLooping={true}
-            shouldPlay={isVideoPlaying}
+            shouldPlay={isVideoPlaying && videoIsLoaded}
+            usePoster={true}
+            positionMillis={userSeekTime}
+            PosterComponent={() =>
+              <View style={styles.videoThumbnail}>
+                <Image style={styles.videoThumbnail} source={{uri: props.thumbnail}}/>
+              </View>}
             useNativeControls={false}
+            onReadyForDisplay={event => {
+              setVideoIsLoaded(event.status.isLoaded)
+              setVideoOrientation(event.naturalSize.orientation)
+              setVideoTotalDuration(event.status.durationMillis)
+            }}
+            progressUpdateIntervalMillis={100}
+            onPlaybackStatusUpdate={(status) => {
+              setVideoCurrentTime(status.positionMillis)
+            }}
           />
           {showPlayPauseButton ?
             <Animated.View style={styles.playPauseIcon} entering={ZoomIn} exiting={ZoomOut} >
-              <Pressable onPress={pausePlayVideo}>
                 {isVideoPlaying ?
-                  <AntDesign name="pausecircleo" size={72} color="white" />
+                  <Ionicons name="play" size={48} color="white" />
                   :
-                  <AntDesign name="playcircleo" size={72} color="white" />
+                  <Ionicons name="pause" size={48} color="white" />
                 }
-              </Pressable>
             </Animated.View>
             : null
           }
         </Pressable>
       )}
-      <VStack space={2} style={styles.bottomSection}>
+      <VStack space={2} style={[styles.bottomSection, isVideoPlaying ? {bottom: 0} : {bottom:24}]}>
         <Pressable
           onPress={() => {
             Alert.alert("Go to user Profile!");
@@ -124,7 +147,7 @@ const PortraitVideoContent = (props: Props) => {
           <Text style={styles.subscribe}>Subscription needed or gold coin</Text>
         </Pressable>
       </VStack>
-      <VStack space={2} style={styles.verticalBar}>
+      <VStack space={2} style={[styles.verticalBar, isVideoPlaying ? {bottom: 0} : {bottom:24}]}>
         <View style={styles.verticalBarItem}>
           <Pressable
             onPress={() => {
@@ -144,12 +167,12 @@ const PortraitVideoContent = (props: Props) => {
           </View>
         </View>
         <View style={styles.verticalBarItem}>
-          <Pressable
-            onPress={() => {
-              Alert.alert("Like!");
-            }}
-          >
-            <Ionicons name="heart" color={"white"} size={40} />
+          <Pressable onPress={() => setVideoIsLiked(prev => !prev)}>
+            {videoIsLiked ?
+              <Ionicons name="heart" color={globalStyle.secondaryColor} size={40} />
+            :
+              <Ionicons name="heart" color={"white"} size={40} />
+            }
           </Pressable>
           <Text style={styles.iconText}>{props.likes}</Text>
         </View>
@@ -160,12 +183,12 @@ const PortraitVideoContent = (props: Props) => {
           <Text style={styles.iconText}>{props.amountOfComments}</Text>
         </View>
         <View style={styles.verticalBarItem}>
-          <Pressable
-            onPress={() => {
-              Alert.alert("Add to Fave");
-            }}
-          >
-            <Ionicons name="star" color={"white"} size={40} />
+          <Pressable onPress={() => setVideoIsFaved(prev => !prev)}>
+            {videoIsFaved ? 
+              <Ionicons name="star" color={"yellow"} size={40} />
+            : 
+              <Ionicons name="star" color={"white"} size={40} />
+            }
           </Pressable>
           <Text style={styles.iconText}>Fave</Text>
         </View>
@@ -180,6 +203,22 @@ const PortraitVideoContent = (props: Props) => {
           <Text style={styles.iconText}>DL</Text>
         </View>
       </VStack>
+      <HStack style={[styles.bottomSliderContainer, isVideoPlaying ? {bottom: -40} : {bottom: 0}]} space={2}>
+          <Text style={styles.videoTimeStamp}>
+            {videoCurrentTimeDisplay < 10 ? `0:0${videoCurrentTimeDisplay}` : `0:${videoCurrentTimeDisplay}`}
+          </Text>
+          <Slider size="sm" w={windowWidth - 100} onChangeEnd={value => {
+            setUserSeekTime(value)
+        }} value={videoCurrentTime} minValue={0} maxValue={videoTotalDuration} step={1}>
+            <Slider.Track bg={globalStyle.inactiveTextColor}>
+              <Slider.FilledTrack bg={globalStyle.secondaryColor} />
+            </Slider.Track>
+            <Slider.Thumb bg={globalStyle.secondaryColor} />
+          </Slider>
+        <Text style={styles.videoTimeStamp}>
+          {videoTotalDurationDisplay < 10? `0:0${videoTotalDurationDisplay}` : `0:${videoTotalDurationDisplay}`}
+        </Text>
+      </HStack>
     </View>
   );
 };
@@ -228,9 +267,9 @@ const PortraitVideo: React.FC<PortraitVideoDataType> = ({
               <PortraitVideoContent
                 key={item.id}
                 uri={item.uri}
-                isPortrait={item.isPortrait}
                 userName={item.userName}
                 description={item.description}
+                thumbnail={item.thumbnail}
                 tags={item.tags}
                 likes={item.likes}
                 amountOfComments={item.amountOfComments}
@@ -267,14 +306,12 @@ const styles = StyleSheet.create({
     height: windowHeight,
     backgroundColor: "#191d26",
   },
-  blackLayer: {
-    height: "50%",
-    marginBottom: "auto",
-    backgroundColor: "#191d26",
-    opacity: 0.5,
-  },
   video: {
     position: "absolute",
+    width: "100%",
+    height: "100%",
+  },
+  videoThumbnail: {
     width: "100%",
     height: "100%",
   },
@@ -283,9 +320,15 @@ const styles = StyleSheet.create({
   },
   bottomSection: {
     position: "absolute",
-    bottom: 0,
     paddingHorizontal: 8,
     paddingBottom: 16,
+  },
+  bottomSliderContainer: {
+    position: "absolute",
+    backgroundColor: "rgba(0,0,0,0.5)",
+    width: "100%",
+    paddingVertical: 6,
+    alignItems: "center"
   },
   userName: {
     fontWeight: "bold",
@@ -293,10 +336,10 @@ const styles = StyleSheet.create({
   verticalBar: {
     position: "absolute",
     right: 8,
-    bottom: 0,
     paddingBottom: 16,
   },
   verticalBarItem: {
+    width: "100%",
     alignItems: "center",
   },
   iconText: {
@@ -336,10 +379,9 @@ const styles = StyleSheet.create({
     paddingVertical: 12,
     paddingHorizontal: 24,
   },
-  textStyle: {
+  videoTimeStamp: {
     color: "white",
-    fontWeight: "bold",
-    textAlign: "center",
+    paddingHorizontal: 6
   },
   subText: {
     color: "#999",
@@ -347,8 +389,6 @@ const styles = StyleSheet.create({
     marginVertical: 6,
     marginBottom: 48,
   },
-
-  // Tags list
   tags: {
     flexDirection: "row",
     gap: 10,
@@ -369,8 +409,12 @@ const styles = StyleSheet.create({
     marginBottom: "auto",
     elevation: 1,
     backgroundColor: 'rgba(0,0,0,0.25)',
-    borderRadius: 36,
-    opacity: 0.9
+    width: 64,
+    height: 64,
+    borderRadius: 32,
+    opacity: 0.9,
+    alignItems: "center",
+    justifyContent:"center"
   },
   videoContainer: {
     width: "100%",

@@ -44,6 +44,7 @@ import InformationScreen from "screens/InformationScreen";
 import SingleChatScreen from "screens/SingleChatScreen";
 import SingleTag from "screens/SingleTag";
 import InitialLoad from "screens/InitialLoad";
+import SingleFeedScreen from "screens/SingleFeedScreen";
 import TermsOfService from "../screens/TermsOfService";
 
 const basicHeader = ({ navigation, route }: any) => ({
@@ -270,6 +271,11 @@ export const stackScreens = {
       name: "InitialLoad",
       component: InitialLoad,
       options: { headerShown: false },
+    },
+    {
+      name: "SingleFeedScreen",
+      component: SingleFeedScreen,
+      options: basicHeader,
     },
   ],
 };

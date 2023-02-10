@@ -62,11 +62,12 @@ const Video = ({ item, isFollowingScreen, onOpen }: any) => {
   const videoHeight =
     item.orientation === "Landscape" ? width * 0.3 : width * 0.5;
   const handlePress = () => {
-    if (item.type === "horizontal") {
+    if (item.orientation === "Landscape") {
       navigation.navigate("SingleVideo", {
-        image: item.video,
-        title: "Mark",
+        image: item.user.photo,
+        title: item.title,
         subTitle: "123456789",
+        id: item._id,
       });
     } else {
       navigation.navigate("VlogScreen", {

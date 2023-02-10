@@ -2,7 +2,6 @@ import { Image, StyleSheet, Text, Pressable, View } from "react-native";
 import React from "react";
 
 import { useNavigation } from "@react-navigation/native";
-import girl from "assets/images/girl.jpg";
 import VideoComponent from "components/VideoComponent";
 
 const SingleVideo = ({ data }) => {
@@ -13,9 +12,10 @@ const SingleVideo = ({ data }) => {
 
   const handlePress = () => {
     navigation.navigate("SingleVideo", {
-      image: girl,
-      title: "Mark",
+      image: item.thumbnail_url,
+      title: item.title,
       subTitle: "123456789",
+      id: item._id,
     });
   };
 

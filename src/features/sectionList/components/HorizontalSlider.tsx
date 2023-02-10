@@ -19,7 +19,7 @@ const Video = ({ index, data, item }: any) => {
   const navigation = useNavigation<any>();
   const handlePress = () => {
     navigation.navigate("SingleVideo", {
-      image: video.thumbnail_url,
+      image: video.user.photo,
       title: video.title,
       subTitle: "123456789",
       id: video._id,

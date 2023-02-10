@@ -32,7 +32,7 @@ const Video = ({ item, index, data }: any) => {
       activeOpacity={1}
     >
       <Image source={{ uri: video.thumbnail_url }} style={styles.image} />
-      <Image source={{ uri: video.thumbnail_url }} style={styles.modelImg} />
+      <Image source={{ uri: video.user.photo }} style={styles.modelImg} />
       <View style={styles.textContent}>
         <Text style={styles.text} numberOfLines={2}>
           {video.title}

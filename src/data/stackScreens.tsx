@@ -105,7 +105,7 @@ export const stackScreens = {
               size={30}
               onPress={() => navigation.goBack()}
             />
-            <Image source={route.params?.image} style={styles.image} />
+            <Image source={{ uri: route.params?.image }} style={styles.image} />
             <View>
               <Text style={styles.title}>{route.params?.title}</Text>
               <Text style={styles.subTitle}>{route.params?.subTitle}粉丝</Text>

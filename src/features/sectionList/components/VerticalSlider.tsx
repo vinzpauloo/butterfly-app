@@ -8,13 +8,14 @@ import {
   VirtualizedList,
 } from "react-native";
 import React from "react";
-
-import { reelsImages } from "data/reelsImages";
 import { reelsVideos } from "data/reelsVideos";
+import { useNavigation } from "@react-navigation/native";
 
 const { width } = Dimensions.get("window");
 
-const Video = ({ item, index, data, navigation }: any) => {
+const Video = ({ item, index, data }: any) => {
+  const { video } = item;
+  const navigation = useNavigation<any>();
   const handlePress = () => {
     navigation.navigate("VlogScreen", {
       reelsVideos: reelsVideos,
@@ -30,35 +31,31 @@ const Video = ({ item, index, data, navigation }: any) => {
       ]}
       activeOpacity={1}
     >
-      <Image source={item.video} style={styles.image} />
-      <Image source={item.video} style={styles.modelImg} />
+      <Image source={{ uri: video.thumbnail_url }} style={styles.image} />
+      <Image source={{ uri: video.thumbnail_url }} style={styles.modelImg} />
       <View style={styles.textContent}>
-        <Text style={styles.text}>Title and Description</Text>
+        <Text style={styles.text} numberOfLines={2}>
+          {video.title}
+        </Text>
       </View>
     </TouchableOpacity>
   );
 };
 
-const VerticalSlider = ({ navigation }) => {
+const VerticalSlider = ({ data }) => {
   return (
     <VirtualizedList
       horizontal
       showsHorizontalScrollIndicator={false}
-      initialNumToRender={reelsImages.length}
+      initialNumToRender={data.length}
       getItem={(_data: unknown, index: number) => ({
         id: index,
-        video: reelsImages[index],
+        video: data[index],
       })}
-      getItemCount={() => reelsImages.length}
+      getItemCount={() => data.length}
       keyExtractor={(item: any) => item.id}
       renderItem={({ item, index }) => (
-        <Video
-          key={index}
-          item={item}
-          index={index}
-          data={reelsImages}
-          navigation={navigation}
-        />
+        <Video key={index} item={item} index={index} data={data} />
       )}
     />
   );

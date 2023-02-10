@@ -2,13 +2,13 @@ import { Image, StyleSheet, Text, Pressable, View } from "react-native";
 import React from "react";
 
 import { useNavigation } from "@react-navigation/native";
-import Ionicons from "react-native-vector-icons/Ionicons";
-
-import banner10 from "assets/images/banner10.jpg";
 import girl from "assets/images/girl.jpg";
-import VIPTag from "components/VIPTag";
+import VideoComponent from "components/VideoComponent";
 
-const SingleVideo = () => {
+const SingleVideo = ({ data }) => {
+  const item = data[0];
+  console.log("!!!", item);
+
   const navigation = useNavigation<any>();
 
   const handlePress = () => {
@@ -22,19 +22,18 @@ const SingleVideo = () => {
   return (
     <Pressable style={styles.container} onPress={handlePress}>
       <View style={styles.thumbnailContainer}>
-        <VIPTag isAbsolute={true} />
-        <Image source={banner10} style={styles.image} />
+        <VideoComponent item={item} />
+        <Image source={{ uri: item.thumbnail_url }} style={styles.image} />
       </View>
       <View style={styles.content}>
-        <Ionicons
-          name="person-circle-outline"
-          size={40}
-          color={"#fff"}
-          onPress={() => navigation.navigate("SingleUser")}
-        />
+        <Image source={{ uri: item.thumbnail_url }} style={styles.modelImg} />
         <View style={styles.texts}>
-          <Text style={styles.text}>The Color Green Frog</Text>
-          <Text style={styles.text}>Frog</Text>
+          <Text style={styles.text} numberOfLines={1}>
+            {item.title}
+          </Text>
+          <Text style={styles.text} numberOfLines={1}>
+            Frog
+          </Text>
         </View>
       </View>
     </Pressable>
@@ -57,6 +56,14 @@ const styles = StyleSheet.create({
   },
   content: {
     flexDirection: "row",
+    alignItems: "center",
+    paddingVertical: 5,
+  },
+  modelImg: {
+    height: 34,
+    width: 34,
+    borderRadius: 17,
+    marginHorizontal: 5,
   },
   texts: {
     justifyContent: "space-evenly",

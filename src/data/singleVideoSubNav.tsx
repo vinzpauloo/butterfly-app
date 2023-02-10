@@ -14,7 +14,7 @@ import { globalStyle } from "globalStyles";
 import BannerAds from "features/ads/components/BannerAds";
 import CommentList from "features/commentList";
 
-const Header = () => {
+export const Header = () => {
   return (
     <>
       <View style={styles.container}>
@@ -102,7 +102,7 @@ const Header = () => {
 const ContentTemplate = () => {
   return (
     <Container>
-      <GridVideos videos={followImages} isFollowingScreen={true} />
+      <GridVideos data={followImages} isFollowingScreen={true} />
     </Container>
   );
 };
@@ -123,7 +123,7 @@ export const singleVideoSubNav = {
     {
       name: "TabComments",
       label: "评论",
-      Content: <CommentList />
+      Content: <CommentList />,
     },
   ],
 };

@@ -45,7 +45,7 @@ import SingleChatScreen from "screens/SingleChatScreen";
 import SingleTag from "screens/SingleTag";
 import InitialLoad from "screens/InitialLoad";
 import SingleFeedScreen from "screens/SingleFeedScreen";
-import TermsOfService from "../screens/TermsOfService";
+import TermsOfService from "screens/TermsOfService";
 
 const basicHeader = ({ navigation, route }: any) => ({
   headerTitle: route?.params.postTitle,
@@ -73,8 +73,8 @@ const basicHeader = ({ navigation, route }: any) => ({
 });
 
 const VlogScreen = () => {
-  <PortraitVideo hasBackButton={true} />
-}
+  <PortraitVideo hasBackButton={true} />;
+};
 
 export const stackScreens = {
   initialRoute: "InitialLoad",
@@ -129,8 +129,8 @@ export const stackScreens = {
     },
     {
       name: "VlogScreen",
-      component: VlogScreen ,
-      options: { headerShown: false }
+      component: VlogScreen,
+      options: { headerShown: false },
     },
     {
       name: "Preloading",
@@ -138,7 +138,7 @@ export const stackScreens = {
       options: { headerShown: false },
     },
     {
-      name: 'TermsOfService',
+      name: "TermsOfService",
       component: TermsOfService,
       options: { headerShown: false },
     },

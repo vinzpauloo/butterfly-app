@@ -1,4 +1,4 @@
-import { StyleSheet, View } from "react-native";
+import { StyleSheet, Text, View } from "react-native";
 
 import { ScrollView } from "react-native-gesture-handler";
 import { useNavigation } from "@react-navigation/native";
@@ -24,102 +24,53 @@ import Container from "components/Container";
 import StickyTabs from "layouts/StickyTabs";
 import { useQuery } from "@tanstack/react-query";
 import SubNav from "hooks/useSabNav";
+import DynamicTabContent from "layouts/DynamicTabContent";
 
-const LayoutContainer = ({ title, children }) => {
-  return (
-    <>
-      <SectionHeader title={title} />
-      {children}
-    </>
-  );
+const Header = () => {
+  return <CarouselContainer images={bannerImage} />;
 };
 
-export function DynamicScreen({ title }) {
-  const navigation = useNavigation();
-  const screenData = homeMainSubNav?.filter((screen) => screen.name === title);
-  const finalScreenData = screenData[0].data;
+const Home = () => {
+  const [tabItems, setTabItems] = useState([]);
 
-  //syntax of fetching data
-  const {
-    data: subNavData,
-    isLoading,
-    isSuccess,
-    isError,
-  } = useQuery([`${title}`], () => SubNav.getSubNav("selection"));
-
-  console.log("!!!", subNavData);
-
-  const [videoListIsLoaded, setVideoListIsLoaded] = useState(false);
+  const { data, isLoading, isSuccess, isError } = useQuery(
+    ["subnav"],
+    SubNav.getSubNav
+  );
 
   useEffect(() => {
-    setTimeout(() => setVideoListIsLoaded(true), 1000);
-  });
+    if (isSuccess) {
+      const homeMainTab = data.filter((item) => item.title === "Home");
+      const { subs } = homeMainTab[0];
+      setTabItems(() => {
+        const tabs = subs.map((item, index) => {
+          return {
+            name: item.slug,
+            label: item.title,
+            Content: <DynamicTabContent key={index} tabTitle={item.slug} />,
+          };
+        });
+        return tabs;
+      });
+    }
+  }, [isSuccess]);
 
-  const SectionLayouts = {
-    videoSlider: (
-      <LayoutContainer title={"Horizontal Videos"}>
-        <HorizontalSlider navigation={navigation} />
-      </LayoutContainer>
-    ),
-    reelSlider: (
-      <LayoutContainer title={"Reels Slider Videos"}>
-        <VerticalSlider navigation={navigation} />
-      </LayoutContainer>
-    ),
-    grid: (
-      <LayoutContainer title={"Grid Videos"}>
-        <View style={{ paddingHorizontal: 10 }}>
-          <GridVideos videos={multipleImages} />
-        </View>
-      </LayoutContainer>
-    ),
-    singleVideo: (
-      <LayoutContainer title={"SingleVideo"}>
-        <SingleVideo />
-      </LayoutContainer>
-    ),
-    singleVideoWithGrid: (
-      <LayoutContainer title={"SingleVideo"}>
-        <SingleVideo />
-        <DividerContainer />
-        <GridVideos videos={multipleImages} />
-      </LayoutContainer>
-    ),
-    singleVideoList: (
-      <View style={{ marginVertical: 15 }}>
-        <SingleVideo />
-      </View>
-    ),
-    sectionHeader: <SectionHeader title="Single Videos" />,
+  const stickyTabsData = {
+    Header,
+    tabItems,
   };
-  return (
-    <ScrollView style={[styles.container, styles.verticalSpacer]}>
-      {videoListIsLoaded ? (
-        <>
-          {finalScreenData.map((item, index) => {
-            return (
-              <>
-                {SectionLayouts[item.layout]}
-                {finalScreenData.length - 1 !== index && <DividerContainer />}
-              </>
-            );
-          })}
-          <BottomMessage />
-        </>
-      ) : (
-        <>
-          <CarouselSkeleton />
-          <VideoListSkeleton />
-        </>
-      )}
-    </ScrollView>
-  );
-}
 
-const Home = ({ navigation }) => {
+  if (isLoading && !!tabItems) {
+    return (
+      <View>
+        <Text>Loading...</Text>
+      </View>
+    );
+  }
+
   return (
     <Container>
-      <StickyTabs scrollEnabled data={topSubNav} />
+      <StickyTabs scrollEnabled data={stickyTabsData} />
     </Container>
   );
 };

@@ -37,10 +37,12 @@ const FollowingBottomContent = ({ item }) => {
   );
 };
 
-const GridVideosBottomContent = ({ onOpen }) => {
+const GridVideosBottomContent = ({ onOpen, username }) => {
   return (
     <View style={styles.textContent}>
-      <Text style={styles.text}>Nana Taipei</Text>
+      <Text style={styles.text} numberOfLines={1}>
+        {username}
+      </Text>
       <Pressable
         style={{
           height: 15,
@@ -57,7 +59,8 @@ const GridVideosBottomContent = ({ onOpen }) => {
 
 const Video = ({ item, isFollowingScreen, onOpen }: any) => {
   const navigation = useNavigation<any>();
-  const videoHeight = item.type === "horizontal" ? width * 0.3 : width * 0.5;
+  const videoHeight =
+    item.orientation === "Landscape" ? width * 0.3 : width * 0.5;
   const handlePress = () => {
     if (item.type === "horizontal") {
       navigation.navigate("SingleVideo", {
@@ -80,22 +83,29 @@ const Video = ({ item, isFollowingScreen, onOpen }: any) => {
       <View style={styles.thumbnailContainer}>
         <VIPTag isAbsolute={true} />
         <Image
-          source={item.video}
+          source={{ uri: item.thumbnail_url }}
           style={[styles.video, { height: videoHeight }]}
         />
       </View>
 
-      <Text style={[styles.text, styles.title]}>Title and Description</Text>
+      <View style={styles.titleContent}>
+        <Text style={[styles.text, styles.title]} numberOfLines={2}>
+          {item.title}
+        </Text>
+      </View>
       {isFollowingScreen ? (
         <FollowingBottomContent item={item} />
       ) : (
-        <GridVideosBottomContent onOpen={onOpen} />
+        <GridVideosBottomContent
+          username={item.user.username}
+          onOpen={onOpen}
+        />
       )}
     </TouchableOpacity>
   );
 };
 
-const GridVideos = ({ videos, isFollowingScreen = false }) => {
+const GridVideos = ({ data, isFollowingScreen = false }) => {
   const { isOpen, onOpen, onClose } = useDisclose();
 
   return (
@@ -103,7 +113,7 @@ const GridVideos = ({ videos, isFollowingScreen = false }) => {
       <MasonryFlashList
         estimatedItemSize={166}
         numColumns={2}
-        data={videos}
+        data={data}
         renderItem={({ item }: any) => (
           <Video
             item={item}
@@ -124,7 +134,8 @@ export default GridVideos;
 const styles = StyleSheet.create({
   gridVideoContainer: {
     flex: 1,
-    minHeight: 100
+    minHeight: 100,
+    paddingHorizontal: 10,
   },
   thumbnailContainer: {
     position: "relative",
@@ -142,6 +153,10 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "space-between",
     padding: 5,
+  },
+  titleContent: {
+    height: 35,
+    marginBottom: 5,
   },
   title: {
     paddingHorizontal: 5,

@@ -1,15 +1,8 @@
 import { DynamicScreen } from "screens/Home/tabs/Home";
 import CarouselContainer from "features/ads/components/CarouselContainer";
-import { bannerImage } from "data/bannerImages";
-
-const Header = () => {
-  return (
-    <CarouselContainer images={bannerImage} />
-  )
-}
 
 export const topSubNav = {
-  Header,
+  Header: CarouselContainer,
   tabItems: [
     { name : "selections",
       label: "精选",

@@ -1,6 +1,4 @@
-import { DynamicScreen } from "screens/Home/tabs/Home";
 import MasonryPhotos from "layouts/MasonryPhotos";
-
 
 export const photographySubNav = {
 	initialRoute: "综合",

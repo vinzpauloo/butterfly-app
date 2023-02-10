@@ -1,8 +1,8 @@
+import React, { useState } from "react";
 import { Dimensions, Pressable, StyleSheet, Text, View } from "react-native";
-import React from "react";
 
 import * as ScreenOrientation from "expo-screen-orientation";
-import { Video, AVPlaybackStatus, ResizeMode } from "expo-av";
+import { Video, ResizeMode } from "expo-av";
 
 import { globalStyle } from "globalStyles";
 
@@ -14,16 +14,13 @@ const { width, height } = Dimensions.get("window");
 const SingleVideoScreen = () => {
   const video = React.useRef(null);
   const [status, setStatus] = React.useState({});
+  const [videoOrientation, setVideoOrientation] = useState("")
 
   const setOrientation = () => {
-    if (Dimensions.get("window").height > Dimensions.get("window").width) {
-      //Device is in portrait mode, rotate to landscape mode.
-      ScreenOrientation.lockAsync(ScreenOrientation.OrientationLock.LANDSCAPE);
-    } else {
-      //Device is in landscape mode, rotate to portrait mode.
-      ScreenOrientation.lockAsync(ScreenOrientation.OrientationLock.PORTRAIT);
-    }
-  };
+    height > width ? ScreenOrientation.lockAsync(ScreenOrientation.OrientationLock.LANDSCAPE)
+      : ScreenOrientation.lockAsync(ScreenOrientation.OrientationLock.PORTRAIT)
+  }
+
   return (
     <View style={styles.container}>
       <View style={styles.videoContent}>
@@ -33,14 +30,15 @@ const SingleVideoScreen = () => {
         <Video
           ref={video}
           style={styles.video}
-          source={{
-            uri: "https://d23dyxeqlo5psv.cloudfront.net/big_buck_bunny.mp4",
-          }}
+          source={{uri: "https://d23dyxeqlo5psv.cloudfront.net/big_buck_bunny.mp4"}}
           useNativeControls
-          resizeMode={ResizeMode.CONTAIN}
+          resizeMode={videoOrientation === "portrait" ? ResizeMode.STRETCH : ResizeMode.CONTAIN}
           isLooping
           onPlaybackStatusUpdate={(status) => setStatus(() => status)}
           onFullscreenUpdate={setOrientation}
+          onReadyForDisplay={event => {
+            setVideoOrientation(event.naturalSize.orientation)
+          }}
         />
       </View>
       <StickyTabs data={singleVideoSubNav} />
@@ -58,9 +56,7 @@ const styles = StyleSheet.create({
   videoContent: {
     position: "relative",
     height: 200,
-
-    // Make the video on top of the sticky tab bar
-    zIndex: 2,
+    zIndex: 1,
     backgroundColor: "black",
   },
   watermarkContainer: {

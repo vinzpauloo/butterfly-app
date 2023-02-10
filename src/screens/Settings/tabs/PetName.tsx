@@ -12,6 +12,7 @@ import { useNavigation } from "@react-navigation/native";
 import InputText from "components/forms/InputText";
 import Buttons from "components/forms/Buttons";
 import UserProfileSettingsHeader from "components/UserProfileSettingsHeader";
+import {globalStyle} from "../../../globalStyles";
 
 const PetName = () => {
 
@@ -32,7 +33,7 @@ const PetName = () => {
         </Text>
 
         <View style={styles.btnContainer}>
-          <Buttons title={'提交'} onPress={() => alert('PetName button test')}/>
+          <Buttons title={'提交'} onPress={() => alert('PetName button test')} backgroundColor={globalStyle.btnColor} color={globalStyle.primaryTextColor}/>
         </View>
       </View>
     </ScrollView>

@@ -9,6 +9,7 @@ import {
 import AreaText from "components/forms/AreaText";
 import Buttons from "components/forms/Buttons";
 import UserProfileSettingsHeader from "components/UserProfileSettingsHeader";
+import {globalStyle} from "../../../globalStyles";
 
 const Introduction = () => {
   return (
@@ -21,7 +22,7 @@ const Introduction = () => {
       </View>
 
       <View style={styles.btnContainer}>
-        <Buttons title={'提交'} onPress={() => alert('Test Introduction')}/>
+        <Buttons title={'提交'} onPress={() => alert('Test Introduction')} backgroundColor={globalStyle.btnColor} color={globalStyle.primaryTextColor}/>
       </View>
     </ScrollView>
   );

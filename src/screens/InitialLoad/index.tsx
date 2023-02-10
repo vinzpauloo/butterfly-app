@@ -13,7 +13,7 @@ const InitialLoad = () => {
       counter > 0 && setInterval(() => setCounter(counter - 1), 1000);
 
     if (counter === 0) {
-      navigation.dispatch(StackActions.replace("Preloading"));
+      navigation.dispatch(StackActions.replace("TermsOfService"));
     }
 
     return () => clearInterval(timer);

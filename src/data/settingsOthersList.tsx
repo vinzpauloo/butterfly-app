@@ -1,9 +1,8 @@
 import {
-    Ionicons,
     AntDesign,
     SimpleLineIcons,
     MaterialCommunityIcons,
-    MaterialIcons, FontAwesome5,
+    MaterialIcons,
 } from "@expo/vector-icons";
 
 export const settingsOthersList = [

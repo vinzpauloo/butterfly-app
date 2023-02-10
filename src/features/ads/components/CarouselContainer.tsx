@@ -80,7 +80,7 @@ export default CarouselContainer;
 
 const styles = StyleSheet.create({
   container: {
-    height: 150,
+    height: 135,
     position: "relative",
     flexDirection: "row",
     width: width,

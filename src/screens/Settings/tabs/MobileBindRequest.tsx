@@ -9,6 +9,7 @@ import {
 import InputText from "components/forms/InputText";
 import Buttons from "components/forms/Buttons";
 import UserProfileSettingsHeader from "components/UserProfileSettingsHeader";
+import {globalStyle} from "../../../globalStyles";
 
 const MobileBindRequest = () => {
   return (
@@ -27,12 +28,12 @@ const MobileBindRequest = () => {
         </View>
 
         <View style={styles.flexTwo}>
-          <Buttons title={'获取短信验证码'} onPress={() => alert('Test MobileBind Btn 1')}/>
+          <Buttons title={'获取短信验证码'} onPress={() => alert('Test MobileBind Btn 1')} backgroundColor={globalStyle.btnColor} color={globalStyle.primaryTextColor}/>
         </View>
       </View>
 
       <View style={{marginHorizontal: 20}}>
-        <Buttons title={'绑定邀请码'} onPress={() => alert('Test MobileBind Btn 2')}/>
+        <Buttons title={'绑定邀请码'} onPress={() => alert('Test MobileBind Btn 2')} backgroundColor={globalStyle.btnColor} color={globalStyle.primaryTextColor}/>
       </View>
     </ScrollView>
   );

@@ -55,7 +55,7 @@ const AccountVerification = () => {
       <QRCode/>
       {/* Button */}
      <View style={styles.btnContainer}>
-       <Buttons title={'保存账号凭证到手机'} onPress={() => alert('Test Verification Button')}/>
+       <Buttons title={'保存账号凭证到手机'} onPress={() => alert('Test Verification Button')} backgroundColor={globalStyle.btnColor} color={globalStyle.primaryTextColor}/>
      </View>
       {/* WARNING */}
       <View style={styles.warning}>

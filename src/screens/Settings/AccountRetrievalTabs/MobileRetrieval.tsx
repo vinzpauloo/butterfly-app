@@ -11,6 +11,7 @@ import {
 import InputText from "components/forms/InputText";
 import Buttons from "components/forms/Buttons";
 import UserProfileSettingsHeader from "components/UserProfileSettingsHeader";
+import {globalStyle} from "../../../globalStyles";
 
 const MobileRetrieval = () => {
 
@@ -35,7 +36,7 @@ const MobileRetrieval = () => {
         </View>
 
         <View style={styles.flexTwo}>
-          <Buttons title={'获取短信验证码'} onPress={() => alert('Test MobileBind Btn 1')}/>
+          <Buttons title={'获取短信验证码'} onPress={() => alert('Test MobileBind Btn 1')} backgroundColor={globalStyle.btnColor} color={globalStyle.primaryTextColor}/>
         </View>
       </View>
 
@@ -50,7 +51,7 @@ const MobileRetrieval = () => {
       </View>
 
       <View style={styles.thirdBtnContainer}>
-        <Buttons title={'确定'} onPress={() => alert('Test MobileRetrieval Btn 2')}/>
+        <Buttons title={'确定'} onPress={() => alert('Test MobileRetrieval Btn 2')} backgroundColor={globalStyle.btnColor} color={globalStyle.primaryTextColor}/>
       </View>
     </ScrollView>
   );

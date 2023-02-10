@@ -6,11 +6,13 @@ import Carousel from "react-native-reanimated-carousel";
 import AntDesign from "react-native-vector-icons/AntDesign";
 import FontAwesome from "react-native-vector-icons/FontAwesome";
 
+import { bannerImage } from "data/bannerImages";
+
 import { globalStyle } from "globalStyles";
 
 const { width, height } = Dimensions.get("window");
 
-const CarouselContainer = ({ images }) => {
+const CarouselContainer = () => {
   const [index, setIndex] = useState(0);
   const isCarousel = useRef(null);
 
@@ -45,7 +47,7 @@ const CarouselContainer = ({ images }) => {
           width={width}
           height={150}
           autoPlay={true}
-          data={images}
+          data={bannerImage}
           scrollAnimationDuration={1000}
           autoPlayInterval={7000}
           onSnapToItem={(index: any) => setIndex(index)}
@@ -61,7 +63,7 @@ const CarouselContainer = ({ images }) => {
           color={globalStyle.secondaryColor}
         />
         <View style={styles.pagination}>
-          {images.map((_, idx) => (
+          {bannerImage.map((_, idx) => (
             <FontAwesome
               key={idx}
               name="circle"

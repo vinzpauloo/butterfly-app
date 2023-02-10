@@ -81,9 +81,7 @@ const PortraitVideoContent = (props: Props) => {
           <Video
             source={{ uri: props.uri }}
             style={styles.video}
-            resizeMode={
-              videoOrientation === "portrait" ? ResizeMode.STRETCH : ResizeMode.CONTAIN
-            }
+            resizeMode={videoOrientation === "portrait" ? ResizeMode.STRETCH : ResizeMode.CONTAIN}
             isLooping={true}
             shouldPlay={isVideoPlaying && videoIsLoaded}
             usePoster={true}

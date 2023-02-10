@@ -18,13 +18,10 @@ const Home = () => {
   const [tabItems, setTabItems] = useState([]);
   const { getSubNav } = SubNav();
 
-  const { data, isLoading, isSuccess, isError } = useQuery(
-    ["subnav"],
-    getSubNav
-  );
-
-  useEffect(() => {
-    if (isSuccess) {
+  const { isLoading } = useQuery({
+    queryKey: ["subnav"],
+    queryFn: getSubNav,
+    onSuccess: (data) => {
       const homeMainTab = data.filter((item) => item.title === "Home");
       const { subs } = homeMainTab[0];
       setTabItems(() => {
@@ -37,8 +34,11 @@ const Home = () => {
         });
         return tabs;
       });
-    }
-  }, [isSuccess]);
+    },
+    onError: (error) => {
+      console.log("have an Error");
+    },
+  });
 
   const stickyTabsData = {
     Header,

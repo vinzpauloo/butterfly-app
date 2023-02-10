@@ -1,9 +1,16 @@
 import request from "utils/request";
 
 export default class SubNav {
-  static getSubNav(title) {
+  static getSubNav() {
     return request({
-      url: `/workgroup/${title}`,
+      url: "/navbar/butterfly-project",
+      method: "GET",
+    });
+  }
+
+  static getWorkGroup(tabName) {
+    return request({
+      url: `/workgroup/${tabName}`,
       method: "GET",
     });
   }

@@ -43,12 +43,13 @@ const MaterialTopTabs = ({
           tabBarScrollEnabled: !isEqualWidth,
           animationEnabled: false,
           lazy: true,
-          lazyPlaceholder: () =>
+          lazyPlaceholder: () => (
             <Container>
               <View style={styles.loaderContainer}>
                 <ActivityIndicator size="large" color="white" />
               </View>
             </Container>
+          ),
         }}
       >
         {screens?.map((item, index) => (
@@ -77,6 +78,6 @@ const styles = StyleSheet.create({
   loaderContainer: {
     justifyContent: "center",
     alignItems: "center",
-    flex: 1
-  }
+    flex: 1,
+  },
 });

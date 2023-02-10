@@ -9,18 +9,18 @@ import {
 } from "react-native";
 import React from "react";
 
-import Ionicons from "react-native-vector-icons/Ionicons";
-
-import { bannerImage } from "data/bannerImages";
-import VIPTag from "components/VIPTag";
+import { useNavigation } from "@react-navigation/native";
+import VideoComponent from "components/VideoComponent";
 
 const { width } = Dimensions.get("window");
 
-const Video = ({ navigation, index, data, item }: any) => {
+const Video = ({ index, data, item }: any) => {
+  const { video } = item;
+  const navigation = useNavigation<any>();
   const handlePress = () => {
     navigation.navigate("SingleVideo", {
-      image: item.video,
-      title: "Mark",
+      image: video.thumbnail_url,
+      title: video.title,
       subTitle: "123456789",
     });
   };
@@ -35,44 +35,40 @@ const Video = ({ navigation, index, data, item }: any) => {
       onPress={handlePress}
     >
       <View style={styles.thumbnailContainer}>
-        <VIPTag isAbsolute={true} />
-        <Image source={item.video} style={styles.image} />
+        <VideoComponent item={video} />
+        <Image source={{ uri: video.thumbnail_url }} style={styles.image} />
       </View>
       <View style={styles.content}>
-        <Ionicons
-          name="person-circle-outline"
-          size={40}
-          color={"#fff"}
-          onPress={() => navigation.navigate("SingleUser")}
-        />
+        <Pressable onPress={() => navigation.navigate("SingleUser")}>
+          <Image source={{ uri: video.user.photo }} style={styles.modelImg} />
+        </Pressable>
         <View style={styles.texts}>
-          <Text style={styles.text}>The Color Green Frog</Text>
-          <Text style={styles.text}>Frog</Text>
+          <Text style={styles.text} numberOfLines={1}>
+            {video.title}
+          </Text>
+          <Text style={styles.text} numberOfLines={1}>
+            {video.user.username}
+          </Text>
         </View>
       </View>
     </Pressable>
   );
 };
 
-const HorizontalSlider = ({ navigation }) => {
+const HorizontalSlider = ({ data }) => {
   return (
     <VirtualizedList
       horizontal
       showsHorizontalScrollIndicator={false}
-      initialNumToRender={bannerImage.length}
+      initialNumToRender={data.length}
       getItem={(_data: unknown, index: number) => ({
         id: index,
-        video: bannerImage[index],
+        video: data[index],
       })}
-      getItemCount={() => bannerImage.length}
+      getItemCount={() => data.length}
       keyExtractor={(item: any) => item.id}
       renderItem={({ item, index }) => (
-        <Video
-          navigation={navigation}
-          index={index}
-          data={bannerImage}
-          item={item}
-        />
+        <Video index={index} data={data} item={item} />
       )}
     />
   );
@@ -97,9 +93,18 @@ const styles = StyleSheet.create({
   },
   content: {
     flexDirection: "row",
+    alignItems: "center",
+    paddingVertical: 5,
+  },
+  modelImg: {
+    height: 34,
+    width: 34,
+    borderRadius: 17,
+    marginHorizontal: 5,
   },
   texts: {
     justifyContent: "space-evenly",
+    width: width * 0.56,
   },
   text: {
     color: "#fff",

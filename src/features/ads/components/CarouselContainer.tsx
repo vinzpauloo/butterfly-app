@@ -86,7 +86,7 @@ const styles = StyleSheet.create({
     position: "relative",
     flexDirection: "row",
     width: width,
-    marginBottom: 15,
+    marginBottom: 30,
   },
   leftIcon: {
     position: "absolute",

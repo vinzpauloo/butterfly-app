@@ -8,19 +8,27 @@ export const SingleVideo = () => {
     });
   };
 
-  const getWorkAll = (id) => {
+  const getWorkAll = (data) => {
     return request({
-      url: `/work/all/${id}`,
+      url: "/work",
       method: "GET",
+      params: data,
     });
   };
 
   const getWorkRecommended = () => {
     return request({
-      url: `/work/recommended`,
+      url: "/work/recommended",
       method: "GET",
     });
   };
 
-  return { getLikesCount, getWorkAll, getWorkRecommended };
+  const getWorkComments = (id) => {
+    return request({
+      url: `/work/comments/${id}`,
+      method: "GET",
+    });
+  };
+
+  return { getLikesCount, getWorkAll, getWorkRecommended, getWorkComments };
 };

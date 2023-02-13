@@ -36,7 +36,9 @@ export const Header = ({ data }) => {
               size={15}
               style={styles.icon}
             />
-            <Text style={styles.text}>56554 | 时长: {data?.duration}</Text>
+            <Text style={styles.text}>
+              {data?.statistic.watched} | 时长: {data?.duration}
+            </Text>
           </View>
           <View style={styles.item}>
             <AntDesign

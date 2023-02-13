@@ -20,9 +20,10 @@ const Video = ({ index, data, item }: any) => {
   const handlePress = () => {
     navigation.navigate("SingleVideo", {
       image: video.user.photo,
-      title: video.title,
-      subTitle: "123456789",
+      username: video.user.username,
+      followers: "123456789",
       id: video._id,
+      userId: video.user_id,
     });
   };
 

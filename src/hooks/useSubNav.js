@@ -10,7 +10,7 @@ export const SubNav = () => {
 
   const getWorkGroup = (data) => {
     return request({
-      url: "/workgroup/",
+      url: "/workgroup",
       method: "GET",
       params: data, //{site_id: 1, navbar: selection}
     });

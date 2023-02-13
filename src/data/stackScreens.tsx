@@ -112,8 +112,10 @@ export const stackScreens = {
             />
             <Image source={{ uri: route.params?.image }} style={styles.image} />
             <View>
-              <Text style={styles.title}>{route.params?.title}</Text>
-              <Text style={styles.subTitle}>{route.params?.subTitle}粉丝</Text>
+              <Text style={styles.title}>{route.params?.username}</Text>
+              <Text style={styles.followers}>
+                {route.params?.followers}粉丝
+              </Text>
             </View>
           </View>
         ),
@@ -307,7 +309,7 @@ const styles = StyleSheet.create({
   title: {
     color: "#fff",
   },
-  subTitle: {
+  followers: {
     color: "#999",
   },
   searchInputContainer: {

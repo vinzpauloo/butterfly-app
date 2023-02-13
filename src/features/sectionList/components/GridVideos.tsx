@@ -57,6 +57,36 @@ const GridVideosBottomContent = ({ onOpen, username }) => {
   );
 };
 
+const AdsContainer = ({ item, isFollowingScreen, onOpen }: any) => {
+  const handlePress = () => {};
+  return (
+    <TouchableOpacity
+      activeOpacity={1}
+      style={styles.videoContainer}
+      onPress={handlePress}
+    >
+      <View style={styles.thumbnailContainer}>
+        <VIPTag isAbsolute={true} />
+        <Image
+          source={{ uri: item.photo_url }}
+          style={[styles.video, { height: width * 0.3 }]}
+        />
+      </View>
+
+      <View style={styles.titleContent}>
+        <Text style={[styles.text, styles.title]} numberOfLines={2}>
+          {item?.title}
+        </Text>
+      </View>
+      {isFollowingScreen ? (
+        <FollowingBottomContent item={item} />
+      ) : (
+        <GridVideosBottomContent username={item.username} onOpen={onOpen} />
+      )}
+    </TouchableOpacity>
+  );
+};
+
 const Video = ({ item, isFollowingScreen, onOpen }: any) => {
   const navigation = useNavigation<any>();
   const videoHeight =
@@ -64,10 +94,10 @@ const Video = ({ item, isFollowingScreen, onOpen }: any) => {
   const handlePress = () => {
     if (item.orientation === "Landscape") {
       navigation.navigate("SingleVideo", {
-        image: item.user.photo,
-        title: item.title,
-        subTitle: "123456789",
-        id: item._id,
+        image: item?.user.photo,
+        username: item?.user.username,
+        followers: "123456789",
+        id: item?._id,
       });
     } else {
       navigation.navigate("VlogScreen", {
@@ -75,6 +105,17 @@ const Video = ({ item, isFollowingScreen, onOpen }: any) => {
       });
     }
   };
+
+  if (item?.username === "Ads") {
+    return (
+      <AdsContainer
+        item={item}
+        isFollowingScreen={isFollowingScreen}
+        onOpen={onOpen}
+      />
+    );
+  }
+
   return (
     <TouchableOpacity
       activeOpacity={1}
@@ -91,14 +132,14 @@ const Video = ({ item, isFollowingScreen, onOpen }: any) => {
 
       <View style={styles.titleContent}>
         <Text style={[styles.text, styles.title]} numberOfLines={2}>
-          {item.title}
+          {item?.title}
         </Text>
       </View>
       {isFollowingScreen ? (
         <FollowingBottomContent item={item} />
       ) : (
         <GridVideosBottomContent
-          username={item.user.username}
+          username={item?.user.username}
           onOpen={onOpen}
         />
       )}

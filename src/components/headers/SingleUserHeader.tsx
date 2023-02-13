@@ -16,7 +16,7 @@ const { width, height } = Dimensions.get("window");
 type Props = {}
 
 const ProfileBanner = () => {
-	const navigation = useNavigation();
+	const navigation = useNavigation<any>();
 
 	const route = useRoute();
 	const previousScreen = (route.params && route.params['previousScreen']) || 'Default';
@@ -59,14 +59,16 @@ const ProfileBanner = () => {
 				</View>
 				<Text style={styles.description}>{singleUserData.description}</Text>
 				<View style={styles.summaryContainer}>
-					<View style={styles.summaryContent}>
+					<Pressable onPress={() => navigation.navigate("FollowingFanListScreen",
+						{ postTitle: "关注", isFetchingFollowingList : true })} style={styles.summaryContent}>
 						<Text style={styles.summaryNumber}>{singleUserData.following}</Text>
 						<Text style={styles.summaryText}>关注</Text>
-					</View>
-					<View style={styles.summaryContentMiddle}>
+					</Pressable>
+					<Pressable onPress={() => navigation.navigate("FollowingFanListScreen",
+						{ postTitle: "粉丝", isFetchingFansList: true })} style={styles.summaryContentMiddle}>
 						<Text style={styles.summaryNumber}>{singleUserData.fans}</Text>
 						<Text style={styles.summaryText}>粉丝</Text>
-					</View>
+					</Pressable>
 					<View style={styles.summaryContent}>
 						<Text style={styles.summaryNumber}>{singleUserData.praise}</Text>
 						<Text style={styles.summaryText}>获赞</Text>

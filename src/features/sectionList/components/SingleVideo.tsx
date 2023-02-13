@@ -12,7 +12,7 @@ const SingleVideo = ({ data }) => {
 
   const handlePress = () => {
     navigation.navigate("SingleVideo", {
-      image: item.thumbnail_url,
+      image: item.user.photo,
       title: item.title,
       subTitle: "123456789",
       id: item._id,
@@ -26,13 +26,13 @@ const SingleVideo = ({ data }) => {
         <Image source={{ uri: item.thumbnail_url }} style={styles.image} />
       </View>
       <View style={styles.content}>
-        <Image source={{ uri: item.thumbnail_url }} style={styles.modelImg} />
+        <Image source={{ uri: item.user.photo }} style={styles.modelImg} />
         <View style={styles.texts}>
           <Text style={styles.text} numberOfLines={1}>
             {item.title}
           </Text>
           <Text style={styles.text} numberOfLines={1}>
-            Frog
+            {item.user.username}
           </Text>
         </View>
       </View>

@@ -53,11 +53,11 @@ const SectionContent = ({
   );
 };
 
-const DynamicTabContent = ({ tabTitle }) => {
+const DynamicTabContent = ({ tabTitle, site_id }) => {
   const { getWorkGroup } = SubNav();
   const { data, isLoading, isSuccess, isError } = useQuery(
     [`tabName${tabTitle}`],
-    () => getWorkGroup(tabTitle)
+    () => getWorkGroup({ site_id, navbar: tabTitle })
   );
 
   useEffect(() => {

@@ -8,10 +8,11 @@ export const SubNav = () => {
     });
   };
 
-  const getWorkGroup = (tabName) => {
+  const getWorkGroup = (data) => {
     return request({
-      url: `/workgroup/${tabName}`,
+      url: "/workgroup/",
       method: "GET",
+      params: data, //{site_id: 1, navbar: selection}
     });
   };
 

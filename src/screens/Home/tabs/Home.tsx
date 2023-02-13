@@ -18,14 +18,18 @@ const Home = () => {
     queryFn: getSubNav,
     onSuccess: (data) => {
       const homeMainTab = data.filter((item) => item.title === "Home");
-      const { subs } = homeMainTab[0];
+      const { subs, site_id } = homeMainTab[0];
       setTabItems(() => {
         const initialRoute = subs[0].title; // get the title in return array of object for the initialRoute
         const tabs = subs.map((item, index) => {
           return {
             name: item.title,
             component: () => (
-              <DynamicTabContent key={index} tabTitle={item.slug} />
+              <DynamicTabContent
+                key={index}
+                tabTitle={item.slug}
+                site_id={site_id}
+              />
             ),
           };
         });

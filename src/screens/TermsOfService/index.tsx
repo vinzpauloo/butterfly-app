@@ -15,12 +15,12 @@ const TermsOfService = ({}) => {
         const backHandler = BackHandler.addEventListener(
             'hardwareBackPress',
             () => {
-                BackHandler.exitApp();
+                navigation.goBack();
                 return true;
             },
         );
         return () => backHandler.remove();
-    }, []);
+    }, [navigation]);
     return (
         <ScrollView style={styles.container}>
             <VStack alignItems={'center'} space={7} p={5} mt={200}>

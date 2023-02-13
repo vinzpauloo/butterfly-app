@@ -73,7 +73,11 @@ const basicHeader = ({ navigation, route }: any) => ({
 });
 
 const VlogScreen = () => {
-  <PortraitVideo hasBackButton={true} />;
+  return <PortraitVideo hasBackButton={true} />;
+};
+
+const BottomNav = () => {
+  return <BottomTabs data={bottomNav} />;
 };
 
 export const stackScreens = {
@@ -82,7 +86,7 @@ export const stackScreens = {
   screens: [
     {
       name: "BottomNav",
-      component: () => <BottomTabs data={bottomNav} />,
+      component: BottomNav,
       options: { headerShown: false },
     },
     {

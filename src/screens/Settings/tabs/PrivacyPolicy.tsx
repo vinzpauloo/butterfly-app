@@ -1,41 +1,43 @@
 import React from "react";
-import {SafeAreaView, StyleSheet} from "react-native";
-import { WebView } from 'react-native-webview'
+import {Text, StyleSheet, Image, ScrollView, Dimensions} from "react-native";
+
+import {VStack} from "native-base";
+import RenderHTML from "react-native-render-html";
 
 import UserProfileSettingsHeader from "components/UserProfileSettingsHeader";
 import {privacyPolicyData} from "data/privacyPolicyData";
+import Logo from 'assets/images/butterfly.png'
+
+const source = privacyPolicyData.chinese
 const PrivacyPolicy = () => {
 
   return (
-      <SafeAreaView style={styles.container}>
+      <ScrollView style={styles.container}>
         <UserProfileSettingsHeader title={null} btnRight={null}/>
-          <WebView
-              source={{ html: `<div style="color: #FFF"><div style="display: flex; justify-content: center"><img src='https://cdn.pixabay.com/photo/2017/02/01/00/32/butterfly-2028591_960_720.png' style="width: 80;"/></div>${privacyPolicyData.map((item) =>  item.chinese.description)}</div>` }}
-              style={styles.htmlStyle}
-              scalesPageToFit={false}
-          />
-      </SafeAreaView>
+          <VStack alignItems='center' space={2}>
+              <Image source={Logo} style={styles.logo}/>
+              <Text style={styles.title}>Privacy Policy</Text>
+          </VStack>
+          <RenderHTML source={source} baseStyle={styles.renderHTML} contentWidth={Dimensions.get('window').width}/>
+      </ScrollView>
   );
 };
 
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: '#191d26'
+        backgroundColor: '#191d26',
     },
-    titleContainer: {
-        alignItems: 'center'
-    },
-    image: {
-        width: 80, height: 80
+    logo: {
+        width: 100,
+        height: 100,
     },
     title: {
-        color: '#FFF',
-        fontWeight: '900'
+        color: '#FFF'
     },
-    htmlStyle: {
-        flex: 1,
-        backgroundColor: '#191d26'
+    renderHTML: {
+        color: 'white',
+        padding: 10
     }
 })
 

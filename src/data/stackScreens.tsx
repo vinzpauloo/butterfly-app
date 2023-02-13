@@ -46,6 +46,7 @@ import SingleTag from "screens/SingleTag";
 import InitialLoad from "screens/InitialLoad";
 import SingleFeedScreen from "screens/SingleFeedScreen";
 import TermsOfService from "screens/TermsOfService";
+import FollowingFanListScreen from "screens/FollowingFanListScreen";
 
 const basicHeader = ({ navigation, route }: any) => ({
   headerTitle: route?.params.postTitle,
@@ -279,6 +280,11 @@ export const stackScreens = {
     {
       name: "SingleFeedScreen",
       component: SingleFeedScreen,
+      options: basicHeader,
+    },
+    {
+      name: "FollowingFanListScreen",
+      component: FollowingFanListScreen,
       options: basicHeader,
     },
   ],

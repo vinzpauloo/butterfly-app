@@ -68,8 +68,11 @@ export default MaterialTopTabs;
 const styles = StyleSheet.create({
   defaultTabBarItemStyle: {
     margin: 0,
-    padding: 0,
-    width: 45,
+    paddingVertical: 0,
+    paddingHorizontal: 5,
+    width: "auto",
+    // width: 45,
+    flexWrap: "nowrap",
   },
   equalWidthTabBarItemStyle: {
     margin: 0,

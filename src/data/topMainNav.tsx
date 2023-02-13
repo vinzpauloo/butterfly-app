@@ -8,19 +8,19 @@ export const topMainNav = {
   screens: [
     {
       name: "关注",
-      component: (props) => <Following {...props} />,
+      component: () => <Following />,
     },
     {
       name: "首页",
-      component: (props) => <Home {...props} />,
+      component: () => <Home />,
     },
     {
       name: "动态",
-      component: (props) => <Moment {...props} />,
+      component: () => <Moment />,
     },
     {
       name: "约会",
-      component: (props) => <Photography {...props} />,
+      component: () => <Photography />,
     },
   ],
 };

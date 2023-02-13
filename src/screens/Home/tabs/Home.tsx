@@ -1,21 +1,16 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { Text, View } from "react-native";
 
 import { useQuery } from "@tanstack/react-query";
 
 import CarouselContainer from "features/ads/components/CarouselContainer";
-import { bannerImage } from "data/bannerImages";
 import Container from "components/Container";
-import StickyTabs from "layouts/StickyTabs";
 import { SubNav } from "hooks/useSubNav";
 import DynamicTabContent from "layouts/DynamicTabContent";
-
-const Header = () => {
-  return <CarouselContainer />;
-};
+import MaterialTopTabs from "layouts/navigators/MaterialTopTabs";
 
 const Home = () => {
-  const [tabItems, setTabItems] = useState([]);
+  const [tabItems, setTabItems] = useState({ initialRoute: "", screens: [] });
   const { getSubNav } = SubNav();
 
   const { isLoading } = useQuery({
@@ -25,25 +20,22 @@ const Home = () => {
       const homeMainTab = data.filter((item) => item.title === "Home");
       const { subs } = homeMainTab[0];
       setTabItems(() => {
+        const initialRoute = subs[0].title; // get the title in return array of object for the initialRoute
         const tabs = subs.map((item, index) => {
           return {
-            name: item.slug,
-            label: item.title,
-            Content: <DynamicTabContent key={index} tabTitle={item.slug} />,
+            name: item.title,
+            component: () => (
+              <DynamicTabContent key={index} tabTitle={item.slug} />
+            ),
           };
         });
-        return tabs;
+        return { initialRoute, screens: tabs };
       });
     },
     onError: (error) => {
       console.log("have an Error");
     },
   });
-
-  const stickyTabsData = {
-    Header,
-    tabItems,
-  };
 
   if (isLoading && !!tabItems) {
     return (
@@ -55,7 +47,7 @@ const Home = () => {
 
   return (
     <Container>
-      <StickyTabs scrollEnabled data={stickyTabsData} />
+      <MaterialTopTabs data={tabItems} />
     </Container>
   );
 };

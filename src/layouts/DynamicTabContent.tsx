@@ -10,6 +10,9 @@ import SectionHeader from "features/sectionList/components/SectionHeader";
 import { useQuery } from "@tanstack/react-query";
 import { SubNav } from "hooks/useSubNav";
 import BottomMessage from "components/BottomMessage";
+import Container from "components/Container";
+import CarouselContainer from "features/ads/components/CarouselContainer";
+import { ScrollView } from "react-native-gesture-handler";
 
 const LayoutContainer = ({ title, dataLength, index, children }) => {
   return (
@@ -64,20 +67,23 @@ const DynamicTabContent = ({ tabTitle }) => {
   }, []);
 
   return (
-    <>
-      {data?.map((item, index) => (
-        <SectionContent
-          key={index}
-          title={item.title}
-          single={item.single}
-          multiple={item.multiple}
-          templateId={item.template_id}
-          dataLength={data.length - 1}
-          index={index}
-        />
-      ))}
-      <BottomMessage />
-    </>
+    <Container>
+      <ScrollView>
+        <CarouselContainer />
+        {data?.map((item, index) => (
+          <SectionContent
+            key={index}
+            title={item.title}
+            single={item.single}
+            multiple={item.multiple}
+            templateId={item.template_id}
+            dataLength={data.length - 1}
+            index={index}
+          />
+        ))}
+        <BottomMessage />
+      </ScrollView>
+    </Container>
   );
 };
 

@@ -45,4 +45,19 @@ export default {
     },
   },
   owner: "1bit-frontend",
+  "expo": {
+
+    "hooks": {
+      "postPublish": [
+        {
+          "file": "sentry-expo/upload-sourcemaps",
+          "config": {
+            "organization": "your sentry organization slug here",
+            "project": "your sentry project name here",
+            "authToken": "your auth token here"
+          }
+        }
+      ]
+    }
+  }
 };

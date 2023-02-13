@@ -1,6 +1,7 @@
 import { StatusBar } from "react-native";
 import { useEffect } from "react";
 
+import { NativeBaseProvider } from "native-base";
 import { NavigationContainer } from "@react-navigation/native";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import axios, { AxiosError } from "axios";
@@ -8,7 +9,14 @@ import axios, { AxiosError } from "axios";
 import StackNavigators from "layouts/navigators/StackNavigators";
 import { globalStyle } from "globalStyles";
 import { stackScreens } from "data/stackScreens";
-import { NativeBaseProvider } from "native-base";
+
+//Sentry
+import * as Sentry from 'sentry-expo';
+Sentry.init({
+  dsn: 'https://45271b1978a24cf7ae4c379a7dca5770@o4504672042745856.ingest.sentry.io/4504672045498368',
+  enableInExpoDevelopment: true,
+  debug: true, // If `true`, Sentry will try to print out useful debugging information if something goes wrong with sending the event. Set it to `false` in production
+});
 
 // Create a client
 const queryClient = new QueryClient({
@@ -41,6 +49,19 @@ const sampleFetch = async (url: string) => {
 };
 
 export default function App() {
+
+  Sentry.Native.captureMessage('TEST CAPTURE MESSAGE')
+  Sentry.Native.captureEvent({
+    message: 'TEST CAPTURE EVENT EXPO'
+  })
+
+  try {
+    throw new Error('Toni Testing lang ng ERROR');
+  } catch (error) {
+    Sentry.Native.captureException(error);
+  }
+
+
   useEffect(() => {
     // initializePusher();
     // sampleFetch("http://192.168.50.9/api/test");

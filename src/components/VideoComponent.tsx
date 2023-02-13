@@ -15,7 +15,7 @@ const VideoComponent = ({ item }) => {
         <Foundation name="play-video" size={20} color="#fff" />
         <Text color="#fff" fontSize="md">
           {/* {wanConverter(item.views)}w */}
-          {item.views}w
+          {item.statistic.watched}w
         </Text>
       </HStack>
       <HStack

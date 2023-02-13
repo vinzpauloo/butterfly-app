@@ -15,7 +15,7 @@ const About = () => {
         <UserProfileSettingsHeader title={null} btnRight={null}/>
         <VStack alignItems='center' space={2}>
           <Image source={Logo} style={styles.logo}/>
-          <Text style={styles.title}>About 糖心</Text>
+          <Text style={styles.title}>txvlog.com</Text>
         </VStack>
         <RenderHTML source={source} baseStyle={styles.renderHTML} contentWidth={Dimensions.get('window').width}/>
       </ScrollView>
@@ -32,7 +32,8 @@ const styles = StyleSheet.create({
     height: 100,
   },
   title: {
-    color: '#FFF'
+    color: '#FFF',
+      fontWeight: '900'
   },
   renderHTML: {
     color: 'white',

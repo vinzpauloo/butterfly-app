@@ -16,7 +16,8 @@ const PrivacyPolicy = () => {
         <UserProfileSettingsHeader title={null} btnRight={null}/>
           <VStack alignItems='center' space={2}>
               <Image source={Logo} style={styles.logo}/>
-              <Text style={styles.title}>Privacy Policy</Text>
+              <Text style={styles.url}>txvlog.com</Text>
+              <Text style={styles.title}>隐私政策</Text>
           </VStack>
           <RenderHTML source={source} baseStyle={styles.renderHTML} contentWidth={Dimensions.get('window').width}/>
       </ScrollView>
@@ -32,8 +33,14 @@ const styles = StyleSheet.create({
         width: 100,
         height: 100,
     },
+    url: {
+      color: '#FFF',
+        fontWeight: '900'
+    },
     title: {
-        color: '#FFF'
+        color: '#FFF',
+        fontSize: 30,
+        fontWeight: '900'
     },
     renderHTML: {
         color: 'white',

@@ -25,7 +25,7 @@ export const getDataString = async (key: string) => {
     return value != null ? value : { message: "Key not found or is empty" };
   } catch (e) {
     // Error handling
-    console.log("storeDataString Error", e);
+    console.log("getDataString Error", e);
   }
 };
 
@@ -37,6 +37,6 @@ export const getDataObject = async (key: string) => {
       : { message: "Key not found or is empty" };
   } catch (e) {
     // Error handling
-    console.log("storeDataString Error", e);
+    console.log("getDataObject Error", e);
   }
 };

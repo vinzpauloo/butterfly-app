@@ -3,19 +3,18 @@ import { Text, View } from "react-native";
 
 import { useQuery } from "@tanstack/react-query";
 
-import CarouselContainer from "features/ads/components/CarouselContainer";
 import Container from "components/Container";
-import { SubNav } from "hooks/useSubNav";
 import DynamicTabContent from "layouts/DynamicTabContent";
 import MaterialTopTabs from "layouts/navigators/MaterialTopTabs";
+import { useSiteSettings } from "hooks/useSiteSettings";
 
 const Home = () => {
   const [tabItems, setTabItems] = useState({ initialRoute: "", screens: [] });
-  const { getSubNav } = SubNav();
+  const { getNavbar } = useSiteSettings();
 
   const { isLoading } = useQuery({
-    queryKey: ["subnav"],
-    queryFn: getSubNav,
+    queryKey: ["navbar"],
+    queryFn: () => getNavbar(),
     onSuccess: (data) => {
       const homeMainTab = data.filter((item) => item.title === "Home");
       const { subs, site_id } = homeMainTab[0];
@@ -37,7 +36,8 @@ const Home = () => {
       });
     },
     onError: (error) => {
-      console.log("have an Error");
+      //error handler
+      console.log("Error", error);
     },
   });
 

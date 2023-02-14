@@ -1,8 +1,7 @@
-import {ScrollView, Dimensions, StyleSheet} from "react-native";
+import {ScrollView, Dimensions, StyleSheet, Text} from "react-native";
 
 import UserProfileSettingsHeader from "components/UserProfileSettingsHeader";
 import {globalStyle} from "globalStyles";
-
 
 const RecordingHistory = () => {
     return (

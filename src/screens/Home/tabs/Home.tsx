@@ -1,20 +1,15 @@
-import {useState} from "react";
+import { useState } from "react";
 import { Text, View } from "react-native";
 
-import {useRoute} from "@react-navigation/native";
-
 import { useQuery } from "@tanstack/react-query";
-import {captureError, captureSuccess} from "services/sentry";
 
+import CarouselContainer from "features/ads/components/CarouselContainer";
 import Container from "components/Container";
 import { SubNav } from "hooks/useSubNav";
 import DynamicTabContent from "layouts/DynamicTabContent";
 import MaterialTopTabs from "layouts/navigators/MaterialTopTabs";
 
 const Home = () => {
-
-  const route = useRoute<any>()
-
   const [tabItems, setTabItems] = useState({ initialRoute: "", screens: [] });
   const { getSubNav } = SubNav();
 
@@ -40,11 +35,9 @@ const Home = () => {
         });
         return { initialRoute, screens: tabs };
       });
-      captureSuccess(route.name)
     },
     onError: (error) => {
       console.log("have an Error");
-      captureError(error, route.name)
     },
   });
 

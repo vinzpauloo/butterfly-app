@@ -10,15 +10,17 @@ import GridVideos from "features/sectionList/components/GridVideos";
 import StickyTabs from "layouts/StickyTabs";
 
 const GridVideosLayout = ({ api_func, id }) => {
-  const { data, isLoading } = useQuery(
-    ["work-grid-videos", id],
-    () => api_func,
-    {
-      onError: () => {
-        //error handler
-      },
-    }
-  );
+  const { data, isLoading } = useQuery({
+    queryKey: ["work-grid-videos", id],
+    queryFn: () => api_func,
+    onSuccess: (data) => {
+      console.log("Success", data);
+    },
+    onError: (error) => {
+      //error handler
+      console.log("Error", error);
+    },
+  });
 
   if (isLoading) {
     return (

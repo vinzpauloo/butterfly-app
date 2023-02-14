@@ -5,25 +5,14 @@ import Fontisto from "react-native-vector-icons/Fontisto";
 import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons";
 import MaterialIcons from "react-native-vector-icons/MaterialIcons";
 import Zocial from "react-native-vector-icons/Zocial";
-import { useQuery } from "@tanstack/react-query";
 import { useNavigation, useRoute } from "@react-navigation/native";
 
 import BannerAds from "features/ads/components/BannerAds";
-import { SubNav } from "hooks/useSubNav";
 import { globalStyle } from "globalStyles";
 
-export const Header = () => {
+export const Header = ({ data }) => {
   const route = useRoute<any>();
   const navigation = useNavigation<any>();
-  const { getWork } = SubNav();
-  const { data, isLoading } = useQuery({
-    queryKey: ["work", route.params.id],
-    queryFn: () => getWork(route.params.id),
-    onError: (error) => {
-      //error handler
-      console.log("Error", error);
-    },
-  });
 
   // navigate to single tag screen
   const handleNavigate = () => {

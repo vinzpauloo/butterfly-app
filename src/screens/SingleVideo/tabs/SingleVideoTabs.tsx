@@ -11,7 +11,7 @@ import StickyTabs from "layouts/StickyTabs";
 
 const GridVideosLayout = ({ api_func, id }) => {
   const { data, isLoading } = useQuery({
-    queryKey: ["work-grid-videos", id],
+    queryKey: ["workGridVideos", id],
     queryFn: () => api_func,
     onSuccess: (data) => {
       console.log("Success", data);
@@ -37,7 +37,7 @@ const CommentListLayout = () => {
   const route = useRoute<any>();
   const { getWorkComments } = SingleVideo();
   const { data, isLoading } = useQuery(
-    ["work-comments", route.params.id],
+    ["workComments", route.params.id],
     () => getWorkComments(route.params.id),
     {
       onError: () => {
@@ -48,12 +48,12 @@ const CommentListLayout = () => {
   return <CommentList />;
 };
 
-const SingleVideoTab = () => {
+const SingleVideoTab = ({ data }) => {
   const route = useRoute<any>();
   const { getWorkAll, getWorkRecommended } = SingleVideo();
 
   const tabsData = {
-    Header: Header,
+    Header: () => <Header data={data} />,
     tabItems: [
       {
         name: "TabOthers",

@@ -1,4 +1,4 @@
-import { Dimensions, Pressable, StyleSheet, Text, View } from "react-native";
+import { Pressable, StyleSheet, Text, View } from "react-native";
 import React from "react";
 
 import { useQuery } from "@tanstack/react-query";
@@ -8,16 +8,13 @@ import { globalStyle } from "globalStyles";
 import { SubNav } from "hooks/useSubNav";
 import SingleVideoTab from "screens/SingleVideo/tabs/SingleVideoTabs";
 import VideoPlayer from "components/VideoPlayer";
-// import VideoPlayer from "react-native-video-player";
-
-const { width, height } = Dimensions.get("window");
 
 const SingleVideoScreen = () => {
   const { getWork } = SubNav();
   const route = useRoute<any>();
 
   const { data, isLoading } = useQuery({
-    queryKey: ["work", route.params.id],
+    queryKey: ["workSingleVideoScreen", route.params.id],
     queryFn: () => getWork(route.params.id),
     onError: () => {
       //error handler
@@ -40,7 +37,7 @@ const SingleVideoScreen = () => {
         </Pressable>
         <VideoPlayer url={data?.video_url} />
       </View>
-      <SingleVideoTab />
+      <SingleVideoTab data={data} />
     </View>
   );
 };

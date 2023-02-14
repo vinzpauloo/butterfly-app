@@ -9,6 +9,7 @@ import StackNavigators from "layouts/navigators/StackNavigators";
 import { globalStyle } from "globalStyles";
 import { stackScreens } from "data/stackScreens";
 import { NativeBaseProvider } from "native-base";
+import { enableLayoutAnimations } from "react-native-reanimated";
 
 // Create a client
 const queryClient = new QueryClient({
@@ -45,7 +46,9 @@ export default function App() {
     // initializePusher();
     // sampleFetch("http://192.168.50.9/api/test");
   }, []);
-
+  
+  // prevent screens UI going under the screen header
+  enableLayoutAnimations(false)
   return (
     //Provide the client to your App
     <QueryClientProvider client={queryClient}>

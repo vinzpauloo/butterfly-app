@@ -9,9 +9,9 @@ import CommentList from "features/commentList";
 import GridVideos from "features/sectionList/components/GridVideos";
 import StickyTabs from "layouts/StickyTabs";
 
-const GridVideosLayout = ({ api_func }) => {
+const GridVideosLayout = ({ api_func, id }) => {
   const { data, isLoading } = useQuery(
-    [`work-grid-videos-${api_func}`],
+    ["work-grid-videos", id],
     () => api_func,
     {
       onError: () => {
@@ -34,8 +34,8 @@ const GridVideosLayout = ({ api_func }) => {
 const CommentListLayout = () => {
   const route = useRoute<any>();
   const { getWorkComments } = SingleVideo();
-  const { data, isLoading, isError, isSuccess } = useQuery(
-    [`work-comments-${route.params.id}`],
+  const { data, isLoading } = useQuery(
+    ["work-comments", route.params.id],
     () => getWorkComments(route.params.id),
     {
       onError: () => {
@@ -59,13 +59,19 @@ const SingleVideoTab = () => {
         Content: (
           <GridVideosLayout
             api_func={getWorkAll({ user_id: route.params.userId })}
+            id={route.params.userId}
           />
         ), // use user_id as params to get ALL data related on that user_id -> api/work?user_id={user_id}
       },
       {
         name: "TabRecommended",
         label: "更多推荐",
-        Content: <GridVideosLayout api_func={getWorkRecommended()} />, // get all recommended video -> api/work/recommended
+        Content: (
+          <GridVideosLayout
+            api_func={getWorkRecommended()}
+            id={route.params.userId}
+          />
+        ), // get all recommended video -> api/work/recommended
       },
       {
         name: "TabComments",

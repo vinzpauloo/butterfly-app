@@ -1,4 +1,4 @@
-import { StyleSheet, Text, View } from "react-native";
+import { Pressable, StyleSheet, Text, View } from "react-native";
 
 import AntDesign from "react-native-vector-icons/AntDesign";
 import Fontisto from "react-native-vector-icons/Fontisto";
@@ -6,27 +6,29 @@ import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityI
 import MaterialIcons from "react-native-vector-icons/MaterialIcons";
 import Zocial from "react-native-vector-icons/Zocial";
 import { useQuery } from "@tanstack/react-query";
-import { useRoute } from "@react-navigation/native";
+import { useNavigation, useRoute } from "@react-navigation/native";
 
 import BannerAds from "features/ads/components/BannerAds";
 import { SubNav } from "hooks/useSubNav";
 import { globalStyle } from "globalStyles";
-import { SingleVideo } from "hooks/useSingleVideo";
 
 export const Header = () => {
   const route = useRoute<any>();
+  const navigation = useNavigation<any>();
   const { getWork } = SubNav();
-  const { getLikesCount } = SingleVideo();
-  const { data, isLoading, isError, isSuccess } = useQuery(
-    [`work-${route.params.id}`],
-    () => getWork(route.params.id)
-  );
-  //   const {
-  //     data: likesCount,
-  //     isSuccess: likesCountIsSuccess,
-  //     isError: likesCountIsError,
-  //     isLoading: likesCountIsLoading,
-  //   } = useQuery([`likesCount-${data._id}`], () => getLikesCount(data._id));
+  const { data, isLoading } = useQuery({
+    queryKey: ["work", route.params.id],
+    queryFn: () => getWork(route.params.id),
+    onError: (error) => {
+      //error handler
+      console.log("Error", error);
+    },
+  });
+
+  // navigate to single tag screen
+  const handleNavigate = () => {
+    navigation.navigate("SingleTag", { id: route.params.id });
+  };
 
   return (
     <>
@@ -56,9 +58,9 @@ export const Header = () => {
         </View>
         <View style={styles.tags}>
           {data?.tags.map((item, index) => (
-            <Text style={styles.tag} key={index}>
-              {item}
-            </Text>
+            <Pressable key={index} onPress={handleNavigate}>
+              <Text style={styles.tag}>{item}</Text>
+            </Pressable>
           ))}
         </View>
         <View style={styles.buttonsContent}>
@@ -69,7 +71,7 @@ export const Header = () => {
               size={15}
               style={styles.icon}
             />
-            {/* <Text style={styles.text}>{likesCount}</Text> */}
+            <Text style={styles.text}>{data?.likes}</Text>
           </View>
           <View style={styles.buttonItem}>
             <MaterialIcons

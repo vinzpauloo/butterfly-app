@@ -6,12 +6,9 @@ import { Video, AVPlaybackStatus, ResizeMode } from "expo-av";
 import { useQuery } from "@tanstack/react-query";
 import { useRoute } from "@react-navigation/native";
 
-import CommentList from "features/commentList";
-import StickyTabs from "layouts/StickyTabs";
 import { globalStyle } from "globalStyles";
-import { ContentTemplate, Header } from "data/singleVideoSubNav";
 import { SubNav } from "hooks/useSubNav";
-import TabsData from "screens/SingleVideo/tabs";
+import SingleVideoTab from "screens/SingleVideo/tabs/SingleVideoTabs";
 
 const { width, height } = Dimensions.get("window");
 
@@ -21,10 +18,13 @@ const SingleVideoScreen = () => {
   const route = useRoute<any>();
   const [status, setStatus] = React.useState({});
 
-  const { data, isLoading, isError, isSuccess } = useQuery(
-    [`work-${route.params.id}`],
-    () => getWork(route.params.id)
-  );
+  const { data, isLoading } = useQuery({
+    queryKey: ["work", route.params.id],
+    queryFn: () => getWork(route.params.id),
+    onError: () => {
+      //error handler
+    },
+  });
 
   // console.log("!!!", data);
 
@@ -65,7 +65,7 @@ const SingleVideoScreen = () => {
           onFullscreenUpdate={setOrientation}
         />
       </View>
-      <StickyTabs data={TabsData} />
+      <SingleVideoTab />
     </View>
   );
 };

@@ -4,6 +4,7 @@ import { useEffect } from "react";
 import { NativeBaseProvider } from "native-base";
 import { NavigationContainer } from "@react-navigation/native";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { enableLayoutAnimations } from "react-native-reanimated";
 import axios from "axios";
 import * as Sentry from "sentry-expo";
 
@@ -35,7 +36,9 @@ export default function App() {
   useEffect(() => {
     // initializePusher();
   }, []);
-
+  
+  // prevent screens UI going under the screen header
+  enableLayoutAnimations(false)
   return (
     // Set app providers
     <QueryClientProvider client={queryClient}>

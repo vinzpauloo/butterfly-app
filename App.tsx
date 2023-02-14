@@ -5,13 +5,13 @@ import { NativeBaseProvider } from "native-base";
 import { NavigationContainer } from "@react-navigation/native";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import axios, { AxiosError } from "axios";
+import * as Sentry from 'sentry-expo';
 
 import StackNavigators from "layouts/navigators/StackNavigators";
 import { globalStyle } from "globalStyles";
 import { stackScreens } from "data/stackScreens";
 
 //Sentry
-import * as Sentry from 'sentry-expo';
 Sentry.init({
   dsn: 'https://45271b1978a24cf7ae4c379a7dca5770@o4504672042745856.ingest.sentry.io/4504672045498368',
   enableInExpoDevelopment: true,
@@ -49,18 +49,6 @@ const sampleFetch = async (url: string) => {
 };
 
 export default function App() {
-
-  Sentry.Native.captureMessage('TEST CAPTURE MESSAGE')
-  Sentry.Native.captureEvent({
-    message: 'TEST CAPTURE EVENT EXPO'
-  })
-
-  try {
-    throw new Error('Toni Testing lang ng ERROR');
-  } catch (error) {
-    Sentry.Native.captureException(error);
-  }
-
 
   useEffect(() => {
     // initializePusher();

@@ -7,8 +7,8 @@ import { useRoute } from "@react-navigation/native";
 import { globalStyle } from "globalStyles";
 import { SubNav } from "hooks/useSubNav";
 import SingleVideoTab from "screens/SingleVideo/tabs/SingleVideoTabs";
-// import VideoPlayer from "components/VideoPlayer";
-import VideoPlayer from "react-native-video-player";
+import VideoPlayer from "components/VideoPlayer";
+// import VideoPlayer from "react-native-video-player";
 
 const { width, height } = Dimensions.get("window");
 

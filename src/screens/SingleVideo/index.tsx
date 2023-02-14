@@ -1,22 +1,20 @@
 import { Dimensions, Pressable, StyleSheet, Text, View } from "react-native";
 import React from "react";
 
-import * as ScreenOrientation from "expo-screen-orientation";
-import { Video, AVPlaybackStatus, ResizeMode } from "expo-av";
 import { useQuery } from "@tanstack/react-query";
 import { useRoute } from "@react-navigation/native";
 
 import { globalStyle } from "globalStyles";
 import { SubNav } from "hooks/useSubNav";
 import SingleVideoTab from "screens/SingleVideo/tabs/SingleVideoTabs";
+// import VideoPlayer from "components/VideoPlayer";
+import VideoPlayer from "react-native-video-player";
 
 const { width, height } = Dimensions.get("window");
 
 const SingleVideoScreen = () => {
   const { getWork } = SubNav();
-  const video = React.useRef(null);
   const route = useRoute<any>();
-  const [status, setStatus] = React.useState({});
 
   const { data, isLoading } = useQuery({
     queryKey: ["work", route.params.id],
@@ -25,18 +23,6 @@ const SingleVideoScreen = () => {
       //error handler
     },
   });
-
-  // console.log("!!!", data);
-
-  const setOrientation = () => {
-    if (Dimensions.get("window").height > Dimensions.get("window").width) {
-      //Device is in portrait mode, rotate to landscape mode.
-      ScreenOrientation.lockAsync(ScreenOrientation.OrientationLock.LANDSCAPE);
-    } else {
-      //Device is in landscape mode, rotate to portrait mode.
-      ScreenOrientation.lockAsync(ScreenOrientation.OrientationLock.PORTRAIT);
-    }
-  };
 
   if (isLoading) {
     return (
@@ -52,18 +38,7 @@ const SingleVideoScreen = () => {
         <Pressable style={styles.watermarkContainer}>
           <Text style={styles.watermarkText}>购买视频观看完整版</Text>
         </Pressable>
-        <Video
-          ref={video}
-          style={styles.video}
-          source={{
-            uri: data?.video_url,
-          }}
-          useNativeControls
-          resizeMode={ResizeMode.CONTAIN}
-          isLooping
-          onPlaybackStatusUpdate={(status) => setStatus(() => status)}
-          onFullscreenUpdate={setOrientation}
-        />
+        <VideoPlayer url={data?.url} />
       </View>
       <SingleVideoTab />
     </View>
@@ -97,10 +72,5 @@ const styles = StyleSheet.create({
   },
   watermarkText: {
     color: "#fff",
-  },
-  video: {
-    alignSelf: "center",
-    width: width,
-    height: 200,
   },
 });

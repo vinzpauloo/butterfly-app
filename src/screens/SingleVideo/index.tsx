@@ -38,7 +38,7 @@ const SingleVideoScreen = () => {
         <Pressable style={styles.watermarkContainer}>
           <Text style={styles.watermarkText}>购买视频观看完整版</Text>
         </Pressable>
-        <VideoPlayer url={data?.url} />
+        <VideoPlayer url={data?.video_url} />
       </View>
       <SingleVideoTab />
     </View>

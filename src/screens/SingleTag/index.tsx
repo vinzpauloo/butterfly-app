@@ -11,9 +11,7 @@ import { useNavigation, useRoute } from "@react-navigation/native";
 import Ionicons from "react-native-vector-icons/Ionicons";
 
 import Banner10 from "assets/images/banner10.jpg";
-import MaterialTopTabs from "layouts/navigators/MaterialTopTabs";
-import { singleTagSubNav } from "data/singleTagSubNav";
-import { globalStyle } from "globalStyles";
+import SingleTagTabs from "./tabs/SingleTagTabs";
 
 const { height, width } = Dimensions.get("window");
 
@@ -49,10 +47,7 @@ const SingleTag = () => {
   return (
     <>
       <ProfileBanner />
-      <MaterialTopTabs
-        data={singleTagSubNav}
-        tabBarColor={globalStyle.headerBasicBg}
-      />
+      <SingleTagTabs />
     </>
   );
 };

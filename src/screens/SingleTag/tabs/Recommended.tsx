@@ -1,17 +1,43 @@
-import { StyleSheet } from "react-native";
+import { StyleSheet, Text, View } from "react-native";
 import React from "react";
 
 import { ScrollView } from "react-native-gesture-handler";
+import { useRoute } from "@react-navigation/native";
+import { useQuery } from "@tanstack/react-query";
 
 import Container from "components/Container";
 import GridVideos from "features/sectionList/components/GridVideos";
-import { followImages } from "data/gridImages";
+import { SingleVideo } from "hooks/useSingleVideo";
+import BottomMessage from "components/BottomMessage";
 
-const Recommended = () => {
+const Recommended = ({ id }) => {
+  const { getWorkRecommended } = SingleVideo();
+
+  const { data, isLoading } = useQuery({
+    queryKey: ["recommended", id],
+    queryFn: getWorkRecommended,
+    onSuccess: (data) => {
+      console.log("Success", data);
+    },
+    onError: (error) => {
+      //error handler
+      console.log("Error", error);
+    },
+  });
+
+  if (isLoading) {
+    return (
+      <View>
+        <Text>Loading....</Text>
+      </View>
+    );
+  }
+
   return (
     <ScrollView>
       <Container>
-        <GridVideos videos={followImages} />
+        <GridVideos data={data.data} />
+        <BottomMessage />
       </Container>
     </ScrollView>
   );

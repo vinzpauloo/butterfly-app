@@ -1,4 +1,4 @@
-import request from "utils/request";
+import request from "lib/request";
 
 export const useSiteSettings = () => {
   const getNavbar = (siteId = 1) => {

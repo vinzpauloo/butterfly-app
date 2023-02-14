@@ -10,8 +10,7 @@ import axios from "axios";
 import StackNavigators from "layouts/navigators/StackNavigators";
 import { globalStyle } from "globalStyles";
 import { stackScreens } from "data/stackScreens";
-
-import {initializeSentry} from "./src/services/sentry";
+import { initializeSentry } from "services/sentry";
 
 // Create a client
 const queryClient = new QueryClient({
@@ -27,14 +26,13 @@ const queryClient = new QueryClient({
 axios.defaults.headers.common["Accept"] = "application/json";
 
 export default function App() {
-
   useEffect(() => {
-    // initializePusher();
     initializeSentry();
   }, []);
-  
+
   // prevent screens UI going under the screen header
-  enableLayoutAnimations(false)
+  enableLayoutAnimations(false);
+
   return (
     // Set app providers
     <QueryClientProvider client={queryClient}>

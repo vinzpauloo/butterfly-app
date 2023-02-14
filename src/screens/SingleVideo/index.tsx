@@ -18,15 +18,13 @@ const SingleVideoScreen = () => {
   const route = useRoute<any>();
   const [status, setStatus] = React.useState({});
 
-  const { data, isLoading } = useQuery(
-    ["work", route.params.id],
-    () => getWork(route.params.id),
-    {
-      onError: () => {
-        //error handler
-      },
-    }
-  );
+  const { data, isLoading } = useQuery({
+    queryKey: ["work", route.params.id],
+    queryFn: () => getWork(route.params.id),
+    onError: () => {
+      //error handler
+    },
+  });
 
   // console.log("!!!", data);
 

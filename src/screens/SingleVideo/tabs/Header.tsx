@@ -11,16 +11,18 @@ import { useRoute } from "@react-navigation/native";
 import BannerAds from "features/ads/components/BannerAds";
 import { SubNav } from "hooks/useSubNav";
 import { globalStyle } from "globalStyles";
-import { SingleVideo } from "hooks/useSingleVideo";
 
 export const Header = () => {
   const route = useRoute<any>();
   const { getWork } = SubNav();
-  const { getLikesCount } = SingleVideo();
-  const { data, isLoading, isError, isSuccess } = useQuery(
-    [`work-${route.params.id}`],
-    () => getWork(route.params.id)
-  );
+  const { data, isLoading } = useQuery({
+    queryKey: ["work", route.params.id],
+    queryFn: () => getWork(route.params.id),
+    onError: (error) => {
+      //error handler
+      console.log("Error", error);
+    },
+  });
   //   const {
   //     data: likesCount,
   //     isSuccess: likesCountIsSuccess,
@@ -69,7 +71,7 @@ export const Header = () => {
               size={15}
               style={styles.icon}
             />
-            {/* <Text style={styles.text}>{likesCount}</Text> */}
+            <Text style={styles.text}>{data?.likes}</Text>
           </View>
           <View style={styles.buttonItem}>
             <MaterialIcons

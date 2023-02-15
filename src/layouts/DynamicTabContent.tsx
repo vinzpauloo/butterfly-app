@@ -1,17 +1,18 @@
-import { StyleSheet, Text, View } from "react-native";
-import React, { useEffect } from "react";
+import { StyleSheet } from "react-native";
+import React from "react";
 
-import HorizontalSlider from "features/sectionList/components/HorizontalSlider";
-import VerticalSlider from "features/sectionList/components/VerticalSlider";
-import SingleVideo from "features/sectionList/components/SingleVideo";
-import DividerContainer from "features/sectionList/components/DividerContainer";
-import GridVideos from "features/sectionList/components/GridVideos";
-import SectionHeader from "features/sectionList/components/SectionHeader";
-import { useQuery } from "@tanstack/react-query";
-import { SubNav } from "hooks/useSubNav";
 import BottomMessage from "components/BottomMessage";
 import Container from "components/Container";
 import CarouselContainer from "features/ads/components/CarouselContainer";
+import DividerContainer from "features/sectionList/components/DividerContainer";
+import HorizontalSlider from "features/sectionList/components/HorizontalSlider";
+import GridVideos from "features/sectionList/components/GridVideos";
+import SectionHeader from "features/sectionList/components/SectionHeader";
+import SingleVideo from "features/sectionList/components/SingleVideo";
+import VerticalSlider from "features/sectionList/components/VerticalSlider";
+import VideoListSkeleton from "components/skeletons/VideoListSkeleton";
+import { useQuery } from "@tanstack/react-query";
+import { SubNav } from "hooks/useSubNav";
 import { ScrollView } from "react-native-gesture-handler";
 
 const LayoutContainer = ({ title, dataLength, index, children }) => {
@@ -44,6 +45,7 @@ const SectionContent = ({
       </>
     ),
     singleVideoList: <GridVideos data={multiple} />,
+    grid: <GridVideos data={multiple} />,
   };
 
   return (
@@ -55,32 +57,33 @@ const SectionContent = ({
 
 const DynamicTabContent = ({ tabTitle, site_id }) => {
   const { getWorkGroup } = SubNav();
-  const { data, isLoading, isSuccess, isError } = useQuery(
-    [`tabName${tabTitle}`],
-    () => getWorkGroup({ site_id, navbar: tabTitle })
-  );
-
-  useEffect(() => {
-    if (isSuccess) {
-      console.log("@@@", data);
-    }
-  }, []);
+  const { data, isLoading } = useQuery({
+    queryKey: [`tabName${tabTitle}`],
+    queryFn: () => getWorkGroup({ site_id, navbar: tabTitle }),
+    onError: (error) => {
+      console.log(`tabName-${tabTitle}`, error);
+    },
+  });
 
   return (
     <Container>
       <ScrollView>
         <CarouselContainer />
-        {data?.map((item, index) => (
-          <SectionContent
-            key={index}
-            title={item.title}
-            single={item.single}
-            multiple={item.multiple}
-            templateId={item.template_id}
-            dataLength={data.length - 1}
-            index={index}
-          />
-        ))}
+        {isLoading ? (
+          <VideoListSkeleton /> // skeleton for no data ready
+        ) : (
+          data?.map((item, index) => (
+            <SectionContent
+              key={index}
+              title={item.title}
+              single={item.single}
+              multiple={item.multiple}
+              templateId={item.template_id}
+              dataLength={data.length - 1}
+              index={index}
+            />
+          ))
+        )}
         <BottomMessage />
       </ScrollView>
     </Container>

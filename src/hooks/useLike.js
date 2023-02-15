@@ -1,6 +1,6 @@
 import request from "lib/request";
 
-export const BottomModal = () => {
+export const Like = () => {
   const postLikeWork = (data) => {
     return request({
       url: "/likes",

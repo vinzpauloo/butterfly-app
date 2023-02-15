@@ -7,12 +7,12 @@ import Fontisto from "react-native-vector-icons/Fontisto";
 import { useMutation, useQuery } from "@tanstack/react-query";
 
 import { GLOBAL_COLORS } from "global";
-import { BottomModal } from "hooks/useBottomModal";
+import { Like } from "hooks/useLike";
 
 const { width } = Dimensions.get("window");
 
 const Modal = ({ onOpen, isOpen, onClose }) => {
-  const { deleteLikeWork, postLikeWork, postLikeChecker } = BottomModal();
+  const { deleteLikeWork, postLikeWork, postLikeChecker } = Like();
   const [isAlreadyLike, setIsAlreadyLike] = useState(false);
 
   const { isLoading } = useQuery({
@@ -33,6 +33,7 @@ const Modal = ({ onOpen, isOpen, onClose }) => {
   // for like
   const { mutate: mutateLike } = useMutation(postLikeWork, {
     onSuccess: (data) => {
+      // change the message to boolean ask in backend
       if (data.message === "customer like content") {
         setIsAlreadyLike(true);
       }
@@ -45,6 +46,7 @@ const Modal = ({ onOpen, isOpen, onClose }) => {
   // for unlike
   const { mutate: mutateUnLike } = useMutation(deleteLikeWork, {
     onSuccess: (data) => {
+      // change the message to boolean ask in backend
       if (data.message === "customer unlike content") {
         setIsAlreadyLike(false);
       }
@@ -96,34 +98,56 @@ const Modal = ({ onOpen, isOpen, onClose }) => {
                   style={{
                     height: 50,
                     width: 50,
-                    borderColor: "#fff",
+                    borderColor: changeButtonColor(isAlreadyLike),
                     borderWidth: 2,
                     borderRadius: 25,
                     alignItems: "center",
                     justifyContent: "center",
                   }}
                 >
-                  <Fontisto name="share-a" size={20} color="#fff" />
+                  <Fontisto
+                    name="share-a"
+                    size={20}
+                    color={changeButtonColor(isAlreadyLike)}
+                  />
                 </View>
-                <Text style={{ color: "#fff", marginVertical: 10 }}>分享</Text>
+                <Text
+                  style={{
+                    color: changeButtonColor(isAlreadyLike),
+                    marginVertical: 10,
+                  }}
+                >
+                  分享
+                </Text>
               </View>
-              <View style={{ alignItems: "center" }}>
+              <Pressable style={{ alignItems: "center" }} onPress={handleLike}>
                 <View
                   style={{
                     height: 50,
                     width: 50,
-                    borderColor: "#fff",
+                    borderColor: changeButtonColor(isAlreadyLike),
                     borderWidth: 2,
                     borderRadius: 25,
                     alignItems: "center",
                     justifyContent: "center",
                   }}
                 >
-                  <Fontisto name="check" size={20} color="#fff" />
+                  <Fontisto
+                    name="check"
+                    size={20}
+                    color={changeButtonColor(isAlreadyLike)}
+                  />
                 </View>
-                <Text style={{ color: "#fff", marginVertical: 10 }}>关注</Text>
-              </View>
-              <Pressable style={{ alignItems: "center" }} onPress={handleLike}>
+                <Text
+                  style={{
+                    color: changeButtonColor(isAlreadyLike),
+                    marginVertical: 10,
+                  }}
+                >
+                  关注
+                </Text>
+              </Pressable>
+              <Pressable style={{ alignItems: "center" }}>
                 <View
                   style={{
                     height: 50,

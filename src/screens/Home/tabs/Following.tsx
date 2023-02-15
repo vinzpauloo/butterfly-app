@@ -22,7 +22,7 @@ import girl from "assets/images/girl.jpg";
 import GridVideos from "features/sectionList/components/GridVideos";
 import NoFollowingImg from "assets/images/nofollowing.png";
 import { followImages } from "data/gridImages";
-import { globalStyle } from "globalStyles";
+import { GLOBAL_COLORS } from "global";
 import { NoFollowingImages } from "data/gridImages";
 import { reelsVideos } from "data/reelsVideos";
 import Modal from "components/BottomModal";
@@ -121,7 +121,7 @@ const Following = () => {
   const noFollowing = true;
   const { isOpen, onOpen, onClose } = useDisclose();
 
-  const [followingDataIsLoaded, setFollowingDataIsLoaded] = useState(false)
+  const [followingDataIsLoaded, setFollowingDataIsLoaded] = useState(false);
 
   useEffect(() => {
     setTimeout(() => setFollowingDataIsLoaded(true), 1000);
@@ -132,21 +132,21 @@ const Following = () => {
       <ScrollView>
         <Container>
           {noFollowing ? (
-            followingDataIsLoaded?
+            followingDataIsLoaded ? (
               <NoFollowing onOpen={onOpen} />
-            :
-              <VideoListSkeleton/>
+            ) : (
+              <VideoListSkeleton />
+            )
+          ) : followingDataIsLoaded ? (
+            <GridVideos videos={followImages} isFollowingScreen={true} />
           ) : (
-            followingDataIsLoaded ?
-              <GridVideos videos={followImages} isFollowingScreen={true} />
-            :
-              <MasonrySkeleton/>    
+            <MasonrySkeleton />
           )}
         </Container>
       </ScrollView>
       <Center flex={1} px="3">
         <Modal isOpen={isOpen} onOpen={onOpen} onClose={onClose} />
-      </Center>        
+      </Center>
     </Container>
   );
 };
@@ -164,7 +164,7 @@ const styles = StyleSheet.create({
   },
   popular: {
     color: "#fff",
-    borderLeftColor: globalStyle.secondaryColor,
+    borderLeftColor: GLOBAL_COLORS.secondaryColor,
     borderLeftWidth: 3,
     paddingHorizontal: 12,
     marginHorizontal: 15,
@@ -191,7 +191,7 @@ const styles = StyleSheet.create({
     marginHorizontal: 5,
   },
   followBtn: {
-    backgroundColor: globalStyle.secondaryColor,
+    backgroundColor: GLOBAL_COLORS.secondaryColor,
     alignItems: "center",
     justifyContent: "center",
     paddingHorizontal: 7,

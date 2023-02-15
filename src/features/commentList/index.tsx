@@ -5,7 +5,7 @@ import { FlashList } from "@shopify/flash-list";
 
 import { comments } from "data/comments";
 import BottomMessage from "components/BottomMessage";
-import { globalStyle } from "globalStyles";
+import { GLOBAL_COLORS } from "global";
 import Fontisto from "react-native-vector-icons/Fontisto";
 
 type Props = {};
@@ -39,7 +39,7 @@ const CommentItem = (props: commentItemProps) => {
           <HStack space={1.5} style={styles.alignCenter}>
             <Fontisto
               name="commenting"
-              color={globalStyle.inactiveTextColor}
+              color={GLOBAL_COLORS.inactiveTextColor}
               size={14}
             />
             <Text style={styles.secondaryText}>回复</Text>
@@ -90,7 +90,6 @@ const CommentItem = (props: commentItemProps) => {
   );
 };
 
-
 const CommentListSkeleton = () => {
   return (
     <>
@@ -108,11 +107,11 @@ const CommentListSkeleton = () => {
       </HStack>
       <Skeleton h="1px" w="full" mt={3} />
     </>
-  )
-}
+  );
+};
 
 const CommentList = (props: Props) => {
-  const [commentListIsLoaded, setCommentListIsLoaded] = useState(false)
+  const [commentListIsLoaded, setCommentListIsLoaded] = useState(false);
 
   useEffect(() => {
     setTimeout(() => setCommentListIsLoaded(true), 1000);
@@ -120,7 +119,7 @@ const CommentList = (props: Props) => {
 
   return (
     <View style={styles.commentsContainer}>
-      {commentListIsLoaded ?
+      {commentListIsLoaded ? (
         <FlashList
           removeClippedSubviews={true}
           estimatedItemSize={117}
@@ -142,10 +141,10 @@ const CommentList = (props: Props) => {
           ItemSeparatorComponent={() => (
             <Divider color="#999" style={styles.divider} />
           )}
-          />
-      :
-        <CommentListSkeleton/>
-      }
+        />
+      ) : (
+        <CommentListSkeleton />
+      )}
     </View>
   );
 };
@@ -154,17 +153,17 @@ export default CommentList;
 
 const styles = StyleSheet.create({
   whiteText: {
-    color: globalStyle.primaryTextColor,
+    color: GLOBAL_COLORS.primaryTextColor,
   },
   commentHeader: {
-    color: globalStyle.primaryTextColor,
+    color: GLOBAL_COLORS.primaryTextColor,
     marginBottom: 18,
   },
   secondaryColor: {
-    color: globalStyle.secondaryColor,
+    color: GLOBAL_COLORS.secondaryColor,
   },
   secondaryText: {
-    color: globalStyle.inactiveTextColor,
+    color: GLOBAL_COLORS.inactiveTextColor,
   },
   alignCenter: {
     alignItems: "center",
@@ -175,10 +174,10 @@ const styles = StyleSheet.create({
   commentsContainer: {
     padding: 12,
     flex: 1,
-    minHeight: 100
+    minHeight: 100,
   },
   loadMoreComments: {
     textAlign: "center",
-    color: globalStyle.inactiveTextColor,
+    color: GLOBAL_COLORS.inactiveTextColor,
   },
 });

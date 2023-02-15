@@ -3,7 +3,7 @@ import React from "react";
 
 import { useNavigation } from "@react-navigation/native";
 
-import { globalStyle } from "globalStyles";
+import { GLOBAL_COLORS } from "global";
 import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons";
 
 const SectionHeader = ({ title }) => {
@@ -19,7 +19,7 @@ const SectionHeader = ({ title }) => {
       <Pressable onPress={() => handlePress(title)}>
         <MaterialCommunityIcons
           name="chevron-triple-right"
-          color={globalStyle.secondaryColor}
+          color={GLOBAL_COLORS.secondaryColor}
           size={20}
         />
       </Pressable>
@@ -42,7 +42,7 @@ const styles = StyleSheet.create({
     color: "#fff",
     fontSize: 18,
     paddingHorizontal: 10,
-    borderLeftColor: globalStyle.secondaryColor,
+    borderLeftColor: GLOBAL_COLORS.secondaryColor,
     borderLeftWidth: 4,
     textAlign: "center",
   },

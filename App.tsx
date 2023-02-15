@@ -8,7 +8,7 @@ import { enableLayoutAnimations } from "react-native-reanimated";
 import axios from "axios";
 
 import StackNavigators from "layouts/navigators/StackNavigators";
-import { globalStyle } from "globalStyles";
+import { GLOBAL_COLORS } from "global";
 import { stackScreens } from "data/stackScreens";
 import { initializeSentry } from "services/sentry";
 
@@ -40,7 +40,7 @@ export default function App() {
         <NavigationContainer>
           <StatusBar
             barStyle={"light-content"}
-            backgroundColor={globalStyle.primaryColor}
+            backgroundColor={GLOBAL_COLORS.primaryColor}
           />
           <StackNavigators data={stackScreens} />
         </NavigationContainer>

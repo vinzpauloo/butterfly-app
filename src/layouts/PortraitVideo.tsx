@@ -8,12 +8,17 @@ import {
   Alert,
   Pressable,
   Image,
-  ActivityIndicator
+  ActivityIndicator,
 } from "react-native";
 import { ResizeMode, Video } from "expo-av";
 import { useNavigation, useRoute } from "@react-navigation/native";
 import { VStack, useDisclose, HStack, Slider } from "native-base";
-import Animated, { PinwheelIn, PinwheelOut, ZoomIn, ZoomOut } from 'react-native-reanimated';
+import Animated, {
+  PinwheelIn,
+  PinwheelOut,
+  ZoomIn,
+  ZoomOut,
+} from "react-native-reanimated";
 
 import BottomComment from "components/BottomComment";
 import Container from "components/Container";
@@ -21,7 +26,7 @@ import Container from "components/Container";
 import Ionicons from "react-native-vector-icons/Ionicons";
 import Feather from "react-native-vector-icons/Feather";
 import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons";
-import { globalStyle } from "globalStyles";
+import { GLOBAL_COLORS } from "global";
 
 interface PortraitVideoDataType {
   reelsVideos?: any[];
@@ -33,7 +38,7 @@ type Props = {
   uri: string;
   userName: string;
   description: string;
-  thumbnail: string
+  thumbnail: string;
   tags: string[];
   likes: number;
   amountOfComments: number;
@@ -49,71 +54,91 @@ const { width: windowWidth, height: windowHeight } = Dimensions.get("window");
 const PortraitVideoContent = (props: Props) => {
   const navigation = useNavigation<any>();
 
-  const [isVideoPlaying, setisVideoPlaying] = useState(false) 
-  const [showPlayPauseButton, setShowPlayPauseButton] = useState(false) 
-  const [userSeekTime, setUserSeekTime] = useState(0)
-  const [videoCurrentTime, setVideoCurrentTime] = useState(0)
-  const [videoTotalDuration, setVideoTotalDuration] = useState(0)
-  const [videoOrientation, setVideoOrientation] = useState("")
-  const [videoIsLoaded, setVideoIsLoaded] = useState(false)
-  const videoCurrentTimeDisplay = Math.round(videoCurrentTime / 1000)
-  const videoTotalDurationDisplay = Math.round(videoTotalDuration / 1000)
+  const [isVideoPlaying, setisVideoPlaying] = useState(false);
+  const [showPlayPauseButton, setShowPlayPauseButton] = useState(false);
+  const [userSeekTime, setUserSeekTime] = useState(0);
+  const [videoCurrentTime, setVideoCurrentTime] = useState(0);
+  const [videoTotalDuration, setVideoTotalDuration] = useState(0);
+  const [videoOrientation, setVideoOrientation] = useState("");
+  const [videoIsLoaded, setVideoIsLoaded] = useState(false);
+  const videoCurrentTimeDisplay = Math.round(videoCurrentTime / 1000);
+  const videoTotalDurationDisplay = Math.round(videoTotalDuration / 1000);
 
-  const [videoIsLiked, setVideoIsLiked] = useState(false)
-  const [videoIsFaved, setVideoIsFaved] = useState(false)
-    
+  const [videoIsLiked, setVideoIsLiked] = useState(false);
+  const [videoIsFaved, setVideoIsFaved] = useState(false);
+
   useEffect(() => {
-    setisVideoPlaying(true)
+    setisVideoPlaying(true);
   }, [props.isActive]);
 
   function pausePlayVideo() {
-    setisVideoPlaying((prev) => !prev)
-    isVideoPlaying ? setShowPlayPauseButton(true) :
-    setTimeout(() => setShowPlayPauseButton(false), 500);
+    setisVideoPlaying((prev) => !prev);
+    isVideoPlaying
+      ? setShowPlayPauseButton(true)
+      : setTimeout(() => setShowPlayPauseButton(false), 500);
     setUserSeekTime(videoCurrentTime);
     setVideoCurrentTime(userSeekTime);
   }
 
   return (
-    <View style={[styles.container, { height: windowHeight - props.tabBarHeight }]}>
+    <View
+      style={[styles.container, { height: windowHeight - props.tabBarHeight }]}
+    >
       {props.isActive && (
         <Pressable style={styles.videoContainer} onPress={pausePlayVideo}>
           <Video
             source={{ uri: props.uri }}
             style={styles.video}
-            resizeMode={videoOrientation === "portrait" ? ResizeMode.STRETCH : ResizeMode.CONTAIN}
+            resizeMode={
+              videoOrientation === "portrait"
+                ? ResizeMode.STRETCH
+                : ResizeMode.CONTAIN
+            }
             isLooping={true}
             shouldPlay={isVideoPlaying && videoIsLoaded}
             usePoster={true}
             positionMillis={userSeekTime}
-            PosterComponent={() =>
+            PosterComponent={() => (
               <View style={styles.videoThumbnail}>
-                <Image style={styles.videoThumbnail} source={{uri: props.thumbnail}}/>
-              </View>}
+                <Image
+                  style={styles.videoThumbnail}
+                  source={{ uri: props.thumbnail }}
+                />
+              </View>
+            )}
             useNativeControls={false}
-            onReadyForDisplay={event => {
-              setVideoIsLoaded(event.status.isLoaded)
-              setVideoOrientation(event.naturalSize.orientation)
-              setVideoTotalDuration(event.status.durationMillis)
+            onReadyForDisplay={(event) => {
+              setVideoIsLoaded(event.status.isLoaded);
+              setVideoOrientation(event.naturalSize.orientation);
+              setVideoTotalDuration(event.status.durationMillis);
             }}
             progressUpdateIntervalMillis={100}
             onPlaybackStatusUpdate={(status) => {
-              setVideoCurrentTime(status.positionMillis)
+              setVideoCurrentTime(status.positionMillis);
             }}
           />
-          {showPlayPauseButton ?
-            <Animated.View style={styles.playPauseIcon} entering={ZoomIn} exiting={ZoomOut} >
-                {isVideoPlaying ?
-                  <Ionicons name="play" size={48} color="white" />
-                  :
-                  <Ionicons name="pause" size={48} color="white" />
-                }
+          {showPlayPauseButton ? (
+            <Animated.View
+              style={styles.playPauseIcon}
+              entering={ZoomIn}
+              exiting={ZoomOut}
+            >
+              {isVideoPlaying ? (
+                <Ionicons name="play" size={48} color="white" />
+              ) : (
+                <Ionicons name="pause" size={48} color="white" />
+              )}
             </Animated.View>
-            : null
-          }
+          ) : null}
         </Pressable>
       )}
-      <VStack space={2} style={[styles.bottomSection, isVideoPlaying ? {bottom: 0} : {bottom:24}]}>
+      <VStack
+        space={2}
+        style={[
+          styles.bottomSection,
+          isVideoPlaying ? { bottom: 0 } : { bottom: 24 },
+        ]}
+      >
         <Pressable
           onPress={() => {
             Alert.alert("Go to user Profile!");
@@ -145,7 +170,13 @@ const PortraitVideoContent = (props: Props) => {
           <Text style={styles.subscribe}>Subscription needed or gold coin</Text>
         </Pressable>
       </VStack>
-      <VStack space={2} style={[styles.verticalBar, isVideoPlaying ? {bottom: 0} : {bottom:24}]}>
+      <VStack
+        space={2}
+        style={[
+          styles.verticalBar,
+          isVideoPlaying ? { bottom: 0 } : { bottom: 24 },
+        ]}
+      >
         <View style={styles.verticalBarItem}>
           <Pressable
             onPress={() => {
@@ -165,12 +196,16 @@ const PortraitVideoContent = (props: Props) => {
           </View>
         </View>
         <View style={styles.verticalBarItem}>
-          <Pressable onPress={() => setVideoIsLiked(prev => !prev)}>
-            {videoIsLiked ?
-              <Ionicons name="heart" color={globalStyle.secondaryColor} size={40} />
-            :
+          <Pressable onPress={() => setVideoIsLiked((prev) => !prev)}>
+            {videoIsLiked ? (
+              <Ionicons
+                name="heart"
+                color={GLOBAL_COLORS.secondaryColor}
+                size={40}
+              />
+            ) : (
               <Ionicons name="heart" color={"white"} size={40} />
-            }
+            )}
           </Pressable>
           <Text style={styles.iconText}>{props.likes}</Text>
         </View>
@@ -181,12 +216,12 @@ const PortraitVideoContent = (props: Props) => {
           <Text style={styles.iconText}>{props.amountOfComments}</Text>
         </View>
         <View style={styles.verticalBarItem}>
-          <Pressable onPress={() => setVideoIsFaved(prev => !prev)}>
-            {videoIsFaved ? 
+          <Pressable onPress={() => setVideoIsFaved((prev) => !prev)}>
+            {videoIsFaved ? (
               <Ionicons name="star" color={"yellow"} size={40} />
-            : 
+            ) : (
               <Ionicons name="star" color={"white"} size={40} />
-            }
+            )}
           </Pressable>
           <Text style={styles.iconText}>Fave</Text>
         </View>
@@ -201,20 +236,38 @@ const PortraitVideoContent = (props: Props) => {
           <Text style={styles.iconText}>DL</Text>
         </View>
       </VStack>
-      <HStack style={[styles.bottomSliderContainer, isVideoPlaying ? {bottom: -40} : {bottom: 0}]} space={2}>
-          <Text style={styles.videoTimeStamp}>
-            {videoCurrentTimeDisplay < 10 ? `0:0${videoCurrentTimeDisplay}` : `0:${videoCurrentTimeDisplay}`}
-          </Text>
-          <Slider size="sm" w={windowWidth - 100} onChangeEnd={value => {
-            setUserSeekTime(value)
-        }} value={videoCurrentTime} minValue={0} maxValue={videoTotalDuration} step={1}>
-            <Slider.Track bg={globalStyle.inactiveTextColor}>
-              <Slider.FilledTrack bg={globalStyle.secondaryColor} />
-            </Slider.Track>
-            <Slider.Thumb bg={globalStyle.secondaryColor} />
-          </Slider>
+      <HStack
+        style={[
+          styles.bottomSliderContainer,
+          isVideoPlaying ? { bottom: -40 } : { bottom: 0 },
+        ]}
+        space={2}
+      >
         <Text style={styles.videoTimeStamp}>
-          {videoTotalDurationDisplay < 10? `0:0${videoTotalDurationDisplay}` : `0:${videoTotalDurationDisplay}`}
+          {videoCurrentTimeDisplay < 10
+            ? `0:0${videoCurrentTimeDisplay}`
+            : `0:${videoCurrentTimeDisplay}`}
+        </Text>
+        <Slider
+          size="sm"
+          w={windowWidth - 100}
+          onChangeEnd={(value) => {
+            setUserSeekTime(value);
+          }}
+          value={videoCurrentTime}
+          minValue={0}
+          maxValue={videoTotalDuration}
+          step={1}
+        >
+          <Slider.Track bg={GLOBAL_COLORS.inactiveTextColor}>
+            <Slider.FilledTrack bg={GLOBAL_COLORS.secondaryColor} />
+          </Slider.Track>
+          <Slider.Thumb bg={GLOBAL_COLORS.secondaryColor} />
+        </Slider>
+        <Text style={styles.videoTimeStamp}>
+          {videoTotalDurationDisplay < 10
+            ? `0:0${videoTotalDurationDisplay}`
+            : `0:${videoTotalDurationDisplay}`}
         </Text>
       </HStack>
     </View>
@@ -230,10 +283,10 @@ const PortraitVideo: React.FC<PortraitVideoDataType> = ({
   const route = useRoute<any>();
   const [activeVideoIndex, setActiveVideoIndex] = useState(0);
   const { isOpen, onOpen, onClose } = useDisclose();
-  const [vlogIsLoaded, setVlogIsLoaded] = useState(false)
+  const [vlogIsLoaded, setVlogIsLoaded] = useState(false);
 
-  const [videoCount, setVideoCount] = useState(1)
-  let localStoredVlog = reelsVideos.slice(0, videoCount)
+  const [videoCount, setVideoCount] = useState(1);
+  let localStoredVlog = reelsVideos.slice(0, videoCount);
 
   useEffect(() => {
     setTimeout(() => setVlogIsLoaded(true), 1000);
@@ -250,7 +303,7 @@ const PortraitVideo: React.FC<PortraitVideoDataType> = ({
           onPress={() => navigation.goBack()}
         />
       ) : null}
-      {vlogIsLoaded ? 
+      {vlogIsLoaded ? (
         <>
           <FlatList
             // estimatedItemSize={15}
@@ -287,11 +340,11 @@ const PortraitVideo: React.FC<PortraitVideoDataType> = ({
           />
           <BottomComment isOpen={isOpen} onOpen={onOpen} onClose={onClose} />
         </>
-      :
+      ) : (
         <View style={styles.loaderContainer}>
           <ActivityIndicator size="large" color="white" />
         </View>
-      }
+      )}
     </Container>
   );
 };
@@ -326,7 +379,7 @@ const styles = StyleSheet.create({
     backgroundColor: "rgba(0,0,0,0.5)",
     width: "100%",
     paddingVertical: 6,
-    alignItems: "center"
+    alignItems: "center",
   },
   userName: {
     fontWeight: "bold",
@@ -379,7 +432,7 @@ const styles = StyleSheet.create({
   },
   videoTimeStamp: {
     color: "white",
-    paddingHorizontal: 6
+    paddingHorizontal: 6,
   },
   subText: {
     color: "#999",
@@ -397,7 +450,7 @@ const styles = StyleSheet.create({
   loaderContainer: {
     justifyContent: "center",
     alignItems: "center",
-    flex: 1
+    flex: 1,
   },
   playPauseIcon: {
     zIndex: 1,
@@ -406,16 +459,16 @@ const styles = StyleSheet.create({
     marginTop: "auto",
     marginBottom: "auto",
     elevation: 1,
-    backgroundColor: 'rgba(0,0,0,0.25)',
+    backgroundColor: "rgba(0,0,0,0.25)",
     width: 64,
     height: 64,
     borderRadius: 32,
     opacity: 0.9,
     alignItems: "center",
-    justifyContent:"center"
+    justifyContent: "center",
   },
   videoContainer: {
     width: "100%",
-    height: "100%" 
-  }
+    height: "100%",
+  },
 });

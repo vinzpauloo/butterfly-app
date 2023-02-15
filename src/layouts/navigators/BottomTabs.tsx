@@ -2,11 +2,11 @@ import React, { useState } from "react";
 
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 
-import { globalStyle } from "../../globalStyles";
+import { GLOBAL_COLORS } from "../../global";
 import { BackHandler, Dimensions, StyleSheet } from "react-native";
 import { useIsFocused, useNavigation } from "@react-navigation/native";
 
-import Animated, { FadeIn, FadeOut } from 'react-native-reanimated'; 
+import Animated, { FadeIn, FadeOut } from "react-native-reanimated";
 
 const BottomTab = createBottomTabNavigator();
 
@@ -16,15 +16,15 @@ const BottomTabs = ({ data }) => {
   const [showConfirmExitText, setShowConfirmExitText] = useState(false);
 
   const confirmExit = () => {
-    setShowConfirmExitText(true)
+    setShowConfirmExitText(true);
     setTimeout(() => setShowConfirmExitText(false), 2000);
-    showConfirmExitText ? BackHandler.exitApp() : null
-  }
+    showConfirmExitText ? BackHandler.exitApp() : null;
+  };
 
   BackHandler.addEventListener("hardwareBackPress", () => {
-    isBottomTabShown ? confirmExit() : navigation.goBack()
-    return true
-  })
+    isBottomTabShown ? confirmExit() : navigation.goBack();
+    return true;
+  });
 
   return (
     <>
@@ -33,7 +33,7 @@ const BottomTabs = ({ data }) => {
         screenOptions={{
           lazy: true,
           headerShown: false,
-          tabBarActiveTintColor: globalStyle.secondaryColor,
+          tabBarActiveTintColor: GLOBAL_COLORS.secondaryColor,
           tabBarInactiveTintColor: "#fff",
           tabBarStyle: {
             backgroundColor: "#262632",
@@ -50,19 +50,20 @@ const BottomTabs = ({ data }) => {
             options={{
               tabBarLabel: item.label,
               tabBarIcon: item.icon,
-              unmountOnBlur: item.unmountOnBlur
+              unmountOnBlur: item.unmountOnBlur,
             }}
           />
         ))}
       </BottomTab.Navigator>
-      {showConfirmExitText ?
+      {showConfirmExitText ? (
         <Animated.Text
           entering={FadeIn}
           exiting={FadeOut}
-          style={styles.confirmExitText}>再按一次退出
+          style={styles.confirmExitText}
+        >
+          再按一次退出
         </Animated.Text>
-        : null
-      }
+      ) : null}
     </>
   );
 };
@@ -78,6 +79,6 @@ const styles = StyleSheet.create({
     bottom: 80,
     padding: 12,
     borderRadius: 6,
-    left: (Dimensions.get("window").width / 2) - 54.5,
-  }
-})
+    left: Dimensions.get("window").width / 2 - 54.5,
+  },
+});

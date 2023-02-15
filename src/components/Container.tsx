@@ -1,6 +1,6 @@
 import { Dimensions, StyleSheet, Text, View } from "react-native";
 import React from "react";
-import { globalStyle } from "globalStyles";
+import { GLOBAL_COLORS } from "global";
 
 interface DataTypes {
   children: any;
@@ -17,7 +17,7 @@ export default Container;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: globalStyle.primaryColor,
+    backgroundColor: GLOBAL_COLORS.primaryColor,
     width: width,
   },
 });

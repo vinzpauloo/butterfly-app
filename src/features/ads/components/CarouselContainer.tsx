@@ -8,7 +8,7 @@ import FontAwesome from "react-native-vector-icons/FontAwesome";
 
 import { bannerImage } from "data/bannerImages";
 
-import { globalStyle } from "globalStyles";
+import { GLOBAL_COLORS } from "global";
 
 const { width, height } = Dimensions.get("window");
 
@@ -39,7 +39,7 @@ const CarouselContainer = () => {
           size={20}
           style={styles.leftIcon}
           onPress={handlePrev}
-          color={globalStyle.secondaryColor}
+          color={GLOBAL_COLORS.secondaryColor}
         />
         <Carousel
           ref={isCarousel}
@@ -60,7 +60,7 @@ const CarouselContainer = () => {
           size={20}
           style={styles.rightIcon}
           onPress={handleNext}
-          color={globalStyle.secondaryColor}
+          color={GLOBAL_COLORS.secondaryColor}
         />
         <View style={styles.pagination}>
           {bannerImage.map((_, idx) => (
@@ -69,7 +69,7 @@ const CarouselContainer = () => {
               name="circle"
               size={7}
               style={styles.circle}
-              color={index === idx ? globalStyle.secondaryColor : "white"}
+              color={index === idx ? GLOBAL_COLORS.secondaryColor : "white"}
             />
           ))}
         </View>

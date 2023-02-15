@@ -8,7 +8,7 @@ import Zocial from "react-native-vector-icons/Zocial";
 import { useNavigation, useRoute } from "@react-navigation/native";
 
 import BannerAds from "features/ads/components/BannerAds";
-import { globalStyle } from "globalStyles";
+import { GLOBAL_COLORS } from "global";
 
 export const Header = ({ data }) => {
   const route = useRoute<any>();
@@ -107,7 +107,7 @@ export const Header = ({ data }) => {
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: globalStyle.primaryColor,
+    backgroundColor: GLOBAL_COLORS.primaryColor,
   },
   title: {
     color: "#fff",

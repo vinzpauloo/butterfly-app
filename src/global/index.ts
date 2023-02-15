@@ -1,8 +1,8 @@
-export const globalStyle = {
+export const GLOBAL_COLORS = {
   headerBasicBg: "#262632",
   primaryColor: "#191d26",
   secondaryColor: "#e15655",
   primaryTextColor: "#fff",
   inactiveTextColor: "#999",
-  btnColor: '#FF474E'
+  btnColor: "#FF474E",
 };

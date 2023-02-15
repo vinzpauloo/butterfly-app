@@ -9,54 +9,66 @@ import {
   Image,
   Linking,
 } from "react-native";
-import {HStack, VStack} from "native-base";
+import { HStack, VStack } from "native-base";
 
 import ImageTitle from "assets/images/profilePhoto.jpg";
 import Buttons from "components/forms/Buttons";
 import UserProfileSettingsHeader from "components/UserProfileSettingsHeader";
-import {globalStyle} from "globalStyles";
+import { GLOBAL_COLORS } from "global";
 
-const QRCode= () => {
+const QRCode = () => {
   return (
-      <VStack justifyContent={'center'} alignItems={'center'} bg={globalStyle.primaryTextColor} p={5} mx={5} space={2} mt={2}>
-        <HStack>
-          <Image style={styles.titleImage} source={ImageTitle} />
-          <Text style={styles.qrTitle}>
-            网黄UP主的性爱博客{"\n"}
-            分享你我的性福生活
+    <VStack
+      justifyContent={"center"}
+      alignItems={"center"}
+      bg={GLOBAL_COLORS.primaryTextColor}
+      p={5}
+      mx={5}
+      space={2}
+      mt={2}
+    >
+      <HStack>
+        <Image style={styles.titleImage} source={ImageTitle} />
+        <Text style={styles.qrTitle}>
+          网黄UP主的性爱博客{"\n"}
+          分享你我的性福生活
+        </Text>
+      </HStack>
+
+      <Image style={styles.qrCodeImage} source={ImageTitle} />
+
+      <View>
+        <Text style={styles.qrCodeText}>官网地址: txvlog.com</Text>
+        <Text style={styles.qrCodeText}>备用地址: tangxin.one</Text>
+        <Text style={styles.qrCodeText2}> tangxin.best</Text>
+      </View>
+
+      <HStack justifyContent={"space-between"} mx={-3}>
+        <View style={styles.qrCircle}></View>
+        <View style={styles.qrCodeDetails}>
+          <Text style={styles.qrCodeDetailsText}>
+            如果账号丢失,请到设置-找回账号-账号凭证 找回,上传凭证或扫描凭证
           </Text>
-        </HStack>
-
-        <Image style={styles.qrCodeImage} source={ImageTitle} />
-
-        <View>
-          <Text style={styles.qrCodeText}>官网地址: txvlog.com</Text>
-          <Text style={styles.qrCodeText}>备用地址: tangxin.one</Text>
-          <Text style={styles.qrCodeText2}> tangxin.best</Text>
         </View>
-
-        <HStack justifyContent={'space-between'} mx={-3}>
-          <View style={styles.qrCircle}></View>
-          <View style={styles.qrCodeDetails}>
-            <Text style={styles.qrCodeDetailsText}>
-              如果账号丢失,请到设置-找回账号-账号凭证 找回,上传凭证或扫描凭证
-            </Text>
-          </View>
-          <View style={styles.qrCircle}></View>
-        </HStack>
-      </VStack>
-  )
-}
+        <View style={styles.qrCircle}></View>
+      </HStack>
+    </VStack>
+  );
+};
 const AccountVerification = () => {
-
   return (
     <ScrollView style={styles.container}>
-      <UserProfileSettingsHeader title='账号凭证' btnRight={null}/>
-      <QRCode/>
+      <UserProfileSettingsHeader title="账号凭证" btnRight={null} />
+      <QRCode />
       {/* Button */}
-     <View style={styles.btnContainer}>
-       <Buttons title={'保存账号凭证到手机'} onPress={() => alert('Test Verification Button')} backgroundColor={globalStyle.btnColor} color={globalStyle.primaryTextColor}/>
-     </View>
+      <View style={styles.btnContainer}>
+        <Buttons
+          title={"保存账号凭证到手机"}
+          onPress={() => alert("Test Verification Button")}
+          backgroundColor={GLOBAL_COLORS.btnColor}
+          color={GLOBAL_COLORS.primaryTextColor}
+        />
+      </View>
       {/* WARNING */}
       <View style={styles.warning}>
         <Text style={styles.warningText}>账号丢失不用愁, 保存凭证解君忧!</Text>
@@ -160,8 +172,8 @@ const styles = StyleSheet.create({
   },
   btnContainer: {
     marginHorizontal: 20,
-    marginTop: 20
-  }
+    marginTop: 20,
+  },
 });
 
 export default AccountVerification;

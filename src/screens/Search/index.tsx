@@ -20,7 +20,7 @@ import GridVideos from "features/sectionList/components/GridVideos";
 import MaterialTopTabs from "layouts/navigators/MaterialTopTabs";
 import Users from "./tabs/Users";
 import Videos from "./tabs/Videos";
-import { globalStyle } from "globalStyles";
+import { GLOBAL_COLORS } from "global";
 import { multipleImages } from "data/gridImages";
 import { useNavigation } from "@react-navigation/native";
 import { FlashList } from "@shopify/flash-list";
@@ -297,7 +297,7 @@ const styles = StyleSheet.create({
     paddingLeft: 40,
   },
   searchBtn: {
-    backgroundColor: globalStyle.secondaryColor,
+    backgroundColor: GLOBAL_COLORS.secondaryColor,
     paddingVertical: 5,
     paddingHorizontal: 10,
     marginHorizontal: 10,
@@ -339,7 +339,7 @@ const styles = StyleSheet.create({
   },
   searchesText: {
     paddingHorizontal: 5,
-    color: globalStyle.secondaryColor,
+    color: GLOBAL_COLORS.secondaryColor,
   },
 
   //Popular Search Item

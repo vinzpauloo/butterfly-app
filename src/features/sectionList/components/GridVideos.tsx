@@ -15,7 +15,7 @@ import { MasonryFlashList } from "@shopify/flash-list";
 import { useNavigation } from "@react-navigation/native";
 import { Center, NativeBaseProvider, useDisclose } from "native-base";
 
-import { globalStyle } from "globalStyles";
+import { GLOBAL_COLORS } from "global";
 import { reelsVideos } from "data/reelsVideos";
 import Modal from "components/BottomModal";
 import VIPTag from "components/VIPTag";
@@ -30,7 +30,11 @@ const FollowingBottomContent = ({ item }) => {
         <Text style={styles.modelText}>Nana_taipei</Text>
       </View>
       <View style={{ flexDirection: "row", alignItems: "center" }}>
-        <Foundation name="heart" size={18} color={globalStyle.secondaryColor} />
+        <Foundation
+          name="heart"
+          size={18}
+          color={GLOBAL_COLORS.secondaryColor}
+        />
         <Text style={styles.modelText}>39.2w</Text>
       </View>
     </View>

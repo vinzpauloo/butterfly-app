@@ -4,7 +4,7 @@ import { Actionsheet, Box, Center } from "native-base";
 
 import AntDesign from "react-native-vector-icons/AntDesign";
 import Fontisto from "react-native-vector-icons/Fontisto";
-import { globalStyle } from "globalStyles";
+import { GLOBAL_COLORS } from "global";
 
 const { width } = Dimensions.get("window");
 
@@ -14,7 +14,7 @@ const Modal = ({ onOpen, isOpen, onClose }) => {
       <Actionsheet isOpen={isOpen} onClose={onClose} hideDragIndicator>
         <Actionsheet.Content
           borderTopRadius="0"
-          backgroundColor={globalStyle.primaryColor}
+          backgroundColor={GLOBAL_COLORS.primaryColor}
         >
           <Box w="100%" h={150} px={4} alignItems="center">
             <View

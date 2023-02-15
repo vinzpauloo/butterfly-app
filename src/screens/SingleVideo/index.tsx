@@ -4,7 +4,7 @@ import React from "react";
 import { useQuery } from "@tanstack/react-query";
 import { useRoute } from "@react-navigation/native";
 
-import { globalStyle } from "globalStyles";
+import { GLOBAL_COLORS } from "global";
 import { SubNav } from "hooks/useSubNav";
 import SingleVideoTab from "screens/SingleVideo/tabs/SingleVideoTabs";
 import VideoPlayer from "components/VideoPlayer";
@@ -47,7 +47,7 @@ export default SingleVideoScreen;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: globalStyle.primaryColor,
+    backgroundColor: GLOBAL_COLORS.primaryColor,
   },
   videoContent: {
     position: "relative",
@@ -58,7 +58,7 @@ const styles = StyleSheet.create({
     backgroundColor: "black",
   },
   watermarkContainer: {
-    backgroundColor: globalStyle.secondaryColor,
+    backgroundColor: GLOBAL_COLORS.secondaryColor,
     paddingVertical: 5,
     paddingHorizontal: 10,
     borderRadius: 20,

@@ -4,7 +4,7 @@ import React, { useState } from "react";
 import { Button, HStack, Modal, Text, VStack } from "native-base";
 import FontAwesome from "react-native-vector-icons/FontAwesome";
 
-import { globalStyle } from "globalStyles";
+import { GLOBAL_COLORS } from "global";
 import CustomModal from "components/CustomModal";
 
 const Content = ({ setOpen }) => {
@@ -16,7 +16,7 @@ const Content = ({ setOpen }) => {
           <FontAwesome
             name="bell"
             size={30}
-            color={globalStyle.secondaryColor}
+            color={GLOBAL_COLORS.secondaryColor}
           />
           <Text fontSize="lg">Announcement Title</Text>
         </VStack>
@@ -60,7 +60,7 @@ export default Announcement;
 
 const styles = StyleSheet.create({
   button: {
-    backgroundColor: globalStyle.secondaryColor,
+    backgroundColor: GLOBAL_COLORS.secondaryColor,
     borderRadius: 20,
     width: 80,
   },

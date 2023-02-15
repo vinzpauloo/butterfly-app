@@ -9,7 +9,7 @@ import {
   Pressable,
   Linking,
 } from "react-native";
-import {HStack, VStack} from "native-base";
+import { HStack, VStack } from "native-base";
 import { useNavigation } from "@react-navigation/native";
 
 import Fontisto from "react-native-vector-icons/Fontisto";
@@ -19,8 +19,7 @@ import { FontAwesome5 } from "@expo/vector-icons";
 import Container from "components/Container";
 import profilePhoto from "assets/images/profilePhoto.jpg";
 import { profileTabSubNav } from "data/profileTabSubNav";
-import {globalStyle} from "globalStyles";
-
+import { GLOBAL_COLORS } from "global";
 
 const Header = () => {
   const navigation = useNavigation<any>();
@@ -30,7 +29,7 @@ const Header = () => {
   };
 
   return (
-    <HStack justifyContent={'flex-end'} pr={2}>
+    <HStack justifyContent={"flex-end"} pr={2}>
       <Fontisto name="bell" color="#fff" size={25} style={styles.icon} />
       <Pressable onPress={handlePressSettings}>
         <Ionicons
@@ -48,57 +47,72 @@ const Summary = () => {
   const navigation = useNavigation<any>();
 
   return (
-      <HStack justifyContent={'space-between'} alignItems={'center'} p={5} backgroundColor={globalStyle.headerBasicBg}>
-        <HStack alignItems={'center'}>
-          <Image style={styles.profileImage} source={profilePhoto} />
-          <Text style={styles.givenName}>受伤的期待</Text>
-        </HStack>
-        <TouchableOpacity
-            onPress={() => navigation.navigate("SingleUser", {previousScreen: 'Account'})}
-        >
-          <HStack>
-            <Text style={styles.homeBtn}>主页</Text>
-            <FontAwesome5 name="angle-right" size={15} color={globalStyle.primaryTextColor} />
-          </HStack>
-        </TouchableOpacity>
+    <HStack
+      justifyContent={"space-between"}
+      alignItems={"center"}
+      p={5}
+      backgroundColor={GLOBAL_COLORS.headerBasicBg}
+    >
+      <HStack alignItems={"center"}>
+        <Image style={styles.profileImage} source={profilePhoto} />
+        <Text style={styles.givenName}>受伤的期待</Text>
       </HStack>
+      <TouchableOpacity
+        onPress={() =>
+          navigation.navigate("SingleUser", { previousScreen: "Account" })
+        }
+      >
+        <HStack>
+          <Text style={styles.homeBtn}>主页</Text>
+          <FontAwesome5
+            name="angle-right"
+            size={15}
+            color={GLOBAL_COLORS.primaryTextColor}
+          />
+        </HStack>
+      </TouchableOpacity>
+    </HStack>
   );
 };
 
 const VIP = () => {
   return (
-      <View style={styles.vipContainer}>
-        <Text style={styles.copyBtn}>VIP Section</Text>
-      </View>
-  )
-}
+    <View style={styles.vipContainer}>
+      <Text style={styles.copyBtn}>VIP Section</Text>
+    </View>
+  );
+};
 
 const LinkList = () => {
   const navigation = useNavigation<any>();
 
   return (
-    <VStack p={3} backgroundColor={globalStyle.headerBasicBg}>
+    <VStack p={3} backgroundColor={GLOBAL_COLORS.headerBasicBg}>
       {profileTabSubNav?.map((item, index) => (
-          <VStack key={index} p={2}>
-            <TouchableOpacity
-                onPress={() => {
-                  item.screen === 'OfficialGroup'
-                      ? Linking.openURL("https://t.me/StockPro_Official_BankNifty")
-                      : item.screen === 'CustomerService'
-                          ? navigation.navigate(`${item.screen}`, item.params)
-                          : navigation.navigate(`${item.screen}`);
-                }}
-            >
-              <HStack justifyContent={'space-between'} mx={2}>
-                <Text style={styles.fifthText}>{item.title}</Text>
-                <FontAwesome5 name="angle-right" size={20} color={globalStyle.primaryTextColor} />
-              </HStack>
-            </TouchableOpacity>
-            <View style={styles.fifthHorizontalRule}></View>
-          </VStack>
+        <VStack key={index} p={2}>
+          <TouchableOpacity
+            onPress={() => {
+              item.screen === "OfficialGroup"
+                ? Linking.openURL("https://t.me/StockPro_Official_BankNifty")
+                : item.screen === "CustomerService"
+                ? navigation.navigate(`${item.screen}`, item.params)
+                : navigation.navigate(`${item.screen}`);
+            }}
+          >
+            <HStack justifyContent={"space-between"} mx={2}>
+              <Text style={styles.fifthText}>{item.title}</Text>
+              <FontAwesome5
+                name="angle-right"
+                size={20}
+                color={GLOBAL_COLORS.primaryTextColor}
+              />
+            </HStack>
+          </TouchableOpacity>
+          <View style={styles.fifthHorizontalRule}></View>
+        </VStack>
       ))}
 
-      <HStack justifyContent={'center'} alignItems={'center'} p={3}>
+      <HStack justifyContent={"center"} alignItems={"center"} p={3}>
         <Text style={styles.fifthText}>官方邮箱linnannan101@gmail.com</Text>
         <TouchableOpacity>
           <View style={styles.copyBtnContainer}>
@@ -115,9 +129,9 @@ const AccountTab = () => {
     <Container>
       <Header />
       <ScrollView>
-        <VStack style={{flex: 1}} space={4} p={3}>
+        <VStack style={{ flex: 1 }} space={4} p={3}>
           <Summary />
-          <VIP/>
+          <VIP />
           <LinkList />
         </VStack>
       </ScrollView>
@@ -135,29 +149,29 @@ const styles = StyleSheet.create({
     width: 40,
     height: 40,
     borderRadius: 20,
-    marginRight: 15
+    marginRight: 15,
   },
   givenName: {
-    color: globalStyle.primaryTextColor,
+    color: GLOBAL_COLORS.primaryTextColor,
     fontSize: 15,
     fontWeight: "600",
   },
   homeBtn: {
-    color: globalStyle.primaryTextColor,
+    color: GLOBAL_COLORS.primaryTextColor,
     fontSize: 13,
     marginRight: 5,
   },
   fifthText: {
-    color: globalStyle.primaryTextColor,
+    color: GLOBAL_COLORS.primaryTextColor,
     fontSize: 12,
   },
   fifthHorizontalRule: {
-    borderBottomColor: globalStyle.primaryTextColor,
+    borderBottomColor: GLOBAL_COLORS.primaryTextColor,
     borderBottomWidth: 1,
     marginTop: 10,
   },
   copyBtnContainer: {
-    backgroundColor: globalStyle.btnColor,
+    backgroundColor: GLOBAL_COLORS.btnColor,
     width: 55,
     height: 25,
     borderRadius: 10,
@@ -166,16 +180,16 @@ const styles = StyleSheet.create({
     marginLeft: 10,
   },
   copyBtn: {
-    color: globalStyle.primaryTextColor,
+    color: GLOBAL_COLORS.primaryTextColor,
     textAlign: "center",
     fontSize: 12,
   },
   vipContainer: {
-    backgroundColor: globalStyle.headerBasicBg,
+    backgroundColor: GLOBAL_COLORS.headerBasicBg,
     borderRadius: 5,
     height: 80,
     flex: 1,
-    justifyContent: 'center',
-    marginBottom: 5
+    justifyContent: "center",
+    marginBottom: 5,
   },
 });

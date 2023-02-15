@@ -6,7 +6,7 @@ import { useRoute } from "@react-navigation/native";
 import MaterialTopTabs from "layouts/navigators/MaterialTopTabs";
 import Moment from "./Moment";
 import Recommended from "./Recommended";
-import { globalStyle } from "globalStyles";
+import { GLOBAL_COLORS } from "global";
 
 const SingleTagTabs = () => {
   const route = useRoute<any>();
@@ -27,7 +27,7 @@ const SingleTagTabs = () => {
   return (
     <MaterialTopTabs
       data={singleTagSubNav}
-      tabBarColor={globalStyle.headerBasicBg}
+      tabBarColor={GLOBAL_COLORS.headerBasicBg}
     />
   );
 };

@@ -9,7 +9,7 @@ import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityI
 import { masonryImages } from "data/masonryImages";
 import { photoGalleryImages } from "data/photoGalleryImages";
 import Container from "components/Container";
-import { globalStyle } from "globalStyles";
+import { GLOBAL_COLORS } from "global";
 import VIPTag from "components/VIPTag";
 import CustomModal from "components/CustomModal";
 import MasonrySkeleton from "components/skeletons/MasonrySkeleton";
@@ -27,7 +27,7 @@ type SingleImageProp = {
 
 const Content = ({ setOpen }) => {
   return (
-    <Modal.Content bgColor={globalStyle.headerBasicBg}>
+    <Modal.Content bgColor={GLOBAL_COLORS.headerBasicBg}>
       <Modal.CloseButton />
       <Modal.Body>
         <VStack space={8} alignItems="center" margin={0} py={5}>
@@ -63,7 +63,7 @@ const SingleImage = (props: SingleImageProp) => {
   return (
     <Pressable onPress={props.idx === 0 ? openVIPModal : handlePress}>
       <ImageBackground
-        source={{ uri: props.url, cache: 'only-if-cached'}}
+        source={{ uri: props.url, cache: "only-if-cached" }}
         style={[styles.singleImage, { height: props.height }]}
         resizeMode="cover"
       >
@@ -73,7 +73,7 @@ const SingleImage = (props: SingleImageProp) => {
           <HStack space={1}>
             <MaterialCommunityIcons
               name="heart"
-              color={globalStyle.secondaryColor}
+              color={GLOBAL_COLORS.secondaryColor}
               size={20}
             />
             <Text style={styles.whiteText}>{props.totalLikes}</Text>
@@ -87,7 +87,7 @@ const SingleImage = (props: SingleImageProp) => {
 const MasonryPhotos = (props: Props) => {
   const [open, setOpen] = useState(false);
 
-  const [masonryPhotosIsLoaded, setmasonryPhotosIsLoaded] = useState(false)
+  const [masonryPhotosIsLoaded, setmasonryPhotosIsLoaded] = useState(false);
 
   useEffect(() => {
     setTimeout(() => setmasonryPhotosIsLoaded(true), 1000);
@@ -95,7 +95,7 @@ const MasonryPhotos = (props: Props) => {
 
   return (
     <>
-      {masonryPhotosIsLoaded ?
+      {masonryPhotosIsLoaded ? (
         <>
           <Container>
             <View style={styles.masonryContainer}>
@@ -121,8 +121,9 @@ const MasonryPhotos = (props: Props) => {
             <Content setOpen={setOpen} />
           </CustomModal>
         </>
-      :
-        <MasonrySkeleton />}
+      ) : (
+        <MasonrySkeleton />
+      )}
     </>
   );
 };
@@ -132,7 +133,7 @@ export default MasonryPhotos;
 const styles = StyleSheet.create({
   masonryContainer: {
     flex: 1,
-    minHeight: 100
+    minHeight: 100,
   },
   singleImage: {
     margin: 4,
@@ -146,7 +147,7 @@ const styles = StyleSheet.create({
     color: "white",
   },
   button: {
-    backgroundColor: globalStyle.secondaryColor,
+    backgroundColor: GLOBAL_COLORS.secondaryColor,
     borderRadius: 20,
     width: 120,
   },

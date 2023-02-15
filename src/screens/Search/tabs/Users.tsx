@@ -15,7 +15,7 @@ import Feather from "react-native-vector-icons/Feather";
 import Container from "components/Container";
 import banner2 from "assets/images/banner2.jpg";
 import girl from "assets/images/girl.jpg";
-import { globalStyle } from "globalStyles";
+import { GLOBAL_COLORS } from "global";
 import VIPTag from "components/VIPTag";
 
 const { width } = Dimensions.get("window");
@@ -122,7 +122,7 @@ const styles = StyleSheet.create({
     borderRadius: 5,
     paddingVertical: 5,
     paddingHorizontal: 10,
-    backgroundColor: globalStyle.secondaryColor,
+    backgroundColor: GLOBAL_COLORS.secondaryColor,
   },
   followText: {
     color: "#fff",
@@ -178,7 +178,7 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     marginVertical: 20,
-    color: globalStyle.secondaryColor,
+    color: GLOBAL_COLORS.secondaryColor,
     textAlign: "center",
   },
 });

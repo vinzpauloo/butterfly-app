@@ -12,7 +12,7 @@ module.exports = function (api) {
             components: "./src/components",
             data: "./src/data",
             features: "./src/features",
-            globalStyles: "./src/globalStyles",
+            global: "./src/global",
             hooks: "./src/hooks",
             i18n: "./src/i18n",
             layouts: "./src/layouts",
@@ -25,11 +25,13 @@ module.exports = function (api) {
           },
         },
       ],
-      ["module:react-native-dotenv",
+      [
+        "module:react-native-dotenv",
         {
-          moduleName: 'react-native-dotenv',
+          moduleName: "react-native-dotenv",
           verbose: true,
-      }]
+        },
+      ],
     ],
   };
 };

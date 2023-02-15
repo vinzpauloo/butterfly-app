@@ -7,7 +7,8 @@ import {
   Image,
   TouchableOpacity,
   SafeAreaView,
-  Dimensions, Linking,
+  Dimensions,
+  Linking,
 } from "react-native";
 import Modal from "react-native-modal";
 
@@ -18,14 +19,15 @@ import {
   AntDesign,
   SimpleLineIcons,
   MaterialCommunityIcons,
-  MaterialIcons, FontAwesome5,
+  MaterialIcons,
+  FontAwesome5,
 } from "@expo/vector-icons";
 
 import Container from "components/Container";
 import profilePhoto from "assets/images/profilePhoto.jpg";
-import {globalStyle} from "../../globalStyles";
-import {HStack, VStack} from "native-base";
-import {settingsOthersList} from "../../data/settingsOthersList";
+import { GLOBAL_COLORS } from "../../global";
+import { HStack, VStack } from "native-base";
+import { settingsOthersList } from "../../data/settingsOthersList";
 const MainSettings = (navigation: any) => {
   const [selected, setSelected] = useState(null);
   const [image, setImage] = useState(null);
@@ -203,7 +205,9 @@ const AccountSettings = (navigation: any) => {
       </View>
 
       {/*Account Certificate*/}
-      <TouchableOpacity onPress={() => navigate.navigate("AccountVerification")}>
+      <TouchableOpacity
+        onPress={() => navigate.navigate("AccountVerification")}
+      >
         <View style={styles.itemContainer}>
           <View style={styles.itemInnerContainer}>
             <MaterialCommunityIcons
@@ -252,31 +256,37 @@ const OtherSettings = (props) => {
   const navigate = useNavigation<any>();
 
   return (
-      <VStack backgroundColor={globalStyle.primaryColor} style={styles.otherSettings} space={5} mt={5} mb={5}>
-        <Text style={styles.accountAndOthersTitle}>其他</Text>
-        {settingsOthersList?.map((item, index) => (
-            <VStack key={index}>
-              <TouchableOpacity
-                  onPress={() => {
-                    item.screen === 'OfficialGroup'
-                        ? Linking.openURL("https://t.me/StockPro_Official_BankNifty")
-                        : item.screen === 'CustomerService'
-                            ? navigate.navigate(`${item.screen}`, item.params)
-                            : navigate.navigate(`${item.screen}`);
-                  }}
-              >
-                <HStack justifyContent={'space-between'}>
-                  <HStack alignItems={'center'}>
-                    {item.logo}
-                    <Text style={styles.accountAndOthersSection}>{item.title}</Text>
-                  </HStack>
-                  <AntDesign name="right" size={18} color="white" />
-                </HStack>
-              </TouchableOpacity>
-              <View></View>
-            </VStack>
-        ))}
-      </VStack>
+    <VStack
+      backgroundColor={GLOBAL_COLORS.primaryColor}
+      style={styles.otherSettings}
+      space={5}
+      mt={5}
+      mb={5}
+    >
+      <Text style={styles.accountAndOthersTitle}>其他</Text>
+      {settingsOthersList?.map((item, index) => (
+        <VStack key={index}>
+          <TouchableOpacity
+            onPress={() => {
+              item.screen === "OfficialGroup"
+                ? Linking.openURL("https://t.me/StockPro_Official_BankNifty")
+                : item.screen === "CustomerService"
+                ? navigate.navigate(`${item.screen}`, item.params)
+                : navigate.navigate(`${item.screen}`);
+            }}
+          >
+            <HStack justifyContent={"space-between"}>
+              <HStack alignItems={"center"}>
+                {item.logo}
+                <Text style={styles.accountAndOthersSection}>{item.title}</Text>
+              </HStack>
+              <AntDesign name="right" size={18} color="white" />
+            </HStack>
+          </TouchableOpacity>
+          <View></View>
+        </VStack>
+      ))}
+    </VStack>
   );
 };
 

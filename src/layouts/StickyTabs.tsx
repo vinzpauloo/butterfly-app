@@ -8,7 +8,7 @@ import {
   ScrollView,
 } from "react-native-collapsible-tab-view";
 
-import { globalStyle } from "globalStyles";
+import { GLOBAL_COLORS } from "global";
 
 interface IStickyTabsProps {
   scrollEnabled?: boolean;
@@ -50,8 +50,8 @@ const StickyTabs: React.FC<IStickyTabsProps> = ({
     return (
       <MaterialTabBar
         {...props}
-        activeColor={globalStyle.primaryTextColor}
-        inactiveColor={globalStyle.inactiveTextColor}
+        activeColor={GLOBAL_COLORS.primaryTextColor}
+        inactiveColor={GLOBAL_COLORS.inactiveTextColor}
         tabStyle={styles.tabStyle}
         indicatorStyle={styles.indicatorStyle}
         scrollEnabled={scrollEnabled}
@@ -91,10 +91,10 @@ export default StickyTabs;
 
 const styles = StyleSheet.create({
   tabStyle: {
-    backgroundColor: globalStyle.primaryColor,
+    backgroundColor: GLOBAL_COLORS.primaryColor,
     height: 40,
   },
   indicatorStyle: {
-    backgroundColor: globalStyle.secondaryColor,
+    backgroundColor: GLOBAL_COLORS.secondaryColor,
   },
 });

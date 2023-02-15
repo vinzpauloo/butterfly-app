@@ -10,7 +10,7 @@ import React from "react";
 
 import Ionicons from "react-native-vector-icons/Ionicons";
 
-import { globalStyle } from "globalStyles";
+import { GLOBAL_COLORS } from "global";
 import BottomTabs from "layouts/navigators/BottomTabs";
 import PhotoGallery from "screens/PhotoGallery";
 import PortraitVideo from "layouts/PortraitVideo";
@@ -52,7 +52,7 @@ const basicHeader = ({ navigation, route }: any) => ({
   headerTitle: route?.params.postTitle,
   headerTitleAlign: "center",
   headerStyle: {
-    backgroundColor: globalStyle.headerBasicBg,
+    backgroundColor: GLOBAL_COLORS.headerBasicBg,
   },
   headerTitleStyle: {
     color: "#fff",
@@ -96,7 +96,7 @@ export const stackScreens = {
       options: ({ navigation, route }: any) => ({
         title: "",
         headerStyle: {
-          backgroundColor: globalStyle.primaryColor,
+          backgroundColor: GLOBAL_COLORS.primaryColor,
         },
         headerLeft: () => (
           <View
@@ -326,7 +326,7 @@ const styles = StyleSheet.create({
     width: 180,
   },
   followBtn: {
-    backgroundColor: globalStyle.secondaryColor,
+    backgroundColor: GLOBAL_COLORS.secondaryColor,
     paddingVertical: 5,
     paddingHorizontal: 10,
     borderRadius: 15,

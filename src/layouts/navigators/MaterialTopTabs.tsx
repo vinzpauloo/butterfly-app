@@ -3,7 +3,7 @@ import React from "react";
 
 import { createMaterialTopTabNavigator } from "@react-navigation/material-top-tabs";
 
-import { globalStyle } from "globalStyles";
+import { GLOBAL_COLORS } from "global";
 import Container from "components/Container";
 
 const TopTab = createMaterialTopTabNavigator();
@@ -23,10 +23,12 @@ const MaterialTopTabs = ({
         initialRouteName={initialRoute}
         screenOptions={{
           tabBarActiveTintColor: activeColor,
-          tabBarIndicatorStyle: { backgroundColor: globalStyle.secondaryColor },
+          tabBarIndicatorStyle: {
+            backgroundColor: GLOBAL_COLORS.secondaryColor,
+          },
           tabBarInactiveTintColor: "#999",
           tabBarStyle: {
-            backgroundColor: tabBarColor || globalStyle.primaryColor,
+            backgroundColor: tabBarColor || GLOBAL_COLORS.primaryColor,
             height: height,
           },
           tabBarAllowFontScaling: true,

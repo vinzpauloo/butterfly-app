@@ -1,29 +1,26 @@
 import React from "react";
-import {
-  StyleSheet,
-  Text,
-  View,
-  ScrollView,
-  Dimensions,
-} from "react-native";
+import { StyleSheet, Text, View, ScrollView, Dimensions } from "react-native";
 
 import { useNavigation } from "@react-navigation/native";
 
 import InputText from "components/forms/InputText";
 import Buttons from "components/forms/Buttons";
 import UserProfileSettingsHeader from "components/UserProfileSettingsHeader";
-import {globalStyle} from "../../../globalStyles";
+import { GLOBAL_COLORS } from "../../../global";
 
 const PetName = () => {
-
   return (
     <ScrollView style={styles.container}>
       {/*Title and Back Button  */}
-      <UserProfileSettingsHeader title='昵称' btnRight={null}/>
+      <UserProfileSettingsHeader title="昵称" btnRight={null} />
 
       <View>
         <View style={styles.inputContainer}>
-          <InputText maxLength={10} placeholder='受伤的期待' placeholderTextColor='grey'/>
+          <InputText
+            maxLength={10}
+            placeholder="受伤的期待"
+            placeholderTextColor="grey"
+          />
         </View>
 
         <Text style={styles.details1}>每个自然月仅允许修改一次</Text>
@@ -33,7 +30,12 @@ const PetName = () => {
         </Text>
 
         <View style={styles.btnContainer}>
-          <Buttons title={'提交'} onPress={() => alert('PetName button test')} backgroundColor={globalStyle.btnColor} color={globalStyle.primaryTextColor}/>
+          <Buttons
+            title={"提交"}
+            onPress={() => alert("PetName button test")}
+            backgroundColor={GLOBAL_COLORS.btnColor}
+            color={GLOBAL_COLORS.primaryTextColor}
+          />
         </View>
       </View>
     </ScrollView>
@@ -62,12 +64,12 @@ const styles = StyleSheet.create({
   },
   inputContainer: {
     marginHorizontal: 21,
-    marginTop: 20
+    marginTop: 20,
   },
   btnContainer: {
     marginVertical: 20,
-    marginHorizontal: 20
-  }
+    marginHorizontal: 20,
+  },
 });
 
 export default PetName;

@@ -1,4 +1,10 @@
-import { Dimensions, ImageBackground, Pressable, StyleSheet, Text } from "react-native";
+import {
+  Dimensions,
+  ImageBackground,
+  Pressable,
+  StyleSheet,
+  Text,
+} from "react-native";
 import { useEffect, useState } from "react";
 
 import * as Linking from "expo-linking";
@@ -9,9 +15,9 @@ const { height } = Dimensions.get("window");
 
 import { useQuery } from "@tanstack/react-query";
 import { useSiteSettings } from "hooks/useSiteSettings";
-import { globalStyle } from "globalStyles";
+import { GLOBAL_COLORS } from "global";
 
-import { storeDataObject, getDataObject } from "services/asyncStorage"
+import { storeDataObject, getDataObject } from "services/asyncStorage";
 
 const Preloading = () => {
   const navigation = useNavigation<any>();
@@ -20,26 +26,23 @@ const Preloading = () => {
     navigation.dispatch(StackActions.replace("BottomNav"));
   };
 
-  const [adsURL, setadsURL] = useState(null)
-  const [bannerImgURL, setbannerImgURL] = useState(null)
-  const [isQueryEnable, setIsQueryEnable] = useState(false)
+  const [adsURL, setadsURL] = useState(null);
+  const [bannerImgURL, setbannerImgURL] = useState(null);
+  const [isQueryEnable, setIsQueryEnable] = useState(false);
 
   useEffect(() => {
     // see local storage first, if local storage has cache the banner image and ads URL use it
     getDataObject("PreloadingData").then((res: any) => {
       if (res.message === "Key not found or is empty") {
-        setIsQueryEnable(true)
+        setIsQueryEnable(true);
+      } else {
+        console.log("local cache exists");
+        setIsQueryEnable(false);
+        setbannerImgURL(res.banner);
+        setadsURL(res.ads);
       }
-
-      else {
-        console.log("local cache exists")
-        setIsQueryEnable(false)
-        setbannerImgURL(res.banner)
-        setadsURL(res.ads)
-      }
-    })
-  },[])
-  
+    });
+  }, []);
 
   // if local storage dont have cache, fetch from backend and store locally
   const { getAds } = useSiteSettings();
@@ -47,13 +50,15 @@ const Preloading = () => {
     queryKey: ["ads"],
     queryFn: () => getAds(),
     onSuccess: (data) => {
-      console.log("fetch was called")
-      setbannerImgURL(data[0].advertisement.fullscreen_banner[0].banners[0].photo_url)
-      setadsURL(data[0].advertisement.fullscreen_banner[0].banners[0].url)
+      console.log("fetch was called");
+      setbannerImgURL(
+        data[0].advertisement.fullscreen_banner[0].banners[0].photo_url
+      );
+      setadsURL(data[0].advertisement.fullscreen_banner[0].banners[0].url);
       storeDataObject("PreloadingData", {
         banner: data[0].advertisement.fullscreen_banner[0].banners[0].photo_url,
-        ads: data[0].advertisement.fullscreen_banner[0].banners[0].url
-      })
+        ads: data[0].advertisement.fullscreen_banner[0].banners[0].url,
+      });
     },
     onError: (error) => {
       console.log("Error", error);
@@ -63,7 +68,11 @@ const Preloading = () => {
 
   return (
     <Pressable onPress={() => Linking.openURL(adsURL)}>
-      <ImageBackground source={{ uri: bannerImgURL }} resizeMode="cover" style={styles.image}>
+      <ImageBackground
+        source={{ uri: bannerImgURL }}
+        resizeMode="cover"
+        style={styles.image}
+      >
         <Pressable style={styles.button} onPress={handleButtonpress}>
           <Text style={styles.text}>Go to Home</Text>
         </Pressable>
@@ -94,7 +103,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 12,
   },
   loaderContainer: {
-    backgroundColor: globalStyle.primaryColor,
+    backgroundColor: GLOBAL_COLORS.primaryColor,
     justifyContent: "center",
     alignItems: "center",
     flex: 1,

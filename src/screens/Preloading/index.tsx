@@ -1,46 +1,74 @@
-import {
-  Dimensions,
-  ImageBackground,
-  Pressable,
-  ScrollView,
-  StyleSheet,
-  Text,
-} from "react-native";
-import { useState, useEffect } from "react";
+import { Dimensions, ImageBackground, Pressable, StyleSheet, Text } from "react-native";
+import { useEffect, useState } from "react";
 
 import * as Linking from "expo-linking";
 
-import adsFullscreen from "assets/images/ads-fullscreen.jpg";
 import { StackActions, useNavigation } from "@react-navigation/native";
 
-const adsURL = "https://google.com/";
 const { height } = Dimensions.get("window");
 
-const Preloading = ({}) => {
-  const navigation = useNavigation<any>();
+import { useQuery } from "@tanstack/react-query";
+import { useSiteSettings } from "hooks/useSiteSettings";
+import { globalStyle } from "globalStyles";
 
-  const handleAdPress = () => {
-    Linking.openURL(adsURL);
-  };
+import { storeDataObject, getDataObject } from "services/asyncStorage"
+
+const Preloading = () => {
+  const navigation = useNavigation<any>();
 
   const handleButtonpress = () => {
     navigation.dispatch(StackActions.replace("BottomNav"));
   };
 
+  const [adsURL, setadsURL] = useState(null)
+  const [bannerImgURL, setbannerImgURL] = useState(null)
+  const [isQueryEnable, setIsQueryEnable] = useState(false)
+
+  useEffect(() => {
+    // see local storage first, if local storage has cache the banner image and ads URL use it
+    getDataObject("PreloadingData").then((res: any) => {
+      if (res.message === "Key not found or is empty") {
+        setIsQueryEnable(true)
+      }
+
+      else {
+        console.log("local cache exists")
+        setIsQueryEnable(false)
+        setbannerImgURL(res.banner)
+        setadsURL(res.ads)
+      }
+    })
+  },[])
+  
+
+  // if local storage dont have cache, fetch from backend and store locally
+  const { getAds } = useSiteSettings();
+  const { isLoading, isError, data, error, status } = useQuery({
+    queryKey: ["ads"],
+    queryFn: () => getAds(),
+    onSuccess: (data) => {
+      console.log("fetch was called")
+      setbannerImgURL(data[0].advertisement.fullscreen_banner[0].banners[0].photo_url)
+      setadsURL(data[0].advertisement.fullscreen_banner[0].banners[0].url)
+      storeDataObject("PreloadingData", {
+        banner: data[0].advertisement.fullscreen_banner[0].banners[0].photo_url,
+        ads: data[0].advertisement.fullscreen_banner[0].banners[0].url
+      })
+    },
+    onError: (error) => {
+      console.log("Error", error);
+    },
+    enabled: isQueryEnable,
+  });
+
   return (
-    <ScrollView>
-      <Pressable onPress={handleAdPress}>
-        <ImageBackground
-          source={adsFullscreen}
-          resizeMode="cover"
-          style={styles.image}
-        >
-          <Pressable style={styles.button} onPress={handleButtonpress}>
-            <Text style={styles.text}>Go to Home</Text>
-          </Pressable>
-        </ImageBackground>
-      </Pressable>
-    </ScrollView>
+    <Pressable onPress={() => Linking.openURL(adsURL)}>
+      <ImageBackground source={{ uri: bannerImgURL }} resizeMode="cover" style={styles.image}>
+        <Pressable style={styles.button} onPress={handleButtonpress}>
+          <Text style={styles.text}>Go to Home</Text>
+        </Pressable>
+      </ImageBackground>
+    </Pressable>
   );
 };
 
@@ -64,5 +92,11 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
     textAlign: "center",
     paddingHorizontal: 12,
+  },
+  loaderContainer: {
+    backgroundColor: globalStyle.primaryColor,
+    justifyContent: "center",
+    alignItems: "center",
+    flex: 1,
   },
 });

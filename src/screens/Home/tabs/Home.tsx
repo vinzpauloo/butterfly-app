@@ -7,6 +7,8 @@ import Container from "components/Container";
 import DynamicTabContent from "layouts/DynamicTabContent";
 import MaterialTopTabs from "layouts/navigators/MaterialTopTabs";
 import { useSiteSettings } from "hooks/useSiteSettings";
+import CarouselSkeleton from "components/skeletons/CarouselSkeleton";
+import VideoListSkeleton from "components/skeletons/VideoListSkeleton";
 
 const Home = () => {
   const [tabItems, setTabItems] = useState({ initialRoute: "", screens: [] });
@@ -41,11 +43,12 @@ const Home = () => {
     },
   });
 
-  if (isLoading && !!tabItems) {
+  if (isLoading) {
     return (
-      <View>
-        <Text>Loading...</Text>
-      </View>
+      <>
+        <CarouselSkeleton />
+        <VideoListSkeleton />
+      </>
     );
   }
 

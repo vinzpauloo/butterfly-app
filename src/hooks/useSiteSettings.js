@@ -8,5 +8,12 @@ export const useSiteSettings = () => {
     });
   };
 
-  return { getNavbar };
+  const getAds = (siteId = 1) => {
+    return request({
+      url: `/advertisement?site_id=${siteId}`,
+      method: "GET",
+    });
+  };
+
+  return { getNavbar, getAds };
 };

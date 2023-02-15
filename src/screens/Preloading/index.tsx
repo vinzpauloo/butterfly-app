@@ -1,5 +1,5 @@
-import { Dimensions, ImageBackground, Pressable, StyleSheet, Text, View } from "react-native";
-import { useState } from "react";
+import { Dimensions, ImageBackground, Pressable, StyleSheet, Text } from "react-native";
+import { useEffect, useState } from "react";
 
 import * as Linking from "expo-linking";
 
@@ -24,22 +24,22 @@ const Preloading = () => {
   const [bannerImgURL, setbannerImgURL] = useState(null)
   const [isQueryEnable, setIsQueryEnable] = useState(false)
 
-  // see local storage first, if local storage has cache the banner image and ads URL use it
-  getDataObject("PreloadingData").then((res: any) => {
-    if (res.message === "Key not found or is empty") {
-      console.log("fetch")
-      console.log(res)
-      setIsQueryEnable(true)
-    }
+  useEffect(() => {
+    // see local storage first, if local storage has cache the banner image and ads URL use it
+    getDataObject("PreloadingData").then((res: any) => {
+      if (res.message === "Key not found or is empty") {
+        setIsQueryEnable(true)
+      }
 
-    else {
-      console.log("local")
-      console.log(res)
-      setIsQueryEnable(false)
-      setadsURL(res.data1)
-      setbannerImgURL(res.data2)
-    }
-  })
+      else {
+        console.log("local cache exists")
+        setIsQueryEnable(false)
+        setbannerImgURL(res.banner)
+        setadsURL(res.ads)
+      }
+    })
+  },[])
+  
 
   // if local storage dont have cache, fetch from backend and store locally
   const { getAds } = useSiteSettings();
@@ -50,7 +50,10 @@ const Preloading = () => {
       console.log("fetch was called")
       setbannerImgURL(data[0].advertisement.fullscreen_banner[0].banners[0].photo_url)
       setadsURL(data[0].advertisement.fullscreen_banner[0].banners[0].url)
-      storeDataObject("PreloadingData", { data1: adsURL, data2: bannerImgURL })
+      storeDataObject("PreloadingData", {
+        banner: data[0].advertisement.fullscreen_banner[0].banners[0].photo_url,
+        ads: data[0].advertisement.fullscreen_banner[0].banners[0].url
+      })
     },
     onError: (error) => {
       console.log("Error", error);

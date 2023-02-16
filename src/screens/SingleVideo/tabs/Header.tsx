@@ -9,14 +9,16 @@ import { useNavigation, useRoute } from "@react-navigation/native";
 
 import BannerAds from "features/ads/components/BannerAds";
 import { GLOBAL_COLORS } from "global";
+import LikeButton from "components/forms/singleVideo/LikeButton";
+import FavoriteButton from "components/forms/singleVideo/FavoriteButton";
 
 export const Header = ({ data }) => {
   const route = useRoute<any>();
   const navigation = useNavigation<any>();
 
   // navigate to single tag screen
-  const handleNavigate = () => {
-    navigation.navigate("SingleTag", { id: route.params.id });
+  const handleNavigate = (item) => {
+    navigation.navigate("SingleTag", { id: route.params.id, tag: item });
   };
 
   return (
@@ -47,30 +49,14 @@ export const Header = ({ data }) => {
         </View>
         <View style={styles.tags}>
           {data?.tags.map((item, index) => (
-            <Pressable key={index} onPress={handleNavigate}>
+            <Pressable key={index} onPress={() => handleNavigate(item)}>
               <Text style={styles.tag}>{item}</Text>
             </Pressable>
           ))}
         </View>
         <View style={styles.buttonsContent}>
-          <View style={styles.buttonItem}>
-            <AntDesign
-              name="heart"
-              color="#999"
-              size={15}
-              style={styles.icon}
-            />
-            <Text style={styles.text}>{data?.likes}</Text>
-          </View>
-          <View style={styles.buttonItem}>
-            <MaterialIcons
-              name="star"
-              color="#999"
-              size={18}
-              style={styles.icon}
-            />
-            <Text style={styles.text}>收藏</Text>
-          </View>
+          <LikeButton data={data} id={route.params.id} />
+          <FavoriteButton id={route.params.id} />
           <View style={[styles.buttonItem, { flexDirection: "column" }]}>
             <Zocial
               name="bitcoin"

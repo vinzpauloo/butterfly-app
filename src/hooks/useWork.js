@@ -11,7 +11,7 @@ export const Work = () => {
 
   const getWorkRecommended = (data) => {
     return request({
-      url: "/work/recommended",
+      url: "/work",
       method: "GET",
       params: data,
     });

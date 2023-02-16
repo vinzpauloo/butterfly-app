@@ -16,7 +16,9 @@ const SingleTagTabs = () => {
     screens: [
       {
         name: "推荐",
-        component: () => <Recommended id={route.params.id} />,
+        component: () => (
+          <Recommended id={route.params.id} tag={route.params.tag} />
+        ),
       },
       {
         name: "动态",

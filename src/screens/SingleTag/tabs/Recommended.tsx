@@ -7,15 +7,15 @@ import { useQuery } from "@tanstack/react-query";
 
 import Container from "components/Container";
 import GridVideos from "features/sectionList/components/GridVideos";
-import { SingleVideo } from "hooks/useWork";
+import { Work } from "hooks/useWork";
 import BottomMessage from "components/BottomMessage";
 
-const Recommended = ({ id }) => {
-  const { getWorkRecommended } = SingleVideo();
+const Recommended = ({ id, tag }) => {
+  const { getWorkRecommended } = Work();
 
   const { data, isLoading } = useQuery({
     queryKey: ["recommended", id],
-    queryFn: getWorkRecommended,
+    queryFn: () => getWorkRecommended({ tag, with: "user", ads: true }),
     onSuccess: (data) => {
       console.log("Success", data);
     },
@@ -36,7 +36,7 @@ const Recommended = ({ id }) => {
   return (
     <ScrollView>
       <Container>
-        <GridVideos data={data.data} />
+        <GridVideos data={data} />
         <BottomMessage />
       </Container>
     </ScrollView>

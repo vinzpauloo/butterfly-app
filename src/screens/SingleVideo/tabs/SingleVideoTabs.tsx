@@ -29,8 +29,10 @@ const GridVideosLayout = ({ api_func, id }) => {
       </View>
     );
   }
-
-  return <GridVideos data={data.data} />;
+  //  the data.data is for getWorkAll function
+  //  the data is for getWorkRecommended function
+  // ->  !!data.data will converted to boolean if the data.data is undefined it will become false
+  return <GridVideos data={!!data.data ? data.data : data} />;
 };
 
 const CommentListLayout = () => {
@@ -60,7 +62,10 @@ const SingleVideoTab = ({ data }) => {
         label: "TA的视频",
         Content: (
           <GridVideosLayout
-            api_func={getWorkAll({ user_id: route.params.userId })}
+            api_func={getWorkAll({
+              user_id: route.params.userId,
+              with: "user",
+            })}
             id={route.params.userId}
           />
         ), // use user_id as params to get ALL data related on that user_id -> api/work?user_id={user_id}
@@ -70,8 +75,12 @@ const SingleVideoTab = ({ data }) => {
         label: "更多推荐",
         Content: (
           <GridVideosLayout
-            api_func={getWorkRecommended()}
-            id={route.params.userId}
+            api_func={getWorkRecommended({
+              tags: data.tags.toString(),
+              with: "user",
+              ads: true,
+            })}
+            id={route.params.id}
           />
         ), // get all recommended video -> api/work/recommended
       },

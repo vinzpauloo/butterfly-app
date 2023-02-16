@@ -1,23 +1,78 @@
-import { StyleSheet } from "react-native";
+import { Button, StyleSheet } from "react-native";
 import React, { useEffect, useState } from "react";
 
 import { Box, Center, Spinner, Text, VStack } from "native-base";
 import { StackActions, useNavigation } from "@react-navigation/native";
 
+import { adsGlobalStore } from "../../zustand/adsGlobalStore";
+
+import { useQuery } from "@tanstack/react-query";
+import { useSiteSettings } from "hooks/useSiteSettings";
+
+import { storeDataObject, getDataObject } from "services/asyncStorage";
+
 const InitialLoad = () => {
-  const [counter, setCounter] = useState(3);
   const navigation = useNavigation<any>();
 
+  const [isQueryEnable, setIsQueryEnable] = useState(false);
+
+  // subscribe to ads global store
+  const setAdsGlobalStore = adsGlobalStore((state) => state.setAdvertisement);
+
   useEffect(() => {
-    const timer =
-      counter > 0 && setInterval(() => setCounter(counter - 1), 1000);
+    // check local app cache if it has ads data
+    getDataObject("AdvertisementCacheData").then((res: any) => {
+      if (res.message === "Key not found or is empty") {
+        setIsQueryEnable(true);
+      } else {
+        console.log("=== Local Cache is used! ===");
+        setIsQueryEnable(false);
 
-    if (counter === 0) {
-      navigation.dispatch(StackActions.replace("TermsOfService"));
-    }
+        // update global ads global store according to cached data
+        setAdsGlobalStore(
+          res.fullscreen_banner,
+          res.popup_banner,
+          res.carousel_banner,
+          res.single_banner,
+          res.multiple_random_gif
+        );
 
-    return () => clearInterval(timer);
-  }, [counter]);
+        navigation.dispatch(StackActions.replace("TermsOfService"));
+      }
+    });
+  }, []);
+
+  // if local app cache dont have ads, fetch all ads data from backend
+  const { getAds } = useSiteSettings();
+  const { isLoading, isError, data, error, status } = useQuery({
+    queryKey: ["ads"],
+    queryFn: () => getAds(),
+    onSuccess: (data) => {
+      console.log("=== Data Fetched from backend! ===");
+      // fetch ads from backend and put into ads global store
+      setAdsGlobalStore(
+        // all arrays
+        data[0].advertisement.fullscreen_banner[0].banners,
+        data[0].advertisement.popup_banner[0].banners,
+        data[0].advertisement.carousel_banner[0].banners,
+        data[0].advertisement.single_banner.banners,
+        data[0].advertisement.multiple_random_gif.gif
+      );
+
+      // store ads to local app cache
+      storeDataObject("AdvertisementCacheData", {
+        fullscreen_banner: data[0].advertisement.fullscreen_banner[0].banners,
+        popup_banner: data[0].advertisement.popup_banner[0].banners,
+        carousel_banner: data[0].advertisement.carousel_banner[0].banners,
+        single_banner: data[0].advertisement.single_banner.banners,
+        multiple_random_gif: data[0].advertisement.multiple_random_gif.gif,
+      });
+    },
+    onError: (error) => {
+      console.log("Error", error);
+    },
+    enabled: isQueryEnable,
+  });
 
   return (
     <Center flex={1}>

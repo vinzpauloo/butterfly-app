@@ -5,75 +5,40 @@ import {
   StyleSheet,
   Text,
 } from "react-native";
-import { useEffect, useState } from "react";
-
-import * as Linking from "expo-linking";
-
 import { StackActions, useNavigation } from "@react-navigation/native";
+import * as Linking from "expo-linking";
+import { GLOBAL_COLORS } from "global";
+import { adsGlobalStore } from "../../zustand/adsGlobalStore"
 
 const { height } = Dimensions.get("window");
-
-import { useQuery } from "@tanstack/react-query";
-import { useSiteSettings } from "hooks/useSiteSettings";
-import { GLOBAL_COLORS } from "global";
-
-import { storeDataObject, getDataObject } from "services/asyncStorage";
-
 const Preloading = () => {
   const navigation = useNavigation<any>();
 
-  const handleButtonpress = () => {
+  const goToMainHome = () => {
     navigation.dispatch(StackActions.replace("BottomNav"));
   };
 
-  const [adsURL, setadsURL] = useState(null);
-  const [bannerImgURL, setbannerImgURL] = useState(null);
-  const [isQueryEnable, setIsQueryEnable] = useState(false);
+  // subscribe to ads global store
+  const [fullscreen_banner] = adsGlobalStore(
+    (state) => [state.fullscreen_banner],
+  )
 
-  useEffect(() => {
-    // see local storage first, if local storage has cache the banner image and ads URL use it
-    getDataObject("PreloadingData").then((res: any) => {
-      if (res.message === "Key not found or is empty") {
-        setIsQueryEnable(true);
-      } else {
-        console.log("local cache exists");
-        setIsQueryEnable(false);
-        setbannerImgURL(res.banner);
-        setadsURL(res.ads);
-      }
-    });
-  }, []);
-
-  // if local storage dont have cache, fetch from backend and store locally
-  const { getAds } = useSiteSettings();
-  const { isLoading, isError, data, error, status } = useQuery({
-    queryKey: ["ads"],
-    queryFn: () => getAds(),
-    onSuccess: (data) => {
-      console.log("fetch was called");
-      setbannerImgURL(
-        data[0].advertisement.fullscreen_banner[0].banners[0].photo_url
-      );
-      setadsURL(data[0].advertisement.fullscreen_banner[0].banners[0].url);
-      storeDataObject("PreloadingData", {
-        banner: data[0].advertisement.fullscreen_banner[0].banners[0].photo_url,
-        ads: data[0].advertisement.fullscreen_banner[0].banners[0].url,
-      });
-    },
-    onError: (error) => {
-      console.log("Error", error);
-    },
-    enabled: isQueryEnable,
-  });
+  let imgURL = ""
+  let adsURL = ""
+  
+  fullscreen_banner.map((item: any) => {
+    imgURL = item.photo_url
+    adsURL = item.url
+  })
 
   return (
     <Pressable onPress={() => Linking.openURL(adsURL)}>
       <ImageBackground
-        source={{ uri: bannerImgURL }}
+        source={{ uri: imgURL }}
         resizeMode="cover"
         style={styles.image}
       >
-        <Pressable style={styles.button} onPress={handleButtonpress}>
+        <Pressable style={styles.button} onPress={goToMainHome}>
           <Text style={styles.text}>Go to Home</Text>
         </Pressable>
       </ImageBackground>

@@ -23,6 +23,7 @@ const VideoPlayer = ({ url }) => {
       source={{
         uri: url,
       }}
+      shouldPlay
       useNativeControls
       resizeMode={ResizeMode.CONTAIN}
       isLooping

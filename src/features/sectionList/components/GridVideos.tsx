@@ -90,7 +90,7 @@ const AdsContainer = ({ item, isFollowingScreen, onOpen, setId }: any) => {
         <FollowingBottomContent item={item} />
       ) : (
         <GridVideosBottomContent
-          username={item.username}
+          username={item?.username}
           onOpen={onOpen}
           setId={setId}
           id={item._id}
@@ -108,7 +108,7 @@ const Video = ({ item, isFollowingScreen, onOpen, setId }: any) => {
     if (item.orientation === "Landscape") {
       navigation.navigate("SingleVideo", {
         image: item?.user.photo,
-        username: item?.user.username,
+        username: item?.user?.username,
         followers: "123456789",
         id: item?._id,
       });
@@ -152,7 +152,7 @@ const Video = ({ item, isFollowingScreen, onOpen, setId }: any) => {
         <FollowingBottomContent item={item} />
       ) : (
         <GridVideosBottomContent
-          username={item?.user.username}
+          username={item?.user?.username}
           onOpen={onOpen}
           setId={setId}
           id={item._id}

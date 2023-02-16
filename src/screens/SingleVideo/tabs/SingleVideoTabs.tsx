@@ -4,7 +4,7 @@ import { useRoute } from "@react-navigation/native";
 import { useQuery } from "@tanstack/react-query";
 
 import { Header } from "./Header";
-import { SingleVideo } from "hooks/useSingleVideo";
+import { Work } from "hooks/useWork";
 import CommentList from "features/commentList";
 import GridVideos from "features/sectionList/components/GridVideos";
 import StickyTabs from "layouts/StickyTabs";
@@ -35,7 +35,7 @@ const GridVideosLayout = ({ api_func, id }) => {
 
 const CommentListLayout = () => {
   const route = useRoute<any>();
-  const { getWorkComments } = SingleVideo();
+  const { getWorkComments } = Work();
   const { data, isLoading } = useQuery(
     ["workComments", route.params.id],
     () => getWorkComments(route.params.id),
@@ -50,7 +50,7 @@ const CommentListLayout = () => {
 
 const SingleVideoTab = ({ data }) => {
   const route = useRoute<any>();
-  const { getWorkAll, getWorkRecommended } = SingleVideo();
+  const { getWorkAll, getWorkRecommended } = Work();
 
   const tabsData = {
     Header: () => <Header data={data} />,

@@ -30,11 +30,10 @@ const InitialLoad = () => {
 
         // update global ads global store according to cached data
         setAdsGlobalStore(
-          res.fullscreen_banner,
-          res.popup_banner,
-          res.carousel_banner,
-          res.single_banner,
-          res.multiple_random_gif
+          res.localCache_fullscreen_banner,
+          res.localCache_popup_banner,
+          res.localCache_carousel_banner,
+          res.localCache_single_banner,
         );
 
         navigation.dispatch(StackActions.replace("TermsOfService"));
@@ -56,16 +55,14 @@ const InitialLoad = () => {
         data[0].advertisement.popup_banner[0].banners,
         data[0].advertisement.carousel_banner[0].banners,
         data[0].advertisement.single_banner.banners,
-        data[0].advertisement.multiple_random_gif.gif
       );
 
       // store ads to local app cache
       storeDataObject("AdvertisementCacheData", {
-        fullscreen_banner: data[0].advertisement.fullscreen_banner[0].banners,
-        popup_banner: data[0].advertisement.popup_banner[0].banners,
-        carousel_banner: data[0].advertisement.carousel_banner[0].banners,
-        single_banner: data[0].advertisement.single_banner.banners,
-        multiple_random_gif: data[0].advertisement.multiple_random_gif.gif,
+        localCache_fullscreen_banner: data[0].advertisement.fullscreen_banner[0].banners,
+        localCache_popup_banner: data[0].advertisement.popup_banner[0].banners,
+        localCache_carousel_banner: data[0].advertisement.carousel_banner[0].banners,
+        localCache_single_banner: data[0].advertisement.single_banner.banners,
       });
     },
     onError: (error) => {

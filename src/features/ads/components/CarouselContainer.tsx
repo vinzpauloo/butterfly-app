@@ -6,11 +6,10 @@ import Carousel from "react-native-reanimated-carousel";
 import AntDesign from "react-native-vector-icons/AntDesign";
 import FontAwesome from "react-native-vector-icons/FontAwesome";
 
-import { bannerImage } from "data/bannerImages";
-
 import { GLOBAL_COLORS } from "global";
+import { adsGlobalStore } from "../../../zustand/adsGlobalStore";
 
-const { width, height } = Dimensions.get("window");
+const windowWidth = Dimensions.get("window").width;
 
 const CarouselContainer = () => {
   const [index, setIndex] = useState(0);
@@ -24,10 +23,18 @@ const CarouselContainer = () => {
     //@ts-ignore
     isCarousel?.current?.next();
   };
+
+  // subscribe to ads global store
+  const [carouselArray] = adsGlobalStore(
+    (state) => [state.carousel_banner],
+  )
+
+  const carouselAds = carouselArray.map(item => item)
+
   const BannerItem = ({ item, index }: any) => {
     return (
       <View style={styles.bannerItem} key={index}>
-        <Image source={item} style={styles.image} />
+        <Image source={{ uri: item.photo_url }} style={styles.image} />
       </View>
     );
   };
@@ -44,12 +51,12 @@ const CarouselContainer = () => {
         <Carousel
           ref={isCarousel}
           loop
-          width={width}
+          width={windowWidth}
           height={150}
           autoPlay={true}
-          data={bannerImage}
+          data={carouselAds}
           scrollAnimationDuration={1000}
-          autoPlayInterval={7000}
+          autoPlayInterval={4000}
           onSnapToItem={(index: any) => setIndex(index)}
           overscrollEnabled={true}
           renderItem={BannerItem}
@@ -63,7 +70,7 @@ const CarouselContainer = () => {
           color={GLOBAL_COLORS.secondaryColor}
         />
         <View style={styles.pagination}>
-          {bannerImage.map((_, idx) => (
+          {carouselAds.map((_, idx) => (
             <FontAwesome
               key={idx}
               name="circle"
@@ -85,7 +92,7 @@ const styles = StyleSheet.create({
     height: 135,
     position: "relative",
     flexDirection: "row",
-    width: width,
+    width: windowWidth,
     marginBottom: 30,
   },
   leftIcon: {
@@ -107,7 +114,7 @@ const styles = StyleSheet.create({
     width: 200,
     zIndex: 10,
     bottom: 10,
-    left: width / 2,
+    left: windowWidth / 2,
     transform: [{ translateX: -100 }],
     flexDirection: "row",
     alignItems: "center",

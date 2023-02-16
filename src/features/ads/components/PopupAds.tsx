@@ -5,22 +5,31 @@ import * as Linking from "expo-linking";
 import AntDesign from "react-native-vector-icons/AntDesign";
 import { Modal } from "native-base";
 
-import Girl from "assets/images/profilePhoto.jpg";
 import CustomModal from "components/CustomModal";
-
-const adsURL = "https://google.com/";
+import { adsGlobalStore } from "../../../zustand/adsGlobalStore";
 
 const { width } = Dimensions.get("window");
 
 const Content = ({ setOpen }) => {
-  const handleAdPress = () => {
-    Linking.openURL(adsURL);
-  };
+
+  // subscribe to ads global store
+  const [popup_banner] = adsGlobalStore(
+    (state) => [state.popup_banner],
+  )
+
+  let imgURL = ""
+  let adsURL = ""
+
+  popup_banner.map((item: any) => {
+    imgURL = item.photo_url
+    adsURL = item.url
+  })
+
   return (
     <Modal.Content backgroundColor="contrastThreshold" width={width}>
       <Modal.Body alignItems="center">
-        <Pressable onPress={handleAdPress}>
-          <Image source={Girl} style={styles.ads} />
+        <Pressable onPress={() => Linking.openURL(adsURL)}>
+          <Image source={{ uri: imgURL }} style={styles.ads} />
         </Pressable>
         <AntDesign
           name="close"

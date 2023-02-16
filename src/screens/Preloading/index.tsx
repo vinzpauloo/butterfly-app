@@ -8,32 +8,37 @@ import {
 import { StackActions, useNavigation } from "@react-navigation/native";
 import * as Linking from "expo-linking";
 import { GLOBAL_COLORS } from "global";
-import { useFullScreenBannerStore } from "../../zustand/adsGlobalStore"
+import { adsGlobalStore } from "../../zustand/adsGlobalStore"
 
 const { height } = Dimensions.get("window");
 const Preloading = () => {
   const navigation = useNavigation<any>();
 
-  const handleButtonpress = () => {
+  const goToMainHome = () => {
     navigation.dispatch(StackActions.replace("BottomNav"));
   };
 
-  // SUBSCRIBE TO GLOBAL STORE
-  const [bannerURL, adsURL] = useFullScreenBannerStore(
-    (state) => [state.photoURL, state.adsURL],
+  // subscribe to ads global store
+  const [fullscreen_banner] = adsGlobalStore(
+    (state) => [state.fullscreen_banner],
   )
 
-  console.log(bannerURL)
-  console.log(adsURL)
+  let imgURL = ""
+  let adsURL = ""
+  
+  fullscreen_banner.map((item: any) => {
+    imgURL = item.photo_url
+    adsURL = item.url
+  })
 
   return (
     <Pressable onPress={() => Linking.openURL(adsURL)}>
       <ImageBackground
-        source={{ uri: bannerURL }}
+        source={{ uri: imgURL }}
         resizeMode="cover"
         style={styles.image}
       >
-        <Pressable style={styles.button} onPress={handleButtonpress}>
+        <Pressable style={styles.button} onPress={goToMainHome}>
           <Text style={styles.text}>Go to Home</Text>
         </Pressable>
       </ImageBackground>

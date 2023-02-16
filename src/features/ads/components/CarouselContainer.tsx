@@ -1,10 +1,11 @@
 import React, { useRef, useState } from "react";
-import { Dimensions, Image, StyleSheet, View } from "react-native";
+import { Dimensions, Image, StyleSheet, View, Pressable } from "react-native";
 
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 import Carousel from "react-native-reanimated-carousel";
 import AntDesign from "react-native-vector-icons/AntDesign";
 import FontAwesome from "react-native-vector-icons/FontAwesome";
+import * as Linking from "expo-linking";
 
 import { GLOBAL_COLORS } from "global";
 import { adsGlobalStore } from "../../../zustand/adsGlobalStore";
@@ -33,9 +34,9 @@ const CarouselContainer = () => {
 
   const BannerItem = ({ item, index }: any) => {
     return (
-      <View style={styles.bannerItem} key={index}>
+      <Pressable onPress={() => Linking.openURL(item.url)} style={styles.bannerItem} key={index}>
         <Image source={{ uri: item.photo_url }} style={styles.image} />
-      </View>
+      </Pressable>
     );
   };
   return (

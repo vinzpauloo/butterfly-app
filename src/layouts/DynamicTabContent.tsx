@@ -55,11 +55,11 @@ const SectionContent = ({
   );
 };
 
-const DynamicTabContent = ({ tabTitle, site_id }) => {
+const DynamicTabContent = ({ tabTitle }) => {
   const { getWorkGroup } = SubNav();
   const { data, isLoading } = useQuery({
     queryKey: [`tabName${tabTitle}`],
-    queryFn: () => getWorkGroup({ site_id, navbar: tabTitle }),
+    queryFn: () => getWorkGroup({ navbar: tabTitle }),
     onError: (error) => {
       console.log(`tabName-${tabTitle}`, error);
     },

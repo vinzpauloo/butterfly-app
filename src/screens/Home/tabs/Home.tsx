@@ -26,11 +26,7 @@ const Home = () => {
           return {
             name: item.title,
             component: () => (
-              <DynamicTabContent
-                key={index}
-                tabTitle={item.slug}
-                site_id={site_id}
-              />
+              <DynamicTabContent key={index} tabTitle={item.slug} />
             ),
           };
         });

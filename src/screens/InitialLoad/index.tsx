@@ -4,7 +4,7 @@ import React, { useEffect, useState } from "react";
 import { Box, Center, Spinner, Text, VStack } from "native-base";
 import { StackActions, useNavigation } from "@react-navigation/native";
 
-import { adsGlobalStore } from "../../zustand/adsGlobalStore"
+import { adsGlobalStore } from "../../zustand/adsGlobalStore";
 
 import { useQuery } from "@tanstack/react-query";
 import { useSiteSettings } from "hooks/useSiteSettings";
@@ -12,14 +12,13 @@ import { useSiteSettings } from "hooks/useSiteSettings";
 import { storeDataObject, getDataObject } from "services/asyncStorage";
 
 const InitialLoad = () => {
-  const [counter, setCounter] = useState(3);
   const navigation = useNavigation<any>();
 
   const [isQueryEnable, setIsQueryEnable] = useState(false);
 
   // subscribe to ads global store
-  const setAdsGlobalStore = adsGlobalStore((state) => state.setAdvertisement)
-  
+  const setAdsGlobalStore = adsGlobalStore((state) => state.setAdvertisement);
+
   useEffect(() => {
     // check local app cache if it has ads data
     getDataObject("AdvertisementCacheData").then((res: any) => {
@@ -36,19 +35,12 @@ const InitialLoad = () => {
           res.carousel_banner,
           res.single_banner,
           res.multiple_random_gif
-        )
+        );
+
+        navigation.dispatch(StackActions.replace("TermsOfService"));
       }
     });
-    
-    const timer = counter > 0 && setInterval(() => setCounter(counter - 1), 1000);
-
-    if (counter === 0) {
-      navigation.dispatch(StackActions.replace("TermsOfService"));
-    }
-
-    return () => clearInterval(timer);
-  }, [counter]);
-
+  }, []);
 
   // if local app cache dont have ads, fetch all ads data from backend
   const { getAds } = useSiteSettings();
@@ -56,7 +48,7 @@ const InitialLoad = () => {
     queryKey: ["ads"],
     queryFn: () => getAds(),
     onSuccess: (data) => {
-       console.log("=== Data Fetched from backend! ===")
+      console.log("=== Data Fetched from backend! ===");
       // fetch ads from backend and put into ads global store
       setAdsGlobalStore(
         // all arrays
@@ -65,7 +57,7 @@ const InitialLoad = () => {
         data[0].advertisement.carousel_banner[0].banners,
         data[0].advertisement.single_banner.banners,
         data[0].advertisement.multiple_random_gif.gif
-      )
+      );
 
       // store ads to local app cache
       storeDataObject("AdvertisementCacheData", {
@@ -73,7 +65,7 @@ const InitialLoad = () => {
         popup_banner: data[0].advertisement.popup_banner[0].banners,
         carousel_banner: data[0].advertisement.carousel_banner[0].banners,
         single_banner: data[0].advertisement.single_banner.banners,
-        multiple_random_gif: data[0].advertisement.multiple_random_gif.gif
+        multiple_random_gif: data[0].advertisement.multiple_random_gif.gif,
       });
     },
     onError: (error) => {

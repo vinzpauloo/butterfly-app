@@ -1,13 +1,6 @@
 import request from "lib/request";
 
-export const SingleVideo = () => {
-  const getLikesCount = (id) => {
-    return request({
-      url: `/like-action/count/${id}`,
-      method: "GET",
-    });
-  };
-
+export const Work = () => {
   const getWorkAll = (data) => {
     return request({
       url: "/work",
@@ -16,10 +9,11 @@ export const SingleVideo = () => {
     });
   };
 
-  const getWorkRecommended = () => {
+  const getWorkRecommended = (data) => {
     return request({
       url: "/work/recommended",
       method: "GET",
+      params: data,
     });
   };
 
@@ -30,5 +24,5 @@ export const SingleVideo = () => {
     });
   };
 
-  return { getLikesCount, getWorkAll, getWorkRecommended, getWorkComments };
+  return { getWorkAll, getWorkRecommended, getWorkComments };
 };

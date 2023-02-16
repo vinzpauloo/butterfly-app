@@ -1,6 +1,12 @@
 import request from "lib/request";
 
 export const Like = () => {
+  const getLikesCount = (id) => {
+    return request({
+      url: `/like-action/count/${id}`,
+      method: "GET",
+    });
+  };
   const postLikeWork = (data) => {
     return request({
       url: "/likes",
@@ -25,5 +31,5 @@ export const Like = () => {
     });
   };
 
-  return { postLikeWork, postLikeChecker, deleteLikeWork };
+  return { getLikesCount, postLikeWork, postLikeChecker, deleteLikeWork };
 };

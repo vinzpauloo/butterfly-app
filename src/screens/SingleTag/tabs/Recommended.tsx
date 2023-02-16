@@ -7,7 +7,7 @@ import { useQuery } from "@tanstack/react-query";
 
 import Container from "components/Container";
 import GridVideos from "features/sectionList/components/GridVideos";
-import { SingleVideo } from "hooks/useSingleVideo";
+import { SingleVideo } from "hooks/useWork";
 import BottomMessage from "components/BottomMessage";
 
 const Recommended = ({ id }) => {

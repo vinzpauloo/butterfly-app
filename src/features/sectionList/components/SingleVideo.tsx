@@ -16,6 +16,7 @@ const SingleVideo = ({ data }) => {
       username: item.user.username,
       followers: "123456789",
       id: item._id,
+      userId: item?.user_id,
     });
   };
 

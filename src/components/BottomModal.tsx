@@ -7,20 +7,26 @@ import Fontisto from "react-native-vector-icons/Fontisto";
 import { useMutation, useQuery } from "@tanstack/react-query";
 
 import { GLOBAL_COLORS } from "global";
-import { Like } from "hooks/useLike";
+import { Like } from "hooks/commonActoins/useLike";
+import { Favorite } from "hooks/commonActoins/useFavorite";
+import { TEMPORARY_CUSTOMER_ID } from "react-native-dotenv";
 
 const { width } = Dimensions.get("window");
 
-const Modal = ({ onOpen, isOpen, onClose }) => {
+const Modal = ({ onOpen, isOpen, onClose, id }) => {
   const { deleteLikeWork, postLikeWork, postLikeChecker } = Like();
+  const { deleteRemoveFavorite, postSaveFavorite, postFavoriteChecker } =
+    Favorite();
   const [isAlreadyLike, setIsAlreadyLike] = useState(false);
+  const [isAlreadyFavorite, setIsAlreadyFavorite] = useState(false);
 
-  const { isLoading } = useQuery({
+  // like checker
+  const { isLoading: isLoadingLike } = useQuery({
     queryKey: [`likeChecker${isAlreadyLike}`],
     queryFn: () =>
       postLikeChecker({
-        foreign_id: "9878ca0f-28ff-45ac-a883-e9af41ce93e1",
-        customer_id: "9876c1a0-134f-4666-8713-039d53195efc",
+        foreign_id: id,
+        customer_id: TEMPORARY_CUSTOMER_ID, // CHANGE LATER
       }),
     onSuccess: (data) => {
       setIsAlreadyLike(data);
@@ -28,13 +34,30 @@ const Modal = ({ onOpen, isOpen, onClose }) => {
     onError: (error) => {
       console.log("postLikeChecker", error);
     },
+    enabled: isOpen,
+  });
+
+  // favorite checker
+  const { isLoading: isLoadingFavorite } = useQuery({
+    queryKey: [`likeChecker${isAlreadyFavorite}`],
+    queryFn: () =>
+      postFavoriteChecker({
+        foreign_id: id,
+        customer_id: TEMPORARY_CUSTOMER_ID, // CHANGE LATER
+      }),
+    onSuccess: (data) => {
+      setIsAlreadyFavorite(data);
+    },
+    onError: (error) => {
+      console.log("postLikeChecker", error);
+    },
+    enabled: isOpen,
   });
 
   // for like
   const { mutate: mutateLike } = useMutation(postLikeWork, {
     onSuccess: (data) => {
-      // change the message to boolean ask in backend
-      if (data.message === "customer like content") {
+      if (data.isLike) {
         setIsAlreadyLike(true);
       }
     },
@@ -46,8 +69,7 @@ const Modal = ({ onOpen, isOpen, onClose }) => {
   // for unlike
   const { mutate: mutateUnLike } = useMutation(deleteLikeWork, {
     onSuccess: (data) => {
-      // change the message to boolean ask in backend
-      if (data.message === "customer unlike content") {
+      if (data.unLike) {
         setIsAlreadyLike(false);
       }
     },
@@ -56,24 +78,64 @@ const Modal = ({ onOpen, isOpen, onClose }) => {
     },
   });
 
+  // for favorite
+  const { mutate: mutateFavorite } = useMutation(postSaveFavorite, {
+    onSuccess: (data) => {
+      if (data.isFavorite) {
+        setIsAlreadyFavorite(true);
+      }
+    },
+    onError: (error) => {
+      console.log("postFavorite", error);
+    },
+  });
+
+  // for remove as favorite
+  const { mutate: mutateRemoveFavorite } = useMutation(deleteRemoveFavorite, {
+    onSuccess: (data) => {
+      if (data.isRemove) {
+        setIsAlreadyFavorite(false);
+      }
+    },
+    onError: (error) => {
+      console.log("postRemoveFavorite", error);
+    },
+  });
+
   const handleLike = () => {
     // check here if not like yet
     if (!isAlreadyLike) {
       mutateLike({
         site_id: 1,
-        foreign_id: "9878ca0f-28ff-45ac-a883-e9af41ce93e1", // will change tommorow
-        customer_id: "9876c1a0-134f-4666-8713-039d53195efc", // will change tommorow
+        foreign_id: id,
+        customer_id: TEMPORARY_CUSTOMER_ID, // CHANGE LATER
+        type: "work",
       });
     } else {
       mutateUnLike({
-        foreign_id: "9878ca0f-28ff-45ac-a883-e9af41ce93e1", // will change tommorow
-        customer_id: "9876c1a0-134f-4666-8713-039d53195efc", // will change tommorow
+        foreign_id: id,
+        customer_id: TEMPORARY_CUSTOMER_ID, // CHANGE LATER
       });
     }
   };
 
-  const changeButtonColor = (isAlreadyLike) => {
-    return isAlreadyLike ? GLOBAL_COLORS.secondaryColor : "#fff";
+  const handleFavorite = () => {
+    // check here if not like yet
+    if (!isAlreadyFavorite) {
+      mutateFavorite({
+        foreign_id: id,
+        customer_id: TEMPORARY_CUSTOMER_ID, // CHANGE LATER
+      });
+    } else {
+      mutateRemoveFavorite({
+        foreign_id: id,
+        customer_id: TEMPORARY_CUSTOMER_ID, // CHANGE LATER
+      });
+    }
+  };
+
+  const changeButtonColor = (isTrue) => {
+    return isTrue ? GLOBAL_COLORS.secondaryColor : "#fff";
   };
 
   return (
@@ -98,22 +160,18 @@ const Modal = ({ onOpen, isOpen, onClose }) => {
                   style={{
                     height: 50,
                     width: 50,
-                    borderColor: changeButtonColor(isAlreadyLike),
+                    borderColor: "#fff",
                     borderWidth: 2,
                     borderRadius: 25,
                     alignItems: "center",
                     justifyContent: "center",
                   }}
                 >
-                  <Fontisto
-                    name="share-a"
-                    size={20}
-                    color={changeButtonColor(isAlreadyLike)}
-                  />
+                  <Fontisto name="share-a" size={20} color={"#fff"} />
                 </View>
                 <Text
                   style={{
-                    color: changeButtonColor(isAlreadyLike),
+                    color: "#fff",
                     marginVertical: 10,
                   }}
                 >
@@ -147,12 +205,15 @@ const Modal = ({ onOpen, isOpen, onClose }) => {
                   关注
                 </Text>
               </Pressable>
-              <Pressable style={{ alignItems: "center" }}>
+              <Pressable
+                style={{ alignItems: "center" }}
+                onPress={handleFavorite}
+              >
                 <View
                   style={{
                     height: 50,
                     width: 50,
-                    borderColor: changeButtonColor(isAlreadyLike),
+                    borderColor: changeButtonColor(isAlreadyFavorite),
                     borderWidth: 2,
                     borderRadius: 25,
                     alignItems: "center",
@@ -162,12 +223,12 @@ const Modal = ({ onOpen, isOpen, onClose }) => {
                   <AntDesign
                     name="star"
                     size={20}
-                    color={changeButtonColor(isAlreadyLike)}
+                    color={changeButtonColor(isAlreadyFavorite)}
                   />
                 </View>
                 <Text
                   style={{
-                    color: changeButtonColor(isAlreadyLike),
+                    color: changeButtonColor(isAlreadyFavorite),
                     marginVertical: 10,
                   }}
                 >

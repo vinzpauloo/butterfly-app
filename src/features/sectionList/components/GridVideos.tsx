@@ -7,7 +7,7 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
-import React from "react";
+import React, { useState } from "react";
 
 import Entypo from "react-native-vector-icons/Entypo";
 import Foundation from "react-native-vector-icons/Foundation";
@@ -41,7 +41,11 @@ const FollowingBottomContent = ({ item }) => {
   );
 };
 
-const GridVideosBottomContent = ({ onOpen, username }) => {
+const GridVideosBottomContent = ({ onOpen, username, setId, id }) => {
+  const handlePress = (event) => {
+    setId(id);
+    onOpen(event);
+  };
   return (
     <View style={styles.textContent}>
       <Text style={styles.text} numberOfLines={1}>
@@ -53,7 +57,7 @@ const GridVideosBottomContent = ({ onOpen, username }) => {
           width: 15,
           alignItems: "center",
         }}
-        onPress={onOpen}
+        onPress={handlePress}
       >
         <Entypo name="dots-three-vertical" color={"#fff"} />
       </Pressable>
@@ -61,7 +65,7 @@ const GridVideosBottomContent = ({ onOpen, username }) => {
   );
 };
 
-const AdsContainer = ({ item, isFollowingScreen, onOpen }: any) => {
+const AdsContainer = ({ item, isFollowingScreen, onOpen, setId }: any) => {
   const handlePress = () => {};
   return (
     <TouchableOpacity
@@ -85,13 +89,18 @@ const AdsContainer = ({ item, isFollowingScreen, onOpen }: any) => {
       {isFollowingScreen ? (
         <FollowingBottomContent item={item} />
       ) : (
-        <GridVideosBottomContent username={item.username} onOpen={onOpen} />
+        <GridVideosBottomContent
+          username={item.username}
+          onOpen={onOpen}
+          setId={setId}
+          id={item._id}
+        />
       )}
     </TouchableOpacity>
   );
 };
 
-const Video = ({ item, isFollowingScreen, onOpen }: any) => {
+const Video = ({ item, isFollowingScreen, onOpen, setId }: any) => {
   const navigation = useNavigation<any>();
   const videoHeight =
     item.orientation === "Landscape" ? width * 0.3 : width * 0.5;
@@ -145,6 +154,8 @@ const Video = ({ item, isFollowingScreen, onOpen }: any) => {
         <GridVideosBottomContent
           username={item?.user.username}
           onOpen={onOpen}
+          setId={setId}
+          id={item._id}
         />
       )}
     </TouchableOpacity>
@@ -153,6 +164,7 @@ const Video = ({ item, isFollowingScreen, onOpen }: any) => {
 
 const GridVideos = ({ data, isFollowingScreen = false }) => {
   const { isOpen, onOpen, onClose } = useDisclose();
+  const [id, setId] = useState<number | null>(null);
 
   return (
     <View style={styles.gridVideoContainer}>
@@ -165,12 +177,13 @@ const GridVideos = ({ data, isFollowingScreen = false }) => {
             item={item}
             isFollowingScreen={isFollowingScreen}
             onOpen={onOpen}
+            setId={setId}
           />
         )}
         keyExtractor={(_, index) => "" + index}
       />
 
-      <Modal isOpen={isOpen} onOpen={onOpen} onClose={onClose} />
+      <Modal isOpen={isOpen} onOpen={onOpen} onClose={onClose} id={id} />
     </View>
   );
 };

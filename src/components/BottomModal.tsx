@@ -4,8 +4,8 @@ import { Dimensions, Pressable, StyleSheet, Text, View } from "react-native";
 
 import { GLOBAL_COLORS } from "global";
 import Fontisto from "react-native-vector-icons/Fontisto";
-import LikeButton from "./forms/LikeButton";
-import FavoriteButton from "./forms/FavoriteButton";
+import LikeButton from "./forms/modal/LikeButton";
+import FavoriteButton from "./forms/modal/FavoriteButton";
 
 const { width } = Dimensions.get("window");
 

@@ -19,7 +19,7 @@ export const Work = () => {
 
   const getWorkComments = (id) => {
     return request({
-      url: `/work/comments/${id}`,
+      url: `/comment/${id}`,
       method: "GET",
     });
   };

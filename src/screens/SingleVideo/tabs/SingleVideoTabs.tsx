@@ -1,4 +1,4 @@
-import { StyleSheet, Text, View } from "react-native";
+import { StyleSheet } from "react-native";
 
 import { useRoute } from "@react-navigation/native";
 import { useQuery } from "@tanstack/react-query";
@@ -9,6 +9,7 @@ import StickyTabs from "layouts/StickyTabs";
 import VideoListSkeleton from "components/skeletons/VideoListSkeleton";
 import { Header } from "./Header";
 import { Work } from "hooks/useWork";
+import CommentListSkeleton from "components/skeletons/CommentListSkeleton";
 
 const OthersLayout = ({ userId }) => {
   const { getWorkAll } = Work();
@@ -73,7 +74,12 @@ const CommentListLayout = () => {
       },
     }
   );
-  return <CommentList />;
+
+  if (isLoading) {
+    return <CommentListSkeleton />;
+  }
+
+  return <CommentList data={data} />;
 };
 
 const SingleVideoTab = ({ data }) => {

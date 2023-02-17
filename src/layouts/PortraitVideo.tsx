@@ -28,6 +28,8 @@ import Feather from "react-native-vector-icons/Feather";
 import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons";
 import { GLOBAL_COLORS } from "global";
 
+import { downloadFile } from "utils/downloadFile";
+
 interface PortraitVideoDataType {
   reelsVideos?: any[];
   bottomTabHeight?: number;
@@ -78,6 +80,12 @@ const PortraitVideoContent = (props: Props) => {
       : setTimeout(() => setShowPlayPauseButton(false), 500);
     setUserSeekTime(videoCurrentTime);
     setVideoCurrentTime(userSeekTime);
+  }
+
+  function testDownload() {
+    const fileName = "test-file-name"
+    alert("start downloading!")
+    downloadFile('http://techslides.com/demos/sample-videos/small.mp4', fileName)
   }
 
   return (
@@ -226,11 +234,7 @@ const PortraitVideoContent = (props: Props) => {
           <Text style={styles.iconText}>Fave</Text>
         </View>
         <View style={styles.verticalBarItem}>
-          <Pressable
-            onPress={() => {
-              Alert.alert("Download Video");
-            }}
-          >
+          <Pressable onPress={testDownload}>
             <MaterialCommunityIcons name="download" color={"white"} size={40} />
           </Pressable>
           <Text style={styles.iconText}>DL</Text>

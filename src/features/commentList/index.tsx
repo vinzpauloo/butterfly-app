@@ -6,9 +6,9 @@ import { FlashList } from "@shopify/flash-list";
 import Fontisto from "react-native-vector-icons/Fontisto";
 
 import BottomMessage from "components/BottomMessage";
+import { Customer } from "hooks/useCustomer";
 import { GLOBAL_COLORS } from "global";
 import { useQuery } from "@tanstack/react-query";
-import { Customer } from "hooks/useCustomer";
 
 type commentItemProps = {
   customerId: string;
@@ -16,47 +16,10 @@ type commentItemProps = {
   replies: {
     replyId: string;
     customerId: string;
+    username: string;
+    photo: string;
     comment: string;
   }[];
-};
-
-const Reply = ({ reply }) => {
-  const { getCustomerInfo } = Customer();
-  const { data, isLoading } = useQuery({
-    queryKey: ["reply", reply.customer_id],
-    queryFn: () => getCustomerInfo(reply.customer_id),
-    onError: (error) => {
-      console.log("reply", error);
-    },
-  });
-
-  if (isLoading) {
-    return null;
-  }
-
-  return (
-    <HStack space={2}>
-      <Pressable
-        onPress={() => Alert.alert("go to " + data?.username + " profile")}
-      >
-        <Avatar size={42} source={{ uri: data?.photo }} />
-      </Pressable>
-      <VStack space={1} style={{ flex: 1, paddingHorizontal: 6 }}>
-        <Text style={styles.whiteText}>{data?.alias}</Text>
-        <Text style={styles.whiteText}>{reply.comment}</Text>
-      </VStack>
-    </HStack>
-  );
-};
-
-const ReplyContainer = ({ replies, amountOfCommentShown }) => {
-  return (
-    <>
-      {replies.slice(0, amountOfCommentShown).map((reply, index) => (
-        <Reply key={index} reply={reply} />
-      ))}
-    </>
-  );
 };
 
 const CommentItem = (props: commentItemProps) => {
@@ -111,10 +74,21 @@ const CommentItem = (props: commentItemProps) => {
           mt={8}
           style={repliesIsShown ? { display: "flex" } : { display: "none" }}
         >
-          <ReplyContainer
-            replies={props.replies}
-            amountOfCommentShown={amountOfCommentShown}
-          />
+          {props.replies.slice(0, amountOfCommentShown).map((reply, index) => (
+            <HStack space={2} key={index}>
+              <Pressable
+                onPress={() =>
+                  Alert.alert("go to " + reply?.username + " profile")
+                }
+              >
+                <Avatar size={42} source={{ uri: reply?.photo }} />
+              </Pressable>
+              <VStack space={1} style={{ flex: 1, paddingHorizontal: 6 }}>
+                <Text style={styles.whiteText}>{reply?.username}</Text>
+                <Text style={styles.whiteText}>{reply.comment}</Text>
+              </VStack>
+            </HStack>
+          ))}
           {props.replies.length >= 10 &&
           amountOfCommentShown < props.replies.length ? (
             <Pressable
@@ -146,8 +120,6 @@ const CommentList = ({ data }) => {
         keyExtractor={(_, index) => "" + index}
         renderItem={({ item }: any) => (
           <CommentItem
-            // userName={item?.userName}
-            // userImgURL={item?.userImgURL}
             customerId={item.customer_id}
             comment={item.comment}
             replies={item.replies}

@@ -64,6 +64,8 @@ const InitialLoad = () => {
         localCache_carousel_banner: data[0].advertisement.carousel_banner[0].banners,
         localCache_single_banner: data[0].advertisement.single_banner.banners,
       });
+
+      navigation.dispatch(StackActions.replace("TermsOfService"));
     },
     onError: (error) => {
       console.log("Error", error);

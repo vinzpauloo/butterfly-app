@@ -11,6 +11,8 @@ import { GLOBAL_COLORS } from "global";
 import { Follow } from "hooks/commonActoins/useFollow";
 import { SubNav } from "hooks/useSubNav";
 import { TEMPORARY_CUSTOMER_ID } from "react-native-dotenv";
+import VideoListSkeleton from "components/skeletons/VideoListSkeleton";
+import CarouselSkeleton from "components/skeletons/CarouselSkeleton";
 
 const HeaderTitle = () => {
   const { postFollowCreator, postFollowChecker } = Follow();
@@ -87,16 +89,18 @@ const SingleVideoScreen = () => {
   const { data, isLoading } = useQuery({
     queryKey: ["workSingleVideoScreen", route.params.id],
     queryFn: () => getWork(route.params.id),
-    onError: () => {
+    onError: (error) => {
       //error handler
+      console.log("workSingleVideo", error);
     },
   });
 
   if (isLoading) {
     return (
-      <View>
-        <Text>Loading....</Text>
-      </View>
+      <>
+        <CarouselSkeleton />
+        <VideoListSkeleton />
+      </>
     );
   }
 

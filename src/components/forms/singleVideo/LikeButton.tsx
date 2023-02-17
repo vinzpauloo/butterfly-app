@@ -1,7 +1,6 @@
 import { Pressable, StyleSheet, Text, View } from "react-native";
 import React, { useState } from "react";
 
-import Fontisto from "react-native-vector-icons/Fontisto";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { TEMPORARY_CUSTOMER_ID } from "react-native-dotenv";
 
@@ -12,7 +11,7 @@ import AntDesign from "react-native-vector-icons/AntDesign";
 const LikeButton = ({ data, id }) => {
   const { deleteLikeWork, postLikeWork, postLikeChecker } = Like();
   const [isAlreadyLike, setIsAlreadyLike] = useState(false);
-  const [likeCount, setLikeCount] = useState(data?.likes);
+  const [likeCount, setLikeCount] = useState(data?.like?.total_likes);
 
   // like checker
   const { isLoading } = useQuery({

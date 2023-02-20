@@ -11,6 +11,7 @@ import BannerAds from "features/ads/components/BannerAds";
 import { GLOBAL_COLORS } from "global";
 import LikeButton from "components/forms/singleVideo/LikeButton";
 import FavoriteButton from "components/forms/singleVideo/FavoriteButton";
+import { downloadFile } from "utils/downloadFile";
 
 export const Header = ({ data }) => {
   const route = useRoute<any>();
@@ -20,6 +21,12 @@ export const Header = ({ data }) => {
   const handleNavigate = (item) => {
     navigation.navigate("SingleTag", { id: route.params.id, tag: item });
   };
+
+  function testDownload() {
+    const fileName = "test-file-name"
+    alert("start downloading!")
+    downloadFile('http://techslides.com/demos/sample-videos/small.mp4', fileName)
+  }
 
   return (
     <>
@@ -66,7 +73,7 @@ export const Header = ({ data }) => {
             />
             <Text style={[styles.text, { marginVertical: 3 }]}>22金币</Text>
           </View>
-          <View style={styles.buttonItem}>
+          <Pressable onPress={testDownload} style={styles.buttonItem}>
             <MaterialCommunityIcons
               name="download"
               color="#999"
@@ -74,7 +81,7 @@ export const Header = ({ data }) => {
               style={styles.icon}
             />
             <Text style={styles.text}>下载</Text>
-          </View>
+          </Pressable>
           <Pressable
             style={styles.buttonItem}
             onPress={() => navigation.navigate("SharingPromotion")}

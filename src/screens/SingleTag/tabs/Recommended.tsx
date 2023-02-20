@@ -14,7 +14,7 @@ const Recommended = ({ id, tag }) => {
   const { getWorkRecommended } = Work();
 
   const { data, isLoading } = useQuery({
-    queryKey: ["recommended", id],
+    queryKey: ["recommendedSingleTag", id],
     queryFn: () => getWorkRecommended({ tag, with: "user", ads: true }),
     onSuccess: (data) => {
       console.log("Success", data);
@@ -36,7 +36,7 @@ const Recommended = ({ id, tag }) => {
   return (
     <ScrollView>
       <Container>
-        <GridVideos data={data} />
+        <GridVideos data={data.data} />
         <BottomMessage />
       </Container>
     </ScrollView>

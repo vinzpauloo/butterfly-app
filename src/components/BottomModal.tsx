@@ -6,10 +6,12 @@ import { GLOBAL_COLORS } from "global";
 import Fontisto from "react-native-vector-icons/Fontisto";
 import LikeButton from "./forms/modal/LikeButton";
 import FavoriteButton from "./forms/modal/FavoriteButton";
+import { useNavigation } from "@react-navigation/native";
 
 const { width } = Dimensions.get("window");
 
 const Modal = ({ onOpen, isOpen, onClose, id }) => {
+  const navigation = useNavigation<any>();
   return (
     <Center>
       <Actionsheet isOpen={isOpen} onClose={onClose} hideDragIndicator>
@@ -27,7 +29,10 @@ const Modal = ({ onOpen, isOpen, onClose, id }) => {
                 width: width,
               }}
             >
-              <View style={{ alignItems: "center" }}>
+              <Pressable
+                style={{ alignItems: "center" }}
+                onPress={() => navigation.navigate("SharingPromotion")}
+              >
                 <View
                   style={{
                     height: 50,
@@ -49,7 +54,7 @@ const Modal = ({ onOpen, isOpen, onClose, id }) => {
                 >
                   分享
                 </Text>
-              </View>
+              </Pressable>
               <LikeButton isOpen={isOpen} id={id} />
               <FavoriteButton isOpen={isOpen} id={id} />
             </View>

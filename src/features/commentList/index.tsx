@@ -1,24 +1,27 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { StyleSheet, Text, Pressable, Alert, View } from "react-native";
-import { VStack, Avatar, HStack, Divider, Skeleton } from "native-base";
+import { VStack, Avatar, HStack, Divider } from "native-base";
 import { FlashList } from "@shopify/flash-list";
 
-import { comments } from "data/comments";
-import BottomMessage from "components/BottomMessage";
-import { GLOBAL_COLORS } from "global";
 import Fontisto from "react-native-vector-icons/Fontisto";
 
-type Props = {};
+import BottomMessage from "components/BottomMessage";
+import { GLOBAL_COLORS } from "global";
+
+type repliesDataType = {
+  replyId: string;
+  customerId: string;
+  username: string;
+  photo: string;
+  comment: string;
+};
 
 type commentItemProps = {
-  userName: string;
+  customerId: string;
   comment: string;
-  userImgURL: string;
-  replies: {
-    userName: string;
-    comment: string;
-    userImgURL: string;
-  }[];
+  username: string;
+  photo: string;
+  replies: repliesDataType[];
 };
 
 const CommentItem = (props: commentItemProps) => {
@@ -28,14 +31,14 @@ const CommentItem = (props: commentItemProps) => {
   return (
     <HStack space={2}>
       <Pressable
-        onPress={() => Alert.alert("go to " + props.userName + " profile")}
+        onPress={() => Alert.alert("go to " + props.username + " profile")}
       >
-        <Avatar size={42} source={{ uri: props.userImgURL }} />
+        <Avatar size={42} source={{ uri: props.photo }} />
       </Pressable>
       <VStack space={1} style={{ flex: 1, paddingHorizontal: 6 }}>
-        <Text style={styles.whiteText}>{props.userName}</Text>
+        <Text style={styles.whiteText}>{props.username}</Text>
         <Text style={styles.whiteText}>{props.comment}</Text>
-        <Pressable onPress={() => Alert.alert("reply to " + props.userName)}>
+        <Pressable onPress={() => Alert.alert("reply to " + props.username)}>
           <HStack space={1.5} style={styles.alignCenter}>
             <Fontisto
               name="commenting"
@@ -62,16 +65,16 @@ const CommentItem = (props: commentItemProps) => {
           style={repliesIsShown ? { display: "flex" } : { display: "none" }}
         >
           {props.replies.slice(0, amountOfCommentShown).map((reply, index) => (
-            <HStack key={index} space={2}>
+            <HStack space={2} key={index}>
               <Pressable
                 onPress={() =>
-                  Alert.alert("go to " + reply.userName + " profile")
+                  Alert.alert("go to " + reply?.username + " profile")
                 }
               >
-                <Avatar size={42} source={{ uri: reply.userImgURL }} />
+                <Avatar size={42} source={{ uri: reply?.photo }} />
               </Pressable>
               <VStack space={1} style={{ flex: 1, paddingHorizontal: 6 }}>
-                <Text style={styles.whiteText}>{reply.userName}</Text>
+                <Text style={styles.whiteText}>{reply?.username}</Text>
                 <Text style={styles.whiteText}>{reply.comment}</Text>
               </VStack>
             </HStack>
@@ -90,61 +93,34 @@ const CommentItem = (props: commentItemProps) => {
   );
 };
 
-const CommentListSkeleton = () => {
-  return (
-    <>
-      <Skeleton.Text lines={1} w="1/6" mb="18px" />
-      <HStack space={2}>
-        <Skeleton size={42} rounded="full" />
-        <VStack space={4} style={{ flex: 1, paddingHorizontal: 6 }}>
-          <Skeleton.Text lines={1} w="1/6" />
-          <Skeleton.Text lines={3} w="full" />
-          <HStack space={1.5} alignItems="center">
-            <Skeleton w="14px" h="14px" rounded="full" />
-            <Skeleton.Text lines={1} w="1/6" />
-          </HStack>
-        </VStack>
-      </HStack>
-      <Skeleton h="1px" w="full" mt={3} />
-    </>
-  );
-};
-
-const CommentList = (props: Props) => {
-  const [commentListIsLoaded, setCommentListIsLoaded] = useState(false);
-
-  useEffect(() => {
-    setTimeout(() => setCommentListIsLoaded(true), 1000);
-  });
-
+const CommentList = ({ data }) => {
   return (
     <View style={styles.commentsContainer}>
-      {commentListIsLoaded ? (
-        <FlashList
-          removeClippedSubviews={true}
-          estimatedItemSize={117}
-          showsVerticalScrollIndicator={false}
-          data={comments}
-          ListHeaderComponent={
-            <Text style={styles.commentHeader}>全部评论 {comments.length}</Text>
-          }
-          ListFooterComponent={<BottomMessage />}
-          keyExtractor={(_, index) => "" + index}
-          renderItem={({ item }) => (
-            <CommentItem
-              userName={item.userName}
-              userImgURL={item.userImgURL}
-              comment={item.comment}
-              replies={item.replies}
-            />
-          )}
-          ItemSeparatorComponent={() => (
-            <Divider color="#999" style={styles.divider} />
-          )}
-        />
-      ) : (
-        <CommentListSkeleton />
-      )}
+      <FlashList
+        removeClippedSubviews={true}
+        estimatedItemSize={117}
+        showsVerticalScrollIndicator={false}
+        data={data.comments}
+        ListHeaderComponent={
+          <Text style={styles.commentHeader}>
+            全部评论 {data.total_comments}
+          </Text>
+        }
+        ListFooterComponent={<BottomMessage />}
+        keyExtractor={(_, index) => "" + index}
+        renderItem={({ item }: any) => (
+          <CommentItem
+            customerId={item.customer_id}
+            comment={item.comment}
+            username={item.username}
+            photo={item.photo}
+            replies={item.replies}
+          />
+        )}
+        ItemSeparatorComponent={() => (
+          <Divider color="#999" style={styles.divider} />
+        )}
+      />
     </View>
   );
 };

@@ -1,18 +1,25 @@
-import { StyleSheet, Text, View } from "react-native";
+import { StyleSheet } from "react-native";
 
 import { useRoute } from "@react-navigation/native";
 import { useQuery } from "@tanstack/react-query";
 
-import { Header } from "./Header";
-import { Work } from "hooks/useWork";
 import CommentList from "features/commentList";
 import GridVideos from "features/sectionList/components/GridVideos";
 import StickyTabs from "layouts/StickyTabs";
+import VideoListSkeleton from "components/skeletons/VideoListSkeleton";
+import { Header } from "./Header";
+import { Work } from "hooks/useWork";
+import CommentListSkeleton from "components/skeletons/CommentListSkeleton";
 
-const GridVideosLayout = ({ api_func, id }) => {
-  const { data, isLoading } = useQuery({
-    queryKey: ["workGridVideos", id],
-    queryFn: () => api_func,
+const OthersLayout = ({ userId }) => {
+  const { getWorkAll } = Work();
+  const { data: workAllData, isLoading } = useQuery({
+    queryKey: ["allWork", userId],
+    queryFn: () =>
+      getWorkAll({
+        user_id: userId,
+        with: "user",
+      }),
     onSuccess: (data) => {
       console.log("Success", data);
     },
@@ -23,16 +30,38 @@ const GridVideosLayout = ({ api_func, id }) => {
   });
 
   if (isLoading) {
-    return (
-      <View>
-        <Text>Loading....</Text>
-      </View>
-    );
+    return <VideoListSkeleton />;
   }
-  //  the data.data is for getWorkAll function
-  //  the data is for getWorkRecommended function
-  // ->  !!data.data will converted to boolean if the data.data is undefined it will become false
-  return <GridVideos data={!!data.data ? data.data : data} />;
+
+  return <GridVideos data={workAllData.data} />;
+};
+
+const RecommendedData = ({ data, id }) => {
+  const { getWorkRecommended } = Work();
+  const { data: recommendedData, isLoading } = useQuery({
+    queryKey: ["recommendedSingleVideo", id],
+    queryFn: () =>
+      getWorkRecommended({
+        tags: data.tags.toString(),
+        with: "user",
+        ads: true,
+        page: 1, // will code later for the pagination
+        user_id: id,
+      }),
+    onSuccess: (data) => {
+      console.log("Success", data);
+    },
+    onError: (error) => {
+      //error handler
+      console.log("Error", error);
+    },
+  });
+
+  if (isLoading) {
+    return <VideoListSkeleton />;
+  }
+
+  return <GridVideos data={recommendedData.data} />;
 };
 
 const CommentListLayout = () => {
@@ -40,19 +69,23 @@ const CommentListLayout = () => {
   const { getWorkComments } = Work();
   const { data, isLoading } = useQuery(
     ["workComments", route.params.id],
-    () => getWorkComments(route.params.id),
+    () => getWorkComments({ foreign_id: route.params.id, skip: 0, limit: 5 }),
     {
       onError: () => {
         //error handler
       },
     }
   );
-  return <CommentList />;
+
+  if (isLoading) {
+    return <CommentListSkeleton />;
+  }
+
+  return <CommentList data={data} />;
 };
 
 const SingleVideoTab = ({ data }) => {
   const route = useRoute<any>();
-  const { getWorkAll, getWorkRecommended } = Work();
 
   const tabsData = {
     Header: () => <Header data={data} />,
@@ -60,29 +93,12 @@ const SingleVideoTab = ({ data }) => {
       {
         name: "TabOthers",
         label: "TA的视频",
-        Content: (
-          <GridVideosLayout
-            api_func={getWorkAll({
-              user_id: route.params.userId,
-              with: "user",
-            })}
-            id={route.params.userId}
-          />
-        ), // use user_id as params to get ALL data related on that user_id -> api/work?user_id={user_id}
+        Content: <OthersLayout userId={route.params.userId} />,
       },
       {
         name: "TabRecommended",
         label: "更多推荐",
-        Content: (
-          <GridVideosLayout
-            api_func={getWorkRecommended({
-              tags: data.tags.toString(),
-              with: "user",
-              ads: true,
-            })}
-            id={route.params.id}
-          />
-        ), // get all recommended video -> api/work/recommended
+        Content: <RecommendedData data={data} id={route.params.userId} />,
       },
       {
         name: "TabComments",

@@ -82,7 +82,10 @@ export const Header = ({ data }) => {
             />
             <Text style={styles.text}>下载</Text>
           </Pressable>
-          <View style={styles.buttonItem}>
+          <Pressable
+            style={styles.buttonItem}
+            onPress={() => navigation.navigate("SharingPromotion")}
+          >
             <Fontisto
               name="share-a"
               color="#999"
@@ -90,7 +93,7 @@ export const Header = ({ data }) => {
               style={styles.icon}
             />
             <Text style={styles.text}>分享</Text>
-          </View>
+          </Pressable>
         </View>
       </View>
       <BannerAds />

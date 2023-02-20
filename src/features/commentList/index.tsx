@@ -6,49 +6,39 @@ import { FlashList } from "@shopify/flash-list";
 import Fontisto from "react-native-vector-icons/Fontisto";
 
 import BottomMessage from "components/BottomMessage";
-import { Customer } from "hooks/useCustomer";
 import { GLOBAL_COLORS } from "global";
-import { useQuery } from "@tanstack/react-query";
+
+type repliesDataType = {
+  replyId: string;
+  customerId: string;
+  username: string;
+  photo: string;
+  comment: string;
+};
 
 type commentItemProps = {
   customerId: string;
   comment: string;
-  replies: {
-    replyId: string;
-    customerId: string;
-    username: string;
-    photo: string;
-    comment: string;
-  }[];
+  username: string;
+  photo: string;
+  replies: repliesDataType[];
 };
 
 const CommentItem = (props: commentItemProps) => {
   const [repliesIsShown, setrepliesIsShown] = useState(false);
   const [amountOfCommentShown, setAmountOfCommentShown] = useState(10);
-  const { getCustomerInfo } = Customer();
-  const { data, isLoading } = useQuery({
-    queryKey: ["comment", props.customerId],
-    queryFn: () => getCustomerInfo(props.customerId),
-    onError: (error) => {
-      console.log("comment", error);
-    },
-  });
-
-  if (isLoading) {
-    return null;
-  }
 
   return (
     <HStack space={2}>
       <Pressable
-        onPress={() => Alert.alert("go to " + data.username + " profile")}
+        onPress={() => Alert.alert("go to " + props.username + " profile")}
       >
-        <Avatar size={42} source={{ uri: data.photo }} />
+        <Avatar size={42} source={{ uri: props.photo }} />
       </Pressable>
       <VStack space={1} style={{ flex: 1, paddingHorizontal: 6 }}>
-        <Text style={styles.whiteText}>{data.alias}</Text>
+        <Text style={styles.whiteText}>{props.username}</Text>
         <Text style={styles.whiteText}>{props.comment}</Text>
-        <Pressable onPress={() => Alert.alert("reply to " + data.username)}>
+        <Pressable onPress={() => Alert.alert("reply to " + props.username)}>
           <HStack space={1.5} style={styles.alignCenter}>
             <Fontisto
               name="commenting"
@@ -122,6 +112,8 @@ const CommentList = ({ data }) => {
           <CommentItem
             customerId={item.customer_id}
             comment={item.comment}
+            username={item.username}
+            photo={item.photo}
             replies={item.replies}
           />
         )}

@@ -39,7 +39,7 @@ const OthersLayout = ({ userId }) => {
 const RecommendedData = ({ data, id }) => {
   const { getWorkRecommended } = Work();
   const { data: recommendedData, isLoading } = useQuery({
-    queryKey: ["recommended", id],
+    queryKey: ["recommendedSingleVideo", id],
     queryFn: () =>
       getWorkRecommended({
         tags: data.tags.toString(),

@@ -14,7 +14,7 @@ const Recommended = ({ id, tag }) => {
   const { getWorkRecommended } = Work();
 
   const { data, isLoading } = useQuery({
-    queryKey: ["recommended", id],
+    queryKey: ["recommendedSingleTag", id],
     queryFn: () => getWorkRecommended({ tag, with: "user", ads: true }),
     onSuccess: (data) => {
       console.log("Success", data);

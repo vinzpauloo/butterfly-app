@@ -36,7 +36,7 @@ const Recommended = ({ id, tag }) => {
   return (
     <ScrollView>
       <Container>
-        <GridVideos data={data} />
+        <GridVideos data={data.data} />
         <BottomMessage />
       </Container>
     </ScrollView>

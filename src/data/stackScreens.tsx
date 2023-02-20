@@ -94,43 +94,6 @@ export const stackScreens = {
       name: "SingleVideo",
       component: SingleVideoScreen,
       options: { headerShown: false },
-      // options: ({ navigation, route }: any) => ({
-      //   title: "",
-      //   headerStyle: {
-      //     backgroundColor: GLOBAL_COLORS.primaryColor,
-      //   },
-      //   headerLeft: () => (
-      //     <View
-      //       style={{
-      //         flexDirection: "row",
-      //       }}
-      //     >
-      //       <Ionicons
-      //         name="chevron-back-sharp"
-      //         color="#fff"
-      //         size={30}
-      //         onPress={() => navigation.goBack()}
-      //       />
-      //       <Image source={{ uri: route.params?.image }} style={styles.image} />
-      //       <View>
-      //         <Text style={styles.title}>{route.params?.username}</Text>
-      //         <Text style={styles.followers}>
-      //           {route.params?.followers}粉丝
-      //         </Text>
-      //       </View>
-      //     </View>
-      //   ),
-      //   headerRight: () => {
-      //     return (
-      //       <Pressable style={styles.followBtn}>
-      //         <Text style={styles.followText}>+关注</Text>
-      //       </Pressable>
-      //     );
-      //   },
-      //   headerTitleStyle: {
-      //     color: "#fff",
-      //   },
-      // }),
     },
     {
       name: "Search",

@@ -15,5 +15,12 @@ export const useSiteSettings = () => {
     });
   };
 
-  return { getNavbar, getAds };
+  const getAnnouncement = () => {
+    return request({
+      url: `/announcement/list`,
+      method: "GET",
+    });
+  };
+
+  return { getNavbar, getAds, getAnnouncement };
 };

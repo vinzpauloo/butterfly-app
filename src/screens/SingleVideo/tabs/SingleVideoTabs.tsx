@@ -45,6 +45,8 @@ const RecommendedData = ({ data, id }) => {
         tags: data.tags.toString(),
         with: "user",
         ads: true,
+        page: 1, // will code later for the pagination
+        user_id: id,
       }),
     onSuccess: (data) => {
       console.log("Success", data);
@@ -96,7 +98,7 @@ const SingleVideoTab = ({ data }) => {
       {
         name: "TabRecommended",
         label: "更多推荐",
-        Content: <RecommendedData data={data} id={route.params.id} />,
+        Content: <RecommendedData data={data} id={route.params.userId} />,
       },
       {
         name: "TabComments",

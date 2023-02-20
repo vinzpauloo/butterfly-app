@@ -67,7 +67,7 @@ const CommentListLayout = () => {
   const { getWorkComments } = Work();
   const { data, isLoading } = useQuery(
     ["workComments", route.params.id],
-    () => getWorkComments(route.params.id),
+    () => getWorkComments({ foreign_id: route.params.id, skip: 0, limit: 5 }),
     {
       onError: () => {
         //error handler

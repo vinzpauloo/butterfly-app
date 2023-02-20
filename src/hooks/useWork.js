@@ -17,10 +17,11 @@ export const Work = () => {
     });
   };
 
-  const getWorkComments = (id) => {
+  const getWorkComments = (data) => {
     return request({
-      url: `/comment/${id}`,
+      url: `/comment/pagination`,
       method: "GET",
+      params: data,
     });
   };
 

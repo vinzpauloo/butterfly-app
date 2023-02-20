@@ -7,7 +7,29 @@ import FontAwesome from "react-native-vector-icons/FontAwesome";
 import { GLOBAL_COLORS } from "global";
 import CustomModal from "components/CustomModal";
 
+import { useQuery } from "@tanstack/react-query";
+import { useSiteSettings } from "hooks/useSiteSettings";
+
 const Content = ({ setOpen }) => {
+
+  const [isQueryEnable, setIsQueryEnable] = useState(true);
+  const [announcementTitle, setAnnouncementTitle] = useState("");
+  const [announcementDescription, setAnnouncementDescription] = useState("");
+
+  const { getAnnouncement } = useSiteSettings();
+  const { isLoading, isError, data, error, status } = useQuery({
+    queryKey: ["announcement"],
+    queryFn: () => getAnnouncement(),
+    onSuccess: (data) => {
+      console.log("=== Announcement fetched from backend! ===");
+      setAnnouncementTitle(data[0].introductions[1].title)
+      setAnnouncementDescription(data[0].introductions[1].description)
+    },
+    onError: (error) => {
+      console.log("Error", error);
+    },
+    enabled: isQueryEnable,
+  });
   return (
     <Modal.Content>
       <Modal.Body>
@@ -18,17 +40,12 @@ const Content = ({ setOpen }) => {
             size={30}
             color={GLOBAL_COLORS.secondaryColor}
           />
-          <Text fontSize="lg">Announcement Title</Text>
+          <Text fontSize="lg">{announcementTitle}</Text>
         </VStack>
 
         {/* Announcement details */}
         <VStack space={2} style={{ marginBottom: 20 }}>
-          <Text>Lorem Ipsum is</Text>
-          <Text>simply dummy text</Text>
-          <Text>of the printing and</Text>
-          <Text>typesetting industry.</Text>
-          <Text>Lorem Ipsum has been</Text>
-          <Text>the industry's standard dummy text.</Text>
+          <Text>{announcementDescription}</Text>
         </VStack>
 
         {/* Button */}

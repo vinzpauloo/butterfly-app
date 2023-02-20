@@ -1,24 +1,9 @@
-import React, { useEffect, useRef, useState } from "react";
-import {
-  StyleSheet,
-  Text,
-  View,
-  Dimensions,
-  FlatList,
-  Alert,
-  Pressable,
-  Image,
-  ActivityIndicator,
-} from "react-native";
-import { ResizeMode, Video } from "expo-av";
+import React, { useEffect, useState } from "react";
+import { StyleSheet, Text, View, Dimensions, FlatList, Alert, Pressable, Image, ActivityIndicator } from "react-native";
+import { AVPlaybackStatusSuccess, ResizeMode, Video } from "expo-av";
 import { useNavigation, useRoute } from "@react-navigation/native";
 import { VStack, useDisclose, HStack, Slider } from "native-base";
-import Animated, {
-  PinwheelIn,
-  PinwheelOut,
-  ZoomIn,
-  ZoomOut,
-} from "react-native-reanimated";
+import Animated, { ZoomIn, ZoomOut } from "react-native-reanimated";
 
 import BottomComment from "components/BottomComment";
 import Container from "components/Container";
@@ -58,28 +43,31 @@ const PortraitVideoContent = (props: Props) => {
 
   const [isVideoPlaying, setisVideoPlaying] = useState(false);
   const [showPlayPauseButton, setShowPlayPauseButton] = useState(false);
-  const [userSeekTime, setUserSeekTime] = useState(0);
-  const [videoCurrentTime, setVideoCurrentTime] = useState(0);
-  const [videoTotalDuration, setVideoTotalDuration] = useState(0);
+  // const [userSeekTime, setUserSeekTime] = useState(0);
+  // const [videoCurrentTime, setVideoCurrentTime] = useState(0);
+  // const [videoTotalDuration, setVideoTotalDuration] = useState(0);
   const [videoOrientation, setVideoOrientation] = useState("");
   const [videoIsLoaded, setVideoIsLoaded] = useState(false);
-  const videoCurrentTimeDisplay = Math.round(videoCurrentTime / 1000);
-  const videoTotalDurationDisplay = Math.round(videoTotalDuration / 1000);
+  // const videoCurrentTimeDisplay = Math.round(videoCurrentTime / 1000);
+  // const videoTotalDurationDisplay = Math.round(videoTotalDuration / 1000);
 
   const [videoIsLiked, setVideoIsLiked] = useState(false);
   const [videoIsFaved, setVideoIsFaved] = useState(false);
 
+  const [totalWatchTime, setTotalWatchTime] = useState(null)
+  const [totalBufferedTime, setTotalBufferedTime] = useState(null)
+
   useEffect(() => {
     setisVideoPlaying(true);
   }, [props.isActive]);
-
+  
   function pausePlayVideo() {
     setisVideoPlaying((prev) => !prev);
     isVideoPlaying
       ? setShowPlayPauseButton(true)
       : setTimeout(() => setShowPlayPauseButton(false), 500);
-    setUserSeekTime(videoCurrentTime);
-    setVideoCurrentTime(userSeekTime);
+    // setUserSeekTime(videoCurrentTime);
+    // setVideoCurrentTime(userSeekTime);
   }
 
   function testDownload() {
@@ -89,48 +77,42 @@ const PortraitVideoContent = (props: Props) => {
   }
 
   return (
-    <View
-      style={[styles.container, { height: windowHeight - props.tabBarHeight }]}
-    >
+    <View style={[styles.container, { height: windowHeight - props.tabBarHeight }]} >
       {props.isActive && (
         <Pressable style={styles.videoContainer} onPress={pausePlayVideo}>
           <Video
             source={{ uri: props.uri }}
             style={styles.video}
-            resizeMode={
-              videoOrientation === "portrait"
-                ? ResizeMode.STRETCH
-                : ResizeMode.CONTAIN
-            }
-            isLooping={true}
+            resizeMode={videoOrientation === "portrait" ? ResizeMode.STRETCH : ResizeMode.CONTAIN}
+            isLooping={false}
             shouldPlay={isVideoPlaying && videoIsLoaded}
             usePoster={true}
-            positionMillis={userSeekTime}
+            // positionMillis={userSeekTime}
             PosterComponent={() => (
               <View style={styles.videoThumbnail}>
-                <Image
-                  style={styles.videoThumbnail}
-                  source={{ uri: props.thumbnail }}
-                />
+                <Image style={styles.videoThumbnail} source={{ uri: props.thumbnail }}/>
               </View>
             )}
             useNativeControls={false}
-            onReadyForDisplay={(event) => {
+            onReadyForDisplay={(event: any) => {
               setVideoIsLoaded(event.status.isLoaded);
               setVideoOrientation(event.naturalSize.orientation);
-              setVideoTotalDuration(event.status.durationMillis);
+              // setVideoTotalDuration(event.status.durationMillis);
+              setTotalWatchTime(event.status.positionMillis);
             }}
             progressUpdateIntervalMillis={100}
-            onPlaybackStatusUpdate={(status) => {
-              setVideoCurrentTime(status.positionMillis);
+            onPlaybackStatusUpdate={(status: AVPlaybackStatusSuccess) => {
+              // setVideoCurrentTime(status.positionMillis);
+              status.isLoaded ? setTotalWatchTime(status.positionMillis) : null
+              setTotalBufferedTime(status.playableDurationMillis)
+
+              status.isPlaying ?
+                console.log("\nwatch time: " + totalWatchTime + "\n" + "buffered time:" + totalBufferedTime)
+                : null
             }}
           />
           {showPlayPauseButton ? (
-            <Animated.View
-              style={styles.playPauseIcon}
-              entering={ZoomIn}
-              exiting={ZoomOut}
-            >
+            <Animated.View style={styles.playPauseIcon} entering={ZoomIn} exiting={ZoomOut}>
               {isVideoPlaying ? (
                 <Ionicons name="play" size={48} color="white" />
               ) : (
@@ -140,18 +122,8 @@ const PortraitVideoContent = (props: Props) => {
           ) : null}
         </Pressable>
       )}
-      <VStack
-        space={2}
-        style={[
-          styles.bottomSection,
-          isVideoPlaying ? { bottom: 0 } : { bottom: 24 },
-        ]}
-      >
-        <Pressable
-          onPress={() => {
-            Alert.alert("Go to user Profile!");
-          }}
-        >
+      <VStack space={2} style={[styles.bottomSection, isVideoPlaying ? { bottom: 0 } : { bottom: 0 }]}>
+        <Pressable onPress={() => {Alert.alert("Go to user Profile!")}}>
           <Text style={[styles.userName, styles.iconText]}>
             @{props.userName}
           </Text>
@@ -159,46 +131,22 @@ const PortraitVideoContent = (props: Props) => {
         <Text style={styles.iconText}>{props.description}</Text>
         <View style={styles.tags}>
           {props.tags.map((item, index) => (
-            <Pressable
-              key={index}
-              style={styles.tag}
-              onPress={() => {
-                navigation.navigate("SingleTag", { tag: item });
-              }}
-            >
+            <Pressable key={index} style={styles.tag} onPress={() => {navigation.navigate("SingleTag", {tag: item})}}>
               <Text style={styles.iconText}>#{item}</Text>
             </Pressable>
           ))}
         </View>
-        <Pressable
-          onPress={() => {
-            Alert.alert("Go to VIP purchase");
-          }}
-        >
+        <Pressable onPress={() => {Alert.alert("Go to VIP purchase")}}>
           <Text style={styles.subscribe}>Subscription needed or gold coin</Text>
         </Pressable>
       </VStack>
-      <VStack
-        space={2}
-        style={[
-          styles.verticalBar,
-          isVideoPlaying ? { bottom: 0 } : { bottom: 24 },
-        ]}
-      >
+      <VStack space={2} style={[styles.verticalBar, isVideoPlaying ? { bottom: 0 } : { bottom: 0 }]}>
         <View style={styles.verticalBarItem}>
-          <Pressable
-            onPress={() => {
-              Alert.alert("Go to user Profile!");
-            }}
-          >
+          <Pressable onPress={() => {Alert.alert("Go to user Profile!")}}>
             <Image style={styles.userLogo} source={{ uri: props.userImage }} />
           </Pressable>
           <View style={styles.followButton}>
-            <Pressable
-              onPress={() => {
-                Alert.alert("Follow User!");
-              }}
-            >
+            <Pressable onPress={() => {Alert.alert("Follow User!")}}>
               <Feather name="plus" color={"white"} size={16} />
             </Pressable>
           </View>
@@ -240,13 +188,7 @@ const PortraitVideoContent = (props: Props) => {
           <Text style={styles.iconText}>DL</Text>
         </View>
       </VStack>
-      <HStack
-        style={[
-          styles.bottomSliderContainer,
-          isVideoPlaying ? { bottom: -40 } : { bottom: 0 },
-        ]}
-        space={2}
-      >
+      {/* <HStack style={[styles.bottomSliderContainer, isVideoPlaying ? { bottom: -40 } : { bottom: 0 }]} space={2}>
         <Text style={styles.videoTimeStamp}>
           {videoCurrentTimeDisplay < 10
             ? `0:0${videoCurrentTimeDisplay}`
@@ -273,7 +215,7 @@ const PortraitVideoContent = (props: Props) => {
             ? `0:0${videoTotalDurationDisplay}`
             : `0:${videoTotalDurationDisplay}`}
         </Text>
-      </HStack>
+      </HStack> */}
     </View>
   );
 };

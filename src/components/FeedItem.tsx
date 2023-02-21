@@ -50,6 +50,8 @@ const FeedItem = ({item}) => {
         <HStack>
           <Pressable onPress={() => {navigation.navigate(`SingleUser`, {
             id: item?.user_id,
+            user_photo: item?.user.photo,
+            username: item?.user.username
           })}}>
             <HStack space={2} style={styles.top}>
               <Avatar source={{uri:  item?.user.photo}} size={28} />
@@ -64,7 +66,7 @@ const FeedItem = ({item}) => {
           {item?.tags ? (
               item.tags.map((tag, index) =>
                   <Pressable key={index} onPress={()=>{navigation.navigate(`SingleTag`, {
-                    id: item?.user_id
+                    tag: tag
                   })}}>
                     <Text style={styles.tags}>#{tag}</Text>
                   </Pressable>
@@ -73,7 +75,13 @@ const FeedItem = ({item}) => {
         </HStack>
         <VStack space={2}>
           <Pressable onPress={()=>{navigation.navigate(`SingleFeedScreen`,{
-            id: item?.user_id
+            id: item?._id,
+            feed: item?.string_story,
+            user_photo: item?.user.photo,
+            username: item?.user.username,
+            likes: item?.like.total_likes,
+            comments: item?.comment.total_comments,
+            postTitle: `详情`
           })}}>
             <Text style={styles.whiteText}>{item?.string_story}</Text>
           </Pressable>
@@ -106,7 +114,7 @@ const FeedItem = ({item}) => {
               </HStack> : null}
         </VStack>
         <HStack style={styles.bottom}>
-          <Pressable onPress={()=> Alert.alert("Share Post")}>
+          <Pressable onPress={()=>{navigation.navigate(`SharingPromotion`)}}>
             <FontAwesome name="share-square-o" color={"#999"} size={16} />
           </Pressable>
           <Pressable onPress={() => item?.openComments === undefined ? null : item.openComments()}>

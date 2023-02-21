@@ -43,14 +43,12 @@ const FeedItem = ({item}) => {
       fromFeedItem: true,
       index: index
     })
-    console.log(`TEST INDEX ${index}`)
   }
 
   return (
       <VStack p={4} space={2}>
         <HStack>
           <Pressable onPress={() => {navigation.navigate(`SingleUser`, {
-            creator: item?.user.id,
             id: item?._id,
           })}}>
             <HStack space={2} style={styles.top}>

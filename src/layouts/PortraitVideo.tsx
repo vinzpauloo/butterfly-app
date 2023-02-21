@@ -25,6 +25,7 @@ interface PortraitVideoDataType {
 }
 
 type Props = {
+  userID: number
   videoURL: string;
   userName: string;
   description: string;
@@ -120,8 +121,8 @@ const PortraitVideoContent = (props: Props) => {
           ) : null}
         </Pressable>
       )}
-      <VStack space={2} style={[styles.bottomSection, isVideoPlaying ? { bottom: 0 } : { bottom: 0 }]}>
-        <Pressable onPress={() => {Alert.alert("Go to user Profile!")}}>
+      <VStack space={2} style={styles.bottomSection}>
+        <Pressable onPress={() => {navigation.navigate("SingleUser", {userID: props.userID})}}>
           <Text style={[styles.userName, styles.iconText]}>
             @{props.userName}
           </Text>
@@ -134,13 +135,13 @@ const PortraitVideoContent = (props: Props) => {
             </Pressable>
           ))}
         </View>
-        <Pressable onPress={() => {Alert.alert("Go to VIP purchase")}}>
+        <Pressable onPress={() => {navigation.navigate("SharingPromotion")}}>
           <Text style={styles.subscribe}>Subscription needed or gold coin</Text>
         </Pressable>
       </VStack>
-      <VStack space={2} style={[styles.verticalBar, isVideoPlaying ? { bottom: 0 } : { bottom: 0 }]}>
+      <VStack space={2} style={styles.verticalBar}>
         <View style={styles.verticalBarItem}>
-          <Pressable onPress={() => {Alert.alert("Go to user Profile!")}}>
+          <Pressable onPress={() => { navigation.navigate("SingleUser", {userID: props.userID})}}>
             <Image style={styles.userLogo} source={{ uri: props.userImage }} />
           </Pressable>
           <View style={styles.followButton}>
@@ -219,6 +220,7 @@ const PortraitVideo: React.FC<PortraitVideoDataType> = ({
       console.log("=== random portrait video fetched from backend! ===");
       let newElement = {
         id: data.id,
+        userID: data.user.id,
         userName: data.user.username,
         videoURL: data.video_url,
         thumbnailURL: data.thumbnail_url,
@@ -267,6 +269,7 @@ const PortraitVideo: React.FC<PortraitVideoDataType> = ({
             removeClippedSubviews={true}
             renderItem={({ item, index }) => (
               <PortraitVideoContent
+                userID={item.userID}
                 key={item.id}
                 videoURL={item.videoURL}
                 description={item.description}
@@ -324,6 +327,7 @@ const styles = StyleSheet.create({
     position: "absolute",
     paddingHorizontal: 8,
     paddingBottom: 16,
+    bottom: 0
   },
   bottomSliderContainer: {
     position: "absolute",
@@ -339,6 +343,7 @@ const styles = StyleSheet.create({
     position: "absolute",
     right: 8,
     paddingBottom: 16,
+    bottom: 0
   },
   verticalBarItem: {
     width: "100%",

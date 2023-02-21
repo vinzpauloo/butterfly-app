@@ -72,7 +72,11 @@ const FeedItem = ({item}) => {
           ): null}
         </HStack>
         <VStack space={2}>
-          <Text style={styles.whiteText}>{item?.string_story}</Text>
+          <Pressable onPress={()=>{navigation.navigate(`SingleFeedScreen`,{
+            id: item?._id
+          })}}>
+            <Text style={styles.whiteText}>{item?.string_story}</Text>
+          </Pressable>
             <Flex wrap="wrap" direction="row">
               {item?.images ? (
                   item.images.map((item, index)=>(

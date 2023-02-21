@@ -11,7 +11,8 @@ const Vlog = (props: Props) => {
   const bottomTabHeight = useBottomTabBarHeight();
   return (
     <PortraitVideo
-      reelsVideos={reelsVideos}
+      // optional prop if it came from a specified list of video from a user
+      // reelsVideos={reelsVideos}
       bottomTabHeight={bottomTabHeight}
     />
   );

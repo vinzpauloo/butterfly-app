@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { StyleSheet, Text, View, Dimensions, FlatList, Alert, Pressable, Image, ActivityIndicator } from "react-native";
 import { AVPlaybackStatusSuccess, ResizeMode, Video } from "expo-av";
 import { useNavigation, useRoute } from "@react-navigation/native";
-import { VStack, useDisclose, HStack, Slider } from "native-base";
+import { VStack, useDisclose, Progress } from "native-base";
 import Animated, { ZoomIn, ZoomOut } from "react-native-reanimated";
 
 import BottomComment from "components/BottomComment";
@@ -15,6 +15,9 @@ import { GLOBAL_COLORS } from "global";
 
 import { downloadFile } from "utils/downloadFile";
 
+import { useQuery } from "@tanstack/react-query";
+import { Work } from "hooks/useWork";
+
 interface PortraitVideoDataType {
   reelsVideos?: any[];
   bottomTabHeight?: number;
@@ -22,7 +25,7 @@ interface PortraitVideoDataType {
 }
 
 type Props = {
-  uri: string;
+  videoURL: string;
   userName: string;
   description: string;
   thumbnail: string;
@@ -43,19 +46,17 @@ const PortraitVideoContent = (props: Props) => {
 
   const [isVideoPlaying, setisVideoPlaying] = useState(false);
   const [showPlayPauseButton, setShowPlayPauseButton] = useState(false);
-  // const [userSeekTime, setUserSeekTime] = useState(0);
-  // const [videoCurrentTime, setVideoCurrentTime] = useState(0);
-  // const [videoTotalDuration, setVideoTotalDuration] = useState(0);
   const [videoOrientation, setVideoOrientation] = useState("");
   const [videoIsLoaded, setVideoIsLoaded] = useState(false);
-  // const videoCurrentTimeDisplay = Math.round(videoCurrentTime / 1000);
-  // const videoTotalDurationDisplay = Math.round(videoTotalDuration / 1000);
 
+  const [videoTotalDuration, setVideoTotalDuration] = useState(0);
+  
   const [videoIsLiked, setVideoIsLiked] = useState(false);
   const [videoIsFaved, setVideoIsFaved] = useState(false);
-
-  const [totalWatchTime, setTotalWatchTime] = useState(null)
-  const [totalBufferedTime, setTotalBufferedTime] = useState(null)
+  
+  // VIDEO WATCH TIME AND BUFFEREED TIME (WIP)
+  const [totalWatchTime, setTotalWatchTime] = useState(0)
+  const [totalBufferedTime, setTotalBufferedTime] = useState(0)
 
   useEffect(() => {
     setisVideoPlaying(true);
@@ -66,8 +67,6 @@ const PortraitVideoContent = (props: Props) => {
     isVideoPlaying
       ? setShowPlayPauseButton(true)
       : setTimeout(() => setShowPlayPauseButton(false), 500);
-    // setUserSeekTime(videoCurrentTime);
-    // setVideoCurrentTime(userSeekTime);
   }
 
   function testDownload() {
@@ -81,13 +80,12 @@ const PortraitVideoContent = (props: Props) => {
       {props.isActive && (
         <Pressable style={styles.videoContainer} onPress={pausePlayVideo}>
           <Video
-            source={{ uri: props.uri }}
+            source={{ uri: props.videoURL }}
             style={styles.video}
             resizeMode={videoOrientation === "portrait" ? ResizeMode.STRETCH : ResizeMode.CONTAIN}
             isLooping={false}
             shouldPlay={isVideoPlaying && videoIsLoaded}
             usePoster={true}
-            // positionMillis={userSeekTime}
             PosterComponent={() => (
               <View style={styles.videoThumbnail}>
                 <Image style={styles.videoThumbnail} source={{ uri: props.thumbnail }}/>
@@ -97,18 +95,18 @@ const PortraitVideoContent = (props: Props) => {
             onReadyForDisplay={(event: any) => {
               setVideoIsLoaded(event.status.isLoaded);
               setVideoOrientation(event.naturalSize.orientation);
-              // setVideoTotalDuration(event.status.durationMillis);
+              setVideoTotalDuration(event.status.durationMillis);
               setTotalWatchTime(event.status.positionMillis);
             }}
             progressUpdateIntervalMillis={100}
             onPlaybackStatusUpdate={(status: AVPlaybackStatusSuccess) => {
-              // setVideoCurrentTime(status.positionMillis);
               status.isLoaded ? setTotalWatchTime(status.positionMillis) : null
               setTotalBufferedTime(status.playableDurationMillis)
-
-              status.isPlaying ?
-                console.log("\nwatch time: " + totalWatchTime + "\n" + "buffered time:" + totalBufferedTime)
-                : null
+              
+              // LOG THE VIDEO WATCH TIME AND TOTAL VIDEO BUFFERED TIME (WIP)
+              // status.isPlaying ?
+              //   console.log("\nwatch time: " + totalWatchTime + "\n" + "buffered time:" + totalBufferedTime)
+              //   : null
             }}
           />
           {showPlayPauseButton ? (
@@ -188,34 +186,7 @@ const PortraitVideoContent = (props: Props) => {
           <Text style={styles.iconText}>DL</Text>
         </View>
       </VStack>
-      {/* <HStack style={[styles.bottomSliderContainer, isVideoPlaying ? { bottom: -40 } : { bottom: 0 }]} space={2}>
-        <Text style={styles.videoTimeStamp}>
-          {videoCurrentTimeDisplay < 10
-            ? `0:0${videoCurrentTimeDisplay}`
-            : `0:${videoCurrentTimeDisplay}`}
-        </Text>
-        <Slider
-          size="sm"
-          w={windowWidth - 100}
-          onChangeEnd={(value) => {
-            setUserSeekTime(value);
-          }}
-          value={videoCurrentTime}
-          minValue={0}
-          maxValue={videoTotalDuration}
-          step={1}
-        >
-          <Slider.Track bg={GLOBAL_COLORS.inactiveTextColor}>
-            <Slider.FilledTrack bg={GLOBAL_COLORS.secondaryColor} />
-          </Slider.Track>
-          <Slider.Thumb bg={GLOBAL_COLORS.secondaryColor} />
-        </Slider>
-        <Text style={styles.videoTimeStamp}>
-          {videoTotalDurationDisplay < 10
-            ? `0:0${videoTotalDurationDisplay}`
-            : `0:${videoTotalDurationDisplay}`}
-        </Text>
-      </HStack> */}
+      <Progress h={0.5} value={(totalWatchTime/videoTotalDuration) * 100} bottom={0.5} _filledTrack={{ borderRadius: 0, bg:GLOBAL_COLORS.secondaryColor }} backgroundColor={GLOBAL_COLORS.inactiveTextColor} rounded="none" />
     </View>
   );
 };
@@ -231,12 +202,46 @@ const PortraitVideo: React.FC<PortraitVideoDataType> = ({
   const { isOpen, onOpen, onClose } = useDisclose();
   const [vlogIsLoaded, setVlogIsLoaded] = useState(false);
 
-  const [videoCount, setVideoCount] = useState(1);
-  let localStoredVlog = reelsVideos.slice(0, videoCount);
+  // if reelsVideos props is passed, this becomes true
+  const isReelsFromSpecificList = !!reelsVideos;
+  const [localStoredVlog, setLocalStoredVlog] = useState([])
 
-  useEffect(() => {
-    setTimeout(() => setVlogIsLoaded(true), 1000);
+  // only enable this random video query if no reelsVideos props is passed
+  const [isQueryEnable, setIsQueryEnable] = useState(!isReelsFromSpecificList);
+
+  const { getWorkAll } = Work();
+  const { isLoading, isError, data, error, status, refetch } = useQuery({
+    queryKey: ["portraitWorks"],
+    queryFn: () => getWorkAll({
+      orientation: "Portrait",
+    }),
+    onSuccess: (data) => {
+      console.log("=== random portrait video fetched from backend! ===");
+      let newElement = {
+        id: data.id,
+        userName: data.user.username,
+        videoURL: data.video_url,
+        thumbnailURL: data.thumbnail_url,
+        description: data.description,
+        tags: data.tags,
+        amountOflikes: data.like.total_likes,
+        amountOfComments: data.comment.total_comments,
+        userPhoto: data.user.photo,
+      }
+      setLocalStoredVlog(oldArray => [...oldArray, newElement])
+      setVlogIsLoaded(true)
+    },
+    onError: (error) => {
+      console.log("Error", error);
+    },
+    enabled: isQueryEnable,
   });
+
+  // if reelsVideos props is passed, use that data list, else use a temporary array with randomly fetch videos
+  function onUserScrollDown() {
+    isReelsFromSpecificList ?
+      null : refetch(); console.log("total vids in VLOG: ", localStoredVlog.length)
+  }
 
   return (
     <Container>
@@ -253,24 +258,24 @@ const PortraitVideo: React.FC<PortraitVideoDataType> = ({
         <>
           <FlatList
             // estimatedItemSize={15}
-            onEndReached={() => setVideoCount(videoCount + 1)}
+            onEndReached={onUserScrollDown}
             maxToRenderPerBatch={1}
             initialNumToRender={1}
             windowSize={2}
-            data={localStoredVlog || route.params?.reelsVideos}
+            data={!!reelsVideos ? reelsVideos : localStoredVlog}
             pagingEnabled
             removeClippedSubviews={true}
             renderItem={({ item, index }) => (
               <PortraitVideoContent
                 key={item.id}
-                uri={item.uri}
-                userName={item.userName}
+                videoURL={item.videoURL}
                 description={item.description}
-                thumbnail={item.thumbnail}
+                userName={item.userName}
+                thumbnail={item.thumbnailURL}
                 tags={item.tags}
-                likes={item.likes}
+                likes={item.amountOflikes}
                 amountOfComments={item.amountOfComments}
-                userImage={item.avatarUri}
+                userImage={item.userPhoto}
                 isActive={activeVideoIndex === index}
                 activeVideoIndex={activeVideoIndex}
                 tabBarHeight={bottomTabHeight}

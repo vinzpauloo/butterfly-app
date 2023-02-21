@@ -19,6 +19,8 @@ const OthersLayout = ({ userId }) => {
       getWorkAll({
         user_id: userId,
         with: "user",
+        owner_only: true,
+        ads: true,
       }),
     onSuccess: (data) => {
       console.log("Success", data);
@@ -47,6 +49,7 @@ const RecommendedData = ({ data, id }) => {
         ads: true,
         page: 1, // will code later for the pagination
         user_id: id,
+        recommended: true,
       }),
     onSuccess: (data) => {
       console.log("Success", data);

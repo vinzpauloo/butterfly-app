@@ -19,7 +19,11 @@ export const Header = ({ data }) => {
 
   // navigate to single tag screen
   const handleNavigate = (item) => {
-    navigation.navigate("SingleTag", { id: route.params.id, tag: item });
+    navigation.navigate("SingleTag", {
+      id: route.params.id,
+      tag: item,
+      userId: route.params.userId,
+    });
   };
 
   function testDownload() {

@@ -17,7 +17,7 @@ const SingleTagTabs = () => {
       {
         name: "推荐",
         component: () => (
-          <Recommended id={route.params.id} tag={route.params.tag} />
+          <Recommended tag={route.params.tag} userId={route.params.userId} />
         ),
       },
       {

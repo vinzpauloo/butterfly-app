@@ -7,9 +7,9 @@ import { StackActions, useNavigation } from "@react-navigation/native";
 import { adsGlobalStore } from "../../zustand/adsGlobalStore";
 
 import { useQuery } from "@tanstack/react-query";
-import { useSiteSettings } from "hooks/useSiteSettings";
 
 import { storeDataObject, getDataObject } from "lib/asyncStorage";
+import SiteSettingsService from "services/api/SiteSettingsService";
 
 const InitialLoad = () => {
   const navigation = useNavigation<any>();
@@ -42,7 +42,7 @@ const InitialLoad = () => {
   }, []);
 
   // if local app cache dont have ads, fetch all ads data from backend
-  const { getAds } = useSiteSettings();
+  const { getAds } = SiteSettingsService();
   const { isLoading, isError, data, error, status } = useQuery({
     queryKey: ["ads"],
     queryFn: () => getAds(),

@@ -3,27 +3,25 @@ import React, { useState } from "react";
 
 import { Button, HStack, Modal, Text, VStack } from "native-base";
 import FontAwesome from "react-native-vector-icons/FontAwesome";
+import { useQuery } from "@tanstack/react-query";
 
 import { GLOBAL_COLORS } from "global";
 import CustomModal from "components/CustomModal";
-
-import { useQuery } from "@tanstack/react-query";
-import { useSiteSettings } from "hooks/useSiteSettings";
+import SiteSettingsService from "services/api/SiteSettingsService";
 
 const Content = ({ setOpen }) => {
-
   const [isQueryEnable, setIsQueryEnable] = useState(true);
   const [announcementTitle, setAnnouncementTitle] = useState("");
   const [announcementDescription, setAnnouncementDescription] = useState("");
 
-  const { getAnnouncement } = useSiteSettings();
+  const { getAnnouncement } = SiteSettingsService();
   const { isLoading, isError, data, error, status } = useQuery({
     queryKey: ["announcement"],
     queryFn: () => getAnnouncement(),
     onSuccess: (data) => {
       console.log("=== Announcement fetched from backend! ===");
-      setAnnouncementTitle(data[0].introductions[1].title)
-      setAnnouncementDescription(data[0].introductions[1].description)
+      setAnnouncementTitle(data[0].introductions[1].title);
+      setAnnouncementDescription(data[0].introductions[1].description);
     },
     onError: (error) => {
       console.log("Error", error);

@@ -1,18 +1,17 @@
 import { useState } from "react";
-import { Text, View } from "react-native";
 
 import { useQuery } from "@tanstack/react-query";
 
 import Container from "components/Container";
 import DynamicTabContent from "layouts/DynamicTabContent";
 import MaterialTopTabs from "layouts/navigators/MaterialTopTabs";
-import { useSiteSettings } from "hooks/useSiteSettings";
 import CarouselSkeleton from "components/skeletons/CarouselSkeleton";
 import VideoListSkeleton from "components/skeletons/VideoListSkeleton";
+import SiteSettingsService from "services/api/SiteSettingsService";
 
 const Home = () => {
   const [tabItems, setTabItems] = useState({ initialRoute: "", screens: [] });
-  const { getNavbar } = useSiteSettings();
+  const { getNavbar } = SiteSettingsService();
 
   const { isLoading } = useQuery({
     queryKey: ["navbar"],

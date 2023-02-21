@@ -50,8 +50,6 @@ const FeedItem = ({item}) => {
         <HStack>
           <Pressable onPress={() => {navigation.navigate(`SingleUser`, {
             id: item?.user_id,
-            user_photo: item?.user.photo,
-            username: item?.user.username
           })}}>
             <HStack space={2} style={styles.top}>
               <Avatar source={{uri:  item?.user.photo}} size={28} />
@@ -76,12 +74,6 @@ const FeedItem = ({item}) => {
         <VStack space={2}>
           <Pressable onPress={()=>{navigation.navigate(`SingleFeedScreen`,{
             id: item?._id,
-            feed: item?.string_story,
-            user_photo: item?.user.photo,
-            username: item?.user.username,
-            likes: item?.like.total_likes,
-            comments: item?.comment.total_comments,
-            postTitle: `详情`
           })}}>
             <Text style={styles.whiteText}>{item?.string_story}</Text>
           </Pressable>

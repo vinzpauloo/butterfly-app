@@ -34,128 +34,95 @@ type Props = {
   openComments?: () => void;
 };
 
-const FeedItem = (props: Props) => {
+const FeedItem = ({item}) => {
   const video = React.useRef(null);
   const navigation = useNavigation<any>();
 
   function goToPhotoGallery() {
-    navigation.navigate("PhotoGallery", {
-      postTitle: props.userName,
-      imageList: props.addedContent,
-      fromFeedItem: true,
-    });
+    navigation.navigate("PhotoGallery",
+        {
+          postTitle: item.userName,
+          imageList: item.images,
+          fromFeedItem: true
+        })
   }
 
   return (
-    <VStack p={4} space={2}>
-      <HStack>
-        <Pressable
-          onPress={() => {
-            Alert.alert("Go to " + props.userName + " profile");
-          }}
-        >
-          <HStack space={2} style={styles.top}>
-            <Avatar source={{ uri: props.userPictureURL }} size={28} />
-            <Text style={styles.whiteText}>{props.userName}</Text>
-          </HStack>
-        </Pressable>
-        <Pressable
-          style={styles.privateMessageButton}
-          onPress={() => {
-            Alert.alert("Send " + props.userName + " message");
-          }}
-        >
-          <Text style={styles.privateMessageText}>私信</Text>
-        </Pressable>
-      </HStack>
-      <HStack space={2}>
-        {props.tags.map((tag, index) => (
-          <Pressable
-            key={index}
-            onPress={() => {
-              Alert.alert("Go to " + tag + " tag page");
-            }}
-          >
-            <Text style={styles.tags}>{tag}</Text>
+      <VStack p={4} space={2}>
+        <HStack>
+          <Pressable onPress={() => {navigation.navigate(`SingleUser`, {
+            creator: item?.user.id,
+            id: item?._id,
+          })}}>
+            <HStack space={2} style={styles.top}>
+              <Avatar source={{uri:  item?.user.photo}} size={28} />
+              <Text style={styles.whiteText}>{item?.user.username }</Text>
+            </HStack>
           </Pressable>
-        ))}
-      </HStack>
-      <VStack space={2}>
-        <Text style={styles.whiteText}>{props.description}</Text>
-        {/* ADDED CONTENT HERE */}
-        <Pressable
-          onPress={
-            props.addedContentType === "picture" ? goToPhotoGallery : null
-          }
-        >
-          <Flex wrap="wrap" direction="row">
-            {props.addedContent.length > 0
-              ? props.addedContent.map((item, index) =>
-                  props.addedContentType === "picture" ? (
-                    <Box
-                      key={index}
-                      style={
-                        props.addedContent.length === 1
-                          ? styles.singleContent
-                          : props.addedContent.length % 3 === 0
-                          ? styles.tripleContent
-                          : styles.doubleContent
-                      }
-                      m={0.5}
-                    >
-                      <Image
-                        style={styles.imageInBox}
-                        source={{
-                          uri: item.contentURL,
-                          cache: "only-if-cached",
-                        }}
-                        resizeMode={ResizeMode.COVER}
-                      />
-                    </Box>
-                  ) : props.addedContentType === "video" ? (
-                    <Video
-                      key={index}
-                      ref={video}
+          <Pressable style={styles.privateMessageButton} onPress={()=> {Alert.alert("Send " + item?.userName + " message")}}>
+            <Text style={styles.privateMessageText}>私信</Text>
+          </Pressable>
+        </HStack>
+        <HStack space={2}>
+          {item?.tags ? (
+              item.tags.map((tag, index) =>
+                  <Pressable key={index} onPress={()=>{navigation.navigate(`SingleTag`), {
+                    tags: item?.tags.map
+                  }}}>
+                    <Text style={styles.tags}>#{tag}</Text>
+                  </Pressable>
+              )
+          ): null}
+        </HStack>
+        <VStack space={2}>
+          <Text style={styles.whiteText}>{item?.string_story}</Text>
+          <Pressable onPress={ item?.images  ? goToPhotoGallery : null}>
+            <Flex wrap="wrap" direction="row">
+              {item?.images ? (
+                  item.images.map((item, index)=>(
+                      <Box style={
+                        item.length === 1 ? styles.singleContent
+                            :item.length % 3 === 0 ? styles.tripleContent
+                                :styles.doubleContent} m={0.5} key={index}>
+                        <Image source={{uri: item.url}} style={item.url ? styles.imageInBox : null}/>
+                      </Box>
+                  ))
+              ): item?.videos ? (
+                  <Video
+                      ref = { video }
                       style={styles.singleContent}
-                      source={{ uri: item.contentURL }}
+                      source = {{uri: item.videos[0].url}}
                       useNativeControls
                       resizeMode={ResizeMode.STRETCH}
-                    />
-                  ) : null
-                )
-              : null}
-          </Flex>
-        </Pressable>
-        {props.location ? (
-          <HStack style={styles.locationButton}>
-            <Entypo name="location-pin" color={"#fff"} size={16} />
-            <Text style={styles.whiteText}>{props.location}</Text>
-          </HStack>
-        ) : null}
+                  />
+              ): null}
+            </Flex>
+          </Pressable>
+          {item?.location?
+              <HStack style={styles.locationButton}>
+                <Entypo name="location-pin" color={"#fff"} size={16} />
+                <Text style={styles.whiteText}>{item.location}</Text>
+              </HStack> : null}
+        </VStack>
+        <HStack style={styles.bottom}>
+          <Pressable onPress={()=> Alert.alert("Share Post")}>
+            <FontAwesome name="share-square-o" color={"#999"} size={16} />
+          </Pressable>
+          <Pressable onPress={() => item?.openComments === undefined ? null : item.openComments()}>
+            <HStack space={1} style={styles.bottomIcon}>
+              <Fontisto name="commenting" color={"#999"} size={16} />
+              <Text style={styles.bottomText}>{item?.comment.total_comments}</Text>
+            </HStack>
+          </Pressable>
+          <Pressable onPress={() => Alert.alert("Like Post")}>
+            <HStack space={1} style={styles.bottomIcon}>
+              <AntDesign name="hearto" color={"#999"} size={16} />
+              <Text style={styles.bottomText}>{item?.like.total_likes}</Text>
+            </HStack>
+          </Pressable>
+        </HStack>
+        <Divider style={styles.divider} color='#999'/>
       </VStack>
-      <HStack style={styles.bottom}>
-        <Pressable onPress={() => Alert.alert("Share Post")}>
-          <FontAwesome name="share-square-o" color={"#999"} size={16} />
-        </Pressable>
-        <Pressable
-          onPress={() =>
-            props.openComments === undefined ? null : props.openComments()
-          }
-        >
-          <HStack space={1} style={styles.bottomIcon}>
-            <Fontisto name="commenting" color={"#999"} size={16} />
-            <Text style={styles.bottomText}>{props.totalComments}</Text>
-          </HStack>
-        </Pressable>
-        <Pressable onPress={() => Alert.alert("Like Post")}>
-          <HStack space={1} style={styles.bottomIcon}>
-            <AntDesign name="hearto" color={"#999"} size={16} />
-            <Text style={styles.bottomText}>{props.totalLikes}</Text>
-          </HStack>
-        </Pressable>
-      </HStack>
-      <Divider style={styles.divider} color="#999" />
-    </VStack>
   );
 };
 

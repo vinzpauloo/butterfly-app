@@ -289,7 +289,7 @@ const PortraitVideo: React.FC<PortraitVideoDataType> = ({
               setActiveVideoIndex(index);
             }}
           />
-          <BottomComment isOpen={isOpen} onOpen={onOpen} onClose={onClose} />
+          <BottomComment commentForeignID={data.comment.foreign_id} isOpen={isOpen} onClose={onClose} />
         </>
       ) : (
         <View style={styles.loaderContainer}>

@@ -49,7 +49,7 @@ const FeedItem = ({item}) => {
       <VStack p={4} space={2}>
         <HStack>
           <Pressable onPress={() => {navigation.navigate(`SingleUser`, {
-            id: item?._id,
+            id: item?.user_id,
           })}}>
             <HStack space={2} style={styles.top}>
               <Avatar source={{uri:  item?.user.photo}} size={28} />
@@ -63,9 +63,9 @@ const FeedItem = ({item}) => {
         <HStack space={2}>
           {item?.tags ? (
               item.tags.map((tag, index) =>
-                  <Pressable key={index} onPress={()=>{navigation.navigate(`SingleTag`), {
-                    tags: item?.tags.map
-                  }}}>
+                  <Pressable key={index} onPress={()=>{navigation.navigate(`SingleTag`, {
+                    id: item?.user_id
+                  })}}>
                     <Text style={styles.tags}>#{tag}</Text>
                   </Pressable>
               )
@@ -73,7 +73,7 @@ const FeedItem = ({item}) => {
         </HStack>
         <VStack space={2}>
           <Pressable onPress={()=>{navigation.navigate(`SingleFeedScreen`,{
-            id: item?._id
+            id: item?.user_id
           })}}>
             <Text style={styles.whiteText}>{item?.string_story}</Text>
           </Pressable>

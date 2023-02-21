@@ -202,11 +202,12 @@ const PortraitVideo: React.FC<PortraitVideoDataType> = ({
   const { isOpen, onOpen, onClose } = useDisclose();
   const [vlogIsLoaded, setVlogIsLoaded] = useState(false);
 
-  const [localStoredVlog, setLocalStoredVlog] = useState([])
-  const [isQueryEnable, setIsQueryEnable] = useState(true);
-
   // if reelsVideos props is passed, this becomes true
   const isReelsFromSpecificList = !!reelsVideos;
+  const [localStoredVlog, setLocalStoredVlog] = useState([])
+
+  // only enable this random video query if no reelsVideos props is passed
+  const [isQueryEnable, setIsQueryEnable] = useState(!isReelsFromSpecificList);
 
   const { getWorkAll } = Work();
   const { isLoading, isError, data, error, status, refetch } = useQuery({
@@ -228,15 +229,12 @@ const PortraitVideo: React.FC<PortraitVideoDataType> = ({
         userPhoto: data.user.photo,
       }
       setLocalStoredVlog(oldArray => [...oldArray, newElement])
+      setVlogIsLoaded(true)
     },
     onError: (error) => {
       console.log("Error", error);
     },
     enabled: isQueryEnable,
-  });
-
-  useEffect(() => {
-    setTimeout(() => setVlogIsLoaded(true), 1000);
   });
 
   // if reelsVideos props is passed, use that data list, else use a temporary array with randomly fetch videos

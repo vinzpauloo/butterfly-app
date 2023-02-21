@@ -31,7 +31,7 @@ const StickyTabs: React.FC<IStickyTabsProps> = ({
   const { Header, tabItems } = data;
 
   const CustomTabHeader = () => {
-    /* 
+    /*
       NOTE: Needs improvement to allow scrolling & touchables inside the header
 
       pointerEvents="none" allows scroll gesture
@@ -68,10 +68,11 @@ const StickyTabs: React.FC<IStickyTabsProps> = ({
       lazy={true}
       renderHeader={CustomTabHeader}
       renderTabBar={CustomTabBar}
+      containerStyle={{backgroundColor: GLOBAL_COLORS.primaryColor}}
     >
       {tabItems.map((item, index) => (
         <Tabs.Tab key={index} name={item.name} label={item.label}>
-          {/* 
+          {/*
             Type error workaround when using Tab.ScrollView
             See issue: https://github.com/PedroBern/react-native-collapsible-tab-view/issues/139
           */}

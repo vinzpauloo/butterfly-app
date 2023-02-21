@@ -7,14 +7,14 @@ import CarouselContainer from "features/ads/components/CarouselContainer";
 import DividerContainer from "features/sectionList/components/DividerContainer";
 import HorizontalSlider from "features/sectionList/components/HorizontalSlider";
 import GridVideos from "features/sectionList/components/GridVideos";
+import Loading from "components/Loading";
 import SectionHeader from "features/sectionList/components/SectionHeader";
 import SingleVideo from "features/sectionList/components/SingleVideo";
 import VerticalSlider from "features/sectionList/components/VerticalSlider";
 import VideoListSkeleton from "components/skeletons/VideoListSkeleton";
 import { useQuery } from "@tanstack/react-query";
-import { SubNav } from "hooks/useSubNav";
-import Loading from "components/Loading";
 import { FlashList } from "@shopify/flash-list";
+import { SubNav } from "hooks/useSubNav";
 
 const LayoutContainer = ({ title, dataLength, index, children }) => {
   return (
@@ -82,7 +82,7 @@ const DynamicTabContent = ({ tabTitle }) => {
       ) : (
         <FlashList
           data={data}
-          onEndReachedThreshold={0.01}
+          onEndReachedThreshold={0.5}
           onEndReached={() => {
             if (!isLoading) {
               if (lastPage !== page) {

@@ -1,8 +1,8 @@
 import React from "react";
-import { StyleSheet, View, Image, Dimensions } from "react-native";
+import {StyleSheet, View, Image, Dimensions} from "react-native";
 import { FlashList } from "@shopify/flash-list";
 
-import { useNavigation, useRoute } from "@react-navigation/native";
+import { useRoute } from "@react-navigation/native";
 import { GLOBAL_COLORS } from "global";
 
 const windowWidth = Dimensions.get("window").width;
@@ -12,7 +12,7 @@ type Props = {};
 
 const PhotoGallery = () => {
   const route = useRoute<any>();
-  const imageList = route?.params.imageList;
+  const { imageList, index } = route.params;
 
   return (
     <View style={styles.container}>
@@ -24,12 +24,13 @@ const PhotoGallery = () => {
           renderItem={({ item }: any) => (
             <View style={styles.imageContainer}>
               <Image
-                style={[styles.postImage, styles.imageContained]}
-                source={{ uri: item.contentURL, cache: "only-if-cached" }}
+                  style={[styles.postImage, styles.imageContained]}
+                  source={{ uri: item.url, cache: "only-if-cached" }}
               />
             </View>
           )}
-          estimatedItemSize={674}
+          estimatedItemSize={319}
+          initialScrollIndex={index}
         />
       ) : (
         <FlashList
@@ -37,12 +38,13 @@ const PhotoGallery = () => {
           renderItem={({ item }: any) => (
             <View style={styles.imageContainer}>
               <Image
-                style={[styles.postImage, styles.imageCovered]}
-                source={{ uri: item.imgUrl, cache: "only-if-cached" }}
+                  style={[styles.postImage, styles.imageCovered]}
+                  source={{ uri: item.url, cache: "only-if-cached" }}
               />
             </View>
           )}
-          estimatedItemSize={674}
+          estimatedItemSize={319}
+          initialScrollIndex={index}
         />
       )}
     </View>
@@ -58,7 +60,6 @@ const styles = StyleSheet.create({
     minHeight: 100,
   },
   imageContainer: {
-    // backgroundColor:"red"
     justifyContent: "center",
   },
   postImage: {

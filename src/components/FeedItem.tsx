@@ -16,7 +16,7 @@ import Fontisto from "react-native-vector-icons/Fontisto";
 import AntDesign from "react-native-vector-icons/AntDesign";
 
 import { GLOBAL_COLORS } from "global";
-import { useNavigation } from "@react-navigation/native";
+import {useNavigation} from "@react-navigation/native";
 
 const windowWidth = Dimensions.get("window").width;
 
@@ -37,14 +37,13 @@ type Props = {
 const FeedItem = ({item}) => {
   const video = React.useRef(null);
   const navigation = useNavigation<any>();
-
-  function goToPhotoGallery() {
-    navigation.navigate("PhotoGallery",
-        {
-          postTitle: item.userName,
-          imageList: item.images,
-          fromFeedItem: true
-        })
+  const goToPhotoGallery = (index) => {
+    navigation.navigate("PhotoGallery", {
+      imageList: item?.images,
+      fromFeedItem: true,
+      index: index
+    })
+    console.log(`TEST INDEX ${index}`)
   }
 
   return (
@@ -76,16 +75,17 @@ const FeedItem = ({item}) => {
         </HStack>
         <VStack space={2}>
           <Text style={styles.whiteText}>{item?.string_story}</Text>
-          <Pressable onPress={ item?.images  ? goToPhotoGallery : null}>
             <Flex wrap="wrap" direction="row">
               {item?.images ? (
                   item.images.map((item, index)=>(
-                      <Box style={
-                        item.length === 1 ? styles.singleContent
-                            :item.length % 3 === 0 ? styles.tripleContent
-                                :styles.doubleContent} m={0.5} key={index}>
-                        <Image source={{uri: item.url}} style={item.url ? styles.imageInBox : null}/>
-                      </Box>
+                        <Box style={
+                          item.length === 1 ? styles.singleContent
+                              :item.length % 3 === 0 ? styles.tripleContent
+                                  :styles.doubleContent} m={0.5} key={index}>
+                          <Pressable onPress={()=>goToPhotoGallery(index)}>
+                            <Image source={{uri: item.url}} style={item.url ? styles.imageInBox : null}/>
+                          </Pressable>
+                        </Box>
                   ))
               ): item?.videos ? (
                   <Video
@@ -97,7 +97,6 @@ const FeedItem = ({item}) => {
                   />
               ): null}
             </Flex>
-          </Pressable>
           {item?.location?
               <HStack style={styles.locationButton}>
                 <Entypo name="location-pin" color={"#fff"} size={16} />

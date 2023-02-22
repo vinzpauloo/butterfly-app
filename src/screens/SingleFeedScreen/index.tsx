@@ -7,23 +7,19 @@ import CommentList from 'features/commentList';
 import CommentTextInput from 'components/CommentTextInput';
 
 import { feedListData } from "data/feedListData";
+import {useRoute} from "@react-navigation/native";
 
 type Props = {}
 
 const SingleFeedScreen = (props: Props) => {
+	const route = useRoute();
+	const item = route.params
+	console.log(`TEST###`,item)
 	return (
 		<Container>
 			<ScrollView>
 				<FeedItem
-					userPictureURL={feedListData[6].userPictureURL}
-					userName={feedListData[6].userName}
-					tags={feedListData[6].tags}
-					description={feedListData[6].description}
-					location={feedListData[6].location}
-					addedContentType={feedListData[6].addedContentType}
-					addedContent={feedListData[6].addedContent}
-					totalComments={feedListData[6].totalComments}
-					totalLikes={feedListData[6].totalLikes}
+					item={item}
 				/>
 				<CommentList />
 			</ScrollView>

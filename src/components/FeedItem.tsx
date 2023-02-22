@@ -53,7 +53,7 @@ const FeedItem = ({item}) => {
           })}}>
             <HStack space={2} style={styles.top}>
               <Avatar source={{uri:  item?.user.photo}} size={28} />
-              <Text style={styles.whiteText}>{item?.user.username }</Text>
+              <Text style={styles.whiteText}>{item?.user.username}</Text>
             </HStack>
           </Pressable>
           <Pressable style={styles.privateMessageButton} onPress={()=> {Alert.alert("Send " + item?.userName + " message")}}>
@@ -72,9 +72,55 @@ const FeedItem = ({item}) => {
           ): null}
         </HStack>
         <VStack space={2}>
-          <Pressable onPress={()=>{navigation.navigate(`SingleFeedScreen`,{
-            id: item?._id,
-          })}}>
+          <Pressable onPress={()=>{navigation.navigate(`SingleFeedScreen`,
+              {
+                postTitle: `详情`,
+                user: {
+                  photo: item?.user.photo,
+                  username: item?.user.username
+                },
+                comment: {
+                  total_comments: item?.comment.total_comments,
+                },
+                like: {
+                  total_likes: item?.like.total_likes,
+                },
+                tags: item?.tags,
+                string_story: item?.string_story,
+                comments: [
+                  {
+                    customer_id: item?.user_id,
+                    comment: 'Great content',
+                    username: item?.user.username,
+                    photo: item?.user.photo,
+                    replies: [
+                      {
+                        replyId: '1',
+                        customerId: '2',
+                        username: 'User 2',
+                        photo: item?.user.photo,
+                        comment: 'Great post!',
+                      },
+                      {
+                        replyId: '2',
+                        customerId: '3',
+                        username: 'User 3',
+                        photo: item?.user.photo,
+                        comment: 'Nice one!',
+                      },
+                      {
+                        replyId: '3',
+                        customerId: '4',
+                        username: 'User 4',
+                        photo: item?.user.photo,
+                        comment: 'Amazing!',
+                      },
+                    ],
+                  },
+                ],
+                total_comments: 2,
+              }
+              )}}>
             <Text style={styles.whiteText}>{item?.string_story}</Text>
           </Pressable>
             <Flex wrap="wrap" direction="row">

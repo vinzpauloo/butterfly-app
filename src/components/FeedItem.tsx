@@ -111,9 +111,11 @@ const FeedItem = ({item}) => {
                 },
                 like: {
                   total_likes: item?.like.total_likes,
+                  foreign_id: item?.like.foreign_id
                 },
                 tags: item?.tags,
                 string_story: item?.string_story,
+                foreign_id: item?.like.foreign_id,
                 comments: [
                   {
                     customer_id: item?.user_id,
@@ -145,7 +147,8 @@ const FeedItem = ({item}) => {
                     ],
                   },
                 ],
-                total_comments: 2,
+                total_comments: item?.comment.total_comments,
+                total_likes: item?.like.total_likes,
               }
               )}}>
             <Text style={styles.whiteText}>{item?.string_story}</Text>

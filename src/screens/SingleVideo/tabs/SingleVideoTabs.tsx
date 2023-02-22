@@ -19,7 +19,7 @@ const OthersLayout = ({ userId }) => {
       getWorkAll({
         user_id: userId,
         with: "user",
-        owner_only: true,
+        creator_only: true,
         ads: true,
       }),
     onSuccess: (data) => {

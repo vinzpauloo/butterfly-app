@@ -19,6 +19,7 @@ import AntDesign from "react-native-vector-icons/AntDesign";
 
 import { GLOBAL_COLORS } from "global";
 import CustomModal from "./CustomModal";
+import LikeButton from "./forms/feeds/LikeButton";
 
 type Props = {
   userPictureURL: string;
@@ -187,12 +188,7 @@ const FeedItem = ({item}) => {
               <Text style={styles.bottomText}>{item?.comment.total_comments}</Text>
             </HStack>
           </Pressable>
-          <Pressable onPress={() => Alert.alert("Like Post")}>
-            <HStack space={1} style={styles.bottomIcon}>
-              <AntDesign name="hearto" color={"#999"} size={16} />
-              <Text style={styles.bottomText}>{item?.like.total_likes}</Text>
-            </HStack>
-          </Pressable>
+          <LikeButton data={item} id={item?.like.foreign_id}/>
         </HStack>
         <Divider style={styles.divider} color='#999'/>
         <CustomModal open={open} setOpen={setOpen}>

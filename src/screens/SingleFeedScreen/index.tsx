@@ -14,7 +14,6 @@ type Props = {}
 const SingleFeedScreen = (props: Props) => {
 	const route = useRoute();
 	const item = route.params
-	console.log(`TEST###`,item)
 	return (
 		<Container>
 			<ScrollView>

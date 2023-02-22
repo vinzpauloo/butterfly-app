@@ -16,7 +16,7 @@ import { GLOBAL_COLORS } from "global";
 import { downloadFile } from "utils/downloadFile";
 
 import { useQuery } from "@tanstack/react-query";
-import { Work } from "hooks/useWork";
+import WorkService from "services/api/WorkService";
 
 interface PortraitVideoDataType {
   reelsVideos?: any[];
@@ -210,10 +210,10 @@ const PortraitVideo: React.FC<PortraitVideoDataType> = ({
   // only enable this random video query if no reelsVideos props is passed
   const [isQueryEnable, setIsQueryEnable] = useState(!isReelsFromSpecificList);
 
-  const { getWorkAll } = Work();
+  const { getWorks } = WorkService();
   const { isLoading, isError, data, error, status, refetch } = useQuery({
     queryKey: ["portraitWorks"],
-    queryFn: () => getWorkAll({
+    queryFn: () => getWorks({
       orientation: "Portrait",
     }),
     onSuccess: (data) => {

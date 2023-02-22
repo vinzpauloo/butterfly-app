@@ -1,6 +1,6 @@
 import request from "lib/request";
 
-export const useSiteSettings = () => {
+const SiteSettingsService = () => {
   const getNavbar = (siteId = 1) => {
     return request({
       url: `/navbar/${siteId}`,
@@ -24,3 +24,5 @@ export const useSiteSettings = () => {
 
   return { getNavbar, getAds, getAnnouncement };
 };
+
+export default SiteSettingsService;

@@ -7,9 +7,9 @@ import { StackActions, useNavigation } from "@react-navigation/native";
 import { adsGlobalStore } from "../../zustand/adsGlobalStore";
 
 import { useQuery } from "@tanstack/react-query";
-import { useSiteSettings } from "hooks/useSiteSettings";
 
-import { storeDataObject, getDataObject } from "services/asyncStorage";
+import { storeDataObject, getDataObject } from "lib/asyncStorage";
+import SiteSettingsService from "services/api/SiteSettingsService";
 
 const InitialLoad = () => {
   const navigation = useNavigation<any>();
@@ -33,7 +33,7 @@ const InitialLoad = () => {
           res.localCache_fullscreen_banner,
           res.localCache_popup_banner,
           res.localCache_carousel_banner,
-          res.localCache_single_banner,
+          res.localCache_single_banner
         );
 
         navigation.dispatch(StackActions.replace("TermsOfService"));
@@ -42,7 +42,7 @@ const InitialLoad = () => {
   }, []);
 
   // if local app cache dont have ads, fetch all ads data from backend
-  const { getAds } = useSiteSettings();
+  const { getAds } = SiteSettingsService();
   const { isLoading, isError, data, error, status } = useQuery({
     queryKey: ["ads"],
     queryFn: () => getAds(),
@@ -54,14 +54,16 @@ const InitialLoad = () => {
         data[0].advertisement.fullscreen_banner[0].banners,
         data[0].advertisement.popup_banner[0].banners,
         data[0].advertisement.carousel_banner[0].banners,
-        data[0].advertisement.single_banner.banners,
+        data[0].advertisement.single_banner.banners
       );
 
       // store ads to local app cache
       storeDataObject("AdvertisementCacheData", {
-        localCache_fullscreen_banner: data[0].advertisement.fullscreen_banner[0].banners,
+        localCache_fullscreen_banner:
+          data[0].advertisement.fullscreen_banner[0].banners,
         localCache_popup_banner: data[0].advertisement.popup_banner[0].banners,
-        localCache_carousel_banner: data[0].advertisement.carousel_banner[0].banners,
+        localCache_carousel_banner:
+          data[0].advertisement.carousel_banner[0].banners,
         localCache_single_banner: data[0].advertisement.single_banner.banners,
       });
 

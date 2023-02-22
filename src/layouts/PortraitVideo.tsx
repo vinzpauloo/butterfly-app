@@ -219,16 +219,16 @@ const PortraitVideo: React.FC<PortraitVideoDataType> = ({
     onSuccess: (data) => {
       console.log("=== random portrait video fetched from backend! ===");
       let newElement = {
-        id: data.id,
-        userID: data.user.id,
-        userName: data.user.username,
-        videoURL: data.video_url,
-        thumbnailURL: data.thumbnail_url,
-        description: data.description,
-        tags: data.tags,
-        amountOflikes: data.like.total_likes,
-        amountOfComments: data.comment.total_comments,
-        userPhoto: data.user.photo,
+        id: data[0]._id,
+        userID: data[0].user.id,
+        userName: data[0].user.username,
+        videoURL: data[0].video_url,
+        thumbnailURL: data[0].thumbnail_url,
+        description: data[0].description,
+        tags: data[0].tags,
+        amountOflikes: data[0].like.total_likes,
+        amountOfComments: data[0].comment.total_comments,
+        userPhoto: data[0].user.photo,
       }
       setLocalStoredVlog(oldArray => [...oldArray, newElement])
       setVlogIsLoaded(true)
@@ -292,7 +292,7 @@ const PortraitVideo: React.FC<PortraitVideoDataType> = ({
               setActiveVideoIndex(index);
             }}
           />
-          <BottomComment commentForeignID={data.comment.foreign_id} isOpen={isOpen} onClose={onClose} />
+          <BottomComment commentForeignID={data[0].comment.foreign_id} isOpen={isOpen} onClose={onClose} />
         </>
       ) : (
         <View style={styles.loaderContainer}>

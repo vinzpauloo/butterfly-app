@@ -1,13 +1,15 @@
-import React from "react";
+import React, {useState} from "react";
 import {
   StyleSheet,
-  Text,
   Pressable,
   Alert,
   Image,
   Dimensions,
 } from "react-native";
-import { VStack, HStack, Avatar, Divider, Box, Flex } from "native-base";
+import {VStack, HStack, Avatar, Divider, Box, Flex, Modal, Button, Text} from "native-base";
+
+import {useNavigation} from "@react-navigation/native";
+
 import { Video, ResizeMode } from "expo-av";
 
 import Entypo from "react-native-vector-icons/Entypo";
@@ -16,9 +18,7 @@ import Fontisto from "react-native-vector-icons/Fontisto";
 import AntDesign from "react-native-vector-icons/AntDesign";
 
 import { GLOBAL_COLORS } from "global";
-import {useNavigation} from "@react-navigation/native";
-
-const windowWidth = Dimensions.get("window").width;
+import CustomModal from "./CustomModal";
 
 type Props = {
   userPictureURL: string;
@@ -34,7 +34,33 @@ type Props = {
   openComments?: () => void;
 };
 
+const Content = ({ setOpen }) => {
+  return (
+      <Modal.Content bgColor={GLOBAL_COLORS.headerBasicBg}>
+        <Modal.CloseButton />
+        <Modal.Body>
+          <VStack space={8} alignItems="center" margin={0} py={5}>
+            <Text color="white">Upgrade membership first!</Text>
+
+            <Button
+                size="sm"
+                style={styles.button}
+                onPress={() => setOpen(false)}
+            >
+              Purchase VIP
+            </Button>
+          </VStack>
+        </Modal.Body>
+      </Modal.Content>
+  );
+};
+
 const FeedItem = ({item}) => {
+  const [open, setOpen] = useState(false);
+  const openVIPModal = () => {
+    setOpen(true);
+  };
+
   const video = React.useRef(null);
   const navigation = useNavigation<any>();
   const goToPhotoGallery = (index) => {
@@ -56,7 +82,7 @@ const FeedItem = ({item}) => {
               <Text style={styles.whiteText}>{item?.user.username}</Text>
             </HStack>
           </Pressable>
-          <Pressable style={styles.privateMessageButton} onPress={()=> {Alert.alert("Send " + item?.userName + " message")}}>
+          <Pressable style={styles.privateMessageButton} onPress={openVIPModal}>
             <Text style={styles.privateMessageText}>私信</Text>
           </Pressable>
         </HStack>
@@ -169,12 +195,16 @@ const FeedItem = ({item}) => {
           </Pressable>
         </HStack>
         <Divider style={styles.divider} color='#999'/>
+        <CustomModal open={open} setOpen={setOpen}>
+          <Content setOpen={setOpen} />
+        </CustomModal>
       </VStack>
   );
 };
 
 export default FeedItem;
 
+const windowWidth = Dimensions.get("window").width;
 const styles = StyleSheet.create({
   top: {
     alignItems: "center",
@@ -229,5 +259,10 @@ const styles = StyleSheet.create({
   tripleContent: {
     height: windowWidth / 3 - 15,
     width: windowWidth / 3 - 15,
+  },
+  button: {
+    backgroundColor: GLOBAL_COLORS.secondaryColor,
+    borderRadius: 20,
+    width: 120,
   },
 });

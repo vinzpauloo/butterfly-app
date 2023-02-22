@@ -22,7 +22,10 @@ const PhotoGallery = () => {
           horizontal={true}
           data={imageList}
           renderItem={({ item }: any) => (
-            <View style={styles.imageContainer}>
+            <View style={[
+                styles.imageContainer,
+                index === 0 ? { marginLeft: 40 } : null,
+            ]}>
               <Image
                   style={[styles.postImage, styles.imageContained]}
                   source={{ uri: item.url, cache: "only-if-cached" }}
@@ -31,6 +34,9 @@ const PhotoGallery = () => {
           )}
           estimatedItemSize={319}
           initialScrollIndex={index}
+          snapToAlignment={`center`}
+          snapToInterval={windowWidth}
+          estimatedFirstItemOffset={41}
         />
       ) : (
         <FlashList
@@ -60,7 +66,8 @@ const styles = StyleSheet.create({
     minHeight: 100,
   },
   imageContainer: {
-    justifyContent: "center",
+    justifyContent: 'center',
+    alignContent: 'center',
   },
   postImage: {
     minHeight: windowHeight,
@@ -70,6 +77,6 @@ const styles = StyleSheet.create({
     resizeMode: "cover",
   },
   imageContained: {
-    resizeMode: "contain",
+    resizeMode: "cover",
   },
 });

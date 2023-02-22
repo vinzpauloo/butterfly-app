@@ -116,13 +116,13 @@ const DynamicTabContent = ({ tabTitle }) => {
           ListFooterComponent={() => (
             <>
               {/* the gap will be remove if the lastpage is been fetch */}
-              {lastPage !== page ? (
+              {lastPage !== page || (lastPage === page && isLoading) ? (
                 <View style={{ marginBottom: 60 }}>
                   {/* to have a gap in bottom part of section to see the loading icon */}
                   {isLoading ? <Loading /> : null}
                 </View>
               ) : null}
-              {lastPage === page ? <BottomMessage /> : null}
+              {lastPage === page && !isLoading ? <BottomMessage /> : null}
             </>
           )}
         />

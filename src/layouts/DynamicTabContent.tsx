@@ -1,4 +1,4 @@
-import { StyleSheet } from "react-native";
+import { StyleSheet, View } from "react-native";
 import React, { useState } from "react";
 
 import BottomMessage from "components/BottomMessage";
@@ -59,6 +59,7 @@ const SectionContent = ({
 const DynamicTabContent = ({ tabTitle }) => {
   const [paginate, setPaginate] = useState(2);
   const [lastPage, setLastPage] = useState(0);
+  const [startScroll, setStartScroll] = useState(true);
   const [page, setPage] = useState(1);
   const [data, setData] = useState([]);
   const { getWorkGroup } = SubNav();
@@ -75,6 +76,16 @@ const DynamicTabContent = ({ tabTitle }) => {
     },
   });
 
+  const reachEnd = () => {
+    if (startScroll) return null;
+    if (!isLoading) {
+      if (lastPage !== page) {
+        setPage((prev) => prev + 1);
+        setStartScroll(true);
+      }
+    }
+  };
+
   return (
     <Container>
       {isLoading && page === 1 ? (
@@ -82,14 +93,10 @@ const DynamicTabContent = ({ tabTitle }) => {
       ) : (
         <FlashList
           data={data}
-          onEndReachedThreshold={0.5}
-          onEndReached={() => {
-            if (!isLoading) {
-              if (lastPage !== page) {
-                setPage((prev) => prev + 1);
-              }
-            }
-          }}
+          onEndReachedThreshold={0.01} // always make this default to 0.01 to have no bug for fetching data for the onEndReached -> https://github.com/facebook/react-native/issues/14015#issuecomment-346547942
+          onMomentumScrollBegin={() => setStartScroll(false)}
+          onEndReached={reachEnd}
+          bounces={false}
           estimatedItemSize={200}
           keyExtractor={(item, index) => "" + index}
           renderItem={({ item, index }: any) => {
@@ -108,7 +115,13 @@ const DynamicTabContent = ({ tabTitle }) => {
           ListHeaderComponent={() => <CarouselContainer />}
           ListFooterComponent={() => (
             <>
-              {isLoading ? <Loading /> : null}
+              {/* the gap will be remove if the lastpage is been fetch */}
+              {lastPage !== page ? (
+                <View style={{ marginBottom: 60 }}>
+                  {/* to have a gap in bottom part of section to see the loading icon */}
+                  {isLoading ? <Loading /> : null}
+                </View>
+              ) : null}
               {lastPage === page ? <BottomMessage /> : null}
             </>
           )}

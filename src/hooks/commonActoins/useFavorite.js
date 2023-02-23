@@ -1,8 +1,10 @@
+import { getHeaders } from "lib/cryptoJs";
 import request from "lib/request";
 
 export const Favorite = () => {
   const postSaveFavorite = (data) => {
     return request({
+      headers: getHeaders(),
       url: "/customer/save-favorite",
       method: "POST",
       data: data,
@@ -11,6 +13,7 @@ export const Favorite = () => {
 
   const postFavoriteChecker = (data) => {
     return request({
+      headers: getHeaders(),
       url: "/customer/favorite-checker",
       method: "POST",
       data: data,
@@ -20,6 +23,7 @@ export const Favorite = () => {
   const deleteRemoveFavorite = (data) => {
     const { foreign_id, customer_id } = data;
     return request({
+      headers: getHeaders(),
       url: `customer/remove-favorite/${foreign_id}/${customer_id}`,
       method: "DELETE",
     });

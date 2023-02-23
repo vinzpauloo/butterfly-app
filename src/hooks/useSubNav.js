@@ -1,8 +1,10 @@
+import { getHeaders } from "lib/cryptoJs";
 import request from "lib/request";
 
 export const SubNav = () => {
   const getSubNav = () => {
     return request({
+      headers: getHeaders(),
       url: "/navbar/1",
       method: "GET",
     });
@@ -10,6 +12,7 @@ export const SubNav = () => {
 
   const getWorkGroup = (data) => {
     return request({
+      headers: getHeaders(),
       url: "/workgroup",
       method: "GET",
       params: data, //{site_id: 1, navbar: selection}
@@ -18,6 +21,7 @@ export const SubNav = () => {
 
   const getWork = (id) => {
     return request({
+      headers: getHeaders(),
       url: `/work/${id}`,
       method: "GET",
     });

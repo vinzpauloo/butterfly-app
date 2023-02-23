@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Dimensions, KeyboardAvoidingView, Pressable, StyleSheet, TextInput, Text } from "react-native";
+import { Dimensions, KeyboardAvoidingView, Pressable, StyleSheet, TextInput, Text, Keyboard } from "react-native";
 import { Actionsheet, Box, HStack } from "native-base";
 import { useMutation, useQuery } from "@tanstack/react-query";
 
@@ -11,11 +11,11 @@ import { GLOBAL_COLORS } from "global";
 import { TEMPORARY_CUSTOMER_ID } from "react-native-dotenv";
 
 const windowHeight = Dimensions.get("window").height;
-const windowWidth = Dimensions.get("window").width;
 
 const BottomComment = ({ commentForeignID, isOpen, onClose }) => {
-  
-  const { getComments } = CommentsService();
+  const [text, setText] = useState("");
+  const [isKeyboardShown, setIsKeyboardShown] = useState(false)
+  const { getComments, addComment } = CommentsService();
   const { isLoading, isError, data, error, status, refetch } = useQuery({
     queryKey: ["workComments", commentForeignID],
     queryFn: () => getComments({
@@ -32,20 +32,13 @@ const BottomComment = ({ commentForeignID, isOpen, onClose }) => {
     enabled: isOpen,
   });
 
-  const [text, setText] = useState("");
-  const { addComment } = CommentsService();
-
   const { mutate: mutateComments } = useMutation(addComment, {
-    onSuccess: (data) => {
-      refetch()
-    },
-    onError: (error) => {
-      console.log(error);
-    },
+    onSuccess: (data) => { refetch() }, onError: (error) => { console.log(error) },
   });
 
   function addNewComment() {
     setText("");
+    Keyboard.dismiss()
     mutateComments({
       site_id: 1,
       foreign_id: commentForeignID,
@@ -54,6 +47,9 @@ const BottomComment = ({ commentForeignID, isOpen, onClose }) => {
       type: "work"
     });
   }
+
+  Keyboard.addListener("keyboardDidShow", () => setIsKeyboardShown(true))
+  Keyboard.addListener("keyboardDidHide", () => setIsKeyboardShown(false))
 
   return (
     <>
@@ -72,7 +68,7 @@ const BottomComment = ({ commentForeignID, isOpen, onClose }) => {
             }
           </Box>
         </Actionsheet.Content>
-        <KeyboardAvoidingView behavior="position">
+        <KeyboardAvoidingView behavior="position" enabled={isKeyboardShown}>
           <HStack style={styles.bottomForm}>
             <TextInput
               style={styles.textInput}

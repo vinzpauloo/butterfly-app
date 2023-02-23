@@ -13,7 +13,7 @@ interface ICommons {
 }
 
 interface IFollow extends ICommons {
-  user_id: string /* Content creator ID */;
+  user_id: string | number /* Content creator ID */;
 }
 
 interface IFavorite extends ICommons {

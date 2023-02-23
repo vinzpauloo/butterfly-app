@@ -5,7 +5,7 @@ export const SubNav = () => {
   const getSubNav = () => {
     return request({
       headers: getHeaders(),
-      url: "/navbar/1",
+      url: "/navbar",
       method: "GET",
     });
   };

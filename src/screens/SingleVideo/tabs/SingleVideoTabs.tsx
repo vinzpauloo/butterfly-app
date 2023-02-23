@@ -6,7 +6,6 @@ import { useQuery } from "@tanstack/react-query";
 import CommentList from "features/commentList";
 import GridVideos from "features/sectionList/components/GridVideos";
 import StickyTabs from "layouts/StickyTabs";
-import VideoListSkeleton from "components/skeletons/VideoListSkeleton";
 import { Header } from "./Header";
 import { Work } from "hooks/useWork";
 import CommentListSkeleton from "components/skeletons/CommentListSkeleton";
@@ -49,21 +48,25 @@ const OthersLayout = ({ userId }) => {
   );
 };
 
-const RecommendedData = ({ data, id }) => {
+const RecommendedData = ({ recommendedData, id }) => {
+  const [page, setPage] = useState(1);
+  const [data, setData] = useState([]);
+  const [lastPage, setLastPage] = useState(1);
   const { getWorkRecommended } = Work();
-  const { data: recommendedData, isLoading } = useQuery({
-    queryKey: ["recommendedSingleVideo", id],
+  const { isLoading } = useQuery({
+    queryKey: ["recommendedSingleVideo", id, page],
     queryFn: () =>
       getWorkRecommended({
-        tags: data.tags.toString(),
+        tags: recommendedData.tags.toString(),
         with: "user",
         ads: true,
-        page: 1, // will code later for the pagination
+        page: page,
         user_id: id,
         recommended: true,
       }),
     onSuccess: (data) => {
-      console.log("Success", data);
+      setLastPage(data.last_page);
+      setData((prev) => [...prev].concat(data.data));
     },
     onError: (error) => {
       //error handler
@@ -71,25 +74,28 @@ const RecommendedData = ({ data, id }) => {
     },
   });
 
-  if (isLoading) {
-    return <VideoListSkeleton />;
-  }
-
-  return <GridVideos data={recommendedData.data} />;
+  return (
+    <StickyTabsGridVideos
+      isLoading={isLoading}
+      page={page}
+      setPage={setPage}
+      lastPage={lastPage}
+      layout={<GridVideos data={data} />}
+    />
+  );
 };
 
 const CommentListLayout = () => {
   const route = useRoute<any>();
   const { getWorkComments } = Work();
-  const { data, isLoading } = useQuery(
-    ["workComments", route.params.id],
-    () => getWorkComments({ foreign_id: route.params.id, skip: 0, limit: 5 }),
-    {
-      onError: () => {
-        //error handler
-      },
-    }
-  );
+  const { data, isLoading } = useQuery({
+    queryKey: ["workComments", route.params.id],
+    queryFn: () =>
+      getWorkComments({ foreign_id: route.params.id, skip: 0, limit: 5 }),
+    onError: () => {
+      //error handler
+    },
+  });
 
   if (isLoading) {
     return <CommentListSkeleton />;
@@ -112,7 +118,9 @@ const SingleVideoTab = ({ data }) => {
       {
         name: "TabRecommended",
         label: "更多推荐",
-        Content: <RecommendedData data={data} id={route.params.userId} />,
+        Content: (
+          <RecommendedData recommendedData={data} id={route.params.userId} />
+        ),
       },
       {
         name: "TabComments",

@@ -1,3 +1,4 @@
+import { getHeaders } from "lib/cryptoJs";
 import request from "lib/request";
 
 interface IFavoritesOrWatchedHistory {
@@ -22,6 +23,7 @@ interface IFavorite extends ICommons {
 const CustomerService = () => {
   const getCustomerById = (customer_id: string) => {
     return request({
+      headers: getHeaders(),
       url: `/customer/details/${customer_id}`,
       method: "GET",
     });
@@ -29,6 +31,7 @@ const CustomerService = () => {
 
   const getFollowedCreators = (customer_id: string) => {
     return request({
+      headers: getHeaders(),
       url: `/customer/followed-creators/${customer_id}`,
       method: "GET",
     });
@@ -36,6 +39,7 @@ const CustomerService = () => {
 
   const getFavoritesOrWatchedHistory = (params: IFavoritesOrWatchedHistory) => {
     return request({
+      headers: getHeaders(),
       url: "/customer/favorites-watched-history",
       method: "GET",
       params,
@@ -44,6 +48,7 @@ const CustomerService = () => {
 
   const followChecker = (data: IFollow) => {
     return request({
+      headers: getHeaders(),
       url: "/customer/follow-checker",
       method: "POST",
       data,
@@ -52,6 +57,7 @@ const CustomerService = () => {
 
   const followCreator = (data: IFollow) => {
     return request({
+      headers: getHeaders(),
       url: "/customer/follow-creator",
       method: "POST",
       data,
@@ -60,6 +66,7 @@ const CustomerService = () => {
 
   const unfollowCreator = (data: IFollow) => {
     return request({
+      headers: getHeaders(),
       url: `/customer/unfollow-creator/${data.user_id}/${data.customer_id}`,
       method: "DELETE",
     });
@@ -67,6 +74,7 @@ const CustomerService = () => {
 
   const favoriteChecker = (data: IFavorite) => {
     return request({
+      headers: getHeaders(),
       url: "/customer/favorite-checker",
       method: "POST",
       data,
@@ -75,6 +83,7 @@ const CustomerService = () => {
 
   const favoriteVideo = (data: IFavorite) => {
     return request({
+      headers: getHeaders(),
       url: "/customer/save-favorite",
       method: "POST",
       data,
@@ -83,6 +92,7 @@ const CustomerService = () => {
 
   const unfavoriteVideo = (data: IFavorite) => {
     return request({
+      headers: getHeaders(),
       url: `/customer/remove-favorite/${data.foreign_id}/${data.customer_id}`,
       method: "DELETE",
     });

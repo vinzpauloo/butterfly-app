@@ -1,8 +1,10 @@
+import { getHeaders } from "lib/cryptoJs";
 import request from "lib/request";
 
 const SiteSettingsService = () => {
   const getNavbar = (siteId = 1) => {
     return request({
+      headers: getHeaders(),
       url: `/navbar/${siteId}`,
       method: "GET",
     });
@@ -10,6 +12,7 @@ const SiteSettingsService = () => {
 
   const getAds = (siteId = 1) => {
     return request({
+      headers: getHeaders(),
       url: `/advertisement?site_id=${siteId}`,
       method: "GET",
     });
@@ -17,6 +20,7 @@ const SiteSettingsService = () => {
 
   const getAnnouncement = () => {
     return request({
+      headers: getHeaders(),
       url: `/announcement/list`,
       method: "GET",
     });

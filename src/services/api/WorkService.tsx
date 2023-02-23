@@ -1,3 +1,4 @@
+import { getHeaders } from "lib/cryptoJs";
 import request from "lib/request";
 
 interface IWorksParams {
@@ -13,6 +14,7 @@ interface IWorksParams {
 const WorkService = () => {
   const getWorks = (params: IWorksParams) => {
     return request({
+      headers: getHeaders(),
       url: "/work",
       method: "GET",
       params,
@@ -21,6 +23,7 @@ const WorkService = () => {
 
   const getWorkById = (work_id: string) => {
     return request({
+      headers: getHeaders(),
       url: `/work/${work_id}`,
       method: "GET",
     });

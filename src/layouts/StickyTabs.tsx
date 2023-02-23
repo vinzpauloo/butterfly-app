@@ -68,7 +68,7 @@ const StickyTabs: React.FC<IStickyTabsProps> = ({
       lazy={true}
       renderHeader={CustomTabHeader}
       renderTabBar={CustomTabBar}
-      containerStyle={{backgroundColor: GLOBAL_COLORS.primaryColor}}
+      containerStyle={{ backgroundColor: GLOBAL_COLORS.primaryColor }}
     >
       {tabItems.map((item, index) => (
         <Tabs.Tab key={index} name={item.name} label={item.label}>
@@ -76,12 +76,12 @@ const StickyTabs: React.FC<IStickyTabsProps> = ({
             Type error workaround when using Tab.ScrollView
             See issue: https://github.com/PedroBern/react-native-collapsible-tab-view/issues/139
           */}
-          <ScrollView
+          {/* <ScrollView
             accessibilityComponentType={undefined}
             accessibilityTraits={undefined}
-          >
-            {item.Content}
-          </ScrollView>
+          > */}
+          {item.Content}
+          {/* </ScrollView> */}
         </Tabs.Tab>
       ))}
     </Tabs.Container>

@@ -10,20 +10,27 @@ import VideoListSkeleton from "components/skeletons/VideoListSkeleton";
 import { Header } from "./Header";
 import { Work } from "hooks/useWork";
 import CommentListSkeleton from "components/skeletons/CommentListSkeleton";
+import { useState } from "react";
+import StickyTabsGridVideos from "features/sectionList/components/StickyTabsGridVideos";
 
 const OthersLayout = ({ userId }) => {
+  const [page, setPage] = useState(1);
+  const [data, setData] = useState([]);
+  const [lastPage, setLastPage] = useState(1);
   const { getWorkAll } = Work();
-  const { data: workAllData, isLoading } = useQuery({
-    queryKey: ["allWork", userId],
+  const { isLoading } = useQuery({
+    queryKey: ["allWork", userId, page],
     queryFn: () =>
       getWorkAll({
         user_id: userId,
         with: "user",
         creator_only: true,
         ads: true,
+        page: page,
       }),
     onSuccess: (data) => {
-      console.log("Success", data);
+      setLastPage(data.last_page);
+      setData((prev) => [...prev].concat(data.data));
     },
     onError: (error) => {
       //error handler
@@ -31,11 +38,15 @@ const OthersLayout = ({ userId }) => {
     },
   });
 
-  if (isLoading) {
-    return <VideoListSkeleton />;
-  }
-
-  return <GridVideos data={workAllData.data} />;
+  return (
+    <StickyTabsGridVideos
+      isLoading={isLoading}
+      page={page}
+      setPage={setPage}
+      lastPage={lastPage}
+      layout={<GridVideos data={data} />}
+    />
+  );
 };
 
 const RecommendedData = ({ data, id }) => {

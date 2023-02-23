@@ -2,10 +2,10 @@ import { getHeaders } from "lib/cryptoJs";
 import request from "lib/request";
 
 const SiteSettingsService = () => {
-  const getNavbar = (siteId = 1) => {
+  const getNavbar = () => {
     return request({
       headers: getHeaders(),
-      url: `/navbar/${siteId}`,
+      url: `/navbar`,
       method: "GET",
     });
   };

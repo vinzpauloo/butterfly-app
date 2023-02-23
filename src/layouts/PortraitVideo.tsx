@@ -1,22 +1,21 @@
 import React, { useEffect, useState } from "react";
-import { StyleSheet, Text, View, Dimensions, FlatList, Alert, Pressable, Image, ActivityIndicator } from "react-native";
+import { StyleSheet, View, Dimensions, FlatList, Pressable, Image, ActivityIndicator } from "react-native";
 import { AVPlaybackStatusSuccess, ResizeMode, Video } from "expo-av";
 import { useNavigation, useRoute } from "@react-navigation/native";
-import { VStack, useDisclose, Progress } from "native-base";
+import { useDisclose, Progress } from "native-base";
 import Animated, { ZoomIn, ZoomOut } from "react-native-reanimated";
 
 import BottomComment from "components/BottomComment";
 import Container from "components/Container";
 
 import Ionicons from "react-native-vector-icons/Ionicons";
-import Feather from "react-native-vector-icons/Feather";
-import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons";
 import { GLOBAL_COLORS } from "global";
-
-import { downloadFile } from "utils/downloadFile";
 
 import { useQuery } from "@tanstack/react-query";
 import WorkService from "services/api/WorkService";
+
+import BottomOverlay from "components/forms/portraitVideoOverlay/BottomOverlay";
+import RightOverlay from "components/forms/portraitVideoOverlay/RightOverlay";
 
 interface PortraitVideoDataType {
   reelsVideos?: any[];
@@ -25,6 +24,7 @@ interface PortraitVideoDataType {
 }
 
 type Props = {
+  videoID: string
   userID: number
   videoURL: string;
   userName: string;
@@ -43,17 +43,12 @@ type Props = {
 const { width: windowWidth, height: windowHeight } = Dimensions.get("window");
 
 const PortraitVideoContent = (props: Props) => {
-  const navigation = useNavigation<any>();
-
   const [isVideoPlaying, setisVideoPlaying] = useState(false);
   const [showPlayPauseButton, setShowPlayPauseButton] = useState(false);
   const [videoOrientation, setVideoOrientation] = useState("");
   const [videoIsLoaded, setVideoIsLoaded] = useState(false);
 
   const [videoTotalDuration, setVideoTotalDuration] = useState(0);
-  
-  const [videoIsLiked, setVideoIsLiked] = useState(false);
-  const [videoIsFaved, setVideoIsFaved] = useState(false);
   
   // VIDEO WATCH TIME AND BUFFEREED TIME (WIP)
   const [totalWatchTime, setTotalWatchTime] = useState(0)
@@ -68,12 +63,6 @@ const PortraitVideoContent = (props: Props) => {
     isVideoPlaying
       ? setShowPlayPauseButton(true)
       : setTimeout(() => setShowPlayPauseButton(false), 500);
-  }
-
-  function testDownload() {
-    const fileName = "test-file-name"
-    alert("start downloading!")
-    downloadFile('http://techslides.com/demos/sample-videos/small.mp4', fileName)
   }
 
   return (
@@ -112,81 +101,23 @@ const PortraitVideoContent = (props: Props) => {
           />
           {showPlayPauseButton ? (
             <Animated.View style={styles.playPauseIcon} entering={ZoomIn} exiting={ZoomOut}>
-              {isVideoPlaying ? (
-                <Ionicons name="play" size={48} color="white" />
-              ) : (
-                <Ionicons name="pause" size={48} color="white" />
-              )}
+              <Ionicons name={isVideoPlaying? "play" : "pause"} size={48} color="white" />
             </Animated.View>
           ) : null}
         </Pressable>
       )}
-      <VStack space={2} style={styles.bottomSection}>
-        <Pressable onPress={() => {navigation.navigate("SingleUser", {userID: props.userID})}}>
-          <Text style={[styles.userName, styles.iconText]}>
-            @{props.userName}
-          </Text>
-        </Pressable>
-        <Text style={styles.iconText}>{props.description}</Text>
-        <View style={styles.tags}>
-          {props.tags.map((item, index) => (
-            <Pressable key={index} style={styles.tag} onPress={() => {navigation.navigate("SingleTag", {tag: item})}}>
-              <Text style={styles.iconText}>#{item}</Text>
-            </Pressable>
-          ))}
-        </View>
-        <Pressable onPress={() => {navigation.navigate("SharingPromotion")}}>
-          <Text style={styles.subscribe}>Subscription needed or gold coin</Text>
-        </Pressable>
-      </VStack>
-      <VStack space={2} style={styles.verticalBar}>
-        <View style={styles.verticalBarItem}>
-          <Pressable onPress={() => { navigation.navigate("SingleUser", {userID: props.userID})}}>
-            <Image style={styles.userLogo} source={{ uri: props.userImage }} />
-          </Pressable>
-          <View style={styles.followButton}>
-            <Pressable onPress={() => {Alert.alert("Follow User!")}}>
-              <Feather name="plus" color={"white"} size={16} />
-            </Pressable>
-          </View>
-        </View>
-        <View style={styles.verticalBarItem}>
-          <Pressable onPress={() => setVideoIsLiked((prev) => !prev)}>
-            {videoIsLiked ? (
-              <Ionicons
-                name="heart"
-                color={GLOBAL_COLORS.secondaryColor}
-                size={40}
-              />
-            ) : (
-              <Ionicons name="heart" color={"white"} size={40} />
-            )}
-          </Pressable>
-          <Text style={styles.iconText}>{props.likes}</Text>
-        </View>
-        <View style={styles.verticalBarItem}>
-          <Pressable onPress={() => props.openComments()}>
-            <MaterialCommunityIcons name="comment" color={"white"} size={40} />
-          </Pressable>
-          <Text style={styles.iconText}>{props.amountOfComments}</Text>
-        </View>
-        <View style={styles.verticalBarItem}>
-          <Pressable onPress={() => setVideoIsFaved((prev) => !prev)}>
-            {videoIsFaved ? (
-              <Ionicons name="star" color={"yellow"} size={40} />
-            ) : (
-              <Ionicons name="star" color={"white"} size={40} />
-            )}
-          </Pressable>
-          <Text style={styles.iconText}>Fave</Text>
-        </View>
-        <View style={styles.verticalBarItem}>
-          <Pressable onPress={testDownload}>
-            <MaterialCommunityIcons name="download" color={"white"} size={40} />
-          </Pressable>
-          <Text style={styles.iconText}>DL</Text>
-        </View>
-      </VStack>
+      <BottomOverlay 
+        userID={props.userID}
+        userName={props.userName}
+        description={props.description}
+        tags={props.tags} />
+      <RightOverlay
+        videoID={props.videoID}
+        userID={props.userID}
+        userImage={props.userImage}
+        likes={props.likes}
+        amountOfComments={props.amountOfComments}
+        openComments={props.openComments} />
       <Progress h={0.5} value={(totalWatchTime/videoTotalDuration) * 100} bottom={0.5} _filledTrack={{ borderRadius: 0, bg:GLOBAL_COLORS.secondaryColor }} backgroundColor={GLOBAL_COLORS.inactiveTextColor} rounded="none" />
     </View>
   );
@@ -219,6 +150,7 @@ const PortraitVideo: React.FC<PortraitVideoDataType> = ({
     onSuccess: (data) => {
       console.log("=== random portrait video fetched from backend! ===");
       let newElement = {
+        // id of the video (which is also the foreign id to refer to)
         id: data[0]._id,
         userID: data[0].user.id,
         userName: data[0].user.username,
@@ -269,6 +201,7 @@ const PortraitVideo: React.FC<PortraitVideoDataType> = ({
             removeClippedSubviews={true}
             renderItem={({ item, index }) => (
               <PortraitVideoContent
+                videoID={item.id}
                 userID={item.userID}
                 key={item.id}
                 videoURL={item.videoURL}
@@ -323,61 +256,12 @@ const styles = StyleSheet.create({
   text: {
     fontSize: 20,
   },
-  bottomSection: {
-    position: "absolute",
-    paddingHorizontal: 8,
-    paddingBottom: 16,
-    bottom: 0
-  },
   bottomSliderContainer: {
     position: "absolute",
     backgroundColor: "rgba(0,0,0,0.5)",
     width: "100%",
     paddingVertical: 6,
     alignItems: "center",
-  },
-  userName: {
-    fontWeight: "bold",
-  },
-  verticalBar: {
-    position: "absolute",
-    right: 8,
-    paddingBottom: 16,
-    bottom: 0
-  },
-  verticalBarItem: {
-    width: "100%",
-    alignItems: "center",
-  },
-  iconText: {
-    color: "white",
-    textShadowColor: "black",
-    textShadowOffset: { width: 0, height: 0 },
-    textShadowRadius: 24,
-  },
-  followButton: {
-    position: "relative",
-    bottom: 12,
-    backgroundColor: "red",
-    borderRadius: 8,
-  },
-  subscribe: {
-    color: "white",
-    borderWidth: 1,
-    borderColor: "white",
-    borderRadius: 4,
-    padding: 5,
-    fontWeight: "bold",
-    textShadowColor: "black",
-    textShadowOffset: { width: 0, height: 0 },
-    textShadowRadius: 24,
-  },
-  userLogo: {
-    width: 40,
-    height: 40,
-    borderRadius: 20,
-    borderWidth: 2,
-    borderColor: "white",
   },
   modalContainer: {
     height: "50%",
@@ -395,13 +279,6 @@ const styles = StyleSheet.create({
     textAlign: "center",
     marginVertical: 6,
     marginBottom: 48,
-  },
-  tags: {
-    flexDirection: "row",
-    gap: 10,
-  },
-  tag: {
-    marginRight: 5,
   },
   loaderContainer: {
     justifyContent: "center",

@@ -11,6 +11,11 @@ interface IWorksParams {
   with?: string;
 }
 
+interface IWorkFollowing {
+  following_only: boolean;
+  customer_id: string;
+}
+
 const WorkService = () => {
   const getWorks = (params: IWorksParams) => {
     return request({
@@ -29,7 +34,16 @@ const WorkService = () => {
     });
   };
 
-  return { getWorks, getWorkById };
+  const getWorkFollowing = (params: IWorkFollowing) => {
+    return request({
+      headers: getHeaders(),
+      url: "/work",
+      get: "GET",
+      params,
+    });
+  };
+
+  return { getWorks, getWorkById, getWorkFollowing };
 };
 
 export default WorkService;

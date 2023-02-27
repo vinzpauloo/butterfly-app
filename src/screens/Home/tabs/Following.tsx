@@ -1,5 +1,4 @@
 import {
-  Alert,
   Dimensions,
   Image,
   Pressable,
@@ -12,35 +11,38 @@ import React, { useEffect, useState } from "react";
 
 import Entypo from "react-native-vector-icons/Entypo";
 import { MasonryFlashList } from "@shopify/flash-list";
-import { Center, useDisclose, Skeleton, HStack, VStack } from "native-base";
+import { Center, useDisclose } from "native-base";
 import { ScrollView } from "react-native-gesture-handler";
 import { useNavigation } from "@react-navigation/native";
 
+import BottomMessage from "components/BottomMessage";
 import Container from "components/Container";
 import DividerContainer from "features/sectionList/components/DividerContainer";
-import girl from "assets/images/girl.jpg";
 import GridVideos from "features/sectionList/components/GridVideos";
-import NoFollowingImg from "assets/images/nofollowing.png";
-import { followImages } from "data/gridImages";
-import { GLOBAL_COLORS } from "global";
-import { NoFollowingImages } from "data/gridImages";
-import { reelsVideos } from "data/reelsVideos";
-import Modal from "components/BottomModal";
-import VIPTag from "components/VIPTag";
-import BottomMessage from "components/BottomMessage";
-import VideoListSkeleton from "components/skeletons/VideoListSkeleton";
 import MasonrySkeleton from "components/skeletons/MasonrySkeleton";
+import Modal from "components/BottomModal";
+import NoFollowingImg from "assets/images/nofollowing.png";
+import VideoListSkeleton from "components/skeletons/VideoListSkeleton";
+import VIPTag from "components/VIPTag";
+import WorkService from "services/api/WorkService";
+import { GLOBAL_COLORS } from "global";
+import { useQuery } from "@tanstack/react-query";
+import { reelsVideos } from "data/reelsVideos";
 
 const { width } = Dimensions.get("window");
 
 const Video = ({ item, index, onOpen }: any) => {
   const navigation = useNavigation<any>();
+  const videoHeight =
+    item.orientation === "Landscape" ? width * 0.3 : width * 0.5;
   const handlePress = () => {
-    if (item.type === "horizontal") {
+    if (item.orientation === "Landscape") {
       navigation.navigate("SingleVideo", {
-        image: item.video,
-        title: "Mark",
-        subTitle: "123456789",
+        image: item.user.photo,
+        username: item.user.username,
+        followers: "123456789",
+        id: item._id,
+        userId: item.user.id,
       });
     } else {
       navigation.navigate("VlogScreen", {
@@ -60,11 +62,18 @@ const Video = ({ item, index, onOpen }: any) => {
     >
       <View style={styles.thumbnailContainer}>
         <VIPTag isAbsolute={true} />
-        <Image source={item.video} style={styles.video} />
+        <Image
+          source={{ uri: item.thumbnail_url }}
+          style={(styles.video, { height: videoHeight })}
+        />
       </View>
-      <Text style={[styles.text, styles.title]}>Title and Description</Text>
+      <View style={styles.titleContent}>
+        <Text style={[styles.text, styles.title]} numberOfLines={2}>
+          {item.title}
+        </Text>
+      </View>
       <View style={styles.textContent}>
-        <Text style={styles.text}>Nana Taipei</Text>
+        <Text style={styles.text}>{item.user.username}</Text>
         <Pressable
           style={{
             height: 15,
@@ -82,18 +91,21 @@ const Video = ({ item, index, onOpen }: any) => {
 
 const sampleData = [1, 2, 3, 4, 5, 6];
 
-const NoFollowing = ({ onOpen }) => {
+const NoFollowing = ({ data, onOpen }) => {
   return (
     <>
       <Image source={NoFollowingImg} style={styles.image} />
       <Text style={styles.popular}>近期热门用户</Text>
-      {[...Array(6)].map((_, index) => (
+      {data.map((item, index) => (
         <View key={index}>
           <View style={styles.usersCategoryContainer}>
             <View style={styles.headerContent}>
               <View style={{ flexDirection: "row", alignItems: "center" }}>
-                <Image source={girl} style={styles.modelImg} />
-                <Text style={styles.modelName}>Applecptv</Text>
+                <Image
+                  source={{ uri: item[0].user.photo }}
+                  style={styles.modelImg}
+                />
+                <Text style={styles.modelName}>{item[0].user.username}</Text>
               </View>
               <TouchableOpacity activeOpacity={1} style={styles.followBtn}>
                 <Text style={styles.followText}>关注</Text>
@@ -101,7 +113,7 @@ const NoFollowing = ({ onOpen }) => {
             </View>
             <MasonryFlashList
               numColumns={2}
-              data={NoFollowingImages}
+              data={item}
               renderItem={({ item, index }: any) => (
                 <Video item={item} index={index} onOpen={onOpen} />
               )}
@@ -109,7 +121,7 @@ const NoFollowing = ({ onOpen }) => {
               estimatedItemSize={12}
             />
           </View>
-          {sampleData.length - 1 !== index ? <DividerContainer /> : null}
+          {data.length - 1 !== index ? <DividerContainer /> : null}
         </View>
       ))}
       <BottomMessage />
@@ -118,10 +130,34 @@ const NoFollowing = ({ onOpen }) => {
 };
 
 const Following = () => {
-  const noFollowing = true;
+  const { getWorkFollowing } = WorkService();
+  const [haveFollowing, setHaveFollowing] = useState(false);
   const { isOpen, onOpen, onClose } = useDisclose();
+  const [data, setData] = useState([]);
 
   const [followingDataIsLoaded, setFollowingDataIsLoaded] = useState(false);
+
+  const { isLoading } = useQuery({
+    queryKey: ["getWorkFollowing"],
+    queryFn: () =>
+      getWorkFollowing({
+        following_only: true,
+        customer_id: "9890d6fe-64b8-4584-9de5-9fad47c0fc69",
+      }),
+    onSuccess: (data) => {
+      console.log("data", Array.isArray(data));
+      if (Array.isArray(data)) {
+        setHaveFollowing(false);
+        setData(data);
+      } else {
+        setHaveFollowing(true);
+        setData(data?.data);
+      }
+    },
+    onError: (error) => {
+      console.log("getWorkFollowing", error);
+    },
+  });
 
   useEffect(() => {
     setTimeout(() => setFollowingDataIsLoaded(true), 1000);
@@ -131,21 +167,26 @@ const Following = () => {
     <Container>
       <ScrollView>
         <Container>
-          {noFollowing ? (
-            followingDataIsLoaded ? (
-              <NoFollowing onOpen={onOpen} />
+          {haveFollowing ? (
+            isLoading ? (
+              <MasonrySkeleton />
             ) : (
-              <VideoListSkeleton />
+              <GridVideos data={data} isFollowingScreen={true} />
             )
-          ) : followingDataIsLoaded ? (
-            <GridVideos videos={followImages} isFollowingScreen={true} />
+          ) : isLoading ? (
+            <VideoListSkeleton />
           ) : (
-            <MasonrySkeleton />
+            <NoFollowing data={data} onOpen={onOpen} />
           )}
         </Container>
       </ScrollView>
       <Center flex={1} px="3">
-        <Modal isOpen={isOpen} onOpen={onOpen} onClose={onClose} />
+        <Modal
+          isOpen={isOpen}
+          onOpen={onOpen}
+          onClose={onClose}
+          id={undefined}
+        />
       </Center>
     </Container>
   );
@@ -209,13 +250,16 @@ const styles = StyleSheet.create({
   },
   video: {
     width: "100%",
-    height: width * 0.3,
   },
   textContent: {
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "space-between",
     padding: 5,
+  },
+  titleContent: {
+    height: 35,
+    marginBottom: 5,
   },
   title: {
     paddingHorizontal: 5,

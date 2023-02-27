@@ -1,17 +1,17 @@
 import { StyleSheet, View } from "react-native";
 import React, { useState } from "react";
 
+import { useDisclose } from "native-base";
 import { useQuery } from "@tanstack/react-query";
+import { MasonryFlashList } from "@shopify/flash-list";
 
 import BottomMessage from "components/BottomMessage";
-import { Video } from "features/sectionList/components/GridVideos";
-import VideoListSkeleton from "components/skeletons/VideoListSkeleton";
-import { Work } from "hooks/useWork";
-import Loading from "components/Loading";
-import { MasonryFlashList } from "@shopify/flash-list";
-import { useDisclose } from "native-base";
-import { GLOBAL_COLORS } from "global";
 import Modal from "components/BottomModal";
+import Loading from "components/Loading";
+import MasonrySkeleton from "components/skeletons/MasonrySkeleton";
+import { Video } from "features/sectionList/components/GridVideos";
+import { GLOBAL_COLORS } from "global";
+import { Work } from "hooks/useWork";
 
 const Recommended = ({ tag, userId, isFollowingScreen = false }) => {
   const { isOpen, onOpen, onClose } = useDisclose();
@@ -30,6 +30,7 @@ const Recommended = ({ tag, userId, isFollowingScreen = false }) => {
         with: "user",
         ads: false,
         page: page,
+        paginate: 20,
         user_id: userId,
       }),
     onSuccess: (data) => {
@@ -55,7 +56,7 @@ const Recommended = ({ tag, userId, isFollowingScreen = false }) => {
   return (
     <View style={styles.gridVideoContainer}>
       {isLoading && page === 1 ? (
-        <VideoListSkeleton />
+        <MasonrySkeleton />
       ) : (
         <MasonryFlashList
           data={data}

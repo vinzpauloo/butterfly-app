@@ -32,7 +32,7 @@ import Loading from "components/Loading";
 
 const { width, height } = Dimensions.get("window");
 
-const Video = ({ item, index, onOpen }: any) => {
+const Video = ({ item, index, onOpen, setId }: any) => {
   const navigation = useNavigation<any>();
   const videoHeight =
     item.orientation === "Landscape" ? width * 0.3 : width * 0.5;
@@ -50,6 +50,11 @@ const Video = ({ item, index, onOpen }: any) => {
         reelsVideos: reelsVideos,
       });
     }
+  };
+
+  const handleThreeDots = (e) => {
+    onOpen(e);
+    setId(item._id);
   };
 
   return (
@@ -81,7 +86,7 @@ const Video = ({ item, index, onOpen }: any) => {
             width: 15,
             alignItems: "center",
           }}
-          onPress={onOpen}
+          onPress={(e) => handleThreeDots(e)}
         >
           <Entypo name="dots-three-vertical" color={"#fff"} />
         </Pressable>
@@ -90,7 +95,7 @@ const Video = ({ item, index, onOpen }: any) => {
   );
 };
 
-const NoFollowing = ({ data, onOpen, isLoading }) => {
+const NoFollowing = ({ data, onOpen, isLoading, setId }) => {
   if (isLoading) {
     return <VideoListSkeleton />;
   }
@@ -117,7 +122,12 @@ const NoFollowing = ({ data, onOpen, isLoading }) => {
               numColumns={2}
               data={item}
               renderItem={({ item, index }: any) => (
-                <Video item={item} index={index} onOpen={onOpen} />
+                <Video
+                  item={item}
+                  index={index}
+                  onOpen={onOpen}
+                  setId={setId}
+                />
               )}
               keyExtractor={(_, index) => "" + index}
               estimatedItemSize={12}
@@ -131,7 +141,15 @@ const NoFollowing = ({ data, onOpen, isLoading }) => {
   );
 };
 
-const Follow = ({ data, onOpen, isLoading, lastPage, page, setPage }) => {
+const Follow = ({
+  data,
+  onOpen,
+  isLoading,
+  lastPage,
+  page,
+  setPage,
+  setId,
+}) => {
   const [startScroll, setStartScroll] = useState(true);
   const reachEnd = () => {
     if (startScroll) return null;
@@ -156,7 +174,7 @@ const Follow = ({ data, onOpen, isLoading, lastPage, page, setPage }) => {
         onEndReached={reachEnd}
         estimatedItemSize={200}
         renderItem={({ item, index }: any) => (
-          <Video item={item} index={index} onOpen={onOpen} />
+          <Video item={item} index={index} onOpen={onOpen} setId={setId} />
         )}
         keyExtractor={(_, index) => "" + index}
         ListFooterComponent={() => (
@@ -183,6 +201,7 @@ const Following = () => {
   const [data, setData] = useState([]);
   const [page, setPage] = useState(1);
   const [lastPage, setLastPage] = useState(1);
+  const [id, setId] = useState(null);
 
   const [followingDataIsLoaded, setFollowingDataIsLoaded] = useState(false);
 
@@ -191,7 +210,7 @@ const Following = () => {
     queryFn: () =>
       getWorkFollowing({
         following_only: true,
-        customer_id: "9890d6fe-650a-4733-8c30-75cba415d08b", //id for no following -> 9890d6fe-64b8-4584-9de5-9fad47c0fc69
+        customer_id: "98910cf6-ccd9-4122-96a6-3ce479031a77", //id for no following -> 9890d6fe-64b8-4584-9de5-9fad47c0fc69
         page: page,
         paginate: 8,
       }),
@@ -220,21 +239,22 @@ const Following = () => {
           lastPage={lastPage}
           page={page}
           setPage={setPage}
+          setId={setId}
         />
       ) : (
         <ScrollView>
           <Container>
-            <NoFollowing data={data} onOpen={onOpen} isLoading={isLoading} />
+            <NoFollowing
+              data={data}
+              onOpen={onOpen}
+              isLoading={isLoading}
+              setId={setId}
+            />
           </Container>
         </ScrollView>
       )}
       <Center flex={1} px="3">
-        <Modal
-          isOpen={isOpen}
-          onOpen={onOpen}
-          onClose={onClose}
-          id={undefined}
-        />
+        <Modal isOpen={isOpen} onOpen={onOpen} onClose={onClose} id={id} />
       </Center>
     </View>
   );

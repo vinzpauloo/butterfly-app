@@ -17,8 +17,10 @@ const LikeButton = ({ isOpen, id }) => {
     queryKey: ["likeChecker", id],
     queryFn: () =>
       postLikeChecker({
+        site_id: 1,
         foreign_id: id,
         customer_id: TEMPORARY_CUSTOMER_ID, // CHANGE LATER
+        type: "work",
       }),
     onSuccess: (data) => {
       setIsAlreadyLike(data);

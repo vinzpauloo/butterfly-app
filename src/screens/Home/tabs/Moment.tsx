@@ -8,21 +8,18 @@ import FeedList from "layouts/FeedList";
 
 import MomentHeader from "components/headers/MomentHeader"
 import StickyTabFeeds from "features/feedsList/components/StickyTabFeeds";
-import {useRoute} from "@react-navigation/native";
-
-const RecommendedLayout = ({ recommendedData, id }) => {
+const RecommendedLayout = () => {
     const [page, setPage] = useState(1);
     const [data, setData] = useState([]);
     const [lastPage, setLastPage] = useState(1);
     const {getFeeds} = Feeds();
     const { isLoading } = useQuery({
-        queryKey: ["recommendedFeeds", id, page],
+        queryKey: ["recommendedFeeds", page],
         queryFn: () =>
             getFeeds({
                 recommended: true,
                 with: [`user`, `comment`, `like`].toString(),
                 page: page,
-                user_id: id,
                 ads: false,
             }),
         onSuccess: (data) => {
@@ -44,20 +41,18 @@ const RecommendedLayout = ({ recommendedData, id }) => {
     )
 }
 
-
-const LatestLayout = ({latestData, id}) => {
+const LatestLayout = () => {
     const [page, setPage] = useState(1);
     const [data, setData] = useState([]);
     const [lastPage, setLastPage] = useState(1);
     const {getFeeds} = Feeds();
     const { isLoading } = useQuery({
-        queryKey: ["latestFeeds", id, page],
+        queryKey: ["latestFeeds", page],
         queryFn: () =>
             getFeeds({
                 latest: true,
                 with: [`user`, `comment`, `like`].toString(),
                 page: page,
-                user_id: id,
                 ads: false,
             }),
         onSuccess: (data) => {
@@ -79,19 +74,18 @@ const LatestLayout = ({latestData, id}) => {
     )
 }
 
-const VideoLayout = ({videoData, id}) => {
+const VideoLayout = () => {
     const [page, setPage] = useState(1);
     const [data, setData] = useState([]);
     const [lastPage, setLastPage] = useState(1);
     const {getFeeds} = Feeds();
     const { isLoading } = useQuery({
-        queryKey: ["videoFeeds", id, page],
+        queryKey: ["videoFeeds", page],
         queryFn: () =>
             getFeeds({
                 video_only: true,
                 with: [`user`, `comment`, `like`].toString(),
                 page: page,
-                user_id: id,
                 ads: false,
             }),
         onSuccess: (data) => {
@@ -113,19 +107,18 @@ const VideoLayout = ({videoData, id}) => {
     )
 }
 
-const PhotoLayout = ({photoData, id}) => {
+const PhotoLayout = () => {
     const [page, setPage] = useState(1);
     const [data, setData] = useState([]);
     const [lastPage, setLastPage] = useState(1);
     const {getFeeds} = Feeds();
     const { isLoading } = useQuery({
-        queryKey: ["photoFeeds", id, page],
+        queryKey: ["photoFeeds", page],
         queryFn: () =>
             getFeeds({
                 images_only: true,
                 with: [`user`, `comment`, `like`].toString(),
                 page: page,
-                user_id: id,
                 ads: false,
             }),
         onSuccess: (data) => {
@@ -147,19 +140,18 @@ const PhotoLayout = ({photoData, id}) => {
     )
 }
 
-const ServicesLayout = ({servicesData, id}) => {
+const ServicesLayout = () => {
     const [page, setPage] = useState(1);
     const [data, setData] = useState([]);
     const [lastPage, setLastPage] = useState(1);
     const {getFeeds} = Feeds();
     const { isLoading } = useQuery({
-        queryKey: ["servicesFeeds", id, page],
+        queryKey: ["servicesFeeds", page],
         queryFn: () =>
             getFeeds({
                 services_only: true,
                 with: [`user`, `comment`, `like`].toString(),
                 page: page,
-                user_id: id,
                 ads: false,
             }),
         onSuccess: (data) => {
@@ -181,37 +173,34 @@ const ServicesLayout = ({servicesData, id}) => {
     )
 }
 
-const Moment = ({data}) => {
-    const route = useRoute<any>();
-    console.log(`TEST@@@@`,route.params)
-
+const Moment = () => {
     const tabsData = {
         Header: MomentHeader,
         tabItems: [
             {
                 name: "recommended",
                 label: "推荐",
-                Content: <RecommendedLayout recommendedData={data}/>
+                Content: <RecommendedLayout/>
             },
             {
                 name: "latest",
                 label: "最新",
-                Content: <LatestLayout latestData={data}/>
+                Content: <LatestLayout/>
             },
             {
                 name: "videos",
                 label: "视频",
-                Content: <VideoLayout videoData={data}/>
+                Content: <VideoLayout/>
             },
             {
                 name: "photo",
                 label: "图片",
-                Content: <PhotoLayout photoData={data}/>
+                Content: <PhotoLayout/>
             },
             {
                 name: "services",
                 label: "服务",
-                Content: <ServicesLayout servicesData={data}/>
+                Content: <ServicesLayout/>
             },
         ],
     };

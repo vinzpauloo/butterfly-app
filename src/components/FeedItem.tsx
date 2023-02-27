@@ -167,7 +167,7 @@ const FeedItem = ({item}) => {
                   ))
               ): item?.videos ? (
                   <Video
-                      ref = { video }
+                      ref={video}
                       style={styles.singleContent}
                       source = {{uri: item.videos[0].url}}
                       useNativeControls

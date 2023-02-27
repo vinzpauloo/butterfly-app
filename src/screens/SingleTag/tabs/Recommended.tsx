@@ -1,18 +1,21 @@
 import { StyleSheet, View } from "react-native";
 import React, { useState } from "react";
 
-import { ScrollView } from "react-native-gesture-handler";
 import { useQuery } from "@tanstack/react-query";
 
 import BottomMessage from "components/BottomMessage";
-import Container from "components/Container";
-import GridVideos from "features/sectionList/components/GridVideos";
+import { Video } from "features/sectionList/components/GridVideos";
 import VideoListSkeleton from "components/skeletons/VideoListSkeleton";
 import { Work } from "hooks/useWork";
 import Loading from "components/Loading";
-import { FlashList } from "@shopify/flash-list";
+import { MasonryFlashList } from "@shopify/flash-list";
+import { useDisclose } from "native-base";
+import { GLOBAL_COLORS } from "global";
+import Modal from "components/BottomModal";
 
-const Recommended = ({ tag, userId }) => {
+const Recommended = ({ tag, userId, isFollowingScreen = false }) => {
+  const { isOpen, onOpen, onClose } = useDisclose();
+  const [id, setId] = useState<number | null>(null);
   const [page, setPage] = useState(1);
   const [data, setData] = useState([]);
   const [lastPage, setLastPage] = useState(1);
@@ -50,21 +53,27 @@ const Recommended = ({ tag, userId }) => {
   };
 
   return (
-    <Container>
+    <View style={styles.gridVideoContainer}>
       {isLoading && page === 1 ? (
         <VideoListSkeleton />
       ) : (
-        <FlashList
-          data={[0]}
+        <MasonryFlashList
+          data={data}
+          numColumns={2}
           onEndReachedThreshold={0.01} // always make this default to 0.01 to have no bug for fetching data for the onEndReached -> https://github.com/facebook/react-native/issues/14015#issuecomment-346547942
           onMomentumScrollBegin={() => setStartScroll(false)}
           onEndReached={reachEnd}
-          bounces={false}
           estimatedItemSize={200}
-          keyExtractor={(item, index) => "" + index}
-          renderItem={() => {
-            return <GridVideos data={data} />;
-          }}
+          keyExtractor={(_, index) => "" + index}
+          renderItem={({ item, index }) => (
+            <Video
+              key={index}
+              item={item}
+              isFollowingScreen={isFollowingScreen}
+              onOpen={onOpen}
+              setId={setId}
+            />
+          )}
           ListFooterComponent={() => (
             <>
               {/* the gap will be remove if the lastpage is been fetch */}
@@ -79,10 +88,18 @@ const Recommended = ({ tag, userId }) => {
           )}
         />
       )}
-    </Container>
+      <Modal isOpen={isOpen} onOpen={onOpen} onClose={onClose} id={id} />
+    </View>
   );
 };
 
 export default Recommended;
 
-const styles = StyleSheet.create({});
+const styles = StyleSheet.create({
+  gridVideoContainer: {
+    flex: 1,
+    minHeight: 100,
+    paddingHorizontal: 10,
+    backgroundColor: GLOBAL_COLORS.primaryColor,
+  },
+});

@@ -100,7 +100,7 @@ const AdsContainer = ({ item, isFollowingScreen, onOpen, setId }: any) => {
   );
 };
 
-const Video = ({ item, isFollowingScreen, onOpen, setId }: any) => {
+export const Video = ({ item, isFollowingScreen, onOpen, setId }: any) => {
   const navigation = useNavigation<any>();
   const videoHeight =
     item.orientation === "Landscape" ? width * 0.3 : width * 0.5;

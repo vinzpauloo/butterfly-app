@@ -45,7 +45,7 @@ const FavoriteButton = ({ id }) => {
   // for remove as favorite
   const { mutate: mutateRemoveFavorite } = useMutation(deleteRemoveFavorite, {
     onSuccess: (data) => {
-      if (data.isRemove) {
+      if (data.isRemoved.response) {
         setIsAlreadyFavorite(false);
       }
     },

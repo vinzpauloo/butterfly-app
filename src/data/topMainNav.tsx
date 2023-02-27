@@ -19,7 +19,7 @@ export const topMainNav = {
       component: () => <Moment />,
     },
     {
-      name: "约会",
+      name: "写真",
       component: () => <Photography />,
     },
   ],

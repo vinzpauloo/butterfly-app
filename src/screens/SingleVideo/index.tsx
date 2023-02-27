@@ -16,7 +16,7 @@ import CarouselSkeleton from "components/skeletons/CarouselSkeleton";
 
 const HeaderTitle = () => {
   const { postFollowCreator, postFollowChecker } = Follow();
-  const navigation = useNavigation();
+  const navigation = useNavigation<any>();
   const route = useRoute<any>();
   const [isFollowed, setIsFollowed] = useState(false);
 
@@ -67,7 +67,13 @@ const HeaderTitle = () => {
           size={30}
           onPress={() => navigation.goBack()}
         />
-        <Image source={{ uri: route.params?.image }} style={styles.image} />
+        <Pressable
+          onPress={() =>
+            navigation.navigate("SingleUser", { id: route.params.userId })
+          }
+        >
+          <Image source={{ uri: route.params?.image }} style={styles.image} />
+        </Pressable>
         <View>
           <Text style={styles.title}>{route.params?.username}</Text>
           <Text style={styles.followers}>{route.params?.followers}粉丝</Text>

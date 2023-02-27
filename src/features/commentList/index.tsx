@@ -7,7 +7,9 @@ import Fontisto from "react-native-vector-icons/Fontisto";
 
 import BottomMessage from "components/BottomMessage";
 import { GLOBAL_COLORS } from "global";
-import {useNavigation, useRoute} from "@react-navigation/native";
+import { useRoute } from "@react-navigation/native";
+import CommentsService from "services/api/CommentsService";
+import { useQuery } from "@tanstack/react-query";
 
 type repliesDataType = {
   replyId: string;
@@ -96,9 +98,17 @@ const CommentItem = (props: commentItemProps) => {
 
 const CommentList = ({}) => {
   const route = useRoute();
-  const data:any = route.params
+  const item:any = route.params;
 
-  const commentsArray = Object.keys(data?.comments).map((key) => data?.comments[key]);
+  const { getComments } = CommentsService();
+  const { data } = useQuery({
+    queryKey: ['feedComments', item?.foreign_id],
+    queryFn: () => getComments({
+      foreign_id: item?.foreign_id,
+      skip: 0,
+      limit: 20,
+    })
+  })
 
   return (
     <View style={styles.commentsContainer}>
@@ -106,7 +116,7 @@ const CommentList = ({}) => {
         removeClippedSubviews={true}
         estimatedItemSize={117}
         showsVerticalScrollIndicator={false}
-        data={commentsArray}
+        data={data.comments}
         ListHeaderComponent={
           <Text style={styles.commentHeader}>
             全部评论 {data?.total_comments}

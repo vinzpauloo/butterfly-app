@@ -7,7 +7,6 @@ import StickyTabs from "layouts/StickyTabs";
 import FeedList from "layouts/FeedList";
 
 import MomentHeader from "components/headers/MomentHeader"
-import FeedItemSkeleton from "components/skeletons/FeedItemSkeleton";
 import StickyTabFeeds from "features/feedsList/components/StickyTabFeeds";
 import {useRoute} from "@react-navigation/native";
 

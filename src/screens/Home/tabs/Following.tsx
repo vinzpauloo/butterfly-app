@@ -28,8 +28,9 @@ import WorkService from "services/api/WorkService";
 import { GLOBAL_COLORS } from "global";
 import { useQuery } from "@tanstack/react-query";
 import { reelsVideos } from "data/reelsVideos";
+import Loading from "components/Loading";
 
-const { width } = Dimensions.get("window");
+const { width, height } = Dimensions.get("window");
 
 const Video = ({ item, index, onOpen }: any) => {
   const navigation = useNavigation<any>();
@@ -89,9 +90,10 @@ const Video = ({ item, index, onOpen }: any) => {
   );
 };
 
-const sampleData = [1, 2, 3, 4, 5, 6];
-
-const NoFollowing = ({ data, onOpen }) => {
+const NoFollowing = ({ data, onOpen, isLoading }) => {
+  if (isLoading) {
+    return <VideoListSkeleton />;
+  }
   return (
     <>
       <Image source={NoFollowingImg} style={styles.image} />
@@ -129,29 +131,78 @@ const NoFollowing = ({ data, onOpen }) => {
   );
 };
 
+const Follow = ({ data, onOpen, isLoading, lastPage, page, setPage }) => {
+  const [startScroll, setStartScroll] = useState(true);
+  const reachEnd = () => {
+    if (startScroll) return null;
+    if (!isLoading) {
+      if (lastPage !== page) {
+        setPage((prev) => prev + 1);
+        setStartScroll(true);
+      }
+    }
+  };
+
+  if (isLoading) {
+    <MasonrySkeleton />;
+  }
+  return (
+    <View style={styles.gridVideoContainer}>
+      <MasonryFlashList
+        data={data}
+        numColumns={2}
+        onEndReachedThreshold={0.01} // always make this default to 0.01 to have no bug for fetching data for the onEndReached -> https://github.com/facebook/react-native/issues/14015#issuecomment-346547942
+        onMomentumScrollBegin={() => setStartScroll(false)}
+        onEndReached={reachEnd}
+        estimatedItemSize={200}
+        renderItem={({ item, index }: any) => (
+          <Video item={item} index={index} onOpen={onOpen} />
+        )}
+        keyExtractor={(_, index) => "" + index}
+        ListFooterComponent={() => (
+          <>
+            {/* the gap will be remove if the lastpage is been fetch */}
+            {lastPage !== page || (lastPage === page && isLoading) ? (
+              <View style={{ marginBottom: 60 }}>
+                {/* to have a gap in bottom part of section to see the loading icon */}
+                {isLoading ? <Loading /> : null}
+              </View>
+            ) : null}
+            {lastPage === page && !isLoading ? <BottomMessage /> : null}
+          </>
+        )}
+      />
+    </View>
+  );
+};
+
 const Following = () => {
   const { getWorkFollowing } = WorkService();
   const [haveFollowing, setHaveFollowing] = useState(false);
   const { isOpen, onOpen, onClose } = useDisclose();
   const [data, setData] = useState([]);
+  const [page, setPage] = useState(1);
+  const [lastPage, setLastPage] = useState(1);
 
   const [followingDataIsLoaded, setFollowingDataIsLoaded] = useState(false);
 
   const { isLoading } = useQuery({
-    queryKey: ["getWorkFollowing"],
+    queryKey: ["getWorkFollowing", page],
     queryFn: () =>
       getWorkFollowing({
         following_only: true,
-        customer_id: "9890d6fe-64b8-4584-9de5-9fad47c0fc69",
+        customer_id: "9890d6fe-650a-4733-8c30-75cba415d08b", //id for no following -> 9890d6fe-64b8-4584-9de5-9fad47c0fc69
+        page: page,
+        paginate: 8,
       }),
     onSuccess: (data) => {
-      console.log("data", Array.isArray(data));
       if (Array.isArray(data)) {
         setHaveFollowing(false);
         setData(data);
       } else {
         setHaveFollowing(true);
-        setData(data?.data);
+        setData((prev) => [...prev].concat(data.data));
+        setLastPage(data?.last_page);
       }
     },
     onError: (error) => {
@@ -159,27 +210,24 @@ const Following = () => {
     },
   });
 
-  useEffect(() => {
-    setTimeout(() => setFollowingDataIsLoaded(true), 1000);
-  });
-
   return (
-    <Container>
-      <ScrollView>
-        <Container>
-          {haveFollowing ? (
-            isLoading ? (
-              <MasonrySkeleton />
-            ) : (
-              <GridVideos data={data} isFollowingScreen={true} />
-            )
-          ) : isLoading ? (
-            <VideoListSkeleton />
-          ) : (
-            <NoFollowing data={data} onOpen={onOpen} />
-          )}
-        </Container>
-      </ScrollView>
+    <View style={styles.container}>
+      {haveFollowing ? (
+        <Follow
+          data={data}
+          onOpen={onOpen}
+          isLoading={isLoading}
+          lastPage={lastPage}
+          page={page}
+          setPage={setPage}
+        />
+      ) : (
+        <ScrollView>
+          <Container>
+            <NoFollowing data={data} onOpen={onOpen} isLoading={isLoading} />
+          </Container>
+        </ScrollView>
+      )}
       <Center flex={1} px="3">
         <Modal
           isOpen={isOpen}
@@ -188,13 +236,16 @@ const Following = () => {
           id={undefined}
         />
       </Center>
-    </Container>
+    </View>
   );
 };
 
 export default Following;
 
 const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+  },
   thumbnailContainer: {
     position: "relative",
   },
@@ -267,5 +318,11 @@ const styles = StyleSheet.create({
   },
   text: {
     color: "#fff",
+  },
+  gridVideoContainer: {
+    flex: 1,
+    minHeight: "100%",
+    paddingHorizontal: 10,
+    backgroundColor: GLOBAL_COLORS.primaryColor,
   },
 });

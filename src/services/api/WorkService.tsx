@@ -14,6 +14,8 @@ interface IWorksParams {
 interface IWorkFollowing {
   following_only: boolean;
   customer_id: string;
+  page: number;
+  paginate: number;
 }
 
 const WorkService = () => {

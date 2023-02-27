@@ -7,6 +7,7 @@ import Fontisto from "react-native-vector-icons/Fontisto";
 
 import BottomMessage from "components/BottomMessage";
 import { GLOBAL_COLORS } from "global";
+import {useNavigation, useRoute} from "@react-navigation/native";
 
 type repliesDataType = {
   replyId: string;
@@ -29,81 +30,86 @@ const CommentItem = (props: commentItemProps) => {
   const [amountOfCommentShown, setAmountOfCommentShown] = useState(10);
 
   return (
-    <HStack space={2}>
-      <Pressable
-        onPress={() => Alert.alert("go to " + props.username + " profile")}
-      >
-        <Avatar size={42} source={{ uri: props.photo }} />
-      </Pressable>
-      <VStack space={1} style={{ flex: 1, paddingHorizontal: 6 }}>
-        <Text style={styles.whiteText}>{props.username}</Text>
-        <Text style={styles.whiteText}>{props.comment}</Text>
-        <Pressable onPress={() => Alert.alert("reply to " + props.username)}>
-          <HStack space={1.5} style={styles.alignCenter}>
-            <Fontisto
-              name="commenting"
-              color={GLOBAL_COLORS.inactiveTextColor}
-              size={14}
-            />
-            <Text style={styles.secondaryText}>回复</Text>
-          </HStack>
-        </Pressable>
+      <HStack space={2}>
         <Pressable
-          onPress={() => {
-            setrepliesIsShown(!repliesIsShown);
-          }}
+            onPress={() => Alert.alert("go to " + props.username + " profile")}
         >
-          {props.replies.length > 0 ? (
-            <Text style={styles.secondaryColor}>
-              查看 {props.replies.length} 则回复
-            </Text>
-          ) : null}
+          <Avatar size={42} source={{ uri: props.photo }} />
         </Pressable>
-        <VStack
-          space={4}
-          mt={8}
-          style={repliesIsShown ? { display: "flex" } : { display: "none" }}
-        >
-          {props.replies.slice(0, amountOfCommentShown).map((reply, index) => (
-            <HStack space={2} key={index}>
-              <Pressable
-                onPress={() =>
-                  Alert.alert("go to " + reply?.username + " profile")
-                }
-              >
-                <Avatar size={42} source={{ uri: reply?.photo }} />
-              </Pressable>
-              <VStack space={1} style={{ flex: 1, paddingHorizontal: 6 }}>
-                <Text style={styles.whiteText}>{reply?.username}</Text>
-                <Text style={styles.whiteText}>{reply.comment}</Text>
-              </VStack>
+        <VStack space={1} style={{ flex: 1, paddingHorizontal: 6 }}>
+          <Text style={styles.whiteText}>{props.username}</Text>
+          <Text style={styles.whiteText}>{props.comment}</Text>
+          <Pressable onPress={() => Alert.alert("reply to " + props.username)}>
+            <HStack space={1.5} style={styles.alignCenter}>
+              <Fontisto
+                  name="commenting"
+                  color={GLOBAL_COLORS.inactiveTextColor}
+                  size={14}
+              />
+              <Text style={styles.secondaryText}>回复</Text>
             </HStack>
-          ))}
-          {props.replies.length >= 10 &&
-          amountOfCommentShown < props.replies.length ? (
-            <Pressable
-              onPress={() => setAmountOfCommentShown(amountOfCommentShown + 10)}
-            >
-              <Text style={styles.loadMoreComments}>更多裝載</Text>
-            </Pressable>
-          ) : null}
+          </Pressable>
+          <Pressable
+              onPress={() => {
+                setrepliesIsShown(!repliesIsShown);
+              }}
+          >
+            {props?.replies?.length > 0 ? (
+                <Text style={styles.secondaryColor}>
+                  查看 {props?.replies?.length} 则回复
+                </Text>
+            ) : null}
+          </Pressable>
+          <VStack
+              space={4}
+              mt={8}
+              style={repliesIsShown ? { display: "flex" } : { display: "none" }}
+          >
+            {props?.replies?.slice(0, amountOfCommentShown).map((reply, index) => (
+                <HStack space={2} key={index}>
+                  <Pressable
+                      onPress={() =>
+                          Alert.alert("go to " + reply?.username + " profile")
+                      }
+                  >
+                    <Avatar size={42} source={{ uri: reply?.photo }} />
+                  </Pressable>
+                  <VStack space={1} style={{ flex: 1, paddingHorizontal: 6 }}>
+                    <Text style={styles.whiteText}>{reply?.username}</Text>
+                    <Text style={styles.whiteText}>{reply.comment}</Text>
+                  </VStack>
+                </HStack>
+            ))}
+            {props?.replies?.length >= 10 &&
+            amountOfCommentShown < props?.replies?.length ? (
+                <Pressable
+                    onPress={() => setAmountOfCommentShown(amountOfCommentShown + 10)}
+                >
+                  <Text style={styles.loadMoreComments}>更多裝載</Text>
+                </Pressable>
+            ) : null}
+          </VStack>
         </VStack>
-      </VStack>
-    </HStack>
+      </HStack>
   );
 };
 
-const CommentList = ({ data }) => {
+const CommentList = ({}) => {
+  const route = useRoute();
+  const data:any = route.params
+
+  const commentsArray = Object.keys(data?.comments).map((key) => data?.comments[key]);
+
   return (
     <View style={styles.commentsContainer}>
       <FlashList
         removeClippedSubviews={true}
         estimatedItemSize={117}
         showsVerticalScrollIndicator={false}
-        data={data.comments}
+        data={commentsArray}
         ListHeaderComponent={
           <Text style={styles.commentHeader}>
-            全部评论 {data.total_comments}
+            全部评论 {data?.total_comments}
           </Text>
         }
         ListFooterComponent={<BottomMessage />}

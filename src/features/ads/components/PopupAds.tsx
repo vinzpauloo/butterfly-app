@@ -26,18 +26,11 @@ const Content = ({ setOpen }) => {
   })
 
   return (
-    <Modal.Content backgroundColor="contrastThreshold" width={width}>
+    <Modal.Content h={400} borderRadius={0} backgroundColor="contrastThreshold" shadow="none" width={width}>
       <Modal.Body alignItems="center">
         <Pressable onPress={() => Linking.openURL(adsURL)}>
           <Image source={{ uri: imgURL }} style={styles.ads} />
         </Pressable>
-        <AntDesign
-          name="close"
-          size={25}
-          color="#fff"
-          style={styles.closeBtn}
-          onPress={() => setOpen(false)}
-        />
       </Modal.Body>
     </Modal.Content>
   );
@@ -48,6 +41,13 @@ const PopupAds = () => {
   return (
     <CustomModal open={open} setOpen={setOpen}>
       <Content setOpen={setOpen} />
+      <AntDesign
+        name="close"
+        size={25}
+        color="#fff"
+        style={styles.closeBtn}
+        onPress={() => setOpen(false)}
+      />
     </CustomModal>
   );
 };
@@ -64,6 +64,6 @@ const styles = StyleSheet.create({
     width: width,
   },
   closeBtn: {
-    marginVertical: 30,
+    marginTop: 30,
   },
 });

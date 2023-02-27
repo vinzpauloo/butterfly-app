@@ -6,19 +6,34 @@ import Container from 'components/Container'
 import CommentList from 'features/commentList';
 import CommentTextInput from 'components/CommentTextInput';
 
-import { feedListData } from "data/feedListData";
 import {useRoute} from "@react-navigation/native";
+import {Feeds} from "hooks/useFeeds";
+import {useQuery} from "@tanstack/react-query";
 
 type Props = {}
 
 const SingleFeedScreen = (props: Props) => {
 	const route = useRoute();
-	const item = route.params
+	const item: any = route.params
+
+	const {getSpecificFeed} = Feeds();
+	const {data: specificFeed, isLoading} = useQuery({
+		queryKey: ["specificFeed"],
+		queryFn: () => getSpecificFeed(item?.userId),
+		onSuccess: (data) => {
+			//
+		},
+		onError: (error) => {
+			//
+		}
+	})
+	console.log(`TEST@@@@@`,specificFeed)
+
 	return (
 		<Container>
 			<ScrollView>
 				<FeedItem
-					item={item}
+					item={specificFeed}
 				/>
 				<CommentList />
 			</ScrollView>

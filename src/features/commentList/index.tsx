@@ -94,11 +94,11 @@ const CommentItem = (props: commentItemProps) => {
   );
 };
 
-const CommentList = ({}) => {
-  const route = useRoute();
-  const data:any = route.params
+const CommentList = ({data}) => {
+  // const route = useRoute();
+  // const data:any = route.params
 
-  const commentsArray = Object.keys(data?.comments).map((key) => data?.comments[key]);
+  // const commentsArray = Object.keys(data?.comments).map((key) => data?.comments[key]);
 
   return (
     <View style={styles.commentsContainer}>
@@ -106,7 +106,7 @@ const CommentList = ({}) => {
         removeClippedSubviews={true}
         estimatedItemSize={117}
         showsVerticalScrollIndicator={false}
-        data={commentsArray}
+        data={data.comments}
         ListHeaderComponent={
           <Text style={styles.commentHeader}>
             全部评论 {data?.total_comments}

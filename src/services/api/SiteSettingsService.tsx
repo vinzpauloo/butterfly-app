@@ -10,10 +10,10 @@ const SiteSettingsService = () => {
     });
   };
 
-  const getAds = (siteId = 1) => {
+  const getAds = () => {
     return request({
       headers: getHeaders(),
-      url: `/advertisement?site_id=${siteId}`,
+      url: `/advertisement`,
       method: "GET",
     });
   };

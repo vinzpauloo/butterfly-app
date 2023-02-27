@@ -22,12 +22,12 @@ import VIPTag from "components/VIPTag";
 
 const { width } = Dimensions.get("window");
 
-const FollowingBottomContent = ({ item }) => {
+export const FollowingBottomContent = ({ item }) => {
   return (
     <View style={styles.textContent}>
       <View style={{ flexDirection: "row", alignItems: "center" }}>
-        <Image source={item.video} style={styles.modelImg} />
-        <Text style={styles.modelText}>Nana_taipei</Text>
+        <Image source={{ uri: item.user.photo }} style={styles.modelImg} />
+        <Text style={styles.modelText}>{item.user.username}</Text>
       </View>
       <View style={{ flexDirection: "row", alignItems: "center" }}>
         <Foundation
@@ -35,13 +35,13 @@ const FollowingBottomContent = ({ item }) => {
           size={18}
           color={GLOBAL_COLORS.secondaryColor}
         />
-        <Text style={styles.modelText}>39.2w</Text>
+        <Text style={styles.modelText}>{item.like.total_likes}w</Text>
       </View>
     </View>
   );
 };
 
-const GridVideosBottomContent = ({ onOpen, username, setId, id }) => {
+export const GridVideosBottomContent = ({ onOpen, username, setId, id }) => {
   const handlePress = (event) => {
     setId(id);
     onOpen(event);

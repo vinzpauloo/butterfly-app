@@ -30,10 +30,20 @@ import WorkService from "services/api/WorkService";
 import { GLOBAL_COLORS } from "global";
 import { reelsVideos } from "data/reelsVideos";
 import { useMutation, useQuery } from "@tanstack/react-query";
+import {
+  FollowingBottomContent,
+  GridVideosBottomContent,
+} from "features/sectionList/components/GridVideos";
 
 const { width, height } = Dimensions.get("window");
 
-const Video = ({ item, index, onOpen, setId }: any) => {
+const Video = ({
+  item,
+  index,
+  onOpen,
+  setId,
+  isFollowingScreen = false,
+}: any) => {
   const navigation = useNavigation<any>();
   const videoHeight =
     item.orientation === "Landscape" ? width * 0.3 : width * 0.5;
@@ -79,7 +89,7 @@ const Video = ({ item, index, onOpen, setId }: any) => {
           {item.title}
         </Text>
       </View>
-      <View style={styles.textContent}>
+      {/* <View style={styles.textContent}>
         <Text style={styles.text}>{item.user.username}</Text>
         <Pressable
           style={{
@@ -91,7 +101,17 @@ const Video = ({ item, index, onOpen, setId }: any) => {
         >
           <Entypo name="dots-three-vertical" color={"#fff"} />
         </Pressable>
-      </View>
+      </View> */}
+      {isFollowingScreen ? (
+        <FollowingBottomContent item={item} />
+      ) : (
+        <GridVideosBottomContent
+          username={item?.user?.username}
+          onOpen={onOpen}
+          setId={setId}
+          id={item._id}
+        />
+      )}
     </TouchableOpacity>
   );
 };
@@ -201,7 +221,13 @@ const Follow = ({
         onEndReached={reachEnd}
         estimatedItemSize={200}
         renderItem={({ item, index }: any) => (
-          <Video item={item} index={index} onOpen={onOpen} setId={setId} />
+          <Video
+            item={item}
+            index={index}
+            onOpen={onOpen}
+            setId={setId}
+            isFollowingScreen={true}
+          />
         )}
         keyExtractor={(_, index) => "" + index}
         ListFooterComponent={() => (
@@ -237,7 +263,7 @@ const Following = () => {
     queryFn: () =>
       getWorkFollowing({
         following_only: true,
-        customer_id: "98912df4-d829-4435-b214-24633dd96794", //id for no following -> 9890d6fe-64b8-4584-9de5-9fad47c0fc69
+        customer_id: "98914c9b-29c0-42b7-a367-4cddda2e3a06", //id for no following -> 9890d6fe-64b8-4584-9de5-9fad47c0fc69
         page: page,
         paginate: 8,
       }),

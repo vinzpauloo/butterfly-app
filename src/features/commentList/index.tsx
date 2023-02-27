@@ -10,6 +10,7 @@ import { GLOBAL_COLORS } from "global";
 import { useRoute } from "@react-navigation/native";
 import CommentsService from "services/api/CommentsService";
 import { useQuery } from "@tanstack/react-query";
+import CommentListSkeleton from "../../components/skeletons/CommentListSkeleton";
 
 type repliesDataType = {
   replyId: string;
@@ -101,7 +102,7 @@ const CommentList = ({}) => {
   const item:any = route.params;
 
   const { getComments } = CommentsService();
-  const { data } = useQuery({
+  const { data, isLoading } = useQuery({
     queryKey: ['feedComments', item?.foreign_id],
     queryFn: () => getComments({
       foreign_id: item?.foreign_id,
@@ -112,31 +113,35 @@ const CommentList = ({}) => {
 
   return (
     <View style={styles.commentsContainer}>
-      <FlashList
-        removeClippedSubviews={true}
-        estimatedItemSize={117}
-        showsVerticalScrollIndicator={false}
-        data={data.comments}
-        ListHeaderComponent={
-          <Text style={styles.commentHeader}>
-            全部评论 {data?.total_comments}
-          </Text>
-        }
-        ListFooterComponent={<BottomMessage />}
-        keyExtractor={(_, index) => "" + index}
-        renderItem={({ item }: any) => (
-          <CommentItem
-            customerId={item.customer_id}
-            comment={item.comment}
-            username={item.username}
-            photo={item.photo}
-            replies={item.replies}
+      {isLoading ? (
+          <CommentListSkeleton/>
+      ):(
+          <FlashList
+              removeClippedSubviews={true}
+              estimatedItemSize={117}
+              showsVerticalScrollIndicator={false}
+              data={data?.comments}
+              ListHeaderComponent={
+                <Text style={styles.commentHeader}>
+                  全部评论 {data?.total_comments}
+                </Text>
+              }
+              ListFooterComponent={<BottomMessage />}
+              keyExtractor={(_, index) => "" + index}
+              renderItem={({ item }: any) => (
+                  <CommentItem
+                      customerId={item.customer_id}
+                      comment={item.comment}
+                      username={item.username}
+                      photo={item.photo}
+                      replies={item.replies}
+                  />
+              )}
+              ItemSeparatorComponent={() => (
+                  <Divider color="#999" style={styles.divider} />
+              )}
           />
-        )}
-        ItemSeparatorComponent={() => (
-          <Divider color="#999" style={styles.divider} />
-        )}
-      />
+      )}
     </View>
   );
 };

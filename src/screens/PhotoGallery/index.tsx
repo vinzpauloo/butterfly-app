@@ -1,5 +1,5 @@
 import React from "react";
-import {StyleSheet, View, Image, Dimensions} from "react-native";
+import {StyleSheet, View, Image, Dimensions, FlatList} from "react-native";
 import { FlashList } from "@shopify/flash-list";
 
 import { useRoute } from "@react-navigation/native";
@@ -14,30 +14,36 @@ const PhotoGallery = () => {
   const route = useRoute<any>();
   const { imageList, index } = route.params;
 
+  const imageWidth = windowWidth;
+  const horizontalPadding = (windowWidth - imageWidth) / 2;
+
   return (
     <View style={styles.container}>
       {!!route?.params.fromFeedItem ? (
-        <FlashList
-          pagingEnabled={true}
-          horizontal={true}
-          data={imageList}
-          renderItem={({ item }: any) => (
-            <View style={[
-                styles.imageContainer,
-                index === 0 ? { marginLeft: 40 } : null,
-            ]}>
-              <Image
-                  style={[styles.postImage, styles.imageContained]}
-                  source={{ uri: item.url, cache: "only-if-cached" }}
-              />
-            </View>
-          )}
-          estimatedItemSize={319}
-          initialScrollIndex={index}
-          snapToAlignment={`center`}
-          snapToInterval={windowWidth}
-          estimatedFirstItemOffset={41}
-        />
+          <FlatList
+              data={imageList}
+              keyExtractor={(item) => item.id}
+              horizontal
+              pagingEnabled
+              showsHorizontalScrollIndicator={false}
+              initialScrollIndex={index}
+              getItemLayout={(data, index) => ({
+                length: imageWidth + horizontalPadding * 2,
+                offset: (imageWidth + horizontalPadding * 2) * index,
+                index,
+              })}
+              renderItem={({ item, index }) => (
+                  <View style={[
+                    styles.imageContainer,
+                    { marginLeft: index === 0 ? horizontalPadding : 0 },
+                  ]}>
+                    <Image
+                        style={[styles.postImage, styles.imageContained]}
+                        source={{ uri: item.url, cache: "only-if-cached" }}
+                    />
+                  </View>
+              )}
+          />
       ) : (
         <FlashList
           data={imageList}

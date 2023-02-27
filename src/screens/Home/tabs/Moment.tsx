@@ -1,4 +1,4 @@
-import React from "react";
+import React, {useState} from "react";
 import { useQuery } from "@tanstack/react-query";
 
 import {Feeds} from "hooks/useFeeds";
@@ -7,126 +7,200 @@ import StickyTabs from "layouts/StickyTabs";
 import FeedList from "layouts/FeedList";
 
 import MomentHeader from "components/headers/MomentHeader"
-import FeedItemSkeleton from "components/skeletons/FeedItemSkeleton";
-
-const RecommendedLayout = ({data}) => {
+import StickyTabFeeds from "features/feedsList/components/StickyTabFeeds";
+const RecommendedLayout = () => {
+    const [page, setPage] = useState(1);
+    const [data, setData] = useState([]);
+    const [lastPage, setLastPage] = useState(1);
     const {getFeeds} = Feeds();
-    const {data: recommendedLayout, isLoading} = useQuery({
-        queryKey: ["recommendedFeeds"],
-        queryFn: () => getFeeds({recommended: true, with: [`user`, `comment`, `like`].toString()}),
+    const { isLoading } = useQuery({
+        queryKey: ["recommendedFeeds", page],
+        queryFn: () =>
+            getFeeds({
+                recommended: true,
+                with: [`user`, `comment`, `like`].toString(),
+                page: page,
+                ads: false,
+            }),
         onSuccess: (data) => {
-            console.log(`Success`, data);
+            setLastPage(data.last_page);
+            setData((prev) => [...prev].concat(data.data))
         },
         onError: (error) => {
             console.log(`Error`, error);
         }
     })
-    if (isLoading) {
-        return <FeedItemSkeleton/>
-    }
-    return <FeedList data={recommendedLayout.data}/>
+    return (
+        <StickyTabFeeds
+            isLoading={isLoading}
+            page={page}
+            setPage={setPage}
+            lastPage={lastPage}
+            layout={<FeedList data={data}/>}
+        />
+    )
 }
 
-const LatestLayout = ({data}) => {
+const LatestLayout = () => {
+    const [page, setPage] = useState(1);
+    const [data, setData] = useState([]);
+    const [lastPage, setLastPage] = useState(1);
     const {getFeeds} = Feeds();
-    const {data: latestLayout, isLoading} = useQuery({
-        queryKey: ["latestFeeds"],
-        queryFn: () => getFeeds({latest: true, with: [`user`,`comment`,`like`].toString()}),
+    const { isLoading } = useQuery({
+        queryKey: ["latestFeeds", page],
+        queryFn: () =>
+            getFeeds({
+                latest: true,
+                with: [`user`, `comment`, `like`].toString(),
+                page: page,
+                ads: false,
+            }),
         onSuccess: (data) => {
-            console.log(`Success`, data);
+            setLastPage(data.last_page);
+            setData((prev) => [...prev].concat(data.data))
         },
         onError: (error) => {
             console.log(`Error`, error);
         }
     })
-    if (isLoading) {
-        return <FeedItemSkeleton/>
-    }
-    return <FeedList data={latestLayout.data}/>
+    return (
+        <StickyTabFeeds
+            isLoading={isLoading}
+            page={page}
+            setPage={setPage}
+            lastPage={lastPage}
+            layout={<FeedList data={data}/>}
+        />
+    )
 }
 
-const VideoLayout = ({data}) => {
+const VideoLayout = () => {
+    const [page, setPage] = useState(1);
+    const [data, setData] = useState([]);
+    const [lastPage, setLastPage] = useState(1);
     const {getFeeds} = Feeds();
-    const {data: videoLayout, isLoading} = useQuery({
-        queryKey: ["videoFeeds"],
-        queryFn: () => getFeeds({video_only: true, with: [`user`,`comment`,`like`].toString()}),
+    const { isLoading } = useQuery({
+        queryKey: ["videoFeeds", page],
+        queryFn: () =>
+            getFeeds({
+                video_only: true,
+                with: [`user`, `comment`, `like`].toString(),
+                page: page,
+                ads: false,
+            }),
         onSuccess: (data) => {
-            console.log(`Success`, data);
+            setLastPage(data.last_page);
+            setData((prev) => [...prev].concat(data.data))
         },
         onError: (error) => {
             console.log(`Error`, error);
         }
     })
-    if (isLoading) {
-        return <FeedItemSkeleton/>
-    }
-    return <FeedList data={videoLayout.data}/>
+    return (
+        <StickyTabFeeds
+            isLoading={isLoading}
+            page={page}
+            setPage={setPage}
+            lastPage={lastPage}
+            layout={<FeedList data={data}/>}
+        />
+    )
 }
 
-const PhotoLayout = ({data}) => {
+const PhotoLayout = () => {
+    const [page, setPage] = useState(1);
+    const [data, setData] = useState([]);
+    const [lastPage, setLastPage] = useState(1);
     const {getFeeds} = Feeds();
-    const {data: photoLayout, isLoading} = useQuery({
-        queryKey: ["photoFeeds"],
-        queryFn: () => getFeeds({images_only: true, with: [`user`,`comment`,`like`].toString()}),
+    const { isLoading } = useQuery({
+        queryKey: ["photoFeeds", page],
+        queryFn: () =>
+            getFeeds({
+                images_only: true,
+                with: [`user`, `comment`, `like`].toString(),
+                page: page,
+                ads: false,
+            }),
         onSuccess: (data) => {
-            console.log(`Success`, data);
+            setLastPage(data.last_page);
+            setData((prev) => [...prev].concat(data.data))
         },
         onError: (error) => {
             console.log(`Error`, error);
         }
     })
-    if (isLoading) {
-        return <FeedItemSkeleton/>
-    }
-    return <FeedList data={photoLayout.data}/>
+    return (
+        <StickyTabFeeds
+            isLoading={isLoading}
+            page={page}
+            setPage={setPage}
+            lastPage={lastPage}
+            layout={<FeedList data={data}/>}
+        />
+    )
 }
 
-const ServicesLayout = ({data}) => {
+const ServicesLayout = () => {
+    const [page, setPage] = useState(1);
+    const [data, setData] = useState([]);
+    const [lastPage, setLastPage] = useState(1);
     const {getFeeds} = Feeds();
-    const {data: servicesLayout, isLoading} = useQuery({
-        queryKey: ["servicesFeeds"],
-        queryFn: () => getFeeds({services_only: true, with:[`user`,`comment`,`like`].toString()}),
+    const { isLoading } = useQuery({
+        queryKey: ["servicesFeeds", page],
+        queryFn: () =>
+            getFeeds({
+                services_only: true,
+                with: [`user`, `comment`, `like`].toString(),
+                page: page,
+                ads: false,
+            }),
         onSuccess: (data) => {
-            console.log(`Success`, data);
+            setLastPage(data.last_page);
+            setData((prev) => [...prev].concat(data.data))
         },
         onError: (error) => {
             console.log(`Error`, error);
         }
     })
-    if (isLoading) {
-        return <FeedItemSkeleton/>
-    }
-    return <FeedList data={servicesLayout.data}/>
+    return (
+        <StickyTabFeeds
+            isLoading={isLoading}
+            page={page}
+            setPage={setPage}
+            lastPage={lastPage}
+            layout={<FeedList data={data}/>}
+        />
+    )
 }
 
-const Moment = ({data}) => {
+const Moment = () => {
     const tabsData = {
         Header: MomentHeader,
         tabItems: [
             {
                 name: "recommended",
                 label: "推荐",
-                Content: <RecommendedLayout data={data}/>
+                Content: <RecommendedLayout/>
             },
             {
                 name: "latest",
                 label: "最新",
-                Content: <LatestLayout data={data}/>
+                Content: <LatestLayout/>
             },
             {
                 name: "videos",
                 label: "视频",
-                Content: <VideoLayout data={data}/>
+                Content: <VideoLayout/>
             },
             {
                 name: "photo",
                 label: "图片",
-                Content: <PhotoLayout data={data}/>
+                Content: <PhotoLayout/>
             },
             {
                 name: "services",
                 label: "服务",
-                Content: <ServicesLayout data={data}/>
+                Content: <ServicesLayout/>
             },
         ],
     };

@@ -6,7 +6,7 @@ type Props = {}
 
 const FeedItemSkeleton = (props: Props) => {
 	return (
-		<VStack p={4} space={4}>
+		<VStack p={4} space={4} mt={260}>
 			<HStack alignItems="center" justifyContent="space-between">
 				<HStack space={2} alignItems="center">
 					<Skeleton size={28} rounded="full" />

@@ -2,7 +2,11 @@ import { Image, Pressable, StyleSheet, Text, View } from "react-native";
 import React, { useState } from "react";
 
 import { useMutation, useQuery } from "@tanstack/react-query";
-import { useNavigation, useRoute } from "@react-navigation/native";
+import {
+  useIsFocused,
+  useNavigation,
+  useRoute,
+} from "@react-navigation/native";
 import Ionicons from "react-native-vector-icons/Ionicons";
 
 import SingleVideoTab from "screens/SingleVideo/tabs/SingleVideoTabs";
@@ -91,6 +95,7 @@ const HeaderTitle = () => {
 const SingleVideoScreen = () => {
   const { getWork } = SubNav();
   const route = useRoute<any>();
+  const isFocus = useIsFocused();
 
   const { data, isLoading } = useQuery({
     queryKey: ["workSingleVideoScreen", route.params.id],
@@ -117,7 +122,7 @@ const SingleVideoScreen = () => {
         <Pressable style={styles.watermarkContainer}>
           <Text style={styles.watermarkText}>购买视频观看完整版</Text>
         </Pressable>
-        <VideoPlayer url={data?.video_url} />
+        <VideoPlayer url={data?.video_url} isFocus={isFocus} />
       </View>
       <SingleVideoTab data={data} />
     </View>

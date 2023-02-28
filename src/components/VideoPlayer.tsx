@@ -16,14 +16,14 @@ const setOrientation = () => {
   }
 };
 
-const VideoPlayer = ({ url }) => {
+const VideoPlayer = ({ url, isFocus }) => {
   return (
     <Video
       style={styles.video}
       source={{
         uri: url,
       }}
-      shouldPlay
+      shouldPlay={isFocus}
       useNativeControls
       resizeMode={ResizeMode.CONTAIN}
       isLooping

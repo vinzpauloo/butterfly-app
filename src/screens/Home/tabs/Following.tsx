@@ -2,12 +2,13 @@ import {
   Dimensions,
   Image,
   Pressable,
+  RefreshControl,
   StyleSheet,
   Text,
   TouchableOpacity,
   View,
 } from "react-native";
-import React, { useState } from "react";
+import React, { useCallback, useState } from "react";
 
 import Entypo from "react-native-vector-icons/Entypo";
 import { TEMPORARY_CUSTOMER_ID } from "react-native-dotenv";
@@ -89,19 +90,6 @@ const Video = ({
           {item.title}
         </Text>
       </View>
-      {/* <View style={styles.textContent}>
-        <Text style={styles.text}>{item.user.username}</Text>
-        <Pressable
-          style={{
-            height: 15,
-            width: 15,
-            alignItems: "center",
-          }}
-          onPress={(e) => handleThreeDots(e)}
-        >
-          <Entypo name="dots-three-vertical" color={"#fff"} />
-        </Pressable>
-      </View> */}
       {isFollowingScreen ? (
         <FollowingBottomContent item={item} />
       ) : (
@@ -116,7 +104,16 @@ const Video = ({
   );
 };
 
-const NoFollowing = ({ data, onOpen, isLoading, setId }) => {
+const NoFollowing = ({
+  data,
+  onOpen,
+  isLoading,
+  refreshing,
+  setId,
+  setRefreshing,
+  setData,
+  setRefreshingId,
+}) => {
   const { followCreator } = CustomerService();
   // for follow
   const { mutate: mutateFollow } = useMutation(followCreator, {
@@ -128,6 +125,15 @@ const NoFollowing = ({ data, onOpen, isLoading, setId }) => {
     },
   });
 
+  const onRefresh = useCallback(() => {
+    setRefreshing(true);
+    setTimeout(() => {
+      setData([]);
+      setRefreshingId((prev) => prev + 1);
+      setRefreshing(false);
+    }, 2000);
+  }, []);
+
   const handleFollow = (userId) => {
     mutateFollow({
       site_id: 1,
@@ -136,7 +142,7 @@ const NoFollowing = ({ data, onOpen, isLoading, setId }) => {
     });
   };
 
-  if (isLoading) {
+  if (isLoading || refreshing) {
     return (
       <View style={{ height }}>
         <VideoListSkeleton />
@@ -144,47 +150,57 @@ const NoFollowing = ({ data, onOpen, isLoading, setId }) => {
     );
   }
   return (
-    <>
-      <Image source={NoFollowingImg} style={styles.image} />
-      <Text style={styles.popular}>近期热门用户</Text>
-      {data.map((item, index) => (
-        <View key={index}>
-          <View style={styles.usersCategoryContainer}>
-            <View style={styles.headerContent}>
-              <View style={{ flexDirection: "row", alignItems: "center" }}>
-                <Image
-                  source={{ uri: item[0].user.photo }}
-                  style={styles.modelImg}
-                />
-                <Text style={styles.modelName}>{item[0].user.username}</Text>
+    <ScrollView
+      refreshControl={
+        <RefreshControl
+          colors={["#e15655"]}
+          refreshing={refreshing}
+          onRefresh={onRefresh}
+        />
+      }
+    >
+      <Container>
+        <Image source={NoFollowingImg} style={styles.image} />
+        <Text style={styles.popular}>近期热门用户</Text>
+        {data.map((item, index) => (
+          <View key={index}>
+            <View style={styles.usersCategoryContainer}>
+              <View style={styles.headerContent}>
+                <View style={{ flexDirection: "row", alignItems: "center" }}>
+                  <Image
+                    source={{ uri: item[0].user.photo }}
+                    style={styles.modelImg}
+                  />
+                  <Text style={styles.modelName}>{item[0].user.username}</Text>
+                </View>
+                <Pressable
+                  style={styles.followBtn}
+                  onPress={() => handleFollow(item[0].user_id)}
+                >
+                  <Text style={styles.followText}>关注</Text>
+                </Pressable>
               </View>
-              <Pressable
-                style={styles.followBtn}
-                onPress={() => handleFollow(item[0].user_id)}
-              >
-                <Text style={styles.followText}>关注</Text>
-              </Pressable>
+              <MasonryFlashList
+                numColumns={2}
+                data={item}
+                renderItem={({ item, index }: any) => (
+                  <Video
+                    item={item}
+                    index={index}
+                    onOpen={onOpen}
+                    setId={setId}
+                  />
+                )}
+                keyExtractor={(_, index) => "" + index}
+                estimatedItemSize={2}
+              />
             </View>
-            <MasonryFlashList
-              numColumns={2}
-              data={item}
-              renderItem={({ item, index }: any) => (
-                <Video
-                  item={item}
-                  index={index}
-                  onOpen={onOpen}
-                  setId={setId}
-                />
-              )}
-              keyExtractor={(_, index) => "" + index}
-              estimatedItemSize={12}
-            />
+            {data.length - 1 !== index ? <DividerContainer /> : null}
           </View>
-          {data.length - 1 !== index ? <DividerContainer /> : null}
-        </View>
-      ))}
-      <BottomMessage />
-    </>
+        ))}
+        <BottomMessage />
+      </Container>
+    </ScrollView>
   );
 };
 
@@ -194,10 +210,27 @@ const Follow = ({
   isLoading,
   lastPage,
   page,
+  refreshing,
+  setData,
   setPage,
   setId,
+  setRefreshing,
+  setRefreshingId,
 }) => {
   const [startScroll, setStartScroll] = useState(true);
+
+  console.log("refresh");
+
+  const onRefresh = useCallback(() => {
+    setRefreshing(true);
+    setTimeout(() => {
+      setData([]);
+      setPage(1);
+      setRefreshingId((prev) => prev + 1);
+      setRefreshing(false);
+    }, 2000);
+  }, []);
+
   const reachEnd = () => {
     if (startScroll) return null;
     if (!isLoading) {
@@ -208,12 +241,24 @@ const Follow = ({
     }
   };
 
-  if (isLoading) {
-    <MasonrySkeleton />;
+  if ((isLoading || refreshing) && page === 1) {
+    return (
+      <View style={{ height }}>
+        <VideoListSkeleton />
+      </View>
+    );
   }
+
   return (
     <View style={styles.gridVideoContainer}>
       <MasonryFlashList
+        refreshControl={
+          <RefreshControl
+            colors={["#e15655"]}
+            refreshing={refreshing}
+            onRefresh={onRefresh}
+          />
+        }
         data={data}
         numColumns={2}
         onEndReachedThreshold={0.01} // always make this default to 0.01 to have no bug for fetching data for the onEndReached -> https://github.com/facebook/react-native/issues/14015#issuecomment-346547942
@@ -250,20 +295,20 @@ const Follow = ({
 const Following = () => {
   const { getWorkFollowing } = WorkService();
   const [haveFollowing, setHaveFollowing] = useState(false);
+  const [refreshing, setRefreshing] = useState(false);
+  const [refreshingId, setRefreshingId] = useState(0);
   const { isOpen, onOpen, onClose } = useDisclose();
   const [data, setData] = useState([]);
   const [page, setPage] = useState(1);
   const [lastPage, setLastPage] = useState(1);
   const [id, setId] = useState(null);
 
-  const [followingDataIsLoaded, setFollowingDataIsLoaded] = useState(false);
-
   const { isLoading } = useQuery({
-    queryKey: ["getWorkFollowing", page],
+    queryKey: ["getWorkFollowing", page, refreshingId],
     queryFn: () =>
       getWorkFollowing({
         following_only: true,
-        customer_id: "98914c9b-29c0-42b7-a367-4cddda2e3a06", //id for no following -> 9890d6fe-64b8-4584-9de5-9fad47c0fc69
+        customer_id: "98914c9b-29c0-42b7-a367-4cddda2e3a06", //id for no following -> 98914c9b-294b-4fa2-a593-06f1ec8a0c7b
         page: page,
         paginate: 8,
       }),
@@ -291,20 +336,24 @@ const Following = () => {
           isLoading={isLoading}
           lastPage={lastPage}
           page={page}
+          setData={setData}
           setPage={setPage}
           setId={setId}
+          refreshing={refreshing}
+          setRefreshing={setRefreshing}
+          setRefreshingId={setRefreshingId}
         />
       ) : (
-        <ScrollView>
-          <Container>
-            <NoFollowing
-              data={data}
-              onOpen={onOpen}
-              isLoading={isLoading}
-              setId={setId}
-            />
-          </Container>
-        </ScrollView>
+        <NoFollowing
+          data={data}
+          onOpen={onOpen}
+          isLoading={isLoading}
+          refreshing={refreshing}
+          setId={setId}
+          setRefreshing={setRefreshing}
+          setData={setData}
+          setRefreshingId={setRefreshingId}
+        />
       )}
       <Center flex={1} px="3">
         <Modal isOpen={isOpen} onOpen={onOpen} onClose={onClose} id={id} />

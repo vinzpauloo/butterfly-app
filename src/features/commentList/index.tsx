@@ -7,7 +7,10 @@ import Fontisto from "react-native-vector-icons/Fontisto";
 
 import BottomMessage from "components/BottomMessage";
 import { GLOBAL_COLORS } from "global";
-import {useNavigation, useRoute} from "@react-navigation/native";
+import { useRoute } from "@react-navigation/native";
+import CommentsService from "services/api/CommentsService";
+import { useQuery } from "@tanstack/react-query";
+import CommentListSkeleton from "../../components/skeletons/CommentListSkeleton";
 
 type repliesDataType = {
   replyId: string;
@@ -94,39 +97,51 @@ const CommentItem = (props: commentItemProps) => {
   );
 };
 
-const CommentList = ({data}) => {
-  // const route = useRoute();
-  // const data:any = route.params
+const CommentList = ({}) => {
+  const route = useRoute();
+  const item:any = route.params;
 
-  // const commentsArray = Object.keys(data?.comments).map((key) => data?.comments[key]);
+  const { getComments } = CommentsService();
+  const { data, isLoading } = useQuery({
+    queryKey: ['feedComments', item?.foreign_id],
+    queryFn: () => getComments({
+      foreign_id: item?.foreign_id,
+      skip: 0,
+      limit: 20,
+    })
+  })
 
   return (
     <View style={styles.commentsContainer}>
-      <FlashList
-        removeClippedSubviews={true}
-        estimatedItemSize={117}
-        showsVerticalScrollIndicator={false}
-        data={data.comments}
-        ListHeaderComponent={
-          <Text style={styles.commentHeader}>
-            全部评论 {data?.total_comments}
-          </Text>
-        }
-        ListFooterComponent={<BottomMessage />}
-        keyExtractor={(_, index) => "" + index}
-        renderItem={({ item }: any) => (
-          <CommentItem
-            customerId={item.customer_id}
-            comment={item.comment}
-            username={item.username}
-            photo={item.photo}
-            replies={item.replies}
+      {isLoading ? (
+          <CommentListSkeleton/>
+      ):(
+          <FlashList
+              removeClippedSubviews={true}
+              estimatedItemSize={117}
+              showsVerticalScrollIndicator={false}
+              data={data?.comments}
+              ListHeaderComponent={
+                <Text style={styles.commentHeader}>
+                  全部评论 {data?.total_comments}
+                </Text>
+              }
+              ListFooterComponent={<BottomMessage />}
+              keyExtractor={(_, index) => "" + index}
+              renderItem={({ item }: any) => (
+                  <CommentItem
+                      customerId={item.customer_id}
+                      comment={item.comment}
+                      username={item.username}
+                      photo={item.photo}
+                      replies={item.replies}
+                  />
+              )}
+              ItemSeparatorComponent={() => (
+                  <Divider color="#999" style={styles.divider} />
+              )}
           />
-        )}
-        ItemSeparatorComponent={() => (
-          <Divider color="#999" style={styles.divider} />
-        )}
-      />
+      )}
     </View>
   );
 };

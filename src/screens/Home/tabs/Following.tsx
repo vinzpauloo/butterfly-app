@@ -114,6 +114,7 @@ const NoFollowing = ({
   setData,
   setRefreshingId,
 }) => {
+  const navigation = useNavigation<any>();
   const { followCreator } = CustomerService();
   // for follow
   const { mutate: mutateFollow } = useMutation(followCreator, {
@@ -142,6 +143,12 @@ const NoFollowing = ({
     });
   };
 
+  const navigateSingleUser = (userId) => {
+    navigation.navigate("SingleUser", {
+      id: userId,
+    });
+  };
+
   if (isLoading || refreshing) {
     return (
       <View style={{ height }}>
@@ -166,13 +173,16 @@ const NoFollowing = ({
           <View key={index}>
             <View style={styles.usersCategoryContainer}>
               <View style={styles.headerContent}>
-                <View style={{ flexDirection: "row", alignItems: "center" }}>
+                <Pressable
+                  style={{ flexDirection: "row", alignItems: "center" }}
+                  onPress={() => navigateSingleUser(item[0].user_id)}
+                >
                   <Image
                     source={{ uri: item[0].user.photo }}
                     style={styles.modelImg}
                   />
                   <Text style={styles.modelName}>{item[0].user.username}</Text>
-                </View>
+                </Pressable>
                 <Pressable
                   style={styles.followBtn}
                   onPress={() => handleFollow(item[0].user_id)}
@@ -308,7 +318,7 @@ const Following = () => {
     queryFn: () =>
       getWorkFollowing({
         following_only: true,
-        customer_id: "98914c9b-29c0-42b7-a367-4cddda2e3a06", //id for no following -> 98914c9b-294b-4fa2-a593-06f1ec8a0c7b
+        customer_id: "98914c9b-294b-4fa2-a593-06f1ec8a0c7b", //id for no following -> 98914c9b-294b-4fa2-a593-06f1ec8a0c7b
         page: page,
         paginate: 8,
       }),

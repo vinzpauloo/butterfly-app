@@ -7,18 +7,20 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 
 import Entypo from "react-native-vector-icons/Entypo";
-import { MasonryFlashList } from "@shopify/flash-list";
+import { TEMPORARY_CUSTOMER_ID } from "react-native-dotenv";
 import { Center, useDisclose } from "native-base";
+import { MasonryFlashList } from "@shopify/flash-list";
 import { ScrollView } from "react-native-gesture-handler";
 import { useNavigation } from "@react-navigation/native";
 
 import BottomMessage from "components/BottomMessage";
 import Container from "components/Container";
+import CustomerService from "services/api/CustomerService";
 import DividerContainer from "features/sectionList/components/DividerContainer";
-import GridVideos from "features/sectionList/components/GridVideos";
+import Loading from "components/Loading";
 import MasonrySkeleton from "components/skeletons/MasonrySkeleton";
 import Modal from "components/BottomModal";
 import NoFollowingImg from "assets/images/nofollowing.png";
@@ -26,13 +28,22 @@ import VideoListSkeleton from "components/skeletons/VideoListSkeleton";
 import VIPTag from "components/VIPTag";
 import WorkService from "services/api/WorkService";
 import { GLOBAL_COLORS } from "global";
-import { useQuery } from "@tanstack/react-query";
 import { reelsVideos } from "data/reelsVideos";
-import Loading from "components/Loading";
+import { useMutation, useQuery } from "@tanstack/react-query";
+import {
+  FollowingBottomContent,
+  GridVideosBottomContent,
+} from "features/sectionList/components/GridVideos";
 
 const { width, height } = Dimensions.get("window");
 
-const Video = ({ item, index, onOpen, setId }: any) => {
+const Video = ({
+  item,
+  index,
+  onOpen,
+  setId,
+  isFollowingScreen = false,
+}: any) => {
   const navigation = useNavigation<any>();
   const videoHeight =
     item.orientation === "Landscape" ? width * 0.3 : width * 0.5;
@@ -78,7 +89,7 @@ const Video = ({ item, index, onOpen, setId }: any) => {
           {item.title}
         </Text>
       </View>
-      <View style={styles.textContent}>
+      {/* <View style={styles.textContent}>
         <Text style={styles.text}>{item.user.username}</Text>
         <Pressable
           style={{
@@ -90,14 +101,47 @@ const Video = ({ item, index, onOpen, setId }: any) => {
         >
           <Entypo name="dots-three-vertical" color={"#fff"} />
         </Pressable>
-      </View>
+      </View> */}
+      {isFollowingScreen ? (
+        <FollowingBottomContent item={item} />
+      ) : (
+        <GridVideosBottomContent
+          username={item?.user?.username}
+          onOpen={onOpen}
+          setId={setId}
+          id={item._id}
+        />
+      )}
     </TouchableOpacity>
   );
 };
 
 const NoFollowing = ({ data, onOpen, isLoading, setId }) => {
+  const { followCreator } = CustomerService();
+  // for follow
+  const { mutate: mutateFollow } = useMutation(followCreator, {
+    onSuccess: (data) => {
+      console.log("followingFollowCreator", data);
+    },
+    onError: (error) => {
+      console.log("followingFollowCreator", error);
+    },
+  });
+
+  const handleFollow = (userId) => {
+    mutateFollow({
+      site_id: 1,
+      user_id: userId,
+      customer_id: TEMPORARY_CUSTOMER_ID,
+    });
+  };
+
   if (isLoading) {
-    return <VideoListSkeleton />;
+    return (
+      <View style={{ height }}>
+        <VideoListSkeleton />
+      </View>
+    );
   }
   return (
     <>
@@ -114,9 +158,12 @@ const NoFollowing = ({ data, onOpen, isLoading, setId }) => {
                 />
                 <Text style={styles.modelName}>{item[0].user.username}</Text>
               </View>
-              <TouchableOpacity activeOpacity={1} style={styles.followBtn}>
+              <Pressable
+                style={styles.followBtn}
+                onPress={() => handleFollow(item[0].user_id)}
+              >
                 <Text style={styles.followText}>关注</Text>
-              </TouchableOpacity>
+              </Pressable>
             </View>
             <MasonryFlashList
               numColumns={2}
@@ -174,7 +221,13 @@ const Follow = ({
         onEndReached={reachEnd}
         estimatedItemSize={200}
         renderItem={({ item, index }: any) => (
-          <Video item={item} index={index} onOpen={onOpen} setId={setId} />
+          <Video
+            item={item}
+            index={index}
+            onOpen={onOpen}
+            setId={setId}
+            isFollowingScreen={true}
+          />
         )}
         keyExtractor={(_, index) => "" + index}
         ListFooterComponent={() => (
@@ -210,7 +263,7 @@ const Following = () => {
     queryFn: () =>
       getWorkFollowing({
         following_only: true,
-        customer_id: "98910cf6-ccd9-4122-96a6-3ce479031a77", //id for no following -> 9890d6fe-64b8-4584-9de5-9fad47c0fc69
+        customer_id: "98914c9b-29c0-42b7-a367-4cddda2e3a06", //id for no following -> 9890d6fe-64b8-4584-9de5-9fad47c0fc69
         page: page,
         paginate: 8,
       }),

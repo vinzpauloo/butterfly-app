@@ -8,6 +8,7 @@ import CommentList from 'features/commentList';
 import {useRoute} from "@react-navigation/native";
 import {Feeds} from "hooks/useFeeds";
 import {useQuery} from "@tanstack/react-query";
+import FeedItemSkeleton from "../../components/skeletons/FeedItemSkeleton";
 
 type Props = {}
 
@@ -17,8 +18,8 @@ const SingleFeedScreen = (props: Props) => {
 
 	const {getSpecificFeed} = Feeds();
 	const {data: specificFeed, isLoading} = useQuery({
-		queryKey: ["specificFeed"],
-		queryFn: () => getSpecificFeed(item?.userId),
+		queryKey: ["specificFeed", item?.feedId],
+		queryFn: () => getSpecificFeed(item?.feedId),
 		onSuccess: (data) => {
 			console.log("=== specifc feed fetched from backend! ===")
 		},
@@ -26,12 +27,16 @@ const SingleFeedScreen = (props: Props) => {
 			//
 		}
 	})
-	
+
 	return (
 		<Container>
 			<ScrollView>
-				<FeedItem item={specificFeed} />
-				<CommentList workID={item?.userId} isFromFeed={true} />
+				{isLoading ? (
+					<FeedItemSkeleton/>
+				):(
+					<FeedItem item={specificFeed} />
+				)}
+				<CommentList workID={item?.feedId} isFromFeed={true} />
 			</ScrollView>
 		</Container>
 	)

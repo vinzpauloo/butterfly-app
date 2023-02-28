@@ -106,7 +106,7 @@ const FeedItem = ({item}) => {
                   photo: item?.user.photo,
                   username: item?.user.username
                 },
-                userId: item?._id,
+                feedId: item?._id,
                 comment: {
                   total_comments: item?.comment.total_comments,
                 },

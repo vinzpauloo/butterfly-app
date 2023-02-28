@@ -248,7 +248,7 @@ export const stackScreens = {
     {
       name: "SingleFeedScreen",
       component: SingleFeedScreen,
-      options: basicHeader,
+      options: { headerShown: false },
     },
     {
       name: "FollowingFanListScreen",

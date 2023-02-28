@@ -1,14 +1,17 @@
 import React from 'react'
 import { ScrollView, StyleSheet } from 'react-native'
+import {useRoute} from "@react-navigation/native";
+
+import {useQuery} from "@tanstack/react-query";
+
+import {Feeds} from "hooks/useFeeds";
+
+import CommentList from 'features/commentList';
 
 import FeedItem from 'components/FeedItem'
 import Container from 'components/Container'
-import CommentList from 'features/commentList';
-
-import {useRoute} from "@react-navigation/native";
-import {Feeds} from "hooks/useFeeds";
-import {useQuery} from "@tanstack/react-query";
-import FeedItemSkeleton from "../../components/skeletons/FeedItemSkeleton";
+import FeedItemSkeleton from "components/skeletons/FeedItemSkeleton";
+import SingleFeedHeader from "components/headers/SingleFeedHeader";
 
 type Props = {}
 
@@ -27,9 +30,9 @@ const SingleFeedScreen = (props: Props) => {
 			//
 		}
 	})
-
 	return (
 		<Container>
+			<SingleFeedHeader title="洋情" />
 			<ScrollView>
 				{isLoading ? (
 					<FeedItemSkeleton/>

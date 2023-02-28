@@ -1,169 +1,110 @@
 import React, { useState } from "react";
-import { StyleSheet, Text, Pressable, Alert, View } from "react-native";
-import { VStack, Avatar, HStack, Divider } from "native-base";
+import { StyleSheet, Text, Pressable, View, Keyboard, KeyboardAvoidingView, TextInput, Dimensions } from "react-native";
+import { HStack, Divider } from "native-base";
 import { FlashList } from "@shopify/flash-list";
 
-import Fontisto from "react-native-vector-icons/Fontisto";
-
+import CommentItem from "components/CommentItem";
 import BottomMessage from "components/BottomMessage";
-import { GLOBAL_COLORS } from "global";
-import { useRoute } from "@react-navigation/native";
 import CommentsService from "services/api/CommentsService";
-import { useQuery } from "@tanstack/react-query";
 import CommentListSkeleton from "../../components/skeletons/CommentListSkeleton";
 
-type repliesDataType = {
-  replyId: string;
-  customerId: string;
-  username: string;
-  photo: string;
-  comment: string;
-};
+import { GLOBAL_COLORS } from "global";
+import { useQuery, useMutation } from "@tanstack/react-query";
+import { TEMPORARY_CUSTOMER_ID } from "react-native-dotenv";
 
-type commentItemProps = {
-  customerId: string;
-  comment: string;
-  username: string;
-  photo: string;
-  replies: repliesDataType[];
-};
+type CommentListProps = {
+  isFromFeed?: boolean
+  workID: string
+}
 
-const CommentItem = (props: commentItemProps) => {
-  const [repliesIsShown, setrepliesIsShown] = useState(false);
-  const [amountOfCommentShown, setAmountOfCommentShown] = useState(10);
+const CommentList = (props: CommentListProps) => {
+  const [text, setText] = useState("");
+  const [isKeyboardShown, setIsKeyboardShown] = useState(false)
 
-  return (
-      <HStack space={2}>
-        <Pressable
-            onPress={() => Alert.alert("go to " + props.username + " profile")}
-        >
-          <Avatar size={42} source={{ uri: props.photo }} />
-        </Pressable>
-        <VStack space={1} style={{ flex: 1, paddingHorizontal: 6 }}>
-          <Text style={styles.whiteText}>{props.username}</Text>
-          <Text style={styles.whiteText}>{props.comment}</Text>
-          <Pressable onPress={() => Alert.alert("reply to " + props.username)}>
-            <HStack space={1.5} style={styles.alignCenter}>
-              <Fontisto
-                  name="commenting"
-                  color={GLOBAL_COLORS.inactiveTextColor}
-                  size={14}
-              />
-              <Text style={styles.secondaryText}>回复</Text>
-            </HStack>
-          </Pressable>
-          <Pressable
-              onPress={() => {
-                setrepliesIsShown(!repliesIsShown);
-              }}
-          >
-            {props?.replies?.length > 0 ? (
-                <Text style={styles.secondaryColor}>
-                  查看 {props?.replies?.length} 则回复
-                </Text>
-            ) : null}
-          </Pressable>
-          <VStack
-              space={4}
-              mt={8}
-              style={repliesIsShown ? { display: "flex" } : { display: "none" }}
-          >
-            {props?.replies?.slice(0, amountOfCommentShown).map((reply, index) => (
-                <HStack space={2} key={index}>
-                  <Pressable
-                      onPress={() =>
-                          Alert.alert("go to " + reply?.username + " profile")
-                      }
-                  >
-                    <Avatar size={42} source={{ uri: reply?.photo }} />
-                  </Pressable>
-                  <VStack space={1} style={{ flex: 1, paddingHorizontal: 6 }}>
-                    <Text style={styles.whiteText}>{reply?.username}</Text>
-                    <Text style={styles.whiteText}>{reply.comment}</Text>
-                  </VStack>
-                </HStack>
-            ))}
-            {props?.replies?.length >= 10 &&
-            amountOfCommentShown < props?.replies?.length ? (
-                <Pressable
-                    onPress={() => setAmountOfCommentShown(amountOfCommentShown + 10)}
-                >
-                  <Text style={styles.loadMoreComments}>更多裝載</Text>
-                </Pressable>
-            ) : null}
-          </VStack>
-        </VStack>
-      </HStack>
-  );
-};
-
-const CommentList = ({}) => {
-  const route = useRoute();
-  const item:any = route.params;
-
-  const { getComments } = CommentsService();
-  const { data, isLoading } = useQuery({
-    queryKey: ['feedComments', item?.foreign_id],
+  const { getComments, addComment } = CommentsService();
+  const { isLoading, isError, data, error, status, refetch } = useQuery({
+    queryKey: ["workComments", props.workID],
     queryFn: () => getComments({
-      foreign_id: item?.foreign_id,
+      foreign_id: props.workID,
       skip: 0,
-      limit: 20,
-    })
-  })
+      limit: 10
+    }),
+    onSuccess: (data) => {
+      console.log("=== commentlist fetched from backend! ===")
+    },
+    onError: (error) => {
+      console.log("Error", error);
+    },
+    // enabled: isOpen,
+  });
+
+  const { mutate: mutateComments } = useMutation(addComment, {
+    onSuccess: (data) => { refetch() }, onError: (error) => { console.log(error) },
+  });
+
+  function addNewComment() {
+    setText("");
+    Keyboard.dismiss()
+    mutateComments({
+      site_id: 1,
+      foreign_id: props.workID,
+      customer_id: TEMPORARY_CUSTOMER_ID,
+      comment: text,
+      type: props.isFromFeed? "feed" : "work"
+    });
+  }
+
+  Keyboard.addListener("keyboardDidShow", () => setIsKeyboardShown(true))
+  Keyboard.addListener("keyboardDidHide", () => setIsKeyboardShown(false))
 
   return (
-    <View style={styles.commentsContainer}>
-      {isLoading ? (
-          <CommentListSkeleton/>
-      ):(
+      <View style={styles.commentsContainer}>
+        {isLoading ? <CommentListSkeleton/> :
           <FlashList
-              removeClippedSubviews={true}
-              estimatedItemSize={117}
-              showsVerticalScrollIndicator={false}
-              data={data?.comments}
-              ListHeaderComponent={
-                <Text style={styles.commentHeader}>
-                  全部评论 {data?.total_comments}
-                </Text>
-              }
-              ListFooterComponent={<BottomMessage />}
-              keyExtractor={(_, index) => "" + index}
-              renderItem={({ item }: any) => (
-                  <CommentItem
-                      customerId={item.customer_id}
-                      comment={item.comment}
-                      username={item.username}
-                      photo={item.photo}
-                      replies={item.replies}
-                  />
-              )}
-              ItemSeparatorComponent={() => (
-                  <Divider color="#999" style={styles.divider} />
-              )}
+            removeClippedSubviews={true}
+            estimatedItemSize={117}
+            showsVerticalScrollIndicator={false}
+            data={data?.comments}
+            ListHeaderComponent={<Text style={styles.commentHeader}>全部评论 {data?.total_comments}</Text>}
+            ListFooterComponent={<BottomMessage />}
+            keyExtractor={(_, index) => "" + index}
+            renderItem={({ item }: any) => (
+              <CommentItem
+                  customerId={item.customer_id}
+                  comment={item.comment}
+                  username={item.username}
+                  photo={item.photo}
+                  replies={item.replies}
+              />)}
+            ItemSeparatorComponent={() => <Divider color="#999" style={styles.divider} />}
           />
-      )}
-    </View>
+        }
+      <KeyboardAvoidingView behavior="position" enabled={isKeyboardShown}>
+        <HStack style={styles.bottomForm}>
+          <TextInput
+            style={styles.textInput}
+            value={text}
+            cursorColor={"white"}
+            placeholder="发表评论"
+            placeholderTextColor="#999"
+            onChangeText={(text) => setText(text)}
+            keyboardType="default"
+          />
+          <Pressable onPress={addNewComment}>
+            <Text style={styles.submitComment}>发送</Text>
+          </Pressable>
+        </HStack>
+      </KeyboardAvoidingView>
+      </View>
   );
 };
 
 export default CommentList;
 
 const styles = StyleSheet.create({
-  whiteText: {
-    color: GLOBAL_COLORS.primaryTextColor,
-  },
   commentHeader: {
     color: GLOBAL_COLORS.primaryTextColor,
     marginBottom: 18,
-  },
-  secondaryColor: {
-    color: GLOBAL_COLORS.secondaryColor,
-  },
-  secondaryText: {
-    color: GLOBAL_COLORS.inactiveTextColor,
-  },
-  alignCenter: {
-    alignItems: "center",
   },
   divider: {
     marginVertical: 12,
@@ -173,8 +114,26 @@ const styles = StyleSheet.create({
     flex: 1,
     minHeight: 100,
   },
-  loadMoreComments: {
-    textAlign: "center",
-    color: GLOBAL_COLORS.inactiveTextColor,
+  submitComment: {
+    color: "white",
+  },
+  textInput: {
+    color: "white",
+    paddingVertical: 12,
+    width: "90%",
+  },
+  submitCommentText: {
+    color: "white",
+  },
+  bottomForm: {
+    position: "absolute",
+    zIndex: 1,
+    bottom: -12,
+    left: -12,
+    width: Dimensions.get("window").width,
+    alignItems: "center",
+    justifyContent: "space-between",
+    backgroundColor: GLOBAL_COLORS.headerBasicBg,
+    paddingHorizontal: 12,
   },
 });

@@ -4,7 +4,6 @@ import { ScrollView, StyleSheet } from 'react-native'
 import FeedItem from 'components/FeedItem'
 import Container from 'components/Container'
 import CommentList from 'features/commentList';
-import CommentTextInput from 'components/CommentTextInput';
 
 import {useRoute} from "@react-navigation/native";
 import {Feeds} from "hooks/useFeeds";
@@ -21,23 +20,19 @@ const SingleFeedScreen = (props: Props) => {
 		queryKey: ["specificFeed"],
 		queryFn: () => getSpecificFeed(item?.userId),
 		onSuccess: (data) => {
-			//
+			console.log("=== specifc feed fetched from backend! ===")
 		},
 		onError: (error) => {
 			//
 		}
 	})
-	console.log(`TEST@@@@@`,specificFeed)
-
+	
 	return (
 		<Container>
 			<ScrollView>
-				<FeedItem
-					item={specificFeed}
-				/>
-				<CommentList />
+				<FeedItem item={specificFeed} />
+				<CommentList workID={item?.userId} isFromFeed={true} />
 			</ScrollView>
-			<CommentTextInput keyboardAvoidingBehavior="height"/>
 		</Container>
 	)
 }

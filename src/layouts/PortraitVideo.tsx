@@ -150,8 +150,8 @@ const PortraitVideo: React.FC<PortraitVideoDataType> = ({
     onSuccess: (data) => {
       console.log("=== random portrait video fetched from backend! ===");
       let newElement = {
-        // id of the video (which is also the foreign id to refer to)
-        id: data[0]._id,
+        // workID of the video (which is also the foreignID to refer to)
+        workID: data[0]._id,
         userID: data[0].user.id,
         userName: data[0].user.username,
         videoURL: data[0].video_url,
@@ -191,7 +191,6 @@ const PortraitVideo: React.FC<PortraitVideoDataType> = ({
       {vlogIsLoaded ? (
         <>
           <FlatList
-            // estimatedItemSize={15}
             onEndReached={onUserScrollDown}
             maxToRenderPerBatch={1}
             initialNumToRender={1}
@@ -201,7 +200,7 @@ const PortraitVideo: React.FC<PortraitVideoDataType> = ({
             removeClippedSubviews={true}
             renderItem={({ item, index }) => (
               <PortraitVideoContent
-                videoID={item.id}
+                videoID={item.workID}
                 userID={item.userID}
                 key={item.id}
                 videoURL={item.videoURL}
@@ -225,7 +224,7 @@ const PortraitVideo: React.FC<PortraitVideoDataType> = ({
               setActiveVideoIndex(index);
             }}
           />
-          <BottomComment commentForeignID={data[0].comment.foreign_id} isOpen={isOpen} onClose={onClose} />
+          <BottomComment workID={data[0]._id} isOpen={isOpen} onClose={onClose} />
         </>
       ) : (
         <View style={styles.loaderContainer}>

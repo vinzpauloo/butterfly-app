@@ -18,5 +18,14 @@ export const Feeds = () => {
       method: "GET",
     });
   };
-  return { getFeeds, getSpecificFeed };
+
+  const getFeedsByTag = (data) => {
+    return request({
+      headers: getHeaders(),
+      url: "/feeds",
+      method: "GET",
+      params: data,
+    });
+  };
+  return { getFeeds, getSpecificFeed, getFeedsByTag };
 };

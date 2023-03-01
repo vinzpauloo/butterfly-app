@@ -8,11 +8,11 @@ import GridVideos from "features/sectionList/components/GridVideos";
 import StickyTabs from "layouts/StickyTabs";
 import { Header } from "./Header";
 import { Work } from "hooks/useWork";
-import CommentListSkeleton from "components/skeletons/CommentListSkeleton";
 import { useState } from "react";
 import StickyTabsGridVideos from "features/sectionList/components/StickyTabsGridVideos";
 import CommentTextInput from "components/CommentTextInput";
 import Container from "components/Container";
+import { Tab, Tabs } from "react-native-collapsible-tab-view";
 
 const OthersLayout = ({ userId }) => {
   const [page, setPage] = useState(1);
@@ -109,10 +109,13 @@ const SingleVideoTab = ({ data }) => {
         name: "TabComments",
         label: "评论",
         Content: (
-          <Container>
-            <CommentList workID={data._id} />
-            <CommentTextInput workID={data._id} keyboardAvoidBehavior="position" />
-          </Container>
+            <Container>
+            <Tabs.ScrollView accessibilityComponentType={undefined} accessibilityTraits={undefined}>
+                <CommentList workID={data._id} />
+              </Tabs.ScrollView>
+              <CommentTextInput workID={data._id} keyboardAvoidBehavior="position" />
+            </Container>
+
         ),
       },
     ],

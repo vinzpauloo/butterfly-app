@@ -8,7 +8,6 @@ import Fontisto from 'react-native-vector-icons/Fontisto';
 import { FlashList } from '@shopify/flash-list';
 
 type repliesDataType = {
-	replyId: string;
 	customerId: string;
 	username: string;
 	photo: string;
@@ -56,7 +55,7 @@ const CommentItem = (props: commentItemProps) => {
 						<Text style={styles.secondaryColor}>查看 {props?.replies?.length} 则回复</Text>
 					</Pressable> : null}
 				{repliesIsShown && props?.replies?.length > 0 ? 
-					<VStack flex={1} space={4} minH={49 * amountOfCommentShown}>
+					<VStack flex={1} space={4} minH={49}>
 						<FlashList
 							estimatedItemSize={50}
 							data={props?.replies?.slice(0, amountOfCommentShown)}
@@ -71,7 +70,7 @@ const CommentItem = (props: commentItemProps) => {
 								</HStack>
 							} />
 							{props?.replies?.length >= 10 && amountOfCommentShown < props?.replies?.length ?
-								<Pressable onPress={() => setAmountOfCommentShown(amountOfCommentShown + 10)}>
+								<Pressable onPress={() => setAmountOfCommentShown((prev) => prev + 10)}>
 									<Text style={styles.loadMoreComments}>更多裝載</Text>
 								</Pressable> : null}
 					</VStack> : null}

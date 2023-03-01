@@ -12,6 +12,7 @@ import FeedItem from 'components/FeedItem'
 import Container from 'components/Container'
 import FeedItemSkeleton from "components/skeletons/FeedItemSkeleton";
 import SingleFeedHeader from "components/headers/SingleFeedHeader";
+import CommentTextInput from 'components/CommentTextInput';
 
 type Props = {}
 
@@ -34,13 +35,10 @@ const SingleFeedScreen = (props: Props) => {
 		<Container>
 			<SingleFeedHeader title="洋情" />
 			<ScrollView>
-				{isLoading ? (
-					<FeedItemSkeleton/>
-				):(
-					<FeedItem item={specificFeed} />
-				)}
+				{isLoading? <FeedItemSkeleton/> : <FeedItem item={specificFeed} />}
 				<CommentList workID={item?.feedId} isFromFeed={true} />
 			</ScrollView>
+			<CommentTextInput workID={item?.feedId} isFromFeed={true} keyboardAvoidBehavior="height"/>
 		</Container>
 	)
 }

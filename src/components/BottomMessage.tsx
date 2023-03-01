@@ -17,8 +17,7 @@ const styles = StyleSheet.create({
   bottomText: {
     textAlign: "center",
     color: "#999",
-    marginTop: 12,
-    marginBottom: 60,
+    marginVertical: 12,
     fontSize: 14,
   },
 });

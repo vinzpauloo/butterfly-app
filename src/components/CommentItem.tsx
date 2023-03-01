@@ -1,7 +1,9 @@
-import { Alert, Pressable, StyleSheet, Text } from 'react-native'
 import React, { useState } from 'react'
-import { GLOBAL_COLORS } from 'global';
+import { Alert, Pressable, StyleSheet, Text } from 'react-native'
 import { HStack, Avatar, VStack } from 'native-base';
+import { GLOBAL_COLORS } from 'global';
+
+import { commentGlobalStore } from "../zustand/commentGlobalStore"
 import Fontisto from 'react-native-vector-icons/Fontisto';
 
 type repliesDataType = {
@@ -13,7 +15,7 @@ type repliesDataType = {
 };
 
 type commentItemProps = {
-	customerId: string;
+	commentID: string;
 	comment: string;
 	username: string;
 	photo: string;
@@ -24,6 +26,18 @@ const CommentItem = (props: commentItemProps) => {
 	const [repliesIsShown, setrepliesIsShown] = useState(false);
 	const [amountOfCommentShown, setAmountOfCommentShown] = useState(10);
 
+	// subscribe to comment global store
+	const [setIsOnReplyMode, setUserNameToReplyTo, setCommentIDToReplyTo, globalTextInputRef] = commentGlobalStore(
+		(state) => [state.setIsOnReplyMode, state.setUserNameToReplyTo, state.setCommentIDToReplyTo, state.globalTextInputRef],
+	)
+
+	function enableReplyMode() {
+		setIsOnReplyMode(true)
+		globalTextInputRef.current.focus()
+		setUserNameToReplyTo(props.username)
+		setCommentIDToReplyTo(props.commentID)
+	}
+
 	return (
 		<HStack space={2}>
 			<Pressable onPress={() => Alert.alert("go to " + props.username + " profile")}>
@@ -32,24 +46,20 @@ const CommentItem = (props: commentItemProps) => {
 			<VStack space={1} style={{ flex: 1, paddingHorizontal: 6 }}>
 				<Text style={styles.whiteText}>{props.username}</Text>
 				<Text style={styles.whiteText}>{props.comment}</Text>
-				<Pressable onPress={() => Alert.alert("reply to " + props.username)}>
+				<Pressable onPress={enableReplyMode}>
 					<HStack space={1.5} alignItems="center">
-						<Fontisto
-							name="commenting"
-							color={GLOBAL_COLORS.inactiveTextColor}
-							size={14}
-						/>
+						<Fontisto name="commenting" color={GLOBAL_COLORS.inactiveTextColor} size={14} />
 						<Text style={styles.secondaryText}>回复</Text>
 					</HStack>
 				</Pressable>
-				<Pressable onPress={() => { setrepliesIsShown(!repliesIsShown) }}>
+				<Pressable onPress={() => {setrepliesIsShown(!repliesIsShown)}}>
 					{props?.replies?.length > 0 ? (
 						<Text style={styles.secondaryColor}>
 							查看 {props?.replies?.length} 则回复
 						</Text>
 					) : null}
 				</Pressable>
-				<VStack space={4} mt={8} style={repliesIsShown ? { display: "flex" } : { display: "none" }}>
+				<VStack space={4} mt={2} style={repliesIsShown ? { display: "flex" } : { display: "none" }}>
 					{props?.replies?.slice(0, amountOfCommentShown).map((reply, index) => (
 						<HStack space={2} key={index}>
 							<Pressable onPress={() => Alert.alert("go to " + reply?.username + " profile")}>

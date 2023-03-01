@@ -31,7 +31,7 @@ export const Like = () => {
     const { foreign_id, customer_id } = data;
     return request({
       headers: getHeaders(),
-      url: `likes/${foreign_id}/${customer_id}`,
+      url: `/likes/${foreign_id}/${customer_id}`,
       method: "DELETE",
     });
   };

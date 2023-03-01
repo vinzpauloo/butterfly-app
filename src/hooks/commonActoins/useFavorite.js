@@ -5,7 +5,7 @@ export const Favorite = () => {
   const postSaveFavorite = (data) => {
     return request({
       headers: getHeaders(),
-      url: "/customer/save-favorite",
+      url: "/customers/save-favorite",
       method: "POST",
       data: data,
     });
@@ -14,7 +14,7 @@ export const Favorite = () => {
   const postFavoriteChecker = (data) => {
     return request({
       headers: getHeaders(),
-      url: "/customer/favorite-checker",
+      url: "/customers/favorite-checker",
       method: "POST",
       data: data,
     });
@@ -24,7 +24,7 @@ export const Favorite = () => {
     const { foreign_id, customer_id } = data;
     return request({
       headers: getHeaders(),
-      url: `customer/remove-favorite/${foreign_id}/${customer_id}`,
+      url: `/customers/remove-favorite/${foreign_id}/${customer_id}`,
       method: "DELETE",
     });
   };

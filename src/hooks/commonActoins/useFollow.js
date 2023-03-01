@@ -5,7 +5,7 @@ export const Follow = () => {
   const postFollowChecker = (data) => {
     return request({
       headers: getHeaders(),
-      url: "/customer/follow-checker",
+      url: "/customers/follow-checker",
       method: "POST",
       data: data,
     });
@@ -14,7 +14,7 @@ export const Follow = () => {
   const postFollowCreator = (data) => {
     return request({
       headers: getHeaders(),
-      url: "/customer/follow-creator",
+      url: "/customers/follow-creator",
       method: "POST",
       data: data,
     });
@@ -24,7 +24,7 @@ export const Follow = () => {
     const { user_id, customer_id } = data;
     return request({
       headers: getHeaders(),
-      url: `/customer/unfollow-creator/${user_id}/${customer_id}`,
+      url: `/customers/unfollow-creator/${user_id}/${customer_id}`,
       method: "DELETE",
     });
   };

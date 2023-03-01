@@ -5,7 +5,7 @@ export const Feeds = () => {
   const getFeeds = (data) => {
     return request({
       headers: getHeaders(),
-      url: `/feed`,
+      url: `/feeds`,
       method: "GET",
       params: data,
     });
@@ -14,7 +14,7 @@ export const Feeds = () => {
   const getSpecificFeed = (id) => {
     return request({
       headers: getHeaders(),
-      url: `/feed/${id}`,
+      url: `/feeds/${id}`,
       method: "GET",
     });
   };

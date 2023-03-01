@@ -11,7 +11,7 @@ const WorkgroupService = () => {
   const getWorkgroup = (params: IWorkgroupParams) => {
     return request({
       headers: getHeaders(),
-      url: "/workgroup",
+      url: "/workgroups",
       method: "GET",
       params,
     });

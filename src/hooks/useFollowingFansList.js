@@ -5,7 +5,7 @@ export const FollowingFansList = () => {
   const getFollowersList = (id) => {
     return request({
       headers: getHeaders(),
-      url: `/follow-action/list/${id}`,
+      url: `/follow-actions/list/${id}`,
       method: "GET",
     });
   };
@@ -13,7 +13,7 @@ export const FollowingFansList = () => {
   const getFollowerCount = (id) => {
     return request({
       headers: getHeaders(),
-      url: `/follow-action/count/${id}`,
+      url: `/follow-actions/count/${id}`,
       method: "GET",
     });
   };

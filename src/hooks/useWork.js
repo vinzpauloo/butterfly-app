@@ -5,7 +5,7 @@ export const Work = () => {
   const getWorkAll = (data) => {
     return request({
       headers: getHeaders(),
-      url: "/work",
+      url: "/works",
       method: "GET",
       params: data,
     });
@@ -14,7 +14,7 @@ export const Work = () => {
   const getWorkRecommended = (data) => {
     return request({
       headers: getHeaders(),
-      url: "/work",
+      url: "/works",
       method: "GET",
       params: data,
     });
@@ -23,7 +23,7 @@ export const Work = () => {
   const getWorkComments = (data) => {
     return request({
       headers: getHeaders(),
-      url: `/comment/pagination`,
+      url: `/comments/pagination`,
       method: "GET",
       params: data,
     });

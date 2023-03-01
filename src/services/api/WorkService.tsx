@@ -22,7 +22,7 @@ const WorkService = () => {
   const getWorks = (params: IWorksParams) => {
     return request({
       headers: getHeaders(),
-      url: "/work",
+      url: "/works",
       method: "GET",
       params,
     });
@@ -31,7 +31,7 @@ const WorkService = () => {
   const getWorkById = (work_id: string) => {
     return request({
       headers: getHeaders(),
-      url: `/work/${work_id}`,
+      url: `/works/${work_id}`,
       method: "GET",
     });
   };
@@ -39,7 +39,7 @@ const WorkService = () => {
   const getWorkFollowing = (params: IWorkFollowing) => {
     return request({
       headers: getHeaders(),
-      url: "/work",
+      url: "/works",
       get: "GET",
       params,
     });

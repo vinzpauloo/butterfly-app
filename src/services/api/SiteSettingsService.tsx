@@ -5,7 +5,7 @@ const SiteSettingsService = () => {
   const getNavbar = () => {
     return request({
       headers: getHeaders(),
-      url: `/navbar`,
+      url: "/navbars",
       method: "GET",
     });
   };
@@ -13,7 +13,7 @@ const SiteSettingsService = () => {
   const getAds = () => {
     return request({
       headers: getHeaders(),
-      url: `/advertisement`,
+      url: "/advertisements",
       method: "GET",
     });
   };
@@ -21,7 +21,7 @@ const SiteSettingsService = () => {
   const getAnnouncement = () => {
     return request({
       headers: getHeaders(),
-      url: `/announcement/list`,
+      url: "/announcements/list",
       method: "GET",
     });
   };

@@ -2,7 +2,7 @@ import { getHeaders } from "lib/cryptoJs";
 import request from "lib/request";
 
 interface ICommentsParams {
-  comment_id?: string
+  comment_id?: string;
   site_id?: number;
   foreign_id?: string;
   skip?: number;
@@ -16,7 +16,7 @@ const CommentsService = () => {
   const getComments = (params: ICommentsParams) => {
     return request({
       headers: getHeaders(),
-      url: "/comment/pagination",
+      url: "/comments/pagination",
       method: "GET",
       params,
     });
@@ -25,7 +25,7 @@ const CommentsService = () => {
   const addComment = (params: ICommentsParams) => {
     return request({
       headers: getHeaders(),
-      url: "/comment",
+      url: "/comments",
       method: "POST",
       params,
     });
@@ -34,7 +34,7 @@ const CommentsService = () => {
   const replyComment = (params: ICommentsParams) => {
     return request({
       headers: getHeaders(),
-      url: "/comment/reply",
+      url: "/comments/reply",
       method: "POST",
       params,
     });

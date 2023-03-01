@@ -5,7 +5,7 @@ export const SubNav = () => {
   const getSubNav = () => {
     return request({
       headers: getHeaders(),
-      url: "/navbar",
+      url: "/navbars",
       method: "GET",
     });
   };
@@ -13,7 +13,7 @@ export const SubNav = () => {
   const getWorkGroup = (data) => {
     return request({
       headers: getHeaders(),
-      url: "/workgroup",
+      url: "/workgroups",
       method: "GET",
       params: data, //{site_id: 1, navbar: selection}
     });
@@ -22,7 +22,7 @@ export const SubNav = () => {
   const getWork = (id) => {
     return request({
       headers: getHeaders(),
-      url: `/work/${id}`,
+      url: `/works/${id}`,
       method: "GET",
     });
   };

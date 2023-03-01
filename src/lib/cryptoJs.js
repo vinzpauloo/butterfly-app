@@ -35,8 +35,8 @@ const getDateNow = () => {
 const encryptData = () => {
   const dataToEncrypt = `${getDateNow()}|${integrationKey}`;
 
-  console.log("--- Inside encryptData function ---");
-  console.log("dataToEncrypt:", dataToEncrypt);
+  // console.log("--- Inside encryptData function ---");
+  // console.log("dataToEncrypt:", dataToEncrypt);
 
   const encrypted = CryptoJS.AES.encrypt(
     JSON.stringify(dataToEncrypt),
@@ -46,7 +46,7 @@ const encryptData = () => {
     }
   ).toString();
 
-  console.log("encrypted:", encrypted);
+  // console.log("encrypted:", encrypted);
 
   return encrypted;
 };

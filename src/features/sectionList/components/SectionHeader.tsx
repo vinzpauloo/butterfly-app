@@ -6,11 +6,11 @@ import { useNavigation } from "@react-navigation/native";
 import { GLOBAL_COLORS } from "global";
 import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons";
 
-const SectionHeader = ({ title }) => {
+const SectionHeader = ({ id, title }) => {
   const navigation = useNavigation<any>();
 
   const handlePress = (title: string) => {
-    navigation.navigate("SingleSection", { postTitle: title });
+    navigation.navigate("SingleSection", { postTitle: title, id: id });
   };
 
   return (

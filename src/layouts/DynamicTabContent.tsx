@@ -16,10 +16,10 @@ import { useQuery } from "@tanstack/react-query";
 import { FlashList } from "@shopify/flash-list";
 import { SubNav } from "hooks/useSubNav";
 
-const LayoutContainer = ({ title, dataLength, index, children }) => {
+const LayoutContainer = ({ id, title, dataLength, index, children }) => {
   return (
     <>
-      <SectionHeader title={title} />
+      <SectionHeader title={title} id={id} />
       {children}
       {dataLength !== index ? <DividerContainer /> : null}
     </>
@@ -27,6 +27,7 @@ const LayoutContainer = ({ title, dataLength, index, children }) => {
 };
 
 const SectionContent = ({
+  id,
   single,
   multiple,
   title,
@@ -50,7 +51,12 @@ const SectionContent = ({
   };
 
   return (
-    <LayoutContainer title={title} dataLength={dataLength} index={index}>
+    <LayoutContainer
+      id={id}
+      title={title}
+      dataLength={dataLength}
+      index={index}
+    >
       {templates[templateId]}
     </LayoutContainer>
   );
@@ -103,6 +109,7 @@ const DynamicTabContent = ({ tabTitle }) => {
             return (
               <SectionContent
                 key={index}
+                id={item._id}
                 title={item.title}
                 single={item.single}
                 multiple={item.multiple}

@@ -1,10 +1,15 @@
-import { Button, StyleSheet } from "react-native";
+import { StyleSheet } from "react-native";
 import React, { useEffect, useState } from "react";
 
 import { Box, Center, Spinner, Text, VStack } from "native-base";
-import { StackActions, useNavigation } from "@react-navigation/native";
+import {
+  StackActions,
+  useNavigation,
+  useRoute,
+} from "@react-navigation/native";
 
 import { adsGlobalStore } from "../../zustand/adsGlobalStore";
+import { captureSuccess, captureError } from "services/sentry";
 
 import { useQuery } from "@tanstack/react-query";
 
@@ -13,6 +18,7 @@ import SiteSettingsService from "services/api/SiteSettingsService";
 
 const InitialLoad = () => {
   const navigation = useNavigation<any>();
+  const route = useRoute<any>();
 
   const [isQueryEnable, setIsQueryEnable] = useState(false);
 
@@ -36,6 +42,7 @@ const InitialLoad = () => {
           res.localCache_single_banner
         );
 
+        captureSuccess(route.name, "getDataObject(AdvertisementCacheData)");
         navigation.dispatch(StackActions.replace("TermsOfService"));
       }
     });
@@ -67,10 +74,12 @@ const InitialLoad = () => {
         localCache_single_banner: data.advertisement.single_banner.banners,
       });
 
+      captureSuccess(route.name, "storeDataObject(AdvertisementCacheData)");
       navigation.dispatch(StackActions.replace("TermsOfService"));
     },
     onError: (error) => {
       console.log("Error", error);
+      captureError(error, route.name, "queryFn: () => getAds()");
     },
     enabled: isQueryEnable,
   });

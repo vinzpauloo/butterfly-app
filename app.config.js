@@ -12,22 +12,23 @@ export default {
     resizeMode: "contain",
     backgroundColor: "#ffffff",
   },
-  "plugins": [
+  plugins: [
     [
       "expo-image-picker",
       {
-        "photosPermission": "The app accesses your photos to let you share them with your friends."
+        photosPermission:
+          "The app accesses your photos to let you share them with your friends.",
       },
     ],
     [
       "expo-media-library",
-        {
-          "photosPermission": "Allow $(PRODUCT_NAME) to access your photos.",
-          "savePhotosPermission": "Allow $(PRODUCT_NAME) to save photos.",
-          "isAccessMediaLocationEnabled": true
-        }
-
-    ]
+      {
+        photosPermission: "Allow $(PRODUCT_NAME) to access your photos.",
+        savePhotosPermission: "Allow $(PRODUCT_NAME) to save photos.",
+        isAccessMediaLocationEnabled: true,
+      },
+    ],
+    ["sentry-expo"],
   ],
   updates: {
     fallbackToCacheTimeout: 0,

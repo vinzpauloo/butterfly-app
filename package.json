@@ -32,7 +32,7 @@
     "expo-device": "~5.0.0",
     "expo-file-system": "~15.1.1",
     "expo-image-picker": "~14.0.2",
-    "expo-linking": "~3.3.0",
+    "expo-linking": "~3.3.1",
     "expo-media-library": "~15.0.0",
     "expo-screen-orientation": "^5.0.1",
     "expo-status-bar": "~1.4.2",
@@ -59,9 +59,10 @@
     "react-native-web": "~0.18.9",
     "react-redux": "^8.0.5",
     "redux": "^4.2.0",
-    "sentry-expo": "4.2",
+    "sentry-expo": "~6.0.0",
     "typescript": "^4.6.3",
-    "zustand": "^4.3.3"
+    "zustand": "^4.3.3",
+    "@sentry/react-native": "4.9.0"
   },
   "devDependencies": {
     "@babel/core": "^7.12.9",

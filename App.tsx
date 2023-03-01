@@ -27,7 +27,7 @@ axios.defaults.headers.common["Accept"] = "application/json";
 
 export default function App() {
   useEffect(() => {
-    // initializeSentry();
+    initializeSentry();
   }, []);
 
   // prevent screens UI going under the screen header

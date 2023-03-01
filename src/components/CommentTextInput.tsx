@@ -77,8 +77,8 @@ const CommentTextInput = (props: Props) => {
 
 	return (
 		<KeyboardAvoidingView behavior={props.keyboardAvoidBehavior} enabled={isKeyboardShown}>
-			<VStack style={styles.bottomForm} space={1}>
-				<HStack display={isOnReplyMode? "flex" : "none"}>
+			<VStack pt={isOnReplyMode? 0 : 3} style={styles.bottomForm} space={1}>
+				<HStack alignItems="center" display={isOnReplyMode? "flex" : "none"}>
 					<Text style={styles.whiteText}>Replying to: {userNameToReplyTo} · </Text>
 					<Pressable onPress={() => setIsOnReplyMode(false)}>
 						<Text style={styles.cancelReply}>Cancel</Text>
@@ -95,7 +95,7 @@ const CommentTextInput = (props: Props) => {
 						keyboardType="default"
 						onChangeText={(text) => setText(text)}
 					/>
-					<Pressable disabled={text === "" ? true : false} onPress={isOnReplyMode ? replyToComment : addNewComment}>
+					<Pressable style={styles.sendComment} disabled={text === "" ? true : false} onPress={isOnReplyMode ? replyToComment : addNewComment}>
 						<Feather name="send" color={text === "" ? GLOBAL_COLORS.inactiveTextColor : GLOBAL_COLORS.secondaryColor} size={20} />
 					</Pressable>
 				</HStack>
@@ -108,15 +108,14 @@ export default CommentTextInput
 
 const styles = StyleSheet.create({
 	bottomForm: {
-		padding: 12,
+		paddingHorizontal: 12,
+		paddingBottom: 12,
 		backgroundColor: GLOBAL_COLORS.headerBasicBg,
 		width: Dimensions.get("window").width,
 	},
 	inputContainer: {
 		alignItems: "center",
 		backgroundColor: GLOBAL_COLORS.headerBasicBg,
-		
-		justifyContent: "space-between"
 	},
 	textInput: {
 		backgroundColor: "white",
@@ -125,9 +124,15 @@ const styles = StyleSheet.create({
 		width: "90%"
 	},
 	cancelReply: {
-		color: GLOBAL_COLORS.secondaryColor
+		color: GLOBAL_COLORS.secondaryColor,
+		padding: 8
 	},
 	whiteText: {
 		color: "white",
 	},
+	sendComment: {
+		width: "10%",
+		alignItems: "center",
+		paddingVertical: 4,
+	}
 })

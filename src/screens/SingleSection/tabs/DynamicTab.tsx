@@ -64,7 +64,7 @@ const DynamicTab = ({ id: selectionId, tabCategory }) => {
         <MasonrySkeleton />
       ) : (
         <MasonryFlashList
-          data={data} // will change tomorrow to data since the api have a problem
+          data={data}
           numColumns={2}
           onEndReachedThreshold={0.01} // always make this default to 0.01 to have no bug for fetching data for the onEndReached -> https://github.com/facebook/react-native/issues/14015#issuecomment-346547942
           onMomentumScrollBegin={() => setStartScroll(false)}

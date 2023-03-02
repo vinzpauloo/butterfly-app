@@ -1,10 +1,9 @@
 import { StyleSheet } from "react-native";
 import React, { useState } from "react";
 
-import FeedList from "layouts/FeedList";
-import { feedListData } from "data/feedListData";
-import { Feeds as FeedsAPI } from "hooks/useFeeds";
+import CommentListSkeleton from "components/skeletons/CommentListSkeleton";
 import Feeds from "components/feed/Feeds";
+import { Feeds as FeedsAPI } from "hooks/useFeeds";
 import { useQuery } from "@tanstack/react-query";
 
 const Moment = ({ userId }) => {
@@ -27,8 +26,11 @@ const Moment = ({ userId }) => {
       setData(data.data);
     },
   });
-  // return <FeedList feedListData={feedListData} />;
-  if (isLoading) null;
+
+  if (isLoading) {
+    return <CommentListSkeleton />;
+  }
+
   return <Feeds data={data} />;
 };
 

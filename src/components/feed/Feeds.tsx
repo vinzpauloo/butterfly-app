@@ -6,9 +6,6 @@ import Container from "components/Container";
 const Feeds = ({ data }) => {
   return (
     <Container>
-      {/* <ScrollView style={{ flex: 1 }}>
-        <FeedContent />
-      </ScrollView> */}
       <VirtualizedList
         data={data}
         initialNumToRender={data.length}

@@ -6,21 +6,29 @@ import {
   Text,
   View,
 } from "react-native";
-import React from "react";
-import { GLOBAL_COLORS } from "global";
-import { FlashList, MasonryFlashList } from "@shopify/flash-list";
+import React, { useState } from "react";
+
+import { MasonryFlashList } from "@shopify/flash-list";
 import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons";
+import { Button, Modal, Text as TextBase, VStack } from "native-base";
+
 import VideoPlayer from "components/VideoPlayer";
+import CustomModal from "components/CustomModal";
+import { GLOBAL_COLORS } from "global";
 import { useNavigation } from "@react-navigation/native";
+import FeedContentLikeBtn from "./FeedContentLikeBtn";
 
 const { height, width } = Dimensions.get("window");
 
-const Header = ({ user, userId }) => {
+const Header = ({ user, userId, setOpen }) => {
   const navigation = useNavigation<any>();
   const navigateSingleUser = () => {
     navigation.navigate(`SingleUser`, {
       id: userId,
     });
+  };
+  const openVIPModal = () => {
+    setOpen(true);
   };
   return (
     <View style={styles.headerContainer}>
@@ -28,19 +36,22 @@ const Header = ({ user, userId }) => {
         <Image source={{ uri: user.photo }} style={styles.profilePhoto} />
         <Text style={styles.username}>{user.username}</Text>
       </Pressable>
-      <Pressable style={styles.privateBtn}>
+      <Pressable style={styles.privateBtn} onPress={openVIPModal}>
         <Text style={styles.privateText}>私信</Text>
       </Pressable>
     </View>
   );
 };
 
-const Captions = ({ tags, story }) => {
+const Captions = ({ tags, story, id }) => {
   const navigation = useNavigation<any>();
   const navigateSingleTag = (tag) => {
     navigation.navigate(`SingleTag`, {
       tag: tag,
     });
+  };
+  const navigateSingleFeed = () => {
+    navigation.navigate("SingleFeedScreen", { feedId: id });
   };
   return (
     <View style={styles.captionContainer}>
@@ -51,7 +62,9 @@ const Captions = ({ tags, story }) => {
           </Pressable>
         ))}
       </View>
-      <Text style={styles.contentText}>{story}</Text>
+      <Pressable onPress={navigateSingleFeed}>
+        <Text style={styles.contentText}>{story}</Text>
+      </Pressable>
     </View>
   );
 };
@@ -102,8 +115,12 @@ const Video = ({ url }) => {
   return <VideoPlayer url={url} isFocus={false} />;
 };
 
-const BottomContent = ({ totalComments, totalLikes }) => {
+const BottomContent = ({ totalComments, totalLikes, id }) => {
   const navigation = useNavigation<any>();
+  const navigateSingleFeed = () => {
+    navigation.navigate("SingleFeedScreen", { feedId: id });
+  };
+
   return (
     <View style={styles.bottomContentContainer}>
       <Pressable
@@ -116,39 +133,65 @@ const BottomContent = ({ totalComments, totalLikes }) => {
           color={GLOBAL_COLORS.inactiveTextColor}
         />
       </Pressable>
-      <View style={styles.bottomItem}>
+      <Pressable style={styles.bottomItem} onPress={navigateSingleFeed}>
         <MaterialCommunityIcons
           name="comment-processing-outline"
           size={20}
           color={GLOBAL_COLORS.inactiveTextColor}
         />
         <Text style={styles.bottomText}>{totalComments}</Text>
-      </View>
-      <View style={styles.bottomItem}>
+      </Pressable>
+      {/* <View style={styles.bottomItem}>
         <MaterialCommunityIcons
           name="heart-outline"
           size={20}
           color={GLOBAL_COLORS.inactiveTextColor}
         />
         <Text style={styles.bottomText}>{totalLikes}</Text>
-      </View>
+      </View> */}
+      <FeedContentLikeBtn totalLikes={totalLikes} id={id} />
     </View>
+  );
+};
+
+const Content = ({ setOpen }) => {
+  return (
+    <Modal.Content bgColor={GLOBAL_COLORS.headerBasicBg}>
+      <Modal.CloseButton />
+      <Modal.Body>
+        <VStack space={8} alignItems="center" margin={0} py={5}>
+          <TextBase color="white">Upgrade membership first!</TextBase>
+          <Button
+            size="sm"
+            style={styles.button}
+            onPress={() => setOpen(false)}
+          >
+            Purchase VIP
+          </Button>
+        </VStack>
+      </Modal.Body>
+    </Modal.Content>
   );
 };
 
 const FeedContent = ({ data }) => {
   const { item } = data;
+  const [open, setOpen] = useState(false);
 
   return (
     <View style={styles.mainContainer}>
-      <Header user={item.user} userId={item.user_id} />
-      <Captions tags={item.tags} story={item.string_story} />
+      <Header user={item.user} userId={item.user_id} setOpen={setOpen} />
+      <Captions tags={item.tags} story={item.string_story} id={item._id} />
       {!!item?.images && <Images images={item?.images} />}
       {!!item?.videos && <Video url={item?.videos[0].url} />}
       <BottomContent
         totalComments={item.comment.total_comments}
         totalLikes={item.like.total_likes}
+        id={item._id}
       />
+      <CustomModal open={open} setOpen={setOpen}>
+        <Content setOpen={setOpen} />
+      </CustomModal>
     </View>
   );
 };
@@ -240,5 +283,11 @@ const styles = StyleSheet.create({
   bottomText: {
     color: GLOBAL_COLORS.inactiveTextColor,
     marginHorizontal: 3,
+  },
+  //CONTENT
+  button: {
+    backgroundColor: GLOBAL_COLORS.secondaryColor,
+    borderRadius: 20,
+    width: 120,
   },
 });

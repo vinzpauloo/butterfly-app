@@ -11,31 +11,23 @@ import { GLOBAL_COLORS } from "global";
 import { FlashList, MasonryFlashList } from "@shopify/flash-list";
 import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons";
 import VideoPlayer from "components/VideoPlayer";
-
-const profile =
-  "http://192.168.50.9/storage/resources/images/customer/Zetsuen-No-Tempest.png";
-
-const images = [
-  profile,
-  profile,
-  profile,
-  profile,
-  profile,
-  profile,
-  profile,
-  //   profile,
-  //   profile,
-];
+import { useNavigation } from "@react-navigation/native";
 
 const { height, width } = Dimensions.get("window");
 
-const Header = ({ user }) => {
+const Header = ({ user, userId }) => {
+  const navigation = useNavigation<any>();
+  const navigateSingleUser = () => {
+    navigation.navigate(`SingleUser`, {
+      id: userId,
+    });
+  };
   return (
     <View style={styles.headerContainer}>
-      <View style={styles.profileContent}>
+      <Pressable style={styles.profileContent} onPress={navigateSingleUser}>
         <Image source={{ uri: user.photo }} style={styles.profilePhoto} />
         <Text style={styles.username}>{user.username}</Text>
-      </View>
+      </Pressable>
       <Pressable style={styles.privateBtn}>
         <Text style={styles.privateText}>私信</Text>
       </Pressable>
@@ -44,13 +36,19 @@ const Header = ({ user }) => {
 };
 
 const Captions = ({ tags, story }) => {
+  const navigation = useNavigation<any>();
+  const navigateSingleTag = (tag) => {
+    navigation.navigate(`SingleTag`, {
+      tag: tag,
+    });
+  };
   return (
     <View style={styles.captionContainer}>
       <View style={styles.tagsContainer}>
         {tags.map((item, index) => (
-          <Text key={index} style={styles.tag}>
-            {item}
-          </Text>
+          <Pressable key={index} onPress={() => navigateSingleTag(item)}>
+            <Text style={styles.tag}>{item}</Text>
+          </Pressable>
         ))}
       </View>
       <Text style={styles.contentText}>{story}</Text>
@@ -105,15 +103,19 @@ const Video = ({ url }) => {
 };
 
 const BottomContent = ({ totalComments, totalLikes }) => {
+  const navigation = useNavigation<any>();
   return (
     <View style={styles.bottomContentContainer}>
-      <View style={styles.bottomItem}>
+      <Pressable
+        style={styles.bottomItem}
+        onPress={() => navigation.navigate("SharingPromotion")}
+      >
         <MaterialCommunityIcons
           name="share"
           size={20}
           color={GLOBAL_COLORS.inactiveTextColor}
         />
-      </View>
+      </Pressable>
       <View style={styles.bottomItem}>
         <MaterialCommunityIcons
           name="comment-processing-outline"
@@ -139,7 +141,7 @@ const FeedContent = ({ data }) => {
 
   return (
     <View style={styles.mainContainer}>
-      <Header user={item.user} />
+      <Header user={item.user} userId={item.user_id} />
       <Captions tags={item.tags} story={item.string_story} />
       {!!item?.images && <Images images={item?.images} />}
       {!!item?.videos && <Video url={item?.videos[0].url} />}

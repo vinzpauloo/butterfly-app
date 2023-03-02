@@ -2,30 +2,14 @@ import { getHeaders } from "lib/cryptoJs";
 import request from "lib/request";
 
 interface IWorkgroupParams {
-  navbar: string;
+  id?: string;
+  navbar?: string;
   page: number;
   paginate: number;
-}
-interface IWorkgroupRecentlyUpdatedParams {
-  id: string;
-  recently_updated: boolean;
-  with: string;
-  paginate: number;
-  page: number;
-}
-interface IWorkgroupMostViewedParams {
-  id: string;
-  most_viewed: boolean;
-  with: string;
-  paginate: number;
-  page: number;
-}
-interface IWorkgroupMostLikedParams {
-  id: string;
-  most_liked: boolean;
-  with: string;
-  paginate: number;
-  page: number;
+  recently_updated?: boolean;
+  most_viewed?: boolean;
+  most_liked?: boolean;
+  with?: string;
 }
 
 const WorkgroupService = () => {
@@ -38,34 +22,7 @@ const WorkgroupService = () => {
     });
   };
 
-  const getRecentlyUpdated = (params: IWorkgroupRecentlyUpdatedParams) => {
-    return request({
-      headers: getHeaders(),
-      url: "/workgroups",
-      method: "GET",
-      params,
-    });
-  };
-
-  const getMostViewed = (params: IWorkgroupMostViewedParams) => {
-    return request({
-      headers: getHeaders(),
-      url: "/workgroups",
-      method: "GET",
-      params,
-    });
-  };
-
-  const getMostLiked = (params: IWorkgroupMostLikedParams) => {
-    return request({
-      headers: getHeaders(),
-      url: "/workgroups",
-      method: "GET",
-      params,
-    });
-  };
-
-  return { getWorkgroup, getRecentlyUpdated, getMostViewed, getMostLiked };
+  return { getWorkgroup };
 };
 
 export default WorkgroupService;

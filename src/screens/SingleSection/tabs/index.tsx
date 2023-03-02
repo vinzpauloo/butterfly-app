@@ -2,10 +2,8 @@ import { StyleSheet, View } from "react-native";
 import React from "react";
 
 import MaterialTopTabs from "layouts/navigators/MaterialTopTabs";
-import MostLiked from "./MostLikes";
-import MostViewed from "./MostViewed";
-import RecentlyUpdated from "./RecentlyUpdated";
 import { useRoute } from "@react-navigation/native";
+import DynamicTab from "./DynamicTab";
 
 const SingleSectionTabContent = ({}) => {
   const routes = useRoute<any>();
@@ -15,15 +13,21 @@ const SingleSectionTabContent = ({}) => {
     screens: [
       {
         name: "最近更新",
-        component: () => <RecentlyUpdated id={routes.params.id} />,
+        component: () => (
+          <DynamicTab id={routes.params.id} tabCategory="recently_updated" />
+        ),
       },
       {
         name: "最多观看",
-        component: () => <MostViewed id={routes.params.id} />,
+        component: () => (
+          <DynamicTab id={routes.params.id} tabCategory="most_viewed" />
+        ),
       },
       {
         name: "最多收藏",
-        component: () => <MostLiked id={routes.params.id} />,
+        component: () => (
+          <DynamicTab id={routes.params.id} tabCategory="most_liked" />
+        ),
       },
     ],
   };

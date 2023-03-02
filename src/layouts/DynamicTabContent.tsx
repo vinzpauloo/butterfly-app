@@ -1,20 +1,21 @@
 import { StyleSheet, View } from "react-native";
 import React, { useState } from "react";
 
+import { useQuery } from "@tanstack/react-query";
+import { FlashList } from "@shopify/flash-list";
+
 import BottomMessage from "components/BottomMessage";
 import Container from "components/Container";
+import Loading from "components/Loading";
+import VideoListSkeleton from "components/skeletons/VideoListSkeleton";
 import CarouselContainer from "features/ads/components/CarouselContainer";
 import DividerContainer from "features/sectionList/components/DividerContainer";
 import HorizontalSlider from "features/sectionList/components/HorizontalSlider";
 import GridVideos from "features/sectionList/components/GridVideos";
-import Loading from "components/Loading";
 import SectionHeader from "features/sectionList/components/SectionHeader";
 import SingleVideo from "features/sectionList/components/SingleVideo";
 import VerticalSlider from "features/sectionList/components/VerticalSlider";
-import VideoListSkeleton from "components/skeletons/VideoListSkeleton";
-import { useQuery } from "@tanstack/react-query";
-import { FlashList } from "@shopify/flash-list";
-import { SubNav } from "hooks/useSubNav";
+import WorkgroupService from "services/api/WorkgroupService";
 
 const LayoutContainer = ({ id, title, dataLength, index, children }) => {
   return (
@@ -68,11 +69,11 @@ const DynamicTabContent = ({ tabTitle }) => {
   const [startScroll, setStartScroll] = useState(true);
   const [page, setPage] = useState(1);
   const [data, setData] = useState([]);
-  const { getWorkGroup } = SubNav();
+  const { getWorkgroup } = WorkgroupService();
   const { isLoading } = useQuery({
     queryKey: [`tabName${tabTitle}`, page],
     queryFn: () =>
-      getWorkGroup({ navbar: tabTitle, paginate: paginate, page: page }),
+      getWorkgroup({ navbar: tabTitle, paginate: paginate, page: page }),
     onError: (error) => {
       console.log(`tabName-${tabTitle}`, error);
     },

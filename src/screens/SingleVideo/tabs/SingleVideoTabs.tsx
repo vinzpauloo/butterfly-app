@@ -8,9 +8,11 @@ import GridVideos from "features/sectionList/components/GridVideos";
 import StickyTabs from "layouts/StickyTabs";
 import { Header } from "./Header";
 import { Work } from "hooks/useWork";
-import CommentListSkeleton from "components/skeletons/CommentListSkeleton";
 import { useState } from "react";
 import StickyTabsGridVideos from "features/sectionList/components/StickyTabsGridVideos";
+import CommentTextInput from "components/CommentTextInput";
+import Container from "components/Container";
+import { Tab, Tabs } from "react-native-collapsible-tab-view";
 
 const OthersLayout = ({ userId }) => {
   const [page, setPage] = useState(1);
@@ -85,25 +87,6 @@ const RecommendedData = ({ recommendedData, id }) => {
   );
 };
 
-const CommentListLayout = () => {
-  const route = useRoute<any>();
-  const { getWorkComments } = Work();
-  const { data, isLoading } = useQuery({
-    queryKey: ["workComments", route.params.id],
-    queryFn: () =>
-      getWorkComments({ foreign_id: route.params.id, skip: 0, limit: 5 }),
-    onError: () => {
-      //error handler
-    },
-  });
-
-  if (isLoading) {
-    return <CommentListSkeleton />;
-  }
-
-  return <CommentList data={data} />;
-};
-
 const SingleVideoTab = ({ data }) => {
   const route = useRoute<any>();
 
@@ -125,7 +108,15 @@ const SingleVideoTab = ({ data }) => {
       {
         name: "TabComments",
         label: "评论",
-        Content: <CommentListLayout />,
+        Content: (
+            <Container>
+            <Tabs.ScrollView accessibilityComponentType={undefined} accessibilityTraits={undefined}>
+                <CommentList workID={data._id} />
+              </Tabs.ScrollView>
+              <CommentTextInput workID={data._id} keyboardAvoidBehavior="position" />
+            </Container>
+
+        ),
       },
     ],
   };

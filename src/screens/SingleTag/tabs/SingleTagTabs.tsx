@@ -16,13 +16,11 @@ const SingleTagTabs = () => {
     screens: [
       {
         name: "推荐",
-        component: () => (
-          <Recommended tag={route.params.tag} userId={route.params.userId} />
-        ),
+        component: () => <Recommended tag={route.params.tag} />,
       },
       {
         name: "动态",
-        component: () => <Moment />,
+        component: () => <Moment userId={route.params.userId} />,
       },
     ],
   };

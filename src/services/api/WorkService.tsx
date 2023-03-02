@@ -9,6 +9,7 @@ interface IWorksParams {
   tag?: string;
   user_id?: number;
   with?: string;
+  paginate?: number;
 }
 
 interface IWorkFollowing {

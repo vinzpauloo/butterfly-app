@@ -11,27 +11,26 @@ import Loading from "components/Loading";
 import MasonrySkeleton from "components/skeletons/MasonrySkeleton";
 import { Video } from "features/sectionList/components/GridVideos";
 import { GLOBAL_COLORS } from "global";
-import { Work } from "hooks/useWork";
+import WorkService from "services/api/WorkService";
 
-const Recommended = ({ tag, userId, isFollowingScreen = false }) => {
+const Recommended = ({ tag, isFollowingScreen = false }) => {
   const { isOpen, onOpen, onClose } = useDisclose();
   const [id, setId] = useState<number | null>(null);
   const [page, setPage] = useState(1);
   const [data, setData] = useState([]);
   const [lastPage, setLastPage] = useState(1);
   const [startScroll, setStartScroll] = useState(true);
-  const { getWorkRecommended } = Work();
+  const { getWorks } = WorkService();
 
   const { isLoading } = useQuery({
     queryKey: ["recommendedSingleTag", tag, page],
     queryFn: () =>
-      getWorkRecommended({
+      getWorks({
         tag,
         with: "user",
         ads: false,
         page: page,
         paginate: 20,
-        user_id: userId,
       }),
     onSuccess: (data) => {
       setLastPage(data.last_page);

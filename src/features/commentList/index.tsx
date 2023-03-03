@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { StyleSheet, Text, View } from "react-native";
 import { Divider } from "native-base";
 import { FlashList } from "@shopify/flash-list";
@@ -8,10 +8,9 @@ import BottomMessage from "components/BottomMessage";
 import CommentsService from "services/api/CommentsService";
 import CommentListSkeleton from "../../components/skeletons/CommentListSkeleton";
 
-import { commentGlobalStore } from "../../zustand/commentGlobalStore"
-
 import { GLOBAL_COLORS } from "global";
 import { useQuery } from "@tanstack/react-query";
+import { commentGlobalStore } from "../../zustand/commentGlobalStore";
 
 type CommentListProps = {
 	isFromFeed?: boolean
@@ -20,63 +19,48 @@ type CommentListProps = {
 }
 
 const CommentList = (props: CommentListProps) => {
-	// PAGINATION WIP
-	// const [hasNextPage, setHasNextPage] = useState(false);
-	// const [commentPage, setCommentPage] = useState(1);
-	// const [data, setData] = useState([]);
-	// const [totalComments, setTotalComments] = useState(0);
-
+	const [amountOfCommentsToGet, setAmountOfCommentsToGet] = useState(10);
+	const commentListRef = useRef<any>()
 	const { getComments } = CommentsService();
 	const { isLoading, refetch, data } = useQuery({
 		queryKey: ["workComments", props.workID],
 		queryFn: () => getComments({
 			foreign_id: props.workID,
-			paginate: 30,
+			paginate: amountOfCommentsToGet,
 			type: "comments",
-			page: 1,
-			// comment_id: 6c69d875-3a1e-4a6b-a290-62cd5917629d (if reply)
 		}),
-		onSuccess: (data) => {
+		onSuccess: () => {
 			console.log("=== commentlist fetched from backend! ===")
-
-			// PAGINATION WIP
-			// setData((prev) => [...prev].concat(data?.data));
-			// setTotalComments(data?.total)
-			// data?.next_page_url ? setHasNextPage(true) : setHasNextPage(false)
 		},
 		onError: (error) => {
-			console.log("Error", error);
+			alert(error);
 		},
-		// enabled: isOpen,
 	});
 
-	// this should be inside comment text input (WIP)
-	// subscribe to comment global store
-	const [setGlobalTextInputRef, setIsOnReplyMode, setUserNameToReplyTo, setCommentIDToReplyTo] = commentGlobalStore(
-		(state) => [state.setGlobalTextInputRef, state.setIsOnReplyMode, state.setUserNameToReplyTo, state.setCommentIDToReplyTo],
-	)
-
-	useEffect(() => {
-		return () => {
-			// reset the comment global store on unmount of comment list
-			setGlobalTextInputRef(null)
-			setIsOnReplyMode(false)
-			setUserNameToReplyTo("")
-			setCommentIDToReplyTo("")
-		}
-	},[])
-	
-	function commentListHasReachedEnd() {
-		console.log("fetch new comments")
-
-		// PAGINATION WIP
-		// if (hasNextPage) { setCommentPage((prev) => prev + 1); refetch() }
+	async function increaseCommentsToGet() {
+		setAmountOfCommentsToGet((prev) => prev + 10)
 	}
 
+	function onScrollToEnd() {
+		if (data?.next_page_url !== null) {
+			increaseCommentsToGet().then(() => refetch())
+		}
+	}
+
+	// subscribe to comment global store
+	const [setGlobalCommentListRef] = commentGlobalStore(
+		(state) => [state.setGlobalCommentListRef])
+
+	useEffect(() => {
+		setGlobalCommentListRef(commentListRef)
+		return () => { setGlobalCommentListRef(null) }
+	},[])
+	
 	return (
 		<View style={styles.commentsContainer}>
 			{isLoading ? <CommentListSkeleton/> :
 				<FlashList
+					ref={commentListRef}
 					removeClippedSubviews={true}
 					estimatedItemSize={117}
 					showsVerticalScrollIndicator={false}
@@ -93,8 +77,8 @@ const CommentList = (props: CommentListProps) => {
 							replies={item.replies}
 						/>)}
 					ItemSeparatorComponent={() => <Divider color="#999" style={styles.divider} />}
-					onEndReachedThreshold={0.01}
-					onEndReached={commentListHasReachedEnd}
+					onEndReachedThreshold={0.1}
+					onEndReached={onScrollToEnd}
 				/>}
 		</View>
 	);

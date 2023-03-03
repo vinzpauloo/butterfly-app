@@ -8,7 +8,7 @@ import { TEMPORARY_CUSTOMER_ID } from "react-native-dotenv";
 import Feather from 'react-native-vector-icons/Feather'
 import { commentGlobalStore } from "../zustand/commentGlobalStore"
 
-import { useQuery, useQueryClient } from '@tanstack/react-query'
+import { useQueryClient } from '@tanstack/react-query'
 
 type Props = {
 	workID: string
@@ -22,15 +22,37 @@ const CommentTextInput = (props: Props) => {
 	const textInputRef = useRef<TextInput>()
 
 	// subscribe to comment global store
-	const [isOnReplyMode, setIsOnReplyMode, userNameToReplyTo, commentIDToReplyTo, setGlobalTextInputRef] = commentGlobalStore(
-		(state) => [state.isOnReplyMode, state.setIsOnReplyMode, state.userNameToReplyTo, state.commentIDToReplyTo, state.setGlobalTextInputRef],
-	)
+	const [
+		isOnReplyMode,
+		setIsOnReplyMode,
+		userNameToReplyTo,
+		setUserNameToReplyTo,
+		commentIDToReplyTo,
+		setCommentIDToReplyTo,
+		setGlobalTextInputRef,
+		globalCommentListRef
+	] = commentGlobalStore((state) => [
+			state.isOnReplyMode,
+			state.setIsOnReplyMode,
+			state.userNameToReplyTo,
+			state.setUserNameToReplyTo,
+			state.commentIDToReplyTo,
+			state.setCommentIDToReplyTo,
+			state.setGlobalTextInputRef,
+			state.globalCommentListRef
+	])
 
 	useEffect(() => {
 		setGlobalTextInputRef(textInputRef)
+		return () => {
+			// reset the comment global store on unmount of comment text input
+			setGlobalTextInputRef(null)
+			setIsOnReplyMode(false)
+			setUserNameToReplyTo("")
+			setCommentIDToReplyTo("")
+		}
 	},[])
 	
-
 	Keyboard.addListener("keyboardDidShow", () => setIsKeyboardShown(true))
 	Keyboard.addListener("keyboardDidHide", () => setIsKeyboardShown(false))
 
@@ -42,16 +64,14 @@ const CommentTextInput = (props: Props) => {
 		onSuccess: (data) => {
 			console.log(data)
 			queryClient.invalidateQueries({ queryKey: ["workComments", props.workID] })
-		}, onError: (error) => { console.log(error) },
+		}, onError: (error) => { alert(error) },
 	});
 	const { mutate: mutateReplyComment } = useMutation(replyComment, {
 		onSuccess: (data) => {
 			console.log(data)
 			queryClient.invalidateQueries({ queryKey: ["workComments", props.workID] })
-		}, onError: (error) => { console.log(error) },
+		}, onError: (error) => { alert(error) },
 	});
-
-	
 
 	function addNewComment() {
 		setText("");
@@ -63,6 +83,7 @@ const CommentTextInput = (props: Props) => {
 			comment: text,
 			type: props.isFromFeed? "feed" : "work"
 		})
+		globalCommentListRef.current.scrollToOffset({ animated: true, offset: 0 })
 	}
 
 	function replyToComment() {

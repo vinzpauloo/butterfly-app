@@ -1,49 +1,21 @@
-import { Pressable, StyleSheet, Text, View } from "react-native";
-import React, { useState } from "react";
+import { Pressable, StyleSheet, Text } from "react-native";
+import React, { memo, useEffect, useState } from "react";
 
-import { useMutation, useQuery } from "@tanstack/react-query";
+import { useMutation } from "@tanstack/react-query";
 import { TEMPORARY_CUSTOMER_ID } from "react-native-dotenv";
 
 import { GLOBAL_COLORS } from "global";
 import LikeService from "services/api/LikeService";
 import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons";
-import { useIsFocused } from "@react-navigation/native";
 
-const FeedContentLikeBtn = ({ totalLikes, id }) => {
-  const isFocus = useIsFocused();
-  const { likeWork, unlikeWork, likeChecker, likesCount } = LikeService();
+const FeedContentLikeBtn = ({ totalLikes, id, customerLikes }) => {
+  const { likeWork, unlikeWork } = LikeService();
   const [isAlreadyLike, setIsAlreadyLike] = useState(false);
   const [likeCount, setLikeCount] = useState(totalLikes);
 
-  // like checker
-  const { isLoading } = useQuery({
-    queryKey: ["likeChecker", id],
-    queryFn: () =>
-      likeChecker({
-        foreign_id: id,
-        customer_id: TEMPORARY_CUSTOMER_ID, // CHANGE LATER
-      }),
-    onSuccess: (data) => {
-      setIsAlreadyLike(data);
-    },
-    onError: (error) => {
-      console.log("postLikeChecker", error);
-    },
-  });
-
-  //   //like count
-  //   const { isLoading: likeCountIsLoading } = useQuery({
-  //     queryKey: ["likeCount", id],
-  //     queryFn: () => likesCount({ foreign_id: id }),
-  //     onSuccess: (data) => {
-  //       console.log("count", data);
-
-  //       setLikeCount(data);
-  //     },
-  //     onError: (error) => {
-  //       console.log("postLikeCount", error);
-  //     },
-  //   });
+  useEffect(() => {
+    setIsAlreadyLike(customerLikes.includes(TEMPORARY_CUSTOMER_ID));
+  }, [customerLikes]);
 
   // for like
   const { mutate: mutateLike } = useMutation(likeWork, {
@@ -110,7 +82,7 @@ const FeedContentLikeBtn = ({ totalLikes, id }) => {
   );
 };
 
-export default FeedContentLikeBtn;
+export default memo(FeedContentLikeBtn);
 
 const styles = StyleSheet.create({
   bottomItem: {

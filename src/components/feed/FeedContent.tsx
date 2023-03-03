@@ -127,7 +127,7 @@ const Video = ({ url }) => {
   return <VideoPlayer url={url} isFocus={false} />;
 };
 
-const BottomContent = ({ totalComments, totalLikes, id }) => {
+const BottomContent = ({ totalComments, totalLikes, id, customerLikes }) => {
   const navigation = useNavigation<any>();
   const navigateSingleFeed = () => {
     navigation.navigate("SingleFeedScreen", { feedId: id });
@@ -153,7 +153,11 @@ const BottomContent = ({ totalComments, totalLikes, id }) => {
         />
         <Text style={styles.bottomText}>{totalComments}</Text>
       </Pressable>
-      <FeedContentLikeBtn totalLikes={totalLikes} id={id} />
+      <FeedContentLikeBtn
+        totalLikes={totalLikes}
+        id={id}
+        customerLikes={customerLikes}
+      />
     </View>
   );
 };
@@ -190,6 +194,7 @@ const FeedContent = ({ data }) => {
       {!!item?.videos && <Video url={item?.videos[0].url} />}
       <BottomContent
         totalComments={item.comment.total_comments}
+        customerLikes={item.like.likes}
         totalLikes={item.like.total_likes}
         id={item._id}
       />

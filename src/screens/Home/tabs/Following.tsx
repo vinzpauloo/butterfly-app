@@ -10,7 +10,6 @@ import {
 } from "react-native";
 import React, { useCallback, useState } from "react";
 
-import Entypo from "react-native-vector-icons/Entypo";
 import { TEMPORARY_CUSTOMER_ID } from "react-native-dotenv";
 import { Center, useDisclose } from "native-base";
 import { MasonryFlashList } from "@shopify/flash-list";
@@ -22,7 +21,6 @@ import Container from "components/Container";
 import CustomerService from "services/api/CustomerService";
 import DividerContainer from "features/sectionList/components/DividerContainer";
 import Loading from "components/Loading";
-import MasonrySkeleton from "components/skeletons/MasonrySkeleton";
 import Modal from "components/BottomModal";
 import NoFollowingImg from "assets/images/nofollowing.png";
 import VideoListSkeleton from "components/skeletons/VideoListSkeleton";
@@ -160,7 +158,7 @@ const NoFollowing = ({
     <ScrollView
       refreshControl={
         <RefreshControl
-          colors={["#e15655"]}
+          colors={[GLOBAL_COLORS.secondaryColor]}
           refreshing={refreshing}
           onRefresh={onRefresh}
         />
@@ -264,7 +262,7 @@ const Follow = ({
       <MasonryFlashList
         refreshControl={
           <RefreshControl
-            colors={["#e15655"]}
+            colors={[GLOBAL_COLORS.secondaryColor]}
             refreshing={refreshing}
             onRefresh={onRefresh}
           />
@@ -318,7 +316,7 @@ const Following = () => {
     queryFn: () =>
       getWorkFollowing({
         following_only: true,
-        customer_id: "98914c9b-294b-4fa2-a593-06f1ec8a0c7b", //id for no following -> 98914c9b-294b-4fa2-a593-06f1ec8a0c7b
+        customer_id: "9896c8d2-81c1-4d38-8049-ecf2401bde0d", //id for no following -> 98914c9b-294b-4fa2-a593-06f1ec8a0c7b
         page: page,
         paginate: 8,
       }),

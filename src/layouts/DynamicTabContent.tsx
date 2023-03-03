@@ -89,6 +89,7 @@ const DynamicTabContent = ({ tabTitle }) => {
   });
 
   const onRefresh = useCallback(() => {
+    setStartScroll(true);
     setRefreshing(true);
     setTimeout(() => {
       setData([]);

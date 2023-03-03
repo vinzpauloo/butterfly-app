@@ -17,6 +17,7 @@ import CustomModal from "components/CustomModal";
 import { GLOBAL_COLORS } from "global";
 import { useNavigation } from "@react-navigation/native";
 import FeedContentLikeBtn from "./FeedContentLikeBtn";
+import Fontisto from "react-native-vector-icons/Fontisto";
 
 const { height, width } = Dimensions.get("window");
 
@@ -146,9 +147,9 @@ const BottomContent = ({ totalComments, totalLikes, id, customerLikes }) => {
         />
       </Pressable>
       <Pressable style={styles.bottomItem} onPress={navigateSingleFeed}>
-        <MaterialCommunityIcons
-          name="comment-processing-outline"
-          size={20}
+        <Fontisto
+          name="commenting"
+          size={16}
           color={GLOBAL_COLORS.inactiveTextColor}
         />
         <Text style={styles.bottomText}>{totalComments}</Text>

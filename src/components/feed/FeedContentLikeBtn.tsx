@@ -1,21 +1,23 @@
 import { Pressable, StyleSheet, Text } from "react-native";
 import React, { memo, useEffect, useState } from "react";
 
-import { useMutation } from "@tanstack/react-query";
+import { useIsFetching, useMutation } from "@tanstack/react-query";
 import { TEMPORARY_CUSTOMER_ID } from "react-native-dotenv";
 
 import { GLOBAL_COLORS } from "global";
 import LikeService from "services/api/LikeService";
 import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons";
+import AntDesign from "react-native-vector-icons/AntDesign";
 
 const FeedContentLikeBtn = ({ totalLikes, id, customerLikes }) => {
+  const isFocused = useIsFetching();
   const { likeWork, unlikeWork } = LikeService();
   const [isAlreadyLike, setIsAlreadyLike] = useState(false);
   const [likeCount, setLikeCount] = useState(totalLikes);
 
   useEffect(() => {
     setIsAlreadyLike(customerLikes.includes(TEMPORARY_CUSTOMER_ID));
-  }, [customerLikes]);
+  }, [isFocused]);
 
   // for like
   const { mutate: mutateLike } = useMutation(likeWork, {
@@ -68,10 +70,10 @@ const FeedContentLikeBtn = ({ totalLikes, id, customerLikes }) => {
 
   return (
     <Pressable style={styles.bottomItem} onPress={handleLike}>
-      <MaterialCommunityIcons
-        name="heart-outline"
+      <AntDesign
+        name="heart"
         color={changeButtonColor(isAlreadyLike)}
-        size={20}
+        size={15}
       />
       <Text
         style={[styles.bottomText, { color: changeButtonColor(isAlreadyLike) }]}

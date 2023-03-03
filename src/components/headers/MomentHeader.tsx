@@ -1,47 +1,51 @@
 import React from "react";
 import { StyleSheet, Text, View, Pressable } from "react-native";
+
 import { HStack, Divider } from "native-base";
 import { useNavigation } from "@react-navigation/native";
-
-import {useQuery} from "@tanstack/react-query";
-
-import { GLOBAL_COLORS } from "global";
-
-import {Feeds} from "hooks/useFeeds";
+import { useQuery } from "@tanstack/react-query";
 
 import MomentHeaderSkeleton from "components/skeletons/MomentHeaderSkeleton";
+import { GLOBAL_COLORS } from "global";
+import { Feeds } from "hooks/useFeeds";
 
-type Props = {};
-
-const MomentHeader = (props: Props) => {
+const MomentHeader = () => {
   const navigation = useNavigation<any>();
+  const { getFeeds } = Feeds();
+  const { data, isLoading } = useQuery({
+    queryKey: ["featuredFeeds"],
+    queryFn: () => getFeeds({ featured: true, site_id: 1 }),
+  });
 
-  const {getFeeds} = Feeds();
-  const {data, isLoading} = useQuery({
-    queryKey:['featuredFeeds'],
-    queryFn: () => getFeeds({featured: true, site_id: 1})
-  })
-  if(isLoading){
+  if (isLoading) {
     return (
-        <View style={styles.certificateContainer}>
-          <MomentHeaderSkeleton />
-        </View>
-    )
+      <View style={styles.certificateContainer}>
+        <MomentHeaderSkeleton />
+      </View>
+    );
   }
 
   return (
-      <View style={styles.certificateContainer}>
-        {data.featured.map((item, index) =>
-            <Pressable key={index} onPress={() => navigation.navigate("SingleFeedScreen", { postTitle: "详情" })}>
-              <HStack space={2} alignItems="center" marginRight={5}>
-                <View style={styles.dot}></View>
-                <Text style={styles.whiteText} numberOfLines={1}>{item.title}</Text>
-              </HStack>
-              {index === data.featured.length - 1 ? null
-                  : <Divider style={styles.divider} color="#999" />}
-            </Pressable>
-        )}
-      </View>
+    <View style={styles.certificateContainer}>
+      {data.featured.map((item, index) => (
+        <Pressable
+          key={index}
+          onPress={() =>
+            navigation.navigate(`SingleFeedScreen`, { feedId: item?.feed_id })
+          }
+        >
+          <HStack space={2} alignItems="center" marginRight={5}>
+            <View style={styles.dot}></View>
+            <Text style={styles.whiteText} numberOfLines={1}>
+              {item.title}
+            </Text>
+          </HStack>
+          {index === data.featured.length - 1 ? null : (
+            <Divider style={styles.divider} color="#999" />
+          )}
+        </Pressable>
+      ))}
+    </View>
   );
 };
 

@@ -8,15 +8,15 @@ import {
   useRoute,
 } from "@react-navigation/native";
 import Ionicons from "react-native-vector-icons/Ionicons";
-
-import SingleVideoTab from "screens/SingleVideo/tabs/SingleVideoTabs";
-import VideoPlayer from "components/VideoPlayer";
-import { GLOBAL_COLORS } from "global";
-import { Follow } from "hooks/commonActoins/useFollow";
-import { SubNav } from "hooks/useSubNav";
 import { TEMPORARY_CUSTOMER_ID } from "react-native-dotenv";
+
+import VideoPlayer from "components/VideoPlayer";
 import VideoListSkeleton from "components/skeletons/VideoListSkeleton";
 import CarouselSkeleton from "components/skeletons/CarouselSkeleton";
+import { GLOBAL_COLORS } from "global";
+import { Follow } from "hooks/commonActoins/useFollow";
+import SingleVideoTab from "screens/SingleVideo/tabs/SingleVideoTabs";
+import WorkService from "services/api/WorkService";
 
 const HeaderTitle = () => {
   const { postFollowCreator, postFollowChecker } = Follow();
@@ -93,13 +93,13 @@ const HeaderTitle = () => {
 };
 
 const SingleVideoScreen = () => {
-  const { getWork } = SubNav();
+  const { getWorkById } = WorkService();
   const route = useRoute<any>();
   const isFocus = useIsFocused();
 
   const { data, isLoading } = useQuery({
     queryKey: ["workSingleVideoScreen", route.params.id],
-    queryFn: () => getWork(route.params.id),
+    queryFn: () => getWorkById(route.params.id),
     onError: (error) => {
       //error handler
       console.log("workSingleVideo", error);

@@ -12,15 +12,19 @@ import { useState } from "react";
 import StickyTabsGridVideos from "features/sectionList/components/StickyTabsGridVideos";
 import CommentTextInput from "components/CommentTextInput";
 import Container from "components/Container";
-import { Tab, Tabs } from "react-native-collapsible-tab-view";
+import { Tabs } from "react-native-collapsible-tab-view";
 
 const OthersLayout = ({ userId }) => {
   const [page, setPage] = useState(1);
   const [data, setData] = useState([]);
   const [lastPage, setLastPage] = useState(1);
+  const [refreshing, setRefreshing] = useState(false);
+  const [refreshingId, setRefreshingId] = useState(0);
+
   const { getWorkAll } = Work();
+
   const { isLoading } = useQuery({
-    queryKey: ["allWork", userId, page],
+    queryKey: ["allWork", userId, page, refreshingId],
     queryFn: () =>
       getWorkAll({
         user_id: userId,
@@ -43,6 +47,10 @@ const OthersLayout = ({ userId }) => {
     <StickyTabsGridVideos
       isLoading={isLoading}
       page={page}
+      refreshing={refreshing}
+      setData={setData}
+      setRefreshing={setRefreshing}
+      setRefreshingId={setRefreshingId}
       setPage={setPage}
       lastPage={lastPage}
       layout={<GridVideos data={data} />}
@@ -54,9 +62,12 @@ const RecommendedData = ({ recommendedData, id }) => {
   const [page, setPage] = useState(1);
   const [data, setData] = useState([]);
   const [lastPage, setLastPage] = useState(1);
+  const [refreshing, setRefreshing] = useState(false);
+  const [refreshingId, setRefreshingId] = useState(0);
   const { getWorkRecommended } = Work();
+
   const { isLoading } = useQuery({
-    queryKey: ["recommendedSingleVideo", id, page],
+    queryKey: ["recommendedSingleVideo", id, page, refreshingId],
     queryFn: () =>
       getWorkRecommended({
         tags: recommendedData.tags.toString(),
@@ -80,6 +91,10 @@ const RecommendedData = ({ recommendedData, id }) => {
     <StickyTabsGridVideos
       isLoading={isLoading}
       page={page}
+      refreshing={refreshing}
+      setData={setData}
+      setRefreshing={setRefreshing}
+      setRefreshingId={setRefreshingId}
       setPage={setPage}
       lastPage={lastPage}
       layout={<GridVideos data={data} />}
@@ -109,11 +124,25 @@ const SingleVideoTab = ({ data }) => {
         name: "TabComments",
         label: "评论",
         Content: (
+          {/* TEMPORARY BUGGY UI - FOR NOW COMMENT PAGING SHOULD WORK */}
+          {/*
           <Tabs.Tab name="asd">
-            {/* TEMPORARY BUGGY UI - FOR NOW COMMENT PAGING SHOULD WORK */}
             <CommentList workID={data._id} />
             <CommentTextInput workID={data._id} keyboardAvoidBehavior="position" />
           </Tabs.Tab>
+          */}
+          <Container>
+            <Tabs.ScrollView
+              accessibilityComponentType={undefined}
+              accessibilityTraits={undefined}
+            >
+              <CommentList workID={data._id} />
+            </Tabs.ScrollView>
+            <CommentTextInput
+              workID={data._id}
+              keyboardAvoidBehavior="position"
+            />
+          </Container>
         ),
       },
     ],

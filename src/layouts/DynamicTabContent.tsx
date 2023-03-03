@@ -1,9 +1,12 @@
-import { StyleSheet, View } from "react-native";
-import React, { useState } from "react";
+import { RefreshControl, StyleSheet, View } from "react-native";
+import React, { useCallback, useState } from "react";
+
+import { useQuery } from "@tanstack/react-query";
+import { FlashList } from "@shopify/flash-list";
 
 import BottomMessage from "components/BottomMessage";
-import Container from "components/Container";
 import CarouselContainer from "features/ads/components/CarouselContainer";
+import Container from "components/Container";
 import DividerContainer from "features/sectionList/components/DividerContainer";
 import HorizontalSlider from "features/sectionList/components/HorizontalSlider";
 import GridVideos from "features/sectionList/components/GridVideos";
@@ -12,9 +15,8 @@ import SectionHeader from "features/sectionList/components/SectionHeader";
 import SingleVideo from "features/sectionList/components/SingleVideo";
 import VerticalSlider from "features/sectionList/components/VerticalSlider";
 import VideoListSkeleton from "components/skeletons/VideoListSkeleton";
-import { useQuery } from "@tanstack/react-query";
-import { FlashList } from "@shopify/flash-list";
-import { SubNav } from "hooks/useSubNav";
+import WorkgroupService from "services/api/WorkgroupService";
+import { GLOBAL_COLORS } from "global";
 
 const LayoutContainer = ({ id, title, dataLength, index, children }) => {
   return (
@@ -68,11 +70,15 @@ const DynamicTabContent = ({ tabTitle }) => {
   const [startScroll, setStartScroll] = useState(true);
   const [page, setPage] = useState(1);
   const [data, setData] = useState([]);
-  const { getWorkGroup } = SubNav();
+  const [refreshing, setRefreshing] = useState(false);
+  const [refreshingId, setRefreshingId] = useState(0);
+
+  const { getWorkgroup } = WorkgroupService();
+
   const { isLoading } = useQuery({
-    queryKey: [`tabName${tabTitle}`, page],
+    queryKey: [`tabName${tabTitle}`, page, refreshingId],
     queryFn: () =>
-      getWorkGroup({ navbar: tabTitle, paginate: paginate, page: page }),
+      getWorkgroup({ navbar: tabTitle, paginate: paginate, page: page }),
     onError: (error) => {
       console.log(`tabName-${tabTitle}`, error);
     },
@@ -81,6 +87,17 @@ const DynamicTabContent = ({ tabTitle }) => {
       setData((prev) => [...prev].concat(data.data));
     },
   });
+
+  const onRefresh = useCallback(() => {
+    setStartScroll(true);
+    setRefreshing(true);
+    setTimeout(() => {
+      setData([]);
+      setPage(1);
+      setRefreshingId((prev) => prev + 1);
+      setRefreshing(false);
+    }, 2000);
+  }, []);
 
   const reachEnd = () => {
     if (startScroll) return null;
@@ -94,10 +111,17 @@ const DynamicTabContent = ({ tabTitle }) => {
 
   return (
     <Container>
-      {isLoading && page === 1 ? (
+      {(isLoading || refreshing) && page === 1 ? (
         <VideoListSkeleton />
       ) : (
         <FlashList
+          refreshControl={
+            <RefreshControl
+              colors={[GLOBAL_COLORS.secondaryColor]}
+              refreshing={refreshing}
+              onRefresh={onRefresh}
+            />
+          }
           data={data}
           onEndReachedThreshold={0.01} // always make this default to 0.01 to have no bug for fetching data for the onEndReached -> https://github.com/facebook/react-native/issues/14015#issuecomment-346547942
           onMomentumScrollBegin={() => setStartScroll(false)}

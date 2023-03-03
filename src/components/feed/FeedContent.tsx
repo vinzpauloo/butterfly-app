@@ -70,6 +70,8 @@ const Captions = ({ tags, story, id }) => {
 };
 
 const Images = ({ images }) => {
+  const navigation = useNavigation<any>();
+
   const columnsCount = (picCount) => {
     switch (picCount) {
       case 1:
@@ -101,11 +103,21 @@ const Images = ({ images }) => {
       numColumns={columnsCount(images.length)}
       data={images}
       renderItem={({ item, index }: any) => (
-        <Image
-          key={index}
-          source={{ uri: item.url }}
-          style={[styles.image, columnImageWidth(images.length)]}
-        />
+        <Pressable
+          onPress={() =>
+            navigation.navigate("PhotoGallery", {
+              imageList: images,
+              fromFeedItem: true,
+              index: index,
+            })
+          }
+        >
+          <Image
+            key={index}
+            source={{ uri: item.url }}
+            style={[styles.image, columnImageWidth(images.length)]}
+          />
+        </Pressable>
       )}
     />
   );
@@ -141,14 +153,6 @@ const BottomContent = ({ totalComments, totalLikes, id }) => {
         />
         <Text style={styles.bottomText}>{totalComments}</Text>
       </Pressable>
-      {/* <View style={styles.bottomItem}>
-        <MaterialCommunityIcons
-          name="heart-outline"
-          size={20}
-          color={GLOBAL_COLORS.inactiveTextColor}
-        />
-        <Text style={styles.bottomText}>{totalLikes}</Text>
-      </View> */}
       <FeedContentLikeBtn totalLikes={totalLikes} id={id} />
     </View>
   );

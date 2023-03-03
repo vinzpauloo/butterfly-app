@@ -52,7 +52,7 @@ const FeedItem = ({item}) => {
 	else if (amountOfImages % 2 === 0) isDoubleContentLayout = true
 
 	return (
-			<VStack p={4} space={2}>
+			<VStack space={2}>
 				<HStack>
 					<Pressable onPress={() => {navigation.navigate(`SingleUser`, {id: item?.user_id,})}}>
 						<HStack space={2} style={styles.top}>

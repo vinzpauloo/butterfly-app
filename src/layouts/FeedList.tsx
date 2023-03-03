@@ -1,5 +1,5 @@
 import React from "react";
-import {Dimensions, StyleSheet, View} from "react-native";
+import { Dimensions, StyleSheet, View } from "react-native";
 import { FlashList } from "@shopify/flash-list";
 
 import FeedItem from "components/FeedItem";
@@ -27,5 +27,6 @@ const styles = StyleSheet.create({
 		flex: 1,
 		width: Dimensions.get('window').width,
 		minHeight: 1000,
+		padding: 12
 	}
 });

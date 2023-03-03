@@ -109,13 +109,11 @@ const SingleVideoTab = ({ data }) => {
         name: "TabComments",
         label: "评论",
         Content: (
-            <Container>
-            <Tabs.ScrollView accessibilityComponentType={undefined} accessibilityTraits={undefined}>
-                <CommentList workID={data._id} />
-              </Tabs.ScrollView>
-              <CommentTextInput workID={data._id} keyboardAvoidBehavior="position" />
-            </Container>
-
+          <Tabs.Tab name="asd">
+            {/* TEMPORARY BUGGY UI - FOR NOW COMMENT PAGING SHOULD WORK */}
+            <CommentList workID={data._id} />
+            <CommentTextInput workID={data._id} keyboardAvoidBehavior="position" />
+          </Tabs.Tab>
         ),
       },
     ],

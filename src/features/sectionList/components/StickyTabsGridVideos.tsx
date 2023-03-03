@@ -43,7 +43,7 @@ const StickyTabsGridVideos = ({
 
   return (
     <Container>
-      {isLoading && page === 1 ? (
+      {(isLoading || refreshing) && page === 1 ? (
         <VideoListSkeleton />
       ) : (
         <Tabs.FlatList

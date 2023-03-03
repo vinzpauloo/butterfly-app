@@ -1,5 +1,5 @@
-import { StyleSheet, View } from "react-native";
-import React, { useState } from "react";
+import { RefreshControl, StyleSheet, View } from "react-native";
+import React, { useCallback, useState } from "react";
 
 import { useDisclose } from "native-base";
 import { useQuery } from "@tanstack/react-query";
@@ -20,10 +20,13 @@ const Recommended = ({ tag, isFollowingScreen = false }) => {
   const [data, setData] = useState([]);
   const [lastPage, setLastPage] = useState(1);
   const [startScroll, setStartScroll] = useState(true);
+  const [refreshing, setRefreshing] = useState(false);
+  const [refreshingId, setRefreshingId] = useState(0);
+
   const { getWorks } = WorkService();
 
   const { isLoading } = useQuery({
-    queryKey: ["recommendedSingleTag", tag, page],
+    queryKey: ["recommendedSingleTag", tag, page, refreshingId],
     queryFn: () =>
       getWorks({
         tag,
@@ -42,6 +45,16 @@ const Recommended = ({ tag, isFollowingScreen = false }) => {
     },
   });
 
+  const onRefresh = useCallback(() => {
+    setRefreshing(true);
+    setTimeout(() => {
+      setData([]);
+      setPage(1);
+      setRefreshingId((prev) => prev + 1);
+      setRefreshing(false);
+    }, 2000);
+  }, []);
+
   const reachEnd = () => {
     if (startScroll) return null;
     if (!isLoading) {
@@ -54,10 +67,17 @@ const Recommended = ({ tag, isFollowingScreen = false }) => {
 
   return (
     <View style={styles.gridVideoContainer}>
-      {isLoading && page === 1 ? (
+      {(isLoading || refreshing) && page === 1 ? (
         <MasonrySkeleton />
       ) : (
         <MasonryFlashList
+          refreshControl={
+            <RefreshControl
+              colors={[GLOBAL_COLORS.secondaryColor]}
+              refreshing={refreshing}
+              onRefresh={onRefresh}
+            />
+          }
           data={data}
           numColumns={2}
           onEndReachedThreshold={0.01} // always make this default to 0.01 to have no bug for fetching data for the onEndReached -> https://github.com/facebook/react-native/issues/14015#issuecomment-346547942

@@ -1,4 +1,4 @@
-import { Pressable, StyleSheet, Text, View } from "react-native";
+import { StyleSheet, Text, TouchableWithoutFeedback, View } from "react-native";
 import React, { useState } from "react";
 
 import { useMutation, useQuery } from "@tanstack/react-query";
@@ -77,17 +77,12 @@ const LikeButton = ({ data, id }) => {
   };
 
   return (
-    <Pressable style={styles.buttonItem} onPress={handleLike}>
-      <AntDesign
-        name="heart"
-        color={changeButtonColor(isAlreadyLike)}
-        size={15}
-        style={styles.icon}
-      />
-      <Text style={[styles.text, { color: changeButtonColor(isAlreadyLike) }]}>
-        {likeCount}
-      </Text>
-    </Pressable>
+    <TouchableWithoutFeedback onPress={handleLike}>
+      <View style={styles.buttonItem} pointerEvents="box-none">
+        <AntDesign name="heart" color={changeButtonColor(isAlreadyLike)} size={15} style={styles.icon}/>
+        <Text style={[styles.text, { color: changeButtonColor(isAlreadyLike)}]}>{likeCount}</Text>
+      </View>
+    </TouchableWithoutFeedback>
   );
 };
 

@@ -30,7 +30,7 @@ const Vlog = (props: Props) => {
         userName: data[0].user.username,
         videoURL: data[0].video_url,
         thumbnailURL: data[0].thumbnail_url,
-        description: data[0].description,
+        title: data[0].title,
         tags: data[0].tags,
         amountOflikes: data[0].like.total_likes,
         amountOfComments: data[0].comment.total_comments,

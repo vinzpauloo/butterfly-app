@@ -33,7 +33,7 @@ type Props = {
   userID: number;
   videoURL: string;
   userName: string;
-  description: string;
+  title: string;
   thumbnail: string;
   tags: string[];
   likes: number;
@@ -131,7 +131,7 @@ const PortraitVideoContent = (props: Props) => {
       <BottomOverlay
         userID={props.userID}
         userName={props.userName}
-        description={props.description}
+        title={props.title}
         tags={props.tags}
       />
       <RightOverlay
@@ -190,7 +190,7 @@ const PortraitVideo: React.FC<PortraitVideoDataType> = ({
             userID={item.userID}
             key={item.id}
             videoURL={item.videoURL}
-            description={item.description}
+            title={item.title}
             userName={item.userName}
             thumbnail={item.thumbnailURL}
             tags={item.tags}

@@ -88,7 +88,7 @@ const VlogScreen = () => {
           userName: data.user.username,
           videoURL: data.video_url,
           thumbnail: data.thumbnail_url,
-          description: data.description,
+          title: data.title,
           tags: data.tags,
           amountOflikes: data.like.total_likes,
           amountOfComments: data.comment.total_comments,

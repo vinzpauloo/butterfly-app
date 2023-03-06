@@ -1,4 +1,4 @@
-import { Pressable, StyleSheet, Text, View } from "react-native";
+import { StyleSheet, Text, TouchableWithoutFeedback, View } from "react-native";
 
 import AntDesign from "react-native-vector-icons/AntDesign";
 import Fontisto from "react-native-vector-icons/Fontisto";
@@ -34,7 +34,7 @@ export const Header = ({ data }) => {
 
   return (
     <>
-      <View style={styles.container}>
+      <View style={styles.container} pointerEvents="box-none">
         <Text style={styles.title}>{data?.title}</Text>
         <View style={styles.watchContent}>
           <View style={styles.item}>
@@ -58,46 +58,32 @@ export const Header = ({ data }) => {
             <Text style={styles.text}>未经作者允许禁止转载</Text>
           </View>
         </View>
-        <View style={styles.tags}>
+        <View style={styles.tags} pointerEvents="box-none">
           {data?.tags.map((item, index) => (
-            <Pressable key={index} onPress={() => handleNavigate(item)}>
+            <TouchableWithoutFeedback key={index} onPress={() => handleNavigate(item)}>
               <Text style={styles.tag}>{item}</Text>
-            </Pressable>
+            </TouchableWithoutFeedback>
           ))}
         </View>
-        <View style={styles.buttonsContent}>
+        <View style={styles.buttonsContent} pointerEvents="box-none">
           <LikeButton data={data} id={route.params.id} />
           <FavoriteButton id={route.params.id} />
           <View style={[styles.buttonItem, { flexDirection: "column" }]}>
-            <Zocial
-              name="bitcoin"
-              color="#ff9900"
-              size={18}
-              style={styles.icon}
-            />
+            <Zocial name="bitcoin" color="#ff9900" size={18} style={styles.icon}/>
             <Text style={[styles.text, { marginVertical: 3 }]}>22金币</Text>
           </View>
-          <Pressable onPress={testDownload} style={styles.buttonItem}>
-            <MaterialCommunityIcons
-              name="download"
-              color="#999"
-              size={18}
-              style={styles.icon}
-            />
-            <Text style={styles.text}>下载</Text>
-          </Pressable>
-          <Pressable
-            style={styles.buttonItem}
-            onPress={() => navigation.navigate("SharingPromotion")}
-          >
-            <Fontisto
-              name="share-a"
-              color="#999"
-              size={15}
-              style={styles.icon}
-            />
-            <Text style={styles.text}>分享</Text>
-          </Pressable>
+          <TouchableWithoutFeedback onPress={testDownload}>
+            <View style={styles.buttonItem} pointerEvents="box-none">
+              <MaterialCommunityIcons name="download" color="#999" size={18} style={styles.icon}/>
+              <Text style={styles.text}>下载</Text>
+            </View>
+          </TouchableWithoutFeedback>
+          <TouchableWithoutFeedback onPress={() => navigation.navigate("SharingPromotion")}>
+            <View style={styles.buttonItem} pointerEvents="box-none">
+              <Fontisto name="share-a" color="#999" size={15} style={styles.icon}/>
+              <Text style={styles.text}>分享</Text>
+            </View>
+          </TouchableWithoutFeedback>
         </View>
       </View>
       <BannerAds />

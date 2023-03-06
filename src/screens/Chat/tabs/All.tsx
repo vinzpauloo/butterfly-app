@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import { StyleSheet, Text, View } from "react-native";
 import { FlashList } from "@shopify/flash-list";
 import { VStack, Skeleton, HStack } from "native-base";
@@ -7,7 +7,8 @@ import Container from "components/Container";
 import UserProfilePicList from "features/sectionList/components/UserProfilePicList";
 import BottomMessage from "components/BottomMessage";
 
-import { allChatCategories } from "data/allChatCategories";
+import { useQuery } from "@tanstack/react-query";
+import ModelGroupService from "services/api/ModelGroupService";
 
 type Props = {};
 
@@ -74,33 +75,36 @@ const UserProfilePicListSkeleton = () => {
 }
 
 const All = (props: Props) => {
-  const [profilePicListIsLoaded, setprofilePicListIsLoaded] = useState(false)
-
-  useEffect(() => {
-    setTimeout(() => setprofilePicListIsLoaded(true), 1000);
+  const { getAllModelGroup } = ModelGroupService();
+  const { isLoading, refetch, data } = useQuery({
+    queryKey: ["allModelGroup"],
+    queryFn: () => getAllModelGroup({
+    }),
+    onSuccess: () => {
+      console.log("=== model group fetched from backend! ===")
+    },
+    onError: (error) => {
+      alert(error);
+    },
   });
   
   return (
     <Container>
-      {profilePicListIsLoaded ? 
+      {isLoading ? <UserProfilePicListSkeleton/> :
         <View style={styles.userContainer}>
           <FlashList
             estimatedItemSize={399}
-            data={allChatCategories}
-            scrollEnabled={true}
-            renderItem={({ item, index }) => (
+            data={data}
+            renderItem={({ item } : any) => (
               <>
-                <Text style={styles.categoryText}>{item.categoryName}</Text>
-                <UserProfilePicList userNames={item.usersData} />
+                <Text style={styles.categoryText}>{item.name}</Text>
+                <UserProfilePicList userInfo={item.users} />
               </>
             )}
             keyExtractor={(item, index) => "" + index}
             ListFooterComponent={<BottomMessage />}
           />
-        </View>
-      :
-        <UserProfilePicListSkeleton/>
-      }
+        </View>}
     </Container>
   );
 };

@@ -1,5 +1,5 @@
 import React from 'react'
-import { StyleSheet, Image, Pressable, Alert } from 'react-native'
+import { StyleSheet, Image, TouchableWithoutFeedback } from 'react-native'
 import * as Linking from "expo-linking";
 import { adsGlobalStore } from '../../../zustand/adsGlobalStore'
 
@@ -20,13 +20,9 @@ const BannerAds = (props: Props) => {
 	})
 
 	return (
-		<Pressable onPress={() => Linking.openURL(adsURL)}>
-			<Image
-				style={styles.bannerAds}
-				source={{ uri: imgURL, cache: 'only-if-cached' }}
-				resizeMode={"cover"}
-			/>
-		</Pressable>
+		<TouchableWithoutFeedback onPress={() => Linking.openURL(adsURL)}>
+			<Image style={styles.bannerAds} source={{ uri: imgURL, cache: 'only-if-cached' }} resizeMode={"cover"}/>
+		</TouchableWithoutFeedback>
 	)
 }
 

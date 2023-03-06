@@ -20,12 +20,29 @@ interface IFavorite extends ICommons {
   foreign_id: string /* Work ID */;
 }
 
+interface INewCustomer {
+  device: {
+    type: string;
+    active: boolean;
+    deviceId?: string;
+  };
+}
+
 const CustomerService = () => {
   const getCustomerById = (customer_id: string) => {
     return request({
       headers: getHeaders(),
       url: `/customers/details/${customer_id}`,
       method: "GET",
+    });
+  };
+
+  const postNewCustomer = (data: INewCustomer) => {
+    return request({
+      headers: getHeaders(),
+      url: "/customers/register/device",
+      method: "POST",
+      data,
     });
   };
 
@@ -100,6 +117,7 @@ const CustomerService = () => {
 
   return {
     getCustomerById,
+    postNewCustomer,
     getFollowedCreators,
     getFavoritesOrWatchedHistory,
     followChecker,

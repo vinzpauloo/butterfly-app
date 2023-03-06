@@ -36,10 +36,11 @@ const SectionContent = ({
   templateId,
   dataLength,
   index,
+  all,
 }) => {
   const templates = {
     videoSlider: <HorizontalSlider data={multiple} />,
-    reelslider: <VerticalSlider data={multiple} />,
+    reelslider: <VerticalSlider data={multiple} all={all} />,
     singleVideo: <SingleVideo data={single} />,
     singleVideoWithGrid: (
       <>
@@ -134,6 +135,7 @@ const DynamicTabContent = ({ tabTitle }) => {
               <SectionContent
                 key={index}
                 id={item._id}
+                all={item.all}
                 title={item.title}
                 single={item.single}
                 multiple={item.multiple}

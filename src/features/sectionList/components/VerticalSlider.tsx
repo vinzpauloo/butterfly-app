@@ -14,13 +14,14 @@ import { useNavigation } from "@react-navigation/native";
 
 const { width } = Dimensions.get("window");
 
-const Video = ({ item, index, data }: any) => {
+const Video = ({ item, index, data, all }: any) => {
   const { video } = item;
 
   const navigation = useNavigation<any>();
   const handlePress = () => {
     navigation.navigate("VlogScreen", {
       id: video._id,
+      all: all,
     });
   };
   return (
@@ -44,7 +45,7 @@ const Video = ({ item, index, data }: any) => {
   );
 };
 
-const VerticalSlider = ({ data }) => {
+const VerticalSlider = ({ data, all }) => {
   return (
     <VirtualizedList
       horizontal
@@ -57,7 +58,7 @@ const VerticalSlider = ({ data }) => {
       getItemCount={() => data.length}
       keyExtractor={(item: any) => item.id}
       renderItem={({ item, index }) => (
-        <Video key={index} item={item} index={index} data={data} />
+        <Video key={index} item={item} index={index} data={data} all={all} />
       )}
     />
   );

@@ -73,15 +73,27 @@ const VlogScreen = () => {
   const route = useRoute<any>();
   const { getWorkById } = WorkService();
   const [data, setData] = useState([]);
+  const [nextID, setNextID] = useState(0);
 
-  const { isLoading } = useQuery({
+  const { isLoading, refetch } = useQuery({
     queryKey: ["SingleVlog", route.params.id],
-    queryFn: () => getWorkById(route.params.id),
+    queryFn: () =>
+      getWorkById(
+        !!route.params.all ? route.params.all[nextID] : route.params.id
+      ),
     onError: (error) => {
       console.log("SingleVlog", error);
     },
     onSuccess: (data) => {
-      setData([
+      /*
+        this use to fetch only one time the single work id
+      */
+      if (nextID === 0) {
+        setNextID((prev) => prev + 1);
+      }
+
+      setData((prev) => [
+        ...prev,
         {
           workID: data._id,
           userID: data.user_id,
@@ -98,6 +110,19 @@ const VlogScreen = () => {
     },
   });
 
+  function onUserScrollDown() {
+    // this use if the vlog is from vertical videos slider
+    if (!!route.params.all) {
+      // this will check if the videos slider meet the last video
+      if (nextID !== route.params.all.length - 1) {
+        if (nextID !== 0) {
+          setNextID((prev) => prev + 1);
+          refetch();
+        }
+      }
+    }
+  }
+
   if (isLoading) {
     return (
       <Container>
@@ -113,6 +138,7 @@ const VlogScreen = () => {
       reelsVideos={data}
       workId={data[0]?.workID}
       hasBackButton={true}
+      onUserScrollDown={onUserScrollDown}
     />
   );
 };

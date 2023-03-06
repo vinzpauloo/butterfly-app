@@ -115,7 +115,7 @@ export const Video = ({ item, isFollowingScreen, onOpen, setId }: any) => {
       });
     } else {
       navigation.navigate("VlogScreen", {
-        reelsVideos: reelsVideos,
+        id: item?._id,
       });
     }
   };

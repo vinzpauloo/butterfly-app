@@ -8,17 +8,19 @@ import {
   VirtualizedList,
 } from "react-native";
 import React from "react";
-import { reelsVideos } from "data/reelsVideos";
+
+import { GLOBAL_COLORS } from "global";
 import { useNavigation } from "@react-navigation/native";
 
 const { width } = Dimensions.get("window");
 
 const Video = ({ item, index, data }: any) => {
   const { video } = item;
+
   const navigation = useNavigation<any>();
   const handlePress = () => {
     navigation.navigate("VlogScreen", {
-      reelsVideos: reelsVideos,
+      id: video._id,
     });
   };
   return (
@@ -81,7 +83,7 @@ const styles = StyleSheet.create({
     borderRadius: 20,
     top: 15,
     left: 15,
-    borderColor: "#fff",
+    borderColor: GLOBAL_COLORS.primaryTextColor,
     borderWidth: 1,
   },
   textContent: {
@@ -93,7 +95,7 @@ const styles = StyleSheet.create({
     padding: 3,
   },
   text: {
-    color: "#fff",
+    color: GLOBAL_COLORS.primaryTextColor,
     fontSize: 14,
   },
 });

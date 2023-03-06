@@ -1,52 +1,48 @@
-import {
-  Image,
-  Pressable,
-  StyleSheet,
-  Text,
-  TextInput,
-  View,
-} from "react-native";
-import React from "react";
+import { ActivityIndicator, StyleSheet, View } from "react-native";
+import React, { useState } from "react";
 
 import Ionicons from "react-native-vector-icons/Ionicons";
 
-import { GLOBAL_COLORS } from "global";
+import About from "screens/Settings/tabs/About";
+import AccountRetrieval from "screens/Settings/tabs/AccountRetrieval";
+import AccountVerification from "screens/Account/tabs/AccountVerification";
+import BestApps from "screens/Account/tabs/BestApps";
 import BottomTabs from "layouts/navigators/BottomTabs";
+import CameraInit from "screens/Settings/AccountRetrievalTabs/CameraInit";
+import CustomerService from "screens/Settings/AccountRetrievalTabs/CustomerService";
+import FollowingFanListScreen from "screens/FollowingFanListScreen";
+import InitialLoad from "screens/InitialLoad";
+import InformationScreen from "screens/InformationScreen";
+import Introduction from "screens/Settings/tabs/Introduction";
+import MobileBindRequest from "screens/Settings/tabs/MobileBindRequest";
+import MobileRetrieval from "screens/Settings/AccountRetrievalTabs/MobileRetrieval";
+import OfflineCache from "../screens/Account/tabs/OfflineCache";
+import PasscodeLock from "screens/Settings/tabs/PasscodeLock";
+import PetName from "screens/Settings/tabs/PetName";
 import PhotoGallery from "screens/PhotoGallery";
 import PortraitVideo from "layouts/PortraitVideo";
 import Preloading from "screens/Preloading";
+import PrivacyPolicy from "screens/Settings/tabs/PrivacyPolicy";
+import ProfilePhoto from "screens/Settings/tabs/ProfilePhoto";
+import RecordingHistory from "../screens/Account/tabs/RecordingHistory";
+import RequestCode from "screens/Settings/tabs/RequestCode";
 import Search from "screens/Search";
 import SingleSectionScreen from "screens/SingleSection";
+import Settings from "screens/Settings";
+import ServiceProvisions from "screens/Settings/tabs/ServiceProvisions";
+import SharingPromotion from "../screens/Account/tabs/SharingPromotion";
 import SingleVideoScreen from "screens/SingleVideo";
 import SingleUser from "screens/SingleUser";
-
-import { bottomNav } from "./bottomNav";
-import RecordingHistory from "../screens/Account/tabs/RecordingHistory";
-import OfflineCache from "../screens/Account/tabs/OfflineCache";
-import SharingPromotion from "../screens/Account/tabs/SharingPromotion";
-import AccountVerification from "screens/Account/tabs/AccountVerification";
-import BestApps from "screens/Account/tabs/BestApps";
-import Settings from "screens/Settings";
-import ProfilePhoto from "screens/Settings/tabs/ProfilePhoto";
-import PetName from "screens/Settings/tabs/PetName";
-import MobileBindRequest from "screens/Settings/tabs/MobileBindRequest";
-import Introduction from "screens/Settings/tabs/Introduction";
-import AccountRetrieval from "screens/Settings/tabs/AccountRetrieval";
-import MobileRetrieval from "screens/Settings/AccountRetrievalTabs/MobileRetrieval";
-import CameraInit from "screens/Settings/AccountRetrievalTabs/CameraInit";
-import CustomerService from "screens/Settings/AccountRetrievalTabs/CustomerService";
-import RequestCode from "screens/Settings/tabs/RequestCode";
-import PrivacyPolicy from "screens/Settings/tabs/PrivacyPolicy";
-import ServiceProvisions from "screens/Settings/tabs/ServiceProvisions";
-import About from "screens/Settings/tabs/About";
-import PasscodeLock from "screens/Settings/tabs/PasscodeLock";
-import InformationScreen from "screens/InformationScreen";
 import SingleChatScreen from "screens/SingleChatScreen";
 import SingleTag from "screens/SingleTag";
-import InitialLoad from "screens/InitialLoad";
 import SingleFeedScreen from "screens/SingleFeedScreen";
 import TermsOfService from "screens/TermsOfService";
-import FollowingFanListScreen from "screens/FollowingFanListScreen";
+import WorkService from "services/api/WorkService";
+import { bottomNav } from "./bottomNav";
+import { GLOBAL_COLORS } from "global";
+import { useRoute } from "@react-navigation/native";
+import { useQuery } from "@tanstack/react-query";
+import Container from "components/Container";
 
 const basicHeader = ({ navigation, route }: any) => ({
   headerTitle: route?.params.postTitle,
@@ -74,7 +70,51 @@ const basicHeader = ({ navigation, route }: any) => ({
 });
 
 const VlogScreen = () => {
-  return <PortraitVideo hasBackButton={true} />;
+  const route = useRoute<any>();
+  const { getWorkById } = WorkService();
+  const [data, setData] = useState([]);
+
+  const { isLoading } = useQuery({
+    queryKey: ["SingleVlog", route.params.id],
+    queryFn: () => getWorkById(route.params.id),
+    onError: (error) => {
+      console.log("SingleVlog", error);
+    },
+    onSuccess: (data) => {
+      setData([
+        {
+          workID: data._id,
+          userID: data.user_id,
+          userName: data.user.username,
+          videoURL: data.video_url,
+          thumbnail: data.thumbnail_url,
+          description: data.description,
+          tags: data.tags,
+          amountOflikes: data.like.total_likes,
+          amountOfComments: data.comment.total_comments,
+          userPhoto: data.user.photo,
+        },
+      ]);
+    },
+  });
+
+  if (isLoading) {
+    return (
+      <Container>
+        <View style={styles.loaderContainer}>
+          <ActivityIndicator size="large" color="white" />
+        </View>
+      </Container>
+    );
+  }
+
+  return (
+    <PortraitVideo
+      reelsVideos={data}
+      workId={data[0]?.workID}
+      hasBackButton={true}
+    />
+  );
 };
 
 const BottomNav = () => {
@@ -302,5 +342,10 @@ const styles = StyleSheet.create({
   followText: {
     color: "#fff",
     fontSize: 14,
+  },
+  loaderContainer: {
+    justifyContent: "center",
+    alignItems: "center",
+    flex: 1,
   },
 });

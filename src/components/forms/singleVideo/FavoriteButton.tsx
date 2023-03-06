@@ -1,7 +1,6 @@
-import { Pressable, StyleSheet, Text, View } from "react-native";
+import { TouchableWithoutFeedback, StyleSheet, Text, View } from "react-native";
 import React, { useState } from "react";
 
-import AntDesign from "react-native-vector-icons/AntDesign";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { TEMPORARY_CUSTOMER_ID } from "react-native-dotenv";
 
@@ -74,19 +73,12 @@ const FavoriteButton = ({ id }) => {
   };
 
   return (
-    <Pressable style={styles.buttonItem} onPress={handleFavorite}>
-      <MaterialIcons
-        name="star"
-        color={changeButtonColor(isAlreadyFavorite)}
-        size={18}
-        style={styles.icon}
-      />
-      <Text
-        style={[styles.text, { color: changeButtonColor(isAlreadyFavorite) }]}
-      >
-        收藏
-      </Text>
-    </Pressable>
+    <TouchableWithoutFeedback onPress={handleFavorite}>
+      <View style={styles.buttonItem} pointerEvents="box-none">
+        <MaterialIcons name="star" color={changeButtonColor(isAlreadyFavorite)} size={18} style={styles.icon}/>
+        <Text style={[styles.text, { color: changeButtonColor(isAlreadyFavorite) }]}>收藏</Text>
+      </View>
+    </TouchableWithoutFeedback>
   );
 };
 

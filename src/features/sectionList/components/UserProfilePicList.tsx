@@ -1,21 +1,24 @@
 import React from 'react'
-import { StyleSheet, Text, Pressable, Alert, View } from 'react-native'
+import { StyleSheet, Text, Pressable, View } from 'react-native'
 import { FlashList } from '@shopify/flash-list'
 import { Avatar, VStack } from 'native-base'
-
+import { useNavigation } from "@react-navigation/native";
 
 type Props = {
-	userNames: {name: string, imgURL: string}[]
+	userInfo: any[]
 }
 
 type UserProfilePicItem = {
+	userID: number
 	name: string
 	imgURL: string
 }
 
 const UserProfilePicItem = (props: UserProfilePicItem) => {
+	const navigation = useNavigation<any>()
+	
 	return (
-		<Pressable style={styles.profPicItem} onPress={()=>{Alert.alert("Go to Profile " + props.name)}}>
+		<Pressable style={styles.profPicItem} onPress={() => navigation.navigate("SingleUser", { userID: props.userID })}>
 			<VStack space={2} style={{alignItems:"center", maxWidth:60}}>
 				<Avatar source={{ uri: props.imgURL }} />
 				<Text style={styles.whiteText}>{props.name}</Text>
@@ -25,15 +28,15 @@ const UserProfilePicItem = (props: UserProfilePicItem) => {
 }
 
 const UserProfilePicList = (props: Props) => {
+	let numberOfRows = 1 + Math.floor(props.userInfo.length / 4)
 	return (
-		<View style={styles.wrapper}>
+		<View style={[styles.wrapper, { height: 139.5 * numberOfRows}]}>
 			<FlashList
-				scrollEnabled={true}
+				scrollEnabled={false}
 				estimatedItemSize={83}
 				numColumns={4}
-				data={props.userNames}
-				renderItem={({ item, index }) =>
-						<UserProfilePicItem name={item.name} imgURL={item.imgURL} />}
+				data={props.userInfo}
+				renderItem={({ item, index }) => <UserProfilePicItem name={item.username} imgURL={item.photo} userID={item.id} />}
 				keyExtractor={(item, index) => "" + index}
 			/>
 		</View>
@@ -45,7 +48,7 @@ export default UserProfilePicList
 const styles = StyleSheet.create({
 	wrapper: {
 		justifyContent: "space-between",
-		minHeight: 430
+		flex: 1,
 	},
 	whiteText: {
 		color: "white"

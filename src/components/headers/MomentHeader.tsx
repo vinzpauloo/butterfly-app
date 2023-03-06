@@ -1,5 +1,5 @@
 import React from "react";
-import { StyleSheet, Text, View, Pressable } from "react-native";
+import { StyleSheet, Text, View, TouchableWithoutFeedback } from "react-native";
 
 import { HStack, Divider } from "native-base";
 import { useNavigation } from "@react-navigation/native";
@@ -26,24 +26,17 @@ const MomentHeader = () => {
   }
 
   return (
-    <View style={styles.certificateContainer}>
+    <View style={styles.certificateContainer} pointerEvents="box-none">
       {data.featured.map((item, index) => (
-        <Pressable
-          key={index}
-          onPress={() =>
-            navigation.navigate(`SingleFeedScreen`, { feedId: item?.feed_id })
-          }
-        >
-          <HStack space={2} alignItems="center" marginRight={5}>
-            <View style={styles.dot}></View>
-            <Text style={styles.whiteText} numberOfLines={1}>
-              {item.title}
-            </Text>
+        <>
+          <HStack space={2} alignItems="center" marginRight={5} pointerEvents="box-none">
+            <View style={styles.dot} />
+            <TouchableWithoutFeedback key={index} onPress={() => navigation.navigate(`SingleFeedScreen`, { feedId: item?.feed_id })}>
+              <Text style={styles.whiteText} numberOfLines={1}>{item.title}</Text>
+            </TouchableWithoutFeedback>
           </HStack>
-          {index === data.featured.length - 1 ? null : (
-            <Divider style={styles.divider} color="#999" />
-          )}
-        </Pressable>
+          {index === data.featured.length - 1 ? null : <Divider style={styles.divider} color="#999" />}
+        </>
       ))}
     </View>
   );

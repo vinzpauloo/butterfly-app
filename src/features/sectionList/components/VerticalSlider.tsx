@@ -17,13 +17,17 @@ const { width } = Dimensions.get("window");
 const Video = ({ item, index, data, all }: any) => {
   const { video } = item;
 
+  const prevArray = all.slice(0, index); // the prev id of the works
+  const nextArray = all.slice(index, all.length); // the work id that been click and the next id of that videos
+
   const navigation = useNavigation<any>();
   const handlePress = () => {
     navigation.navigate("VlogScreen", {
       id: video._id,
-      all: all,
+      all: nextArray.concat(prevArray), // add the prev id's to the next id's and it will go to the end part of the array
     });
   };
+
   return (
     <TouchableOpacity
       onPress={handlePress}

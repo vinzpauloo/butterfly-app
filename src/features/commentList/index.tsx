@@ -11,6 +11,7 @@ import CommentListSkeleton from "../../components/skeletons/CommentListSkeleton"
 import { GLOBAL_COLORS } from "global";
 import { useQuery } from "@tanstack/react-query";
 import { commentGlobalStore } from "../../zustand/commentGlobalStore";
+import Loading from "components/Loading";
 
 type CommentListProps = {
 	isFromFeed?: boolean
@@ -58,28 +59,27 @@ const CommentList = (props: CommentListProps) => {
 	
 	return (
 		<View style={styles.commentsContainer}>
-			{isLoading ? <CommentListSkeleton/> :
-				<FlashList
-					ref={commentListRef}
-					removeClippedSubviews={true}
-					estimatedItemSize={117}
-					showsVerticalScrollIndicator={false}
-					data={data?.data}
-					ListHeaderComponent={<>{props.customHeaderComponent}<Text style={styles.commentHeader}>全部评论 {data?.total}</Text></>}
-					ListFooterComponent={<BottomMessage />}
-					keyExtractor={(_, index) => "" + index}
-					renderItem={({ item }: any) => (
-						<CommentItem
-							commentID={item.comment_id}
-							comment={item.comment}
-							username={item.username}
-							photo={item.photo}
-							replies={item.replies}
-						/>)}
-					ItemSeparatorComponent={() => <Divider color="#999" style={styles.divider} />}
-					onEndReachedThreshold={0.1}
-					onEndReached={onScrollToEnd}
-				/>}
+			<FlashList
+				ref={commentListRef}
+				removeClippedSubviews={true}
+				estimatedItemSize={117}
+				showsVerticalScrollIndicator={false}
+				data={data?.data}
+				ListHeaderComponent={<>{props.customHeaderComponent}<Text style={styles.commentHeader}>全部评论 {data?.total}</Text></>}
+				ListFooterComponent={isLoading ? <Loading/> : <BottomMessage />}
+				keyExtractor={(_, index) => "" + index}
+				renderItem={({ item }: any) => (
+					<CommentItem
+						commentID={item.comment_id}
+						comment={item.comment}
+						username={item.username}
+						photo={item.photo}
+						replies={item.replies}
+					/>)}
+				ItemSeparatorComponent={() => <Divider color="#999" style={styles.divider} />}
+				onEndReachedThreshold={0.1}
+				onEndReached={onScrollToEnd}
+			/>
 		</View>
 	);
 };

@@ -12,7 +12,7 @@ import Animated, { ZoomIn, ZoomOut } from "react-native-reanimated";
 import Ionicons from "react-native-vector-icons/Ionicons";
 import { AVPlaybackStatusSuccess, ResizeMode, Video } from "expo-av";
 import { useDisclose, Progress } from "native-base";
-import { useNavigation } from "@react-navigation/native";
+import { useIsFocused, useNavigation } from "@react-navigation/native";
 
 import BottomComment from "components/BottomComment";
 import BottomOverlay from "components/forms/portraitVideoOverlay/BottomOverlay";
@@ -40,7 +40,6 @@ type Props = {
   amountOfComments: number;
   userImage: string;
   isActive: boolean;
-  activeVideoIndex: number;
   tabBarHeight: number;
   openComments: () => void;
 };
@@ -162,6 +161,7 @@ const PortraitVideo: React.FC<PortraitVideoDataType> = ({
   onUserScrollDown = null, // default value
 }) => {
   const navigation = useNavigation<any>();
+  const isFocused = useIsFocused()
   const [activeVideoIndex, setActiveVideoIndex] = useState(0);
   const { isOpen, onOpen, onClose } = useDisclose();
 
@@ -197,8 +197,7 @@ const PortraitVideo: React.FC<PortraitVideoDataType> = ({
             likes={item.amountOflikes}
             amountOfComments={item.amountOfComments}
             userImage={item.userPhoto}
-            isActive={activeVideoIndex === index}
-            activeVideoIndex={activeVideoIndex}
+            isActive={activeVideoIndex === index && isFocused}
             tabBarHeight={bottomTabHeight}
             openComments={onOpen}
           />

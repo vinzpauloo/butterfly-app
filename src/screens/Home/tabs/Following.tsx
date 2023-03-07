@@ -143,7 +143,7 @@ const NoFollowing = ({
 
   const navigateSingleUser = (userId) => {
     navigation.navigate("SingleUser", {
-      id: userId,
+      userID: userId,
     });
   };
 

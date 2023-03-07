@@ -25,7 +25,7 @@ const Header = ({ user, userId, setOpen }) => {
   const navigation = useNavigation<any>();
   const navigateSingleUser = () => {
     navigation.navigate(`SingleUser`, {
-      id: userId,
+      userID: userId,
     });
   };
   const openVIPModal = () => {

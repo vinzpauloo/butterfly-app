@@ -14,18 +14,30 @@ type Props = {
 
 const LikeOverlay = (props: Props) => {
 	const [videoIsLiked, setVideoIsLiked] = useState(false);
+	const [amountofLikes, setAmountofLikes] = useState(props.likes)
 
 	const { likeWork, unlikeWork } = LikeService();
 	const { mutate: mutateLikeVideo } = useMutation(likeWork, {
-		onSuccess: (data) => { console.log(data) }, onError: (error) => { console.log(error) },
+		onSuccess: (data) => {
+			if (data?.isLike) {
+				setAmountofLikes(prev => prev + 1)
+				setVideoIsLiked(true)
+			}
+		},
+		onError: (error) => { console.log(error) },
 	});
 
 	const { mutate: mutateUnlikeVideo } = useMutation(unlikeWork, {
-		onSuccess: (data) => { console.log(data) }, onError: (error) => { console.log(error) },
+		onSuccess: (data) => {
+			if (data?.unLike) {
+				setAmountofLikes(prev => prev - 1)
+				setVideoIsLiked(false)
+			}
+		},
+		onError: (error) => { console.log(error) },
 	});
 
 	function likeVideo() {
-		setVideoIsLiked(true)
 		mutateLikeVideo({
 			site_id: 1,
 			foreign_id: props.videoID,
@@ -35,7 +47,6 @@ const LikeOverlay = (props: Props) => {
 	}
 
 	function unlikeVideo() {
-		setVideoIsLiked(false)
 		mutateUnlikeVideo({
 			site_id: 1,
 			foreign_id: props.videoID,
@@ -50,7 +61,7 @@ const LikeOverlay = (props: Props) => {
 				<Ionicons name="heart" color={videoIsLiked ? GLOBAL_COLORS.secondaryColor : "white"} size={40}
 				/>
 			</Pressable>
-			<Text style={styles.iconText}>{props.likes}</Text>
+			<Text style={styles.iconText}>{amountofLikes}</Text>
 		</View>
 	)
 }

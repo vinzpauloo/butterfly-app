@@ -24,8 +24,12 @@ interface INewCustomer {
   device: {
     type: string;
     active: boolean;
-    deviceId?: string;
+    device_id?: string;
   };
+}
+
+interface IExistingCustomer extends INewCustomer {
+  token: string;
 }
 
 const CustomerService = () => {
@@ -34,6 +38,18 @@ const CustomerService = () => {
       headers: getHeaders(),
       url: `/customers/details/${customer_id}`,
       method: "GET",
+    });
+  };
+
+  const postLoginCustomer = (data: IExistingCustomer) => {
+    return request({
+      headers: {
+        ...getHeaders(),
+        Authorization: `Bearer ${data.token}`,
+      },
+      url: "/customers/login/device",
+      method: "POST",
+      data: { device: data.device },
     });
   };
 
@@ -117,6 +133,7 @@ const CustomerService = () => {
 
   return {
     getCustomerById,
+    postLoginCustomer,
     postNewCustomer,
     getFollowedCreators,
     getFavoritesOrWatchedHistory,

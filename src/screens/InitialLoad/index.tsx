@@ -1,4 +1,4 @@
-import { StyleSheet } from "react-native";
+import { Platform, StyleSheet } from "react-native";
 import React, { useEffect, useState } from "react";
 
 import { Box, Center, Spinner, Text, VStack } from "native-base";
@@ -7,14 +7,15 @@ import {
   useNavigation,
   useRoute,
 } from "@react-navigation/native";
-
-import { adsGlobalStore } from "../../zustand/adsGlobalStore";
-import { captureSuccess, captureError } from "services/sentry";
-
-import { useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery } from "@tanstack/react-query";
 
 import { storeDataObject, getDataObject } from "lib/asyncStorage";
+import { getDeviceId } from "lib/deviceInfo";
 import SiteSettingsService from "services/api/SiteSettingsService";
+import CustomerService from "services/api/CustomerService";
+import { captureSuccess, captureError } from "services/sentry";
+import { adsGlobalStore } from "../../zustand/adsGlobalStore";
+import { userStore } from "../../zustand/userStore";
 
 const InitialLoad = () => {
   const navigation = useNavigation<any>();
@@ -24,33 +25,23 @@ const InitialLoad = () => {
 
   // subscribe to ads global store
   const setAdsGlobalStore = adsGlobalStore((state) => state.setAdvertisement);
+  const setUserStore = userStore((state) => state.setUserData);
 
-  useEffect(() => {
-    // check local app cache if it has ads data
-    getDataObject("AdvertisementCacheData").then((res: any) => {
-      if (res.message === "Key not found or is empty") {
-        setIsQueryEnable(true);
-      } else {
-        console.log("=== Local Cache is used! ===");
-        setIsQueryEnable(false);
+  const generateCustomerData = async () => {
+    const customerDevice = {
+      device: {
+        active: true,
+        type: Platform.OS,
+        device_id: await getDeviceId(),
+      },
+    };
 
-        // update global ads global store according to cached data
-        setAdsGlobalStore(
-          res.localCache_fullscreen_banner,
-          res.localCache_popup_banner,
-          res.localCache_carousel_banner,
-          res.localCache_single_banner
-        );
-
-        captureSuccess(route.name, "getDataObject(AdvertisementCacheData)");
-        navigation.dispatch(StackActions.replace("TermsOfService"));
-      }
-    });
-  }, []);
+    return customerDevice;
+  };
 
   // if local app cache dont have ads, fetch all ads data from backend
   const { getAds } = SiteSettingsService();
-  const { isLoading, isError, data, error, status } = useQuery({
+  const { isLoading: isAdsLoading } = useQuery({
     queryKey: ["ads"],
     queryFn: () => getAds(),
     onSuccess: (data) => {
@@ -78,11 +69,126 @@ const InitialLoad = () => {
       navigation.dispatch(StackActions.replace("TermsOfService"));
     },
     onError: (error) => {
-      console.log("Error", error);
+      console.log("getAds Error", error);
       captureError(error, route.name, "queryFn: () => getAds()");
     },
     enabled: isQueryEnable,
   });
+
+  // if local app cache dont have user data, register user data from backend
+  const { postLoginCustomer, postNewCustomer } = CustomerService();
+  const { mutate: mutateRegisterCustomer } = useMutation(postNewCustomer, {
+    onSuccess: (data) => {
+      console.log("=== Customer Registered!! ===", data);
+
+      // set user global store
+      setUserStore({
+        _id: data._id,
+        site_id: data.site_id,
+        api_token: data.api_token,
+        alias: data.alias,
+      });
+
+      // store user to device storage
+      storeDataObject("UserCacheData", {
+        _id: data._id,
+        site_id: data.site_id,
+        api_token: data.api_token,
+        alias: data.alias,
+      });
+
+      captureSuccess(route.name, "mutateRegisterCustomer");
+
+      processAdsCacheData();
+    },
+    onError: (error) => {
+      console.log("mutateRegisterCustomer Error", error);
+      captureError(error, route.name, "mutateRegisterCustomer");
+    },
+  });
+
+  const { mutate: mutateLoginCustomer } = useMutation(postLoginCustomer, {
+    onSuccess: (data) => {
+      console.log("=== Customer Logged in!! ===", data);
+
+      // set user global store
+      setUserStore({
+        _id: data._id,
+        site_id: data.site_id,
+        api_token: data.api_token,
+        alias: data.alias,
+      });
+
+      // store user to device storage
+      storeDataObject("UserCacheData", {
+        _id: data._id,
+        site_id: data.site_id,
+        api_token: data.api_token,
+        alias: data.alias,
+      });
+
+      captureSuccess(route.name, "mutateLoginCustomer");
+
+      processAdsCacheData();
+    },
+    onError: (error) => {
+      console.log("mutateLoginCustomer Error", error);
+      captureError(error, route.name, "mutateLoginCustomer");
+    },
+  });
+
+  const processUserCacheData = () => {
+    // User cache logic
+    getDataObject("UserCacheData").then((value) => {
+      if (value.message === "Key not found or is empty") {
+        console.log("=== Registering new customer device ===");
+
+        // Register new customer device
+        generateCustomerData().then((res) => {
+          console.log("generateCustomerData()", res);
+          mutateRegisterCustomer(res);
+        });
+      } else {
+        console.log("=== Local UserCacheData is used! ===");
+
+        // Validate if bearer token is still active
+        generateCustomerData().then((res) => {
+          const verifyUserData = {
+            ...res,
+            token: value.api_token,
+          };
+
+          mutateLoginCustomer(verifyUserData);
+        });
+      }
+    });
+  };
+
+  const processAdsCacheData = () => {
+    getDataObject("AdvertisementCacheData").then((value) => {
+      // Ads cache logic
+      if (value.message === "Key not found or is empty") {
+        setIsQueryEnable(true);
+      } else {
+        console.log("=== Local AdsCacheData is used! ===");
+
+        // update ads global store according to cached data
+        setAdsGlobalStore(
+          value.localCache_fullscreen_banner,
+          value.localCache_popup_banner,
+          value.localCache_carousel_banner,
+          value.localCache_single_banner
+        );
+
+        captureSuccess(route.name, "getDataObject(AdvertisementCacheData)");
+        navigation.dispatch(StackActions.replace("TermsOfService"));
+      }
+    });
+  };
+
+  useEffect(() => {
+    processUserCacheData();
+  }, []);
 
   return (
     <Center flex={1}>

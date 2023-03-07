@@ -16,15 +16,16 @@ const FavoriteOVerlay = (props: Props) => {
 
 	const { favoriteVideo, unfavoriteVideo } = CustomerService();
 	const { mutate: mutateAddToFavorite } = useMutation(favoriteVideo, {
-		onSuccess: (data) => { console.log(data) }, onError: (error) => { console.log(error) },
+		onSuccess: (data) => { if (data?.isFavorite) setVideoIsFaved(true) },
+		onError: (error) => { console.log(error) },
 	});
 
 	const { mutate: mutateRemoveFromFavorite } = useMutation(unfavoriteVideo, {
-		onSuccess: (data) => { console.log(data) }, onError: (error) => { console.log(error) },
+		onSuccess: (data) => { if (data?.isRemoved?.response) setVideoIsFaved(false) },
+		onError: (error) => { console.log(error) },
 	});
 
 	function addVideoToFavorite() {
-		setVideoIsFaved(true)
 		mutateAddToFavorite({
 			site_id: 1,
 			foreign_id: props.videoID,
@@ -33,7 +34,6 @@ const FavoriteOVerlay = (props: Props) => {
 	}
 
 	function removeVideoFromFavorite() {
-		setVideoIsFaved(false)
 		mutateRemoveFromFavorite({
 			site_id: 1,
 			foreign_id: props.videoID,

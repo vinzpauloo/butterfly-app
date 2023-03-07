@@ -73,7 +73,7 @@ const HeaderTitle = () => {
         />
         <Pressable
           onPress={() =>
-            navigation.navigate("SingleUser", { id: route.params.userId })
+            navigation.navigate("SingleUser", { userID: route.params.userId })
           }
         >
           <Image source={{ uri: route.params?.image }} style={styles.image} />

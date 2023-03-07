@@ -41,7 +41,7 @@ const Video = ({ index, data, item }: any) => {
         <Image source={{ uri: video.thumbnail_url }} style={styles.image} />
       </View>
       <View style={styles.content}>
-        <Pressable onPress={() => navigation.navigate("SingleUser")}>
+        <Pressable onPress={() => navigation.navigate("SingleUser", { userID: video.user_id })}>
           <Image source={{ uri: video.user.photo }} style={styles.modelImg} />
         </Pressable>
         <View style={styles.texts}>

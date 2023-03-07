@@ -30,6 +30,8 @@ const ProfileBanner = () => {
   const previousScreen =
     (route.params && route.params["previousScreen"]) || "Default";
 
+  console.log(JSON.stringify(route?.params))
+  
   return (
     <View style={styles.bannerContainer}>
       <ImageBackground

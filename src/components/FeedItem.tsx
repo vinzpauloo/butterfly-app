@@ -72,7 +72,7 @@ const FeedItem = ({ item }) => {
       <HStack>
         <Pressable
           onPress={() => {
-            navigation.navigate(`SingleUser`, { id: item?.user_id });
+            navigation.navigate(`SingleUser`, { userID: item?.user_id });
           }}
         >
           <HStack space={2} style={styles.top}>

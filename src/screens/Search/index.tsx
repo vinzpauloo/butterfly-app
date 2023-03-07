@@ -13,23 +13,31 @@ import AntDesign from "react-native-vector-icons/AntDesign";
 import Feather from "react-native-vector-icons/Feather";
 import Ionicons from "react-native-vector-icons/Ionicons";
 import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons";
+import { ScrollView } from "native-base";
+import { useNavigation } from "@react-navigation/native";
+import { useQuery } from "@tanstack/react-query";
 
 import Container from "components/Container";
 import Feeds from "./tabs/Feeds";
+import GeneralSearch from "services/api/GeneralSearch";
 import GridVideos from "features/sectionList/components/GridVideos";
 import MaterialTopTabs from "layouts/navigators/MaterialTopTabs";
 import Users from "./tabs/Users";
-import Videos from "./tabs/Videos";
+import VideoListSkeleton from "components/skeletons/VideoListSkeleton";
+import Work from "./tabs/Work";
 import { GLOBAL_COLORS } from "global";
-import { multipleImages } from "data/gridImages";
-import { useNavigation } from "@react-navigation/native";
-import { FlashList } from "@shopify/flash-list";
+import { userStore } from "../../zustand/userStore";
 
 const { width } = Dimensions.get("window");
 
-const SearchBar = ({ setSearches, hasSearch, setHasSearch }) => {
+const SearchBar = ({
+  search,
+  setSearch,
+  setSearches,
+  hasSearch,
+  setHasSearch,
+}) => {
   const navigation = useNavigation<any>();
-  const [search, setSearch] = useState<string>("");
 
   const handlePress = () => {
     navigation.navigate("BottomNav");
@@ -194,6 +202,20 @@ const PopularSearches = () => {
 };
 
 const VideoList = () => {
+  const token = userStore((state) => state.api_token);
+  const { getSearchPageRecommended } = GeneralSearch();
+  const { isLoading, data } = useQuery({
+    queryKey: ["search"],
+    queryFn: () => getSearchPageRecommended(token),
+    onError: (error) => {
+      console.log("search", error);
+    },
+  });
+  if (isLoading) {
+    return <VideoListSkeleton />;
+  }
+  console.log("@@@", data);
+
   return (
     <View style={{ height: "100%" }}>
       <View style={styles.headerContent}>
@@ -208,26 +230,26 @@ const VideoList = () => {
           </Text>
         </View>
       </View>
-      <GridVideos videos={multipleImages} />
+      <GridVideos data={data} />
     </View>
   );
 };
 
-const SearchOutput = () => {
+const SearchOutput = ({ searchText }) => {
   const data = {
     initialRoute: "视频",
     screens: [
       {
         name: "视频",
-        component: (props) => <Videos {...props} />,
+        component: () => <Work searchText={searchText} />,
       },
       {
         name: "用户",
-        component: (props) => <Users {...props} />,
+        component: () => <Users searchText={searchText} />,
       },
       {
         name: "动态",
-        component: (props) => <Feeds {...props} />,
+        component: () => <Feeds searchText={searchText} />,
       },
     ],
   };
@@ -236,28 +258,31 @@ const SearchOutput = () => {
 
 const Search = () => {
   const [hasSearch, setHasSearch] = useState(false);
+  const [search, setSearch] = useState<string>("");
   const [searches, setSearches] = useState<string[]>([
     "Mark",
-    "Anthony",
-    "Salvacion Mark",
-    "Famarin",
+    "Markk",
+    "Markkkk",
+    "Markkkkk",
   ]);
   return (
     <>
       <Container>
         <SearchBar
+          search={search}
+          setSearch={setSearch}
           setSearches={setSearches}
           hasSearch={hasSearch}
           setHasSearch={setHasSearch}
         />
         {hasSearch ? (
-          <SearchOutput />
+          <SearchOutput searchText={search} />
         ) : (
-          <>
+          <ScrollView>
             <SearchHistory searches={searches} />
             <PopularSearches />
             <VideoList />
-          </>
+          </ScrollView>
         )}
       </Container>
     </>

@@ -2,31 +2,33 @@ import {
   Dimensions,
   Image,
   Pressable,
-  ScrollView,
   StyleSheet,
   Text,
   View,
 } from "react-native";
-import React from "react";
+import React, { useState } from "react";
 
 import Octicons from "react-native-vector-icons/Octicons";
 import Feather from "react-native-vector-icons/Feather";
+import { FlashList } from "@shopify/flash-list";
 
 import Container from "components/Container";
-import banner2 from "assets/images/banner2.jpg";
-import girl from "assets/images/girl.jpg";
-import { GLOBAL_COLORS } from "global";
+import GeneralSearch from "services/api/GeneralSearch";
+import VideoListSkeleton from "components/skeletons/VideoListSkeleton";
 import VIPTag from "components/VIPTag";
+import { GLOBAL_COLORS } from "global";
+import { userStore } from "../../../zustand/userStore";
+import { useQuery } from "@tanstack/react-query";
 
 const { width } = Dimensions.get("window");
 
-const HeaderComponent = () => {
+const HeaderComponent = ({ data }) => {
   return (
     <View style={styles.headerContainer}>
       <View style={styles.headerLeft}>
-        <Image source={girl} style={styles.modelImg} />
+        <Image source={{ uri: data.user.photo }} style={styles.modelImg} />
         <View>
-          <Text style={styles.headerTitle}>FC2</Text>
+          <Text style={styles.headerTitle}>{data.user.username}</Text>
           <Text style={styles.headerSubTitle}>SubTitle</Text>
           <Text style={styles.headerSubTitle}>Description</Text>
         </View>
@@ -39,32 +41,34 @@ const HeaderComponent = () => {
   );
 };
 
-const VideoContainer = () => {
+const VideoContainer = ({ data }) => {
   return (
     <View style={styles.videoContainer}>
       <View style={styles.videoContent}>
         <View style={styles.thumbnailContainer}>
           <VIPTag isAbsolute={true} />
-          <Image source={banner2} style={styles.video} />
+          <Image source={{ uri: data.thumbnail_url }} style={styles.video} />
         </View>
         <View style={styles.watchCount}>
           <Octicons name="video" size={15} color="#fff" />
-          <Text style={styles.watchCountText}>105.1w</Text>
+          <Text style={styles.watchCountText}>{data.statistic.watched}w</Text>
         </View>
-        <Text style={styles.watchDurationText}>52:49</Text>
+        <Text style={styles.watchDurationText}>{data.duration}</Text>
       </View>
-      <Text style={styles.title}>Search Videos Layout</Text>
+      <Text style={styles.title} numberOfLines={2}>
+        {data.title}
+      </Text>
     </View>
   );
 };
 
-const ModelVideosContainer = () => {
+const ModelVideosContainer = ({ data }) => {
   return (
     <View style={{ marginHorizontal: 10 }}>
-      <HeaderComponent />
+      <HeaderComponent data={data[0]} />
       <View style={styles.modelVideosContainer}>
-        {[1, 2, 3].map((_, index) => (
-          <VideoContainer key={index} />
+        {data.map((item, index) => (
+          <VideoContainer key={index} data={item} />
         ))}
       </View>
       <Text style={styles.seeMoreBtn}>See more videos button</Text>
@@ -72,14 +76,45 @@ const ModelVideosContainer = () => {
   );
 };
 
-const Users = () => {
+const Users = ({ searchText }) => {
+  const token = userStore((state) => state.api_token);
+  const { getSearchPage } = GeneralSearch();
+  const [data, setData] = useState([]);
+  const { isLoading } = useQuery({
+    queryKey: ["search-user", searchText],
+    queryFn: () =>
+      getSearchPage({ creator_only: true, keyword: searchText }, token),
+    onError: (error) => {
+      console.log("search-work", error);
+    },
+    onSuccess: (data) => {
+      setData(data.data);
+    },
+  });
+
+  if (isLoading) {
+    return (
+      <Container>
+        <View style={{ height: "100%" }}>
+          <VideoListSkeleton />
+        </View>
+      </Container>
+    );
+  }
+
   return (
     <Container>
-      <ScrollView>
-        {[...Array(6)].map((_, index) => (
-          <ModelVideosContainer key={index} />
-        ))}
-      </ScrollView>
+      {data.length === 0 ? (
+        <Text style={styles.emptyResult}>No Data</Text>
+      ) : (
+        <FlashList
+          data={data}
+          keyExtractor={(_, index) => "" + index}
+          renderItem={({ item, index }) => (
+            <ModelVideosContainer key={index} data={item} />
+          )}
+        />
+      )}
     </Container>
   );
 };
@@ -173,6 +208,7 @@ const styles = StyleSheet.create({
   title: {
     color: "#aaa",
     marginVertical: 2,
+    width: width * 0.3,
   },
   seeMoreBtn: {
     flexDirection: "row",
@@ -180,5 +216,11 @@ const styles = StyleSheet.create({
     marginVertical: 20,
     color: GLOBAL_COLORS.secondaryColor,
     textAlign: "center",
+  },
+  emptyResult: {
+    textAlign: "center",
+    fontSize: 30,
+    marginVertical: 15,
+    color: GLOBAL_COLORS.secondaryColor,
   },
 });

@@ -1,14 +1,15 @@
 import { StyleSheet, Text, TouchableWithoutFeedback, View } from "react-native";
 import React, { useState } from "react";
 
+import AntDesign from "react-native-vector-icons/AntDesign";
 import { useMutation, useQuery } from "@tanstack/react-query";
-import { TEMPORARY_CUSTOMER_ID } from "react-native-dotenv";
 
 import { GLOBAL_COLORS } from "global";
 import { Like } from "hooks/commonActoins/useLike";
-import AntDesign from "react-native-vector-icons/AntDesign";
+import { userStore } from "../../../zustand/userStore";
 
 const LikeButton = ({ data, id }) => {
+  const customerID = userStore((store) => store._id);
   const { deleteLikeWork, postLikeWork, postLikeChecker } = Like();
   const [isAlreadyLike, setIsAlreadyLike] = useState(false);
   const [likeCount, setLikeCount] = useState(data?.like?.total_likes);
@@ -19,7 +20,7 @@ const LikeButton = ({ data, id }) => {
     queryFn: () =>
       postLikeChecker({
         foreign_id: id,
-        customer_id: TEMPORARY_CUSTOMER_ID, // CHANGE LATER
+        customer_id: customerID,
       }),
     onSuccess: (data) => {
       setIsAlreadyLike(data);
@@ -61,13 +62,13 @@ const LikeButton = ({ data, id }) => {
       mutateLike({
         site_id: 1,
         foreign_id: id,
-        customer_id: TEMPORARY_CUSTOMER_ID, // CHANGE LATER
+        customer_id: customerID,
         type: "work",
       });
     } else {
       mutateUnLike({
         foreign_id: id,
-        customer_id: TEMPORARY_CUSTOMER_ID, // CHANGE LATER
+        customer_id: customerID,
       });
     }
   };
@@ -79,8 +80,17 @@ const LikeButton = ({ data, id }) => {
   return (
     <TouchableWithoutFeedback onPress={handleLike}>
       <View style={styles.buttonItem} pointerEvents="box-none">
-        <AntDesign name="heart" color={changeButtonColor(isAlreadyLike)} size={15} style={styles.icon}/>
-        <Text style={[styles.text, { color: changeButtonColor(isAlreadyLike)}]}>{likeCount}</Text>
+        <AntDesign
+          name="heart"
+          color={changeButtonColor(isAlreadyLike)}
+          size={15}
+          style={styles.icon}
+        />
+        <Text
+          style={[styles.text, { color: changeButtonColor(isAlreadyLike) }]}
+        >
+          {likeCount}
+        </Text>
       </View>
     </TouchableWithoutFeedback>
   );

@@ -1,14 +1,15 @@
 import { TouchableWithoutFeedback, StyleSheet, Text, View } from "react-native";
 import React, { useState } from "react";
 
+import MaterialIcons from "react-native-vector-icons/MaterialIcons";
 import { useMutation, useQuery } from "@tanstack/react-query";
-import { TEMPORARY_CUSTOMER_ID } from "react-native-dotenv";
 
 import { Favorite } from "hooks/commonActoins/useFavorite";
 import { GLOBAL_COLORS } from "global";
-import MaterialIcons from "react-native-vector-icons/MaterialIcons";
+import { userStore } from "../../../zustand/userStore";
 
 const FavoriteButton = ({ id }) => {
+  const customerID = userStore((store) => store._id);
   const { deleteRemoveFavorite, postSaveFavorite, postFavoriteChecker } =
     Favorite();
   const [isAlreadyFavorite, setIsAlreadyFavorite] = useState(false);
@@ -19,7 +20,7 @@ const FavoriteButton = ({ id }) => {
     queryFn: () =>
       postFavoriteChecker({
         foreign_id: id,
-        customer_id: TEMPORARY_CUSTOMER_ID, // CHANGE LATER
+        customer_id: customerID,
       }),
     onSuccess: (data) => {
       setIsAlreadyFavorite(data);
@@ -58,12 +59,12 @@ const FavoriteButton = ({ id }) => {
     if (!isAlreadyFavorite) {
       mutateFavorite({
         foreign_id: id,
-        customer_id: TEMPORARY_CUSTOMER_ID, // CHANGE LATER
+        customer_id: customerID,
       });
     } else {
       mutateRemoveFavorite({
         foreign_id: id,
-        customer_id: TEMPORARY_CUSTOMER_ID, // CHANGE LATER
+        customer_id: customerID,
       });
     }
   };
@@ -75,8 +76,17 @@ const FavoriteButton = ({ id }) => {
   return (
     <TouchableWithoutFeedback onPress={handleFavorite}>
       <View style={styles.buttonItem} pointerEvents="box-none">
-        <MaterialIcons name="star" color={changeButtonColor(isAlreadyFavorite)} size={18} style={styles.icon}/>
-        <Text style={[styles.text, { color: changeButtonColor(isAlreadyFavorite) }]}>收藏</Text>
+        <MaterialIcons
+          name="star"
+          color={changeButtonColor(isAlreadyFavorite)}
+          size={18}
+          style={styles.icon}
+        />
+        <Text
+          style={[styles.text, { color: changeButtonColor(isAlreadyFavorite) }]}
+        >
+          收藏
+        </Text>
       </View>
     </TouchableWithoutFeedback>
   );

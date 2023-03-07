@@ -3,12 +3,14 @@ import React, { useState } from "react";
 
 import AntDesign from "react-native-vector-icons/AntDesign";
 import { useMutation, useQuery } from "@tanstack/react-query";
-import { TEMPORARY_CUSTOMER_ID } from "react-native-dotenv";
 
 import { Favorite } from "hooks/commonActoins/useFavorite";
 import { GLOBAL_COLORS } from "global";
+import { userStore } from "../../../zustand/userStore";
 
 const FavoriteButton = ({ isOpen, id }) => {
+  const customerID = userStore((store) => store._id);
+
   const { deleteRemoveFavorite, postSaveFavorite, postFavoriteChecker } =
     Favorite();
   const [isAlreadyFavorite, setIsAlreadyFavorite] = useState(false);
@@ -19,7 +21,7 @@ const FavoriteButton = ({ isOpen, id }) => {
     queryFn: () =>
       postFavoriteChecker({
         foreign_id: id,
-        customer_id: TEMPORARY_CUSTOMER_ID, // CHANGE LATER
+        customer_id: customerID,
       }),
     onSuccess: (data) => {
       setIsAlreadyFavorite(data);
@@ -59,12 +61,12 @@ const FavoriteButton = ({ isOpen, id }) => {
     if (!isAlreadyFavorite) {
       mutateFavorite({
         foreign_id: id,
-        customer_id: TEMPORARY_CUSTOMER_ID, // CHANGE LATER
+        customer_id: customerID,
       });
     } else {
       mutateRemoveFavorite({
         foreign_id: id,
-        customer_id: TEMPORARY_CUSTOMER_ID, // CHANGE LATER
+        customer_id: customerID,
       });
     }
   };

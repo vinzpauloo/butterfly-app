@@ -3,12 +3,13 @@ import React, { useState } from "react";
 
 import Fontisto from "react-native-vector-icons/Fontisto";
 import { useMutation, useQuery } from "@tanstack/react-query";
-import { TEMPORARY_CUSTOMER_ID } from "react-native-dotenv";
 
 import { GLOBAL_COLORS } from "global";
 import { Like } from "hooks/commonActoins/useLike";
+import { userStore } from "../../../zustand/userStore";
 
 const LikeButton = ({ isOpen, id }) => {
+  const customerID = userStore((store) => store._id);
   const { deleteLikeWork, postLikeWork, postLikeChecker } = Like();
   const [isAlreadyLike, setIsAlreadyLike] = useState(false);
 
@@ -19,7 +20,7 @@ const LikeButton = ({ isOpen, id }) => {
       postLikeChecker({
         site_id: 1,
         foreign_id: id,
-        customer_id: TEMPORARY_CUSTOMER_ID, // CHANGE LATER
+        customer_id: customerID,
         type: "work",
       }),
     onSuccess: (data) => {
@@ -61,13 +62,13 @@ const LikeButton = ({ isOpen, id }) => {
       mutateLike({
         site_id: 1,
         foreign_id: id,
-        customer_id: TEMPORARY_CUSTOMER_ID, // CHANGE LATER
+        customer_id: customerID,
         type: "work",
       });
     } else {
       mutateUnLike({
         foreign_id: id,
-        customer_id: TEMPORARY_CUSTOMER_ID, // CHANGE LATER
+        customer_id: customerID,
       });
     }
   };

@@ -27,30 +27,31 @@ import VideoListSkeleton from "components/skeletons/VideoListSkeleton";
 import Work from "./tabs/Work";
 import { GLOBAL_COLORS } from "global";
 import { userStore } from "../../zustand/userStore";
+import { FlashList } from "@shopify/flash-list";
 
 const { width } = Dimensions.get("window");
 
-const SearchBar = ({
-  search,
-  setSearch,
-  setSearches,
-  hasSearch,
-  setHasSearch,
-}) => {
+const SearchBar = ({ search, setSearch, hasSearch, setHasSearch }) => {
   const navigation = useNavigation<any>();
+  const [text, setText] = useState("");
 
   const handlePress = () => {
     navigation.navigate("BottomNav");
   };
 
   const searchWords = () => {
+    setSearch(text);
     setHasSearch(true);
-    setSearches((prev) => [...prev, search]);
   };
 
   const searchClear = () => {
     setHasSearch(false);
     setSearch("");
+    setText("");
+  };
+
+  const enterToSearch = () => {
+    setSearch(text);
   };
 
   return (
@@ -69,10 +70,11 @@ const SearchBar = ({
           style={[styles.textInputIcon, { left: 0 }]}
         />
         <TextInput
-          value={search}
-          onChangeText={(text: string) => setSearch(text)}
+          value={text}
+          onChangeText={(text: string) => setText(text)}
           placeholder="search model name"
           style={styles.inputField}
+          onSubmitEditing={enterToSearch}
         />
         {search.length > 0 ? (
           <AntDesign
@@ -100,18 +102,18 @@ const SearchBar = ({
   );
 };
 
-const SearchItem = ({ text }) => {
+const SearchItem = ({ data }) => {
   return (
     <View style={styles.searchItemContent}>
       <Text style={styles.searchesText}>
-        {text.length > 10 ? text.slice(0, 10) + " ..." : text}
+        {data.length > 10 ? data.slice(0, 10) + " ..." : data}
       </Text>
       <AntDesign name="closecircle" color="#aaa" size={25} />
     </View>
   );
 };
 
-const SearchHistory = ({ searches }) => {
+const SearchHistory = ({ data }) => {
   return (
     <View>
       <View style={styles.headerContent}>
@@ -134,8 +136,10 @@ const SearchHistory = ({ searches }) => {
         <FlatList
           scrollEnabled={false}
           numColumns={3}
-          data={searches}
-          renderItem={({ item }) => <SearchItem text={item} />}
+          data={data}
+          renderItem={({ item, index }) => (
+            <SearchItem key={index} data={item.search} />
+          )}
           keyExtractor={(_, index) => "" + index}
         />
       </View>
@@ -178,8 +182,9 @@ const PopularSearches = () => {
         </View>
       </View>
       <View style={styles.popularSearchItemContainer}>
-        <FlatList
+        <FlashList
           scrollEnabled={false}
+          estimatedItemSize={8}
           numColumns={2}
           data={[
             "Selections",
@@ -201,21 +206,7 @@ const PopularSearches = () => {
   );
 };
 
-const VideoList = () => {
-  const token = userStore((state) => state.api_token);
-  const { getSearchPageRecommended } = GeneralSearch();
-  const { isLoading, data } = useQuery({
-    queryKey: ["search"],
-    queryFn: () => getSearchPageRecommended(token),
-    onError: (error) => {
-      console.log("search", error);
-    },
-  });
-  if (isLoading) {
-    return <VideoListSkeleton />;
-  }
-  console.log("@@@", data);
-
+const VideoList = ({ data }) => {
   return (
     <View style={{ height: "100%" }}>
       <View style={styles.headerContent}>
@@ -259,19 +250,25 @@ const SearchOutput = ({ searchText }) => {
 const Search = () => {
   const [hasSearch, setHasSearch] = useState(false);
   const [search, setSearch] = useState<string>("");
-  const [searches, setSearches] = useState<string[]>([
-    "Mark",
-    "Markk",
-    "Markkkk",
-    "Markkkkk",
-  ]);
+  const token = userStore((state) => state.api_token);
+  const { getSearchPageRecommended } = GeneralSearch();
+  const { isLoading, data } = useQuery({
+    queryKey: ["search"],
+    queryFn: () => getSearchPageRecommended(token),
+    onError: (error) => {
+      console.log("search", error);
+    },
+  });
+  if (isLoading) {
+    return <VideoListSkeleton />;
+  }
+
   return (
     <>
       <Container>
         <SearchBar
           search={search}
           setSearch={setSearch}
-          setSearches={setSearches}
           hasSearch={hasSearch}
           setHasSearch={setHasSearch}
         />
@@ -279,9 +276,12 @@ const Search = () => {
           <SearchOutput searchText={search} />
         ) : (
           <ScrollView>
-            <SearchHistory searches={searches} />
+            {data.search_history.length !== 0 ? (
+              <SearchHistory data={data.search_history} />
+            ) : null}
+
             <PopularSearches />
-            <VideoList />
+            <VideoList data={data.recommended} />
           </ScrollView>
         )}
       </Container>
@@ -360,6 +360,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 2,
     paddingVertical: 1,
     minWidth: width * 0.22,
+    maxWidth: width * 0.22,
     borderRadius: 20,
   },
   searchesText: {

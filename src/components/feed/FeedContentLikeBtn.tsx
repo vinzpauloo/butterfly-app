@@ -2,21 +2,21 @@ import { Pressable, StyleSheet, Text } from "react-native";
 import React, { memo, useEffect, useState } from "react";
 
 import { useIsFetching, useMutation } from "@tanstack/react-query";
-import { TEMPORARY_CUSTOMER_ID } from "react-native-dotenv";
-
-import { GLOBAL_COLORS } from "global";
-import LikeService from "services/api/LikeService";
-import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons";
 import AntDesign from "react-native-vector-icons/AntDesign";
 
+import LikeService from "services/api/LikeService";
+import { GLOBAL_COLORS } from "global";
+import { userStore } from "../../zustand/userStore";
+
 const FeedContentLikeBtn = ({ totalLikes, id, customerLikes }) => {
+  const customerID = userStore((store) => store._id);
   const isFocused = useIsFetching();
   const { likeWork, unlikeWork } = LikeService();
   const [isAlreadyLike, setIsAlreadyLike] = useState(false);
   const [likeCount, setLikeCount] = useState(totalLikes);
 
   useEffect(() => {
-    setIsAlreadyLike(customerLikes.includes(TEMPORARY_CUSTOMER_ID));
+    setIsAlreadyLike(customerLikes.includes(customerID));
   }, [isFocused]);
 
   // for like
@@ -51,13 +51,13 @@ const FeedContentLikeBtn = ({ totalLikes, id, customerLikes }) => {
       mutateLike({
         site_id: 1,
         foreign_id: id,
-        customer_id: TEMPORARY_CUSTOMER_ID, // CHANGE LATER
+        customer_id: customerID, // CHANGE LATER
         type: "feed",
       });
     } else {
       mutateUnLike({
         foreign_id: id,
-        customer_id: TEMPORARY_CUSTOMER_ID, // CHANGE LATER
+        customer_id: customerID, // CHANGE LATER
       });
     }
   };

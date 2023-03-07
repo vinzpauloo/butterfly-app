@@ -10,7 +10,6 @@ import {
 } from "react-native";
 import React, { useCallback, useState } from "react";
 
-import { TEMPORARY_CUSTOMER_ID } from "react-native-dotenv";
 import { Center, useDisclose } from "native-base";
 import { MasonryFlashList } from "@shopify/flash-list";
 import { ScrollView } from "react-native-gesture-handler";
@@ -33,6 +32,7 @@ import {
   FollowingBottomContent,
   GridVideosBottomContent,
 } from "features/sectionList/components/GridVideos";
+import { userStore } from "../../../zustand/userStore";
 
 const { width, height } = Dimensions.get("window");
 
@@ -112,6 +112,7 @@ const NoFollowing = ({
   setData,
   setRefreshingId,
 }) => {
+  const customerID = userStore((store) => store._id);
   const navigation = useNavigation<any>();
   const { followCreator } = CustomerService();
   // for follow
@@ -137,7 +138,7 @@ const NoFollowing = ({
     mutateFollow({
       site_id: 1,
       user_id: userId,
-      customer_id: TEMPORARY_CUSTOMER_ID,
+      customer_id: customerID,
     });
   };
 

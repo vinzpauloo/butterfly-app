@@ -8,7 +8,6 @@ import {
   useRoute,
 } from "@react-navigation/native";
 import Ionicons from "react-native-vector-icons/Ionicons";
-import { TEMPORARY_CUSTOMER_ID } from "react-native-dotenv";
 
 import VideoPlayer from "components/VideoPlayer";
 import VideoListSkeleton from "components/skeletons/VideoListSkeleton";
@@ -17,8 +16,10 @@ import { GLOBAL_COLORS } from "global";
 import { Follow } from "hooks/commonActoins/useFollow";
 import SingleVideoTab from "screens/SingleVideo/tabs/SingleVideoTabs";
 import WorkService from "services/api/WorkService";
+import { userStore } from "../../zustand/userStore";
 
 const HeaderTitle = () => {
+  const customerID = userStore((store) => store._id);
   const { postFollowCreator, postFollowChecker } = Follow();
   const navigation = useNavigation<any>();
   const route = useRoute<any>();
@@ -28,7 +29,7 @@ const HeaderTitle = () => {
     queryKey: ["follow", route.params.userId],
     queryFn: () =>
       postFollowChecker({
-        customer_id: TEMPORARY_CUSTOMER_ID, // CHANGE LATER
+        customer_id: customerID, // CHANGE LATER
         user_id: route.params.userId,
       }),
     onSuccess: (data) => {
@@ -55,7 +56,7 @@ const HeaderTitle = () => {
   const handleFollow = () => {
     mutate({
       user_id: route.params.userId,
-      customer_id: TEMPORARY_CUSTOMER_ID,
+      customer_id: customerID,
     });
   };
   return (

@@ -6,7 +6,7 @@ import {
   Text,
   View,
 } from "react-native";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 
 import Octicons from "react-native-vector-icons/Octicons";
 import Feather from "react-native-vector-icons/Feather";
@@ -25,6 +25,7 @@ import CustomerService from "services/api/CustomerService";
 const { width } = Dimensions.get("window");
 
 const HeaderComponent = ({ data }) => {
+  const [isFollowed, setIsFollowed] = useState(false);
   const token = userStore((state) => state.api_token);
   const navigation = useNavigation<any>();
   const { followCreator } = CustomerService();
@@ -35,30 +36,39 @@ const HeaderComponent = ({ data }) => {
   });
 
   const navigateToSingleUser = () => {
-    navigation.navigate("SingleUser", { userID: data?.user_id });
+    navigation.navigate("SingleUser", { userID: data?.id });
   };
 
   const followBtn = () => {
+    setIsFollowed(true);
     mutate({
-      user_id: { user_id: data?.user_id },
+      user_id: { user_id: data?.id },
       token: token,
     });
   };
 
+  useEffect(() => {
+    setIsFollowed(data.is_followed);
+  }, []);
+
   return (
     <View style={styles.headerContainer}>
       <Pressable style={styles.headerLeft} onPress={navigateToSingleUser}>
-        <Image source={{ uri: data.user.photo }} style={styles.modelImg} />
+        <Image source={{ uri: data.photo }} style={styles.modelImg} />
         <View>
-          <Text style={styles.headerTitle}>{data.user.username}</Text>
-          <Text style={styles.headerSubTitle}>SubTitle</Text>
+          <Text style={styles.headerTitle}>{data.username}</Text>
+          <Text style={styles.headerSubTitle}>
+            Followers: {data.total_followers} Videos: {data.total_work}
+          </Text>
           <Text style={styles.headerSubTitle}>Description</Text>
         </View>
       </Pressable>
-      <Pressable style={styles.followBtn} onPress={followBtn}>
-        <Feather name="plus" color="#fff" />
-        <Text style={styles.followText}>关注</Text>
-      </Pressable>
+      {isFollowed ? null : (
+        <Pressable style={styles.followBtn} onPress={followBtn}>
+          <Feather name="plus" color="#fff" />
+          <Text style={styles.followText}>关注</Text>
+        </Pressable>
+      )}
     </View>
   );
 };
@@ -100,13 +110,13 @@ const ModelVideosContainer = ({ data }) => {
   const navigation = useNavigation<any>();
 
   const navigateToSingleUser = () => {
-    navigation.navigate("SingleUser", { userID: data[0]?.user_id });
+    navigation.navigate("SingleUser", { userID: data.id });
   };
   return (
     <View style={{ marginHorizontal: 10 }}>
-      <HeaderComponent data={data[0]} />
+      <HeaderComponent data={data} />
       <View style={styles.modelVideosContainer}>
-        {data.map((item, index) => (
+        {data.work.map((item, index) => (
           <VideoContainer key={index} data={item} />
         ))}
       </View>

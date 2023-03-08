@@ -147,14 +147,9 @@ const SearchItem = ({ data, setSearch, setHasSearch, setHistory }) => {
   );
 };
 
-const SearchHistory = ({ data, setSearch, setHasSearch, refetch }) => {
+const SearchHistory = ({ history, setSearch, setHasSearch, setHistory }) => {
   const token = userStore((state) => state.api_token);
   const { deleteSearchHistory } = GeneralSearch();
-  const [history, setHistory] = useState([]);
-
-  useEffect(() => {
-    setHistory(data);
-  }, [data]);
 
   const { mutate } = useMutation(deleteSearchHistory, {
     onSuccess: (data) => {
@@ -167,7 +162,6 @@ const SearchHistory = ({ data, setSearch, setHasSearch, refetch }) => {
   const handleClear = () => {
     mutate({ data: { all: true }, token: token });
     setHistory([]);
-    // refetch();
   };
   return (
     <View>
@@ -319,6 +313,8 @@ const Search = () => {
   const { getSearchPageRecommended } = GeneralSearch();
   const [hasSearch, setHasSearch] = useState(false);
   const [search, setSearch] = useState<string>("");
+  const [history, setHistory] = useState([]);
+
   const { isLoading, data, refetch } = useQuery({
     queryKey: ["search"],
     queryFn: () => getSearchPageRecommended(token),
@@ -326,6 +322,11 @@ const Search = () => {
       console.log("search", error);
     },
   });
+
+  useEffect(() => {
+    setHistory(data.search_history);
+  }, [data.search_history]);
+
   if (isLoading) {
     return <VideoListSkeleton />;
   }
@@ -344,12 +345,12 @@ const Search = () => {
           <SearchOutput searchText={search} />
         ) : (
           <ScrollView>
-            {data.search_history.length !== 0 ? (
+            {history.length !== 0 ? (
               <SearchHistory
-                data={data.search_history}
+                history={history}
                 setSearch={setSearch}
                 setHasSearch={setHasSearch}
-                refetch={refetch}
+                setHistory={setHistory}
               />
             ) : null}
             <PopularSearches

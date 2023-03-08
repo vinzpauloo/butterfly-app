@@ -167,7 +167,7 @@ const SearchHistory = ({ data, setSearch, setHasSearch, refetch }) => {
   const handleClear = () => {
     mutate({ data: { all: true }, token: token });
     setHistory([]);
-    refetch();
+    // refetch();
   };
   return (
     <View>

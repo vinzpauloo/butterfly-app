@@ -5,10 +5,10 @@ import Ionicons from 'react-native-vector-icons/Ionicons';
 import { useNavigation } from '@react-navigation/native';
 import CustomerService from 'services/api/CustomerService';
 import { useMutation } from '@tanstack/react-query';
+import { userStore } from "../../zustand/userStore";
 
 type Props = {
 	userID: number
-	customerID: string
 	contentCreatorName: string
 	profilePhotoURL: string
 	coverPhotoURL: string
@@ -21,14 +21,15 @@ type Props = {
 const SingleUserHeader = (props: Props) => {
 	const navigation = useNavigation<any>();
 	const [isCreatorFollowed, setIsCreatorFollowed] = useState(false)
+	const token = userStore((state) => state.api_token);
 
 	const { followCreator, unfollowCreator } = CustomerService();
 	const { mutate: mutateFollowCreator } = useMutation(followCreator, {
-		onSuccess: (data) => { console.log(data) }, onError: (error) => { console.log(error) },
+		onSuccess: (data) => { if (data?.isFollowed) setIsCreatorFollowed(true) }, onError: (error) => { console.log(error) },
 	});
 
 	const { mutate: mutateUnfollowCreator } = useMutation(unfollowCreator, {
-		onSuccess: (data) => { console.log(data) }, onError: (error) => { console.log(error) },
+		onSuccess: (data) => { if (data?.isUnfollowed) setIsCreatorFollowed(false) }, onError: (error) => { console.log(error) },
 	});
 
 	function goToFollowingScreen() {
@@ -46,20 +47,16 @@ const SingleUserHeader = (props: Props) => {
 	}
 
 	function followContentCreator() {
-		setIsCreatorFollowed(true)
 		mutateFollowCreator({
-		  site_id: 1,
-		  user_id: props.userID,
-		  customer_id: props.customerID,
+			user_id: { user_id: props.userID },
+			token: token,
 		});
 	}
 
 	function unfollowContentCreator() {
-		setIsCreatorFollowed(false)
 		mutateUnfollowCreator({
-		  site_id: 1,
-		  user_id: props.userID,
-		  customer_id: props.customerID,
+			user_id: { user_id: props.userID },
+			token: token,
 		});
 	}
 
@@ -99,7 +96,7 @@ const SingleUserHeader = (props: Props) => {
 			<View style={styles.donatorContainer}>
 				<View style={styles.profilesImagesContent}>
 					{props.donatorList.map((item, index) => (
-						<Image source={{ uri: item.customer[0].photo }} style={[styles.profileImgs, { zIndex: index, left: index * 15 }]} />
+						<Image source={{ uri: item?.customer?.photo }} style={[styles.profileImgs, { zIndex: index, left: index * 15 }]} />
 					))}
 				</View>
 				<View style={styles.buttons}>

@@ -8,7 +8,6 @@ import Moment from "./tabs/Moment";
 import Projects from "./tabs/Projects";
 import Collection from "./tabs/Collection";
 import SingleUserHeader from "components/headers/SingleUserHeader";
-import { TEMPORARY_CUSTOMER_ID } from "react-native-dotenv";
 
 const SingleUserScreen = () => {
 	const route = useRoute<any>();
@@ -55,7 +54,6 @@ const SingleUserScreen = () => {
 		Header: () =>
 			<SingleUserHeader
 				userID={userID}
-				customerID={TEMPORARY_CUSTOMER_ID}
 				contentCreatorName={data?.username}
 				profilePhotoURL={data?.photo}
 				coverPhotoURL={data?.cover_photo}

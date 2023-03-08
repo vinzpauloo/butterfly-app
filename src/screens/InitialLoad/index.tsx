@@ -39,6 +39,13 @@ const InitialLoad = () => {
     return customerDevice;
   };
 
+  const processRegisterCustomer = () => {
+    generateCustomerData().then((res) => {
+      console.log("processRegisterCustomer()", res);
+      mutateRegisterCustomer(res);
+    });
+  };
+
   // if local app cache dont have ads, fetch all ads data from backend
   const { getAds } = SiteSettingsService();
   const { isLoading: isAdsLoading } = useQuery({
@@ -134,6 +141,9 @@ const InitialLoad = () => {
     onError: (error) => {
       console.log("mutateLoginCustomer Error", error);
       captureError(error, route.name, "mutateLoginCustomer");
+
+      // If unauthorized, re-register deviceId
+      processRegisterCustomer();
     },
   });
 
@@ -144,10 +154,7 @@ const InitialLoad = () => {
         console.log("=== Registering new customer device ===");
 
         // Register new customer device
-        generateCustomerData().then((res) => {
-          console.log("generateCustomerData()", res);
-          mutateRegisterCustomer(res);
-        });
+        processRegisterCustomer();
       } else {
         console.log("=== Local UserCacheData is used! ===");
 

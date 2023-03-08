@@ -8,12 +8,13 @@ interface IFavoritesOrWatchedHistory {
 }
 
 interface ICommons {
-  customer_id: string;
+  customer_id?: string;
   site_id?: number;
 }
 
 interface IFollow extends ICommons {
-  user_id: string | number /* Content creator ID */;
+  user_id: { user_id: string | number } /* Content creator ID */;
+  token?: string;
 }
 
 interface IFavorite extends ICommons {
@@ -89,11 +90,13 @@ const CustomerService = () => {
   };
 
   const followCreator = (data: IFollow) => {
+    console.log("@@@", data.user_id);
+
     return request({
-      headers: getHeaders(),
+      headers: { ...getHeaders(), Authorization: `Bearer ${data.token}` },
       url: "/customers/follow-creator",
       method: "POST",
-      data,
+      data: data.user_id,
     });
   };
 

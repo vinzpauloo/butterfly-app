@@ -18,22 +18,44 @@ import VideoListSkeleton from "components/skeletons/VideoListSkeleton";
 import VIPTag from "components/VIPTag";
 import { GLOBAL_COLORS } from "global";
 import { userStore } from "../../../zustand/userStore";
-import { useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery } from "@tanstack/react-query";
+import { useNavigation } from "@react-navigation/native";
+import CustomerService from "services/api/CustomerService";
 
 const { width } = Dimensions.get("window");
 
 const HeaderComponent = ({ data }) => {
+  const token = userStore((state) => state.api_token);
+  const navigation = useNavigation<any>();
+  const { followCreator } = CustomerService();
+  const { mutate } = useMutation(followCreator, {
+    onError: (error) => {
+      console.log("user-tab-search", error);
+    },
+  });
+
+  const navigateToSingleUser = () => {
+    navigation.navigate("SingleUser", { userID: data?.user_id });
+  };
+
+  const followBtn = () => {
+    mutate({
+      user_id: { user_id: data?.user_id },
+      token: token,
+    });
+  };
+
   return (
     <View style={styles.headerContainer}>
-      <View style={styles.headerLeft}>
+      <Pressable style={styles.headerLeft} onPress={navigateToSingleUser}>
         <Image source={{ uri: data.user.photo }} style={styles.modelImg} />
         <View>
           <Text style={styles.headerTitle}>{data.user.username}</Text>
           <Text style={styles.headerSubTitle}>SubTitle</Text>
           <Text style={styles.headerSubTitle}>Description</Text>
         </View>
-      </View>
-      <Pressable style={styles.followBtn}>
+      </Pressable>
+      <Pressable style={styles.followBtn} onPress={followBtn}>
         <Feather name="plus" color="#fff" />
         <Text style={styles.followText}>关注</Text>
       </Pressable>
@@ -42,8 +64,20 @@ const HeaderComponent = ({ data }) => {
 };
 
 const VideoContainer = ({ data }) => {
+  const navigation = useNavigation<any>();
+
+  const navigateToSingleVideo = () => {
+    navigation.navigate("SingleVideo", {
+      image: data?.user.photo,
+      username: data?.user?.username,
+      followers: "123456789",
+      id: data?._id,
+      userId: data?.user_id,
+    });
+  };
+
   return (
-    <View style={styles.videoContainer}>
+    <Pressable style={styles.videoContainer} onPress={navigateToSingleVideo}>
       <View style={styles.videoContent}>
         <View style={styles.thumbnailContainer}>
           <VIPTag isAbsolute={true} />
@@ -58,11 +92,16 @@ const VideoContainer = ({ data }) => {
       <Text style={styles.title} numberOfLines={2}>
         {data.title}
       </Text>
-    </View>
+    </Pressable>
   );
 };
 
 const ModelVideosContainer = ({ data }) => {
+  const navigation = useNavigation<any>();
+
+  const navigateToSingleUser = () => {
+    navigation.navigate("SingleUser", { userID: data[0]?.user_id });
+  };
   return (
     <View style={{ marginHorizontal: 10 }}>
       <HeaderComponent data={data[0]} />
@@ -71,7 +110,9 @@ const ModelVideosContainer = ({ data }) => {
           <VideoContainer key={index} data={item} />
         ))}
       </View>
-      <Text style={styles.seeMoreBtn}>See more videos button</Text>
+      <Pressable onPress={navigateToSingleUser}>
+        <Text style={styles.seeMoreBtn}>See more videos button</Text>
+      </Pressable>
     </View>
   );
 };

@@ -102,9 +102,10 @@ const CustomerService = () => {
 
   const unfollowCreator = (data: IFollow) => {
     return request({
-      headers: getHeaders(),
-      url: `/customers/unfollow-creator/${data.user_id}/${data.customer_id}`,
+      headers: { ...getHeaders(), Authorization: `Bearer ${data.token}` },
+      url: `/customers/unfollow-creator/`,
       method: "DELETE",
+      data: data.user_id
     });
   };
 

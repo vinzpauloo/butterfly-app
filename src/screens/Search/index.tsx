@@ -7,7 +7,7 @@ import {
   TextInput,
   View,
 } from "react-native";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 
 import AntDesign from "react-native-vector-icons/AntDesign";
 import Feather from "react-native-vector-icons/Feather";
@@ -15,7 +15,7 @@ import Ionicons from "react-native-vector-icons/Ionicons";
 import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons";
 import { ScrollView } from "native-base";
 import { useNavigation } from "@react-navigation/native";
-import { useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery } from "@tanstack/react-query";
 
 import Container from "components/Container";
 import Feeds from "./tabs/Feeds";
@@ -53,6 +53,11 @@ const SearchBar = ({ search, setSearch, hasSearch, setHasSearch }) => {
   const enterToSearch = () => {
     setSearch(text);
   };
+
+  // this will trigger when the history list or top list been click to display in input field
+  useEffect(() => {
+    setText(search);
+  }, [search]);
 
   return (
     <View style={styles.headerContainer}>
@@ -102,18 +107,64 @@ const SearchBar = ({ search, setSearch, hasSearch, setHasSearch }) => {
   );
 };
 
-const SearchItem = ({ data }) => {
+const SearchItem = ({ data, setSearch, setHasSearch, setHistory }) => {
+  const token = userStore((state) => state.api_token);
+  const { deleteSearchHistory } = GeneralSearch();
+
+  const { mutate } = useMutation(deleteSearchHistory, {
+    onSuccess: (data) => {
+      console.log("delete-history", data);
+    },
+    onError: (error) => {
+      console.log("delete-history", error);
+    },
+  });
+  const handleSearch = (word) => {
+    setSearch(word);
+    setHasSearch(true);
+  };
+  const handleClear = (word) => {
+    setHistory((prev) => prev.filter((item) => item.search !== word));
+    mutate({ data: { keyword: word }, token: token });
+  };
   return (
-    <View style={styles.searchItemContent}>
+    <Pressable
+      style={styles.searchItemContent}
+      onPress={() => handleSearch(data)}
+    >
       <Text style={styles.searchesText}>
         {data.length > 10 ? data.slice(0, 10) + " ..." : data}
       </Text>
-      <AntDesign name="closecircle" color="#aaa" size={25} />
-    </View>
+      <AntDesign
+        name="closecircle"
+        color="#aaa"
+        size={25}
+        onPress={() => handleClear(data)}
+      />
+    </Pressable>
   );
 };
 
-const SearchHistory = ({ data }) => {
+const SearchHistory = ({ data, setSearch, setHasSearch }) => {
+  const token = userStore((state) => state.api_token);
+  const { deleteSearchHistory } = GeneralSearch();
+  const [history, setHistory] = useState([]);
+
+  useEffect(() => {
+    setHistory(data);
+  }, [data]);
+
+  const { mutate } = useMutation(deleteSearchHistory, {
+    onSuccess: (data) => {
+      console.log("delete-history", data);
+    },
+    onError: (error) => {
+      console.log("delete-history", error);
+    },
+  });
+  const handleClear = () => {
+    mutate({ data: { all: true }, token: token });
+  };
   return (
     <View>
       <View style={styles.headerContent}>
@@ -129,16 +180,25 @@ const SearchHistory = ({ data }) => {
             color="#fff"
             size={22}
           />
-          <Text style={[styles.text, { marginLeft: 4 }]}>Clear Searches</Text>
+          <Pressable onPress={handleClear}>
+            <Text style={[styles.text, { marginLeft: 4 }]}>Clear Searches</Text>
+          </Pressable>
         </View>
       </View>
       <View style={styles.searchesContainer}>
-        <FlatList
+        <FlashList
           scrollEnabled={false}
           numColumns={3}
-          data={data}
-          renderItem={({ item, index }) => (
-            <SearchItem key={index} data={item.search} />
+          estimatedItemSize={100}
+          data={history}
+          renderItem={({ item, index }: any) => (
+            <SearchItem
+              key={index}
+              data={item.search}
+              setSearch={setSearch}
+              setHasSearch={setHasSearch}
+              setHistory={setHistory}
+            />
           )}
           keyExtractor={(_, index) => "" + index}
         />
@@ -147,7 +207,7 @@ const SearchHistory = ({ data }) => {
   );
 };
 
-const PopularSearchItem = ({ text, index }) => {
+const PopularSearchItem = ({ text, index, setSearch, setHasSearch }) => {
   const color = (index) => {
     switch (index) {
       case 1:
@@ -160,17 +220,24 @@ const PopularSearchItem = ({ text, index }) => {
         return "#9b9b99";
     }
   };
+  const handleSearch = (word) => {
+    setSearch(word);
+    setHasSearch(true);
+  };
   return (
-    <View style={styles.popularSearchItem}>
+    <Pressable
+      style={styles.popularSearchItem}
+      onPress={() => handleSearch(text)}
+    >
       <Text style={[styles.number, { backgroundColor: color(index + 1) }]}>
         {index + 1}
       </Text>
       <Text style={styles.popularText}>{text}</Text>
-    </View>
+    </Pressable>
   );
 };
 
-const PopularSearches = () => {
+const PopularSearches = ({ data, setSearch, setHasSearch }) => {
   return (
     <View>
       <View style={styles.headerContent}>
@@ -186,18 +253,14 @@ const PopularSearches = () => {
           scrollEnabled={false}
           estimatedItemSize={8}
           numColumns={2}
-          data={[
-            "Selections",
-            "Latest",
-            "Original",
-            "HomeMade",
-            "Hot",
-            "Local",
-            "PornStars",
-            "Loli",
-          ]}
+          data={data}
           renderItem={({ item, index }) => (
-            <PopularSearchItem text={item} index={index} />
+            <PopularSearchItem
+              text={item}
+              index={index}
+              setSearch={setSearch}
+              setHasSearch={setHasSearch}
+            />
           )}
           keyExtractor={(_, index) => "" + index}
         />
@@ -248,10 +311,10 @@ const SearchOutput = ({ searchText }) => {
 };
 
 const Search = () => {
-  const [hasSearch, setHasSearch] = useState(false);
-  const [search, setSearch] = useState<string>("");
   const token = userStore((state) => state.api_token);
   const { getSearchPageRecommended } = GeneralSearch();
+  const [hasSearch, setHasSearch] = useState(false);
+  const [search, setSearch] = useState<string>("");
   const { isLoading, data } = useQuery({
     queryKey: ["search"],
     queryFn: () => getSearchPageRecommended(token),
@@ -277,10 +340,17 @@ const Search = () => {
         ) : (
           <ScrollView>
             {data.search_history.length !== 0 ? (
-              <SearchHistory data={data.search_history} />
+              <SearchHistory
+                data={data.search_history}
+                setSearch={setSearch}
+                setHasSearch={setHasSearch}
+              />
             ) : null}
-
-            <PopularSearches />
+            <PopularSearches
+              data={data.top_search}
+              setSearch={setSearch}
+              setHasSearch={setHasSearch}
+            />
             <VideoList data={data.recommended} />
           </ScrollView>
         )}
@@ -360,7 +430,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 2,
     paddingVertical: 1,
     minWidth: width * 0.22,
-    maxWidth: width * 0.22,
+    maxWidth: width * 0.3,
     borderRadius: 20,
   },
   searchesText: {

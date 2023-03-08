@@ -2,6 +2,7 @@ import React, { useState } from 'react'
 import { Pressable, StyleSheet, Image, View } from 'react-native'
 import { useNavigation } from '@react-navigation/native';
 import { useMutation } from "@tanstack/react-query";
+import { userStore } from "../../../zustand/userStore";
 
 import CustomerService from "services/api/CustomerService";
 import Feather from "react-native-vector-icons/Feather";
@@ -15,31 +16,28 @@ type Props = {
 const UserOverlay = (props: Props) => {
 	const navigation = useNavigation<any>();
 	const [isCreatorFollowed, setIsCreatorFollowed] = useState(false)
+	const token = userStore((state) => state.api_token);
 
 	const { followCreator, unfollowCreator } = CustomerService();
 	const { mutate: mutateFollowCreator } = useMutation(followCreator, {
-		onSuccess: (data) => { console.log(data) }, onError: (error) => { console.log(error) },
+		onSuccess: (data) => { if (data?.isFollowed) setIsCreatorFollowed(true) }, onError: (error) => { console.log(error) },
 	});
 
 	const { mutate: mutateUnfollowCreator } = useMutation(unfollowCreator, {
-		onSuccess: (data) => { console.log(data) }, onError: (error) => { console.log(error) },
+		onSuccess: (data) => { if (data?.isUnfollowed) setIsCreatorFollowed(false) }, onError: (error) => { console.log(error) },
 	});
 
 	function followVideoCreator() {
-		setIsCreatorFollowed(true)
 		mutateFollowCreator({
-			site_id: 1,
-			user_id: props.userID,
-			customer_id: props.customerID,
+			user_id: { user_id: props.userID },
+			token: token,
 		});
 	}
 
 	function unfollowVideoCreator() {
-		setIsCreatorFollowed(false)
 		mutateUnfollowCreator({
-			site_id: 1,
-			user_id: props.userID,
-			customer_id: props.customerID,
+			user_id: { user_id: props.userID },
+			token: token,
 		});
 	}
 

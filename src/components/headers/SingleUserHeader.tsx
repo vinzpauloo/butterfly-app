@@ -1,284 +1,246 @@
-import React from "react";
-import {
-  Dimensions,
-  Image,
-  ImageBackground,
-  Pressable,
-  StyleSheet,
-  Text,
-  View,
-} from "react-native";
-import { useNavigation, useRoute } from "@react-navigation/native";
+import { ImageBackground, Pressable, StyleSheet, Text, View, Image } from 'react-native'
+import React, { useState } from 'react'
+import { GLOBAL_COLORS } from 'global';
+import Ionicons from 'react-native-vector-icons/Ionicons';
+import { useNavigation } from '@react-navigation/native';
+import CustomerService from 'services/api/CustomerService';
+import { useMutation } from '@tanstack/react-query';
 
-import Ionicons from "react-native-vector-icons/Ionicons";
-import Banner10 from "assets/images/banner10.jpg";
-import ProfilePhoto from "assets/images/profilePhoto.jpg";
-
-import Container from "components/Container";
-import { Entypo } from "@expo/vector-icons";
-import { GLOBAL_COLORS } from "global";
-import { singleUserData } from "data/singleUserData";
-
-const { width, height } = Dimensions.get("window");
-
-type Props = {};
-
-const ProfileBanner = () => {
-  const navigation = useNavigation<any>();
-
-  const route = useRoute();
-  const previousScreen =
-    (route.params && route.params["previousScreen"]) || "Default";
-
-  console.log(JSON.stringify(route?.params))
-  
-  return (
-    <View style={styles.bannerContainer}>
-      <ImageBackground
-        source={Banner10}
-        resizeMode="cover"
-        style={styles.bgImg}
-      />
-      <View style={styles.bannerContent}>
-        <Ionicons
-          name="chevron-back"
-          color="#fff"
-          size={30}
-          style={styles.backIcon}
-          onPress={() => navigation.goBack()}
-        />
-        {previousScreen === "Account" ? (
-          <Entypo
-            name="dots-three-vertical"
-            size={30}
-            color="#FFFFFF"
-            style={styles.messageIcon}
-          />
-        ) : (
-          <Ionicons
-            name="md-chatbox-ellipses-outline"
-            color="#fff"
-            size={35}
-            style={styles.messageIcon}
-            onPress={() => navigation.goBack()}
-          />
-        )}
-        <Image source={ProfilePhoto} style={styles.profileImg} />
-        <View style={styles.usernameContainer}>
-          <View style={styles.usernameContent}>
-            <Text style={styles.usernameText}>{singleUserData.userName}</Text>
-            <Text style={styles.usernameUp}>UP</Text>
-          </View>
-          <Pressable style={styles.followBtn}>
-            <Text style={styles.followText}>关注</Text>
-          </Pressable>
-        </View>
-        <Text style={styles.description}>{singleUserData.description}</Text>
-        <View style={styles.summaryContainer}>
-          <Pressable
-            onPress={() =>
-              navigation.navigate("FollowingFanListScreen", {
-                postTitle: "关注",
-                isFetchingFollowingList: true,
-              })
-            }
-            style={styles.summaryContent}
-          >
-            <Text style={styles.summaryNumber}>{singleUserData.following}</Text>
-            <Text style={styles.summaryText}>关注</Text>
-          </Pressable>
-          <Pressable
-            onPress={() =>
-              navigation.navigate("FollowingFanListScreen", {
-                postTitle: "粉丝",
-                isFetchingFansList: true,
-              })
-            }
-            style={styles.summaryContentMiddle}
-          >
-            <Text style={styles.summaryNumber}>{singleUserData.fans}</Text>
-            <Text style={styles.summaryText}>粉丝</Text>
-          </Pressable>
-          <View style={styles.summaryContent}>
-            <Text style={styles.summaryNumber}>{singleUserData.praise}</Text>
-            <Text style={styles.summaryText}>获赞</Text>
-          </View>
-        </View>
-      </View>
-    </View>
-  );
-};
-
-const Donators = () => {
-  return (
-    <View style={styles.donatorContainer}>
-      <View style={styles.profilesImagesContent}>
-        {[1, 2, 3, 4, 5].map((item, index) => (
-          <Image
-            source={ProfilePhoto}
-            style={[styles.profileImgs, { zIndex: index, left: index * 20 }]}
-          />
-        ))}
-      </View>
-      <View style={styles.buttons}>
-        <Text style={styles.donateText}>{singleUserData.donators}人打赏</Text>
-        <Pressable style={styles.donateBtn}>
-          <Text style={styles.donateText}>打赏</Text>
-        </Pressable>
-      </View>
-    </View>
-  );
+type Props = {
+	userID: number
+	customerID: string
+	contentCreatorName: string
+	profilePhotoURL: string
+	coverPhotoURL: string
+	contentCreatorSlogan: string
+	followerCount: number
+	donatorCount: number
+	donatorList: any[]
 };
 
 const SingleUserHeader = (props: Props) => {
-  return (
-    <Container>
-      <ProfileBanner />
-      <Donators />
-    </Container>
-  );
-};
+	const navigation = useNavigation<any>();
+	const [isCreatorFollowed, setIsCreatorFollowed] = useState(false)
 
-export default SingleUserHeader;
+	const { followCreator, unfollowCreator } = CustomerService();
+	const { mutate: mutateFollowCreator } = useMutation(followCreator, {
+		onSuccess: (data) => { console.log(data) }, onError: (error) => { console.log(error) },
+	});
+
+	const { mutate: mutateUnfollowCreator } = useMutation(unfollowCreator, {
+		onSuccess: (data) => { console.log(data) }, onError: (error) => { console.log(error) },
+	});
+
+	function goToFollowingScreen() {
+		navigation.navigate("FollowingFanListScreen", {
+			postTitle: "关注",
+			isFetchingFollowingList: true,
+		})
+	}
+
+	function goToFansScreen() {
+		navigation.navigate("FollowingFanListScreen", {
+			postTitle: "粉丝",
+			isFetchingFansList: true,
+		})
+	}
+
+	function followContentCreator() {
+		setIsCreatorFollowed(true)
+		mutateFollowCreator({
+		  site_id: 1,
+		  user_id: props.userID,
+		  customer_id: props.customerID,
+		});
+	}
+
+	function unfollowContentCreator() {
+		setIsCreatorFollowed(false)
+		mutateUnfollowCreator({
+		  site_id: 1,
+		  user_id: props.userID,
+		  customer_id: props.customerID,
+		});
+	}
+
+	return (
+		<>
+			<ImageBackground source={{ uri: props.coverPhotoURL }} resizeMode="cover">
+				<View style={styles.bannerContent}>
+					<Ionicons name="chevron-back" color="#fff" size={30} style={styles.backIcon} onPress={() => navigation.goBack()} />
+					<Ionicons name="md-chatbox-ellipses-outline" color="#fff" size={35} style={styles.messageIcon} onPress={() => alert("you need VIP to message")} />
+					<Image source={{ uri: props.profilePhotoURL }} style={styles.profileImg} />
+					<View style={styles.usernameContainer}>
+						<View style={styles.usernameContent}>
+							<Text style={styles.usernameText}>{props.contentCreatorName}</Text>
+							<Text style={styles.usernameUp}>UP</Text>
+						</View>
+						<Pressable style={isCreatorFollowed ? styles.unfollowBtn : styles.followBtn} onPress={isCreatorFollowed ? unfollowContentCreator : followContentCreator}>
+							<Text style={styles.followText}>{isCreatorFollowed ? "己关注" : "关注"}</Text>
+						</Pressable>
+					</View>
+					<Text style={styles.description}>{props.contentCreatorSlogan}</Text>
+					<View style={styles.summaryContainer}>
+						<Pressable onPress={goToFollowingScreen} style={styles.summaryContent}>
+							<Text style={styles.summaryNumber}>TBD</Text>
+							<Text style={styles.summaryText}>关注</Text>
+						</Pressable>
+						<Pressable onPress={goToFansScreen} style={styles.summaryContentMiddle}>
+							<Text style={styles.summaryNumber}>{props.followerCount}</Text>
+							<Text style={styles.summaryText}>粉丝</Text>
+						</Pressable>
+						<View style={styles.summaryContent}>
+							<Text style={styles.summaryNumber}>TBD</Text>
+							<Text style={styles.summaryText}>获赞</Text>
+						</View>
+					</View>
+				</View>
+			</ImageBackground>
+			<View style={styles.donatorContainer}>
+				<View style={styles.profilesImagesContent}>
+					{props.donatorList.map((item, index) => (
+						<Image source={{ uri: item.customer[0].photo }} style={[styles.profileImgs, { zIndex: index, left: index * 15 }]} />
+					))}
+				</View>
+				<View style={styles.buttons}>
+					<Text style={styles.donateText}>{props.donatorCount}人打赏</Text>
+					<Pressable style={styles.donateBtn} onPress={() => alert("Donate to user")}>
+						<Text style={styles.donateText}>打赏</Text>
+					</Pressable>
+				</View>
+			</View>
+		</>
+	);
+}
+
+export default SingleUserHeader
 
 const styles = StyleSheet.create({
-  //ProfileBanner
-  bannerContainer: {
-    height: height * 0.3,
-    width: width,
-    position: "relative",
-  },
-  bgImg: {
-    top: 0,
-    left: 0,
-    right: 0,
-    height: height * 0.3,
-    width: width,
-    position: "absolute",
-  },
-  bannerContent: {
-    backgroundColor: "rgba(0,0,0, 0.5)",
-    height: height * 0.3,
-    width: width,
-    position: "relative",
-    alignItems: "center",
-    justifyContent: "center",
-  },
-  backIcon: {
-    position: "absolute",
-    left: 10,
-    top: 10,
-  },
-  messageIcon: {
-    position: "absolute",
-    right: 10,
-    top: 10,
-    transform: [{ scaleX: -1 }],
-  },
-  profileImg: {
-    height: 60,
-    width: 60,
-    borderRadius: 30,
-    borderWidth: 2,
-    borderColor: GLOBAL_COLORS.secondaryColor,
-  },
-  usernameContainer: {
-    position: "relative",
-    flexDirection: "row",
-    alignItems: "center",
-    marginVertical: 10,
-  },
-  usernameContent: {
-    flexDirection: "row",
-  },
-  usernameText: {
-    color: "#fff",
-    fontSize: 16,
-    paddingHorizontal: 20,
-  },
-  usernameUp: {
-    position: "absolute",
-    top: 0,
-    right: 0,
-    color: "#fff",
-    fontSize: 10,
-    backgroundColor: GLOBAL_COLORS.secondaryColor,
-    paddingHorizontal: 4,
-    borderRadius: 3,
-    fontWeight: "bold",
-  },
-  followBtn: {
-    paddingHorizontal: 20,
-    paddingVertical: 4,
-    backgroundColor: GLOBAL_COLORS.secondaryColor,
-    borderRadius: 12,
-  },
-  followText: {
-    color: "#fff",
-    fontSize: 14,
-  },
-  description: {
-    color: "#fff",
-    marginTop: 10,
-    fontSize: 16,
-  },
-  summaryContainer: {
-    flexDirection: "row",
-    marginTop: 30,
-  },
-  summaryContent: {
-    width: width / 3,
-    alignItems: "center",
-  },
-  summaryContentMiddle: {
-    width: width / 3,
-    alignItems: "center",
-    borderLeftColor: "#bbb",
-    borderRightColor: "#bbb",
-    borderLeftWidth: 1,
-    borderRightWidth: 1,
-  },
-  summaryNumber: {
-    fontSize: 18,
-    color: "#fff",
-    fontWeight: "bold",
-  },
-  summaryText: {
-    color: "#bbb",
-  },
-
-  //Donators
-  donatorContainer: {
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "space-between",
-    backgroundColor: "#262632",
-    marginTop: 15,
-    paddingVertical: 5,
-    paddingHorizontal: 15,
-  },
-  profilesImagesContent: {
-    position: "relative",
-    height: 40,
-  },
-  profileImgs: {
-    position: "absolute",
-    width: 40,
-    height: 40,
-    borderRadius: 20,
-  },
-  buttons: {
-    flexDirection: "row",
-    alignItems: "center",
-  },
-  donateBtn: {
-    paddingHorizontal: 10,
-    paddingVertical: 4,
-    backgroundColor: GLOBAL_COLORS.secondaryColor,
-    borderRadius: 4,
-    marginLeft: 10,
-  },
-  donateText: {
-    color: "#fff",
-  },
+	bannerContent: {
+		backgroundColor: "rgba(0,0,0, 0.5)",
+		alignItems: "center",
+		justifyContent: "center",
+		paddingVertical: 16,
+	},
+	backIcon: {
+		position: "absolute",
+		left: 10,
+		top: 10,
+	},
+	messageIcon: {
+		position: "absolute",
+		right: 10,
+		top: 10,
+		transform: [{ scaleX: -1 }],
+	},
+	profileImg: {
+		height: 60,
+		width: 60,
+		borderRadius: 30,
+		borderWidth: 2,
+		borderColor: GLOBAL_COLORS.secondaryColor,
+	},
+	usernameContainer: {
+		position: "relative",
+		flexDirection: "row",
+		alignItems: "center",
+		marginVertical: 10,
+	},
+	usernameContent: {
+		flexDirection: "row",
+		alignItems: "center",
+		marginRight: 8,
+	},
+	usernameText: {
+		color: "#fff",
+		fontSize: 16,
+	},
+	usernameUp: {
+		color: "#fff",
+		fontSize: 10,
+		backgroundColor: GLOBAL_COLORS.secondaryColor,
+		paddingHorizontal: 4,
+		borderRadius: 3,
+		fontWeight: "bold",
+		top: -6,
+		left: 2,
+	},
+	followBtn: {
+		paddingHorizontal: 16,
+		paddingVertical: 2,
+		backgroundColor: GLOBAL_COLORS.secondaryColor,
+		borderRadius: 12,
+	},
+	unfollowBtn: {
+		paddingHorizontal: 16,
+		paddingVertical: 2,
+		backgroundColor: GLOBAL_COLORS.inactiveTextColor,
+		borderRadius: 12,
+	},
+	followText: {
+		color: "#fff",
+		fontSize: 14,
+	},
+	description: {
+		color: "#fff",
+		marginTop: 10,
+		fontSize: 16,
+	},
+	summaryContainer: {
+		flexDirection: "row",
+		marginTop: 30,
+	},
+	summaryContent: {
+		width: "33%",
+		alignItems: "center",
+	},
+	summaryContentMiddle: {
+		width: "33%",
+		alignItems: "center",
+		borderLeftColor: "#bbb",
+		borderRightColor: "#bbb",
+		borderLeftWidth: 1,
+		borderRightWidth: 1,
+	},
+	summaryNumber: {
+		fontSize: 18,
+		color: "#fff",
+		fontWeight: "bold",
+	},
+	summaryText: {
+		color: "#bbb",
+	},
+	donatorContainer: {
+		flexDirection: "row",
+		alignItems: "center",
+		justifyContent: "space-between",
+		backgroundColor: "#262632",
+		// marginTop: 15,
+		paddingVertical: 5,
+		paddingHorizontal: 15,
+	},
+	profilesImagesContent: {
+		position: "relative",
+		height: 40,
+	},
+	profileImgs: {
+		position: "absolute",
+		width: 40,
+		height: 40,
+		borderRadius: 20,
+	},
+	buttons: {
+		flexDirection: "row",
+		alignItems: "center",
+	},
+	donateBtn: {
+		paddingHorizontal: 10,
+		paddingVertical: 4,
+		backgroundColor: GLOBAL_COLORS.secondaryColor,
+		borderRadius: 4,
+		marginLeft: 10,
+	},
+	donateText: {
+		color: "#fff",
+	},
 });

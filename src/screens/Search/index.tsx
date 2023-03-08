@@ -31,7 +31,7 @@ import { FlashList } from "@shopify/flash-list";
 
 const { width } = Dimensions.get("window");
 
-const SearchBar = ({ search, setSearch, hasSearch, setHasSearch }) => {
+const SearchBar = ({ search, setSearch, hasSearch, setHasSearch, refetch }) => {
   const navigation = useNavigation<any>();
   const [text, setText] = useState("");
 
@@ -48,6 +48,7 @@ const SearchBar = ({ search, setSearch, hasSearch, setHasSearch }) => {
     setHasSearch(false);
     setSearch("");
     setText("");
+    refetch();
   };
 
   const enterToSearch = () => {
@@ -127,6 +128,7 @@ const SearchItem = ({ data, setSearch, setHasSearch, setHistory }) => {
     setHistory((prev) => prev.filter((item) => item.search !== word));
     mutate({ data: { keyword: word }, token: token });
   };
+
   return (
     <Pressable
       style={styles.searchItemContent}
@@ -145,7 +147,7 @@ const SearchItem = ({ data, setSearch, setHasSearch, setHistory }) => {
   );
 };
 
-const SearchHistory = ({ data, setSearch, setHasSearch }) => {
+const SearchHistory = ({ data, setSearch, setHasSearch, refetch }) => {
   const token = userStore((state) => state.api_token);
   const { deleteSearchHistory } = GeneralSearch();
   const [history, setHistory] = useState([]);
@@ -164,6 +166,8 @@ const SearchHistory = ({ data, setSearch, setHasSearch }) => {
   });
   const handleClear = () => {
     mutate({ data: { all: true }, token: token });
+    setHistory([]);
+    refetch();
   };
   return (
     <View>
@@ -315,7 +319,7 @@ const Search = () => {
   const { getSearchPageRecommended } = GeneralSearch();
   const [hasSearch, setHasSearch] = useState(false);
   const [search, setSearch] = useState<string>("");
-  const { isLoading, data } = useQuery({
+  const { isLoading, data, refetch } = useQuery({
     queryKey: ["search"],
     queryFn: () => getSearchPageRecommended(token),
     onError: (error) => {
@@ -334,6 +338,7 @@ const Search = () => {
           setSearch={setSearch}
           hasSearch={hasSearch}
           setHasSearch={setHasSearch}
+          refetch={refetch}
         />
         {hasSearch ? (
           <SearchOutput searchText={search} />
@@ -344,6 +349,7 @@ const Search = () => {
                 data={data.search_history}
                 setSearch={setSearch}
                 setHasSearch={setHasSearch}
+                refetch={refetch}
               />
             ) : null}
             <PopularSearches

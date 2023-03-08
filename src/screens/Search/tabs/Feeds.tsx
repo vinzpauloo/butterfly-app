@@ -1,12 +1,13 @@
 import { StyleSheet, Text, View } from "react-native";
 import React, { useState } from "react";
-import FeedList from "layouts/FeedList";
-import { userStore } from "../../../zustand/userStore";
-import GeneralSearch from "services/api/GeneralSearch";
-import { useQuery } from "@tanstack/react-query";
+
 import Container from "components/Container";
-import VideoListSkeleton from "components/skeletons/VideoListSkeleton";
+import FeedList from "layouts/FeedList";
+import FeedItemSkeleton from "components/skeletons/FeedItemSkeleton";
+import GeneralSearch from "services/api/GeneralSearch";
 import { GLOBAL_COLORS } from "global";
+import { userStore } from "../../../zustand/userStore";
+import { useQuery } from "@tanstack/react-query";
 
 const Feeds = ({ searchText }) => {
   const token = userStore((state) => state.api_token);
@@ -28,7 +29,7 @@ const Feeds = ({ searchText }) => {
     return (
       <Container>
         <View style={{ height: "100%" }}>
-          <VideoListSkeleton />
+          <FeedItemSkeleton />
         </View>
       </Container>
     );

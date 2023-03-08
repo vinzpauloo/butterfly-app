@@ -1,18 +1,21 @@
-import { StyleSheet, Text, View } from "react-native";
 import React from "react";
+import { StyleSheet, Text, View, ScrollView } from "react-native";
 
-import Container from "components/Container";
-import GridVideos from "features/sectionList/components/GridVideos";
-import { followImages } from "data/gridImages";
+type Props = {
+	userID: number
+};
 
-type Props = {};
-
+// BUGGY UI TO BE FIXED
 const Projects = (props: Props) => {
-  return (
-    <Container>
-      <GridVideos videos={followImages} isFollowingScreen={true} />
-    </Container>
-  );
+	return (
+		<ScrollView>
+			<View style={{ marginTop: 600, minHeight: 2000 }}>
+				<Text style={{ color: "white" }}>USER ID: {props.userID} </Text>
+				<Text style={{ color: "white" }}>PROJECTS OF SPECIFIC CONTENT CREATOR</Text>
+				<Text style={{ color: "white" }}>BUGGY UI TO BE FIXED</Text>
+			</View>
+		</ScrollView>
+	);
 };
 
 export default Projects;

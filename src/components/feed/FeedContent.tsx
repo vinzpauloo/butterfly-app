@@ -1,16 +1,8 @@
-import {
-  Dimensions,
-  Image,
-  Pressable,
-  StyleSheet,
-  Text,
-  View,
-} from "react-native";
+import { Dimensions, Image, Pressable, StyleSheet, Text, View } from "react-native";
 import React, { useState } from "react";
 
 import { MasonryFlashList } from "@shopify/flash-list";
 import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons";
-import { Button, Modal, Text as TextBase, VStack } from "native-base";
 
 import VideoPlayer from "components/VideoPlayer";
 import CustomModal from "components/CustomModal";
@@ -18,6 +10,7 @@ import { GLOBAL_COLORS } from "global";
 import { useNavigation } from "@react-navigation/native";
 import FeedContentLikeBtn from "./FeedContentLikeBtn";
 import Fontisto from "react-native-vector-icons/Fontisto";
+import VIPModalContent from "components/VIPModalContent";
 
 const { height, width } = Dimensions.get("window");
 
@@ -159,26 +152,6 @@ const BottomContent = ({ totalComments, totalLikes, id, isLiked }) => {
   );
 };
 
-const Content = ({ setOpen }) => {
-  return (
-    <Modal.Content bgColor={GLOBAL_COLORS.headerBasicBg}>
-      <Modal.CloseButton />
-      <Modal.Body>
-        <VStack space={8} alignItems="center" margin={0} py={5}>
-          <TextBase color="white">Upgrade membership first!</TextBase>
-          <Button
-            size="sm"
-            style={styles.button}
-            onPress={() => setOpen(false)}
-          >
-            Purchase VIP
-          </Button>
-        </VStack>
-      </Modal.Body>
-    </Modal.Content>
-  );
-};
-
 const FeedContent = ({ data }) => {
   const { item } = data;
   const [open, setOpen] = useState(false);
@@ -196,7 +169,7 @@ const FeedContent = ({ data }) => {
         id={item._id}
       />
       <CustomModal open={open} setOpen={setOpen}>
-        <Content setOpen={setOpen} />
+        <VIPModalContent setOpen={setOpen} />
       </CustomModal>
     </View>
   );
@@ -289,11 +262,5 @@ const styles = StyleSheet.create({
   bottomText: {
     color: GLOBAL_COLORS.inactiveTextColor,
     marginHorizontal: 3,
-  },
-  //CONTENT
-  button: {
-    backgroundColor: GLOBAL_COLORS.secondaryColor,
-    borderRadius: 20,
-    width: 120,
   },
 });

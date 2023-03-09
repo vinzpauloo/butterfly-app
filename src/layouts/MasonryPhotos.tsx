@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { StyleSheet, View, ImageBackground, Pressable } from "react-native";
 
 import { useNavigation } from "@react-navigation/native";
-import { VStack, HStack, Modal, Button, Text, Skeleton } from "native-base";
+import { VStack, HStack, Text } from "native-base";
 import { MasonryFlashList } from "@shopify/flash-list";
 import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons";
 
@@ -13,6 +13,7 @@ import { GLOBAL_COLORS } from "global";
 import VIPTag from "components/VIPTag";
 import CustomModal from "components/CustomModal";
 import MasonrySkeleton from "components/skeletons/MasonrySkeleton";
+import VIPModalContent from "components/VIPModalContent";
 
 type Props = {};
 
@@ -23,27 +24,6 @@ type SingleImageProp = {
   totalLikes: string;
   height: number;
   setOpen: React.Dispatch<React.SetStateAction<boolean>>;
-};
-
-const Content = ({ setOpen }) => {
-  return (
-    <Modal.Content bgColor={GLOBAL_COLORS.headerBasicBg}>
-      <Modal.CloseButton />
-      <Modal.Body>
-        <VStack space={8} alignItems="center" margin={0} py={5}>
-          <Text color="white">Upgrade membership first!</Text>
-
-          <Button
-            size="sm"
-            style={styles.button}
-            onPress={() => setOpen(false)}
-          >
-            Purchase VIP
-          </Button>
-        </VStack>
-      </Modal.Body>
-    </Modal.Content>
-  );
 };
 
 const SingleImage = (props: SingleImageProp) => {
@@ -118,7 +98,7 @@ const MasonryPhotos = (props: Props) => {
             </View>
           </Container>
           <CustomModal open={open} setOpen={setOpen}>
-            <Content setOpen={setOpen} />
+            <VIPModalContent setOpen={setOpen} />
           </CustomModal>
         </>
       ) : (
@@ -145,10 +125,5 @@ const styles = StyleSheet.create({
   },
   whiteText: {
     color: "white",
-  },
-  button: {
-    backgroundColor: GLOBAL_COLORS.secondaryColor,
-    borderRadius: 20,
-    width: 120,
   },
 });

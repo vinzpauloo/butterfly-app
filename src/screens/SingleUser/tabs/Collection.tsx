@@ -1,20 +1,21 @@
 import React from "react";
-import { StyleSheet, Text, View, ScrollView } from "react-native";
+import { StyleSheet, View, Text } from "react-native";
+import { useRoute } from "@react-navigation/native";
+import { Tabs } from "react-native-collapsible-tab-view";
+import Container from "components/Container";
 
-type Props = {
-	userID: number
-};
+type Props = {};
 
-// BUGGY UI TO BE FIXED
 const Collection = (props: Props) => {
+	const route = useRoute<any>();
+	const userID = route?.params?.userID
+
 	return (
-		<ScrollView>
-			<View style={{ marginTop: 600, minHeight: 2000 }}>
-				<Text style={{ color: "white" }}>USER ID: {props.userID} </Text>
-				<Text style={{ color: "white" }}>COLLECTION OF SPECIFIC CONTENT CREATOR</Text>
-				<Text style={{ color: "white" }}>BUGGY UI TO BE FIXED</Text>
-			</View>
-		</ScrollView>
+		<Container>
+			<Tabs.FlatList data={[1]} renderItem={() =>
+					<Text style={{color:"white"}}>Collection - WIP</Text>
+			}/>
+		</Container>
 	);
 };
 

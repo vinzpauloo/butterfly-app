@@ -1,20 +1,56 @@
-import React from "react";
-import { StyleSheet, Text, View, ScrollView } from "react-native";
+import { useRoute } from "@react-navigation/native";
+import { useQuery } from "@tanstack/react-query";
+import GridVideos from "features/sectionList/components/GridVideos";
+import StickyTabsGridVideos from "features/sectionList/components/StickyTabsGridVideos";
+import React, { useState } from "react";
+import { StyleSheet } from "react-native";
+import WorkService from "services/api/WorkService";
 
-type Props = {
-	userID: number
-};
+type Props = {};
 
-// BUGGY UI TO BE FIXED
 const Projects = (props: Props) => {
+	const route = useRoute<any>();
+	const userID = route?.params?.userID
+	
+	const [page, setPage] = useState(1);
+	const [data, setData] = useState([]);
+	const [lastPage, setLastPage] = useState(1);
+	const [refreshing, setRefreshing] = useState(false);
+	const [refreshingId, setRefreshingId] = useState(0);
+
+	const { getWorks } = WorkService();
+	const { isLoading } = useQuery({
+		queryKey: ["testt", userID, page, refreshingId],
+		queryFn: () =>
+			getWorks({
+				user_id: userID,
+				with: "user",
+				creator_only: true,
+				ads: true,
+				page: page,
+			}),
+		onSuccess: (data) => {
+			setLastPage(data.last_page);
+			setData((prev) => [...prev].concat(data.data));
+		},
+		onError: (error) => {
+			//error handler
+			console.log("Error", error);
+		},
+	});
+
 	return (
-		<ScrollView>
-			<View style={{ marginTop: 600, minHeight: 2000 }}>
-				<Text style={{ color: "white" }}>USER ID: {props.userID} </Text>
-				<Text style={{ color: "white" }}>PROJECTS OF SPECIFIC CONTENT CREATOR</Text>
-				<Text style={{ color: "white" }}>BUGGY UI TO BE FIXED</Text>
-			</View>
-		</ScrollView>
+		<StickyTabsGridVideos
+			isLoading={isLoading}
+			page={page}
+			refreshing={refreshing}
+			setData={setData}
+			setRefreshing={setRefreshing}
+			setRefreshingId={setRefreshingId}
+			setPage={setPage}
+			lastPage={lastPage}
+			layout={<GridVideos data={data} />}
+		/>
 	);
 };
 

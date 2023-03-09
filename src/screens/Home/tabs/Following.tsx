@@ -115,20 +115,6 @@ const NoFollowing = ({
   setData,
   setRefreshingId,
 }) => {
-  const token = userStore((store) => store.api_token);
-  const navigation = useNavigation<any>();
-  const { followCreator } = CustomerService();
-  const [isFollow, setIsFollow] = useState(false);
-  // for follow
-  const { mutate: mutateFollow } = useMutation(followCreator, {
-    onSuccess: (data) => {
-      console.log("followingFollowCreator-success", data);
-    },
-    onError: (error) => {
-      console.log("followingFollowCreator-error", error);
-    },
-  });
-
   const onRefresh = useCallback(() => {
     setRefreshing(true);
     setTimeout(() => {
@@ -138,20 +124,6 @@ const NoFollowing = ({
     }, 2000);
   }, []);
 
-  const handleFollow = (userId) => {
-    mutateFollow({
-      user_id: { user_id: userId },
-      token: token,
-    });
-    setIsFollow(true);
-  };
-
-  const navigateSingleUser = (userId) => {
-    navigation.navigate("SingleUser", {
-      userID: userId,
-    });
-  };
-
   if (isLoading || refreshing) {
     return (
       <View style={{ height }}>
@@ -159,6 +131,7 @@ const NoFollowing = ({
       </View>
     );
   }
+
   return (
     <ScrollView
       refreshControl={
@@ -173,49 +146,89 @@ const NoFollowing = ({
         <Image source={NoFollowingImg} style={styles.image} />
         <Text style={styles.popular}>近期热门用户</Text>
         {data.map((info, index) => (
-          <View key={index}>
-            <View style={styles.usersCategoryContainer}>
-              <View style={styles.headerContent}>
-                <Pressable
-                  style={{ flexDirection: "row", alignItems: "center" }}
-                  onPress={() => navigateSingleUser(info.id)}
-                >
-                  <Image source={{ uri: info.photo }} style={styles.modelImg} />
-                  <Text style={styles.modelName}>{info.username}</Text>
-                </Pressable>
-                {isFollow ? null : (
-                  <Pressable
-                    style={styles.followBtn}
-                    onPress={() => handleFollow(info.id)}
-                  >
-                    <Text style={styles.followText}>关注</Text>
-                  </Pressable>
-                )}
-              </View>
-              <MasonryFlashList
-                numColumns={2}
-                data={info.work}
-                renderItem={({ item, index }: any) => (
-                  <Video
-                    userId={info.id}
-                    username={info.username}
-                    photo={info.photo}
-                    item={item}
-                    index={index}
-                    onOpen={onOpen}
-                    setId={setId}
-                  />
-                )}
-                keyExtractor={(_, index) => "" + index}
-                estimatedItemSize={2}
-              />
-            </View>
-            {data.length - 1 !== index ? <DividerContainer /> : null}
-          </View>
+          <SectionContent
+            index={index}
+            info={info}
+            onOpen={onOpen}
+            setId={setId}
+            data={data}
+          />
         ))}
         <BottomMessage />
       </Container>
     </ScrollView>
+  );
+};
+
+const SectionContent = ({ index, info, onOpen, setId, data }) => {
+  const navigation = useNavigation<any>();
+  const { followCreator } = CustomerService();
+  const token = userStore((store) => store.api_token);
+  const [isFollow, setIsFollow] = useState(false);
+
+  //for follow
+  const { mutate: mutateFollow } = useMutation(followCreator, {
+    onSuccess: (data) => {
+      console.log("followingFollowCreator-success", data);
+    },
+    onError: (error) => {
+      console.log("followingFollowCreator-error", error);
+    },
+  });
+
+  const navigateSingleUser = (userId) => {
+    navigation.navigate("SingleUser", {
+      userID: userId,
+    });
+  };
+
+  const handleFollow = (userId) => {
+    mutateFollow({
+      user_id: { user_id: userId },
+      token: token,
+    });
+    setIsFollow(true);
+  };
+  return (
+    <View key={index}>
+      <View style={styles.usersCategoryContainer}>
+        <View style={styles.headerContent}>
+          <Pressable
+            style={{ flexDirection: "row", alignItems: "center" }}
+            onPress={() => navigateSingleUser(info.id)}
+          >
+            <Image source={{ uri: info.photo }} style={styles.modelImg} />
+            <Text style={styles.modelName}>{info.username}</Text>
+          </Pressable>
+          {isFollow ? null : (
+            <Pressable
+              style={styles.followBtn}
+              onPress={() => handleFollow(info.id)}
+            >
+              <Text style={styles.followText}>关注</Text>
+            </Pressable>
+          )}
+        </View>
+        <MasonryFlashList
+          numColumns={2}
+          data={info.work}
+          renderItem={({ item, index }: any) => (
+            <Video
+              userId={info.id}
+              username={info.username}
+              photo={info.photo}
+              item={item}
+              index={index}
+              onOpen={onOpen}
+              setId={setId}
+            />
+          )}
+          keyExtractor={(_, index) => "" + index}
+          estimatedItemSize={2}
+        />
+      </View>
+      {data.length - 1 !== index ? <DividerContainer /> : null}
+    </View>
   );
 };
 

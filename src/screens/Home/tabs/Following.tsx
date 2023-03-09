@@ -295,6 +295,9 @@ const Follow = ({
         estimatedItemSize={200}
         renderItem={({ item, index }: any) => (
           <Video
+            userId={item.user.id}
+            username={item.user.username}
+            photo={item.user.photo}
             item={item}
             index={index}
             onOpen={onOpen}

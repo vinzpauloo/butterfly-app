@@ -59,7 +59,7 @@ const Captions = ({ tags, story, id }) => {
       <View style={styles.tagsContainer}>
         {tags.map((item, index) => (
           <Pressable key={index} onPress={() => navigateSingleTag(item)}>
-            <Text style={styles.tag}>{item}</Text>
+            <Text style={styles.tag}>#{item}</Text>
           </Pressable>
         ))}
       </View>
@@ -128,7 +128,7 @@ const Video = ({ url }) => {
   return <VideoPlayer url={url} isFocus={false} />;
 };
 
-const BottomContent = ({ totalComments, totalLikes, id, customerLikes }) => {
+const BottomContent = ({ totalComments, totalLikes, id, isLiked }) => {
   const navigation = useNavigation<any>();
   const navigateSingleFeed = () => {
     navigation.navigate("SingleFeedScreen", { feedId: id });
@@ -154,11 +154,7 @@ const BottomContent = ({ totalComments, totalLikes, id, customerLikes }) => {
         />
         <Text style={styles.bottomText}>{totalComments}</Text>
       </Pressable>
-      <FeedContentLikeBtn
-        totalLikes={totalLikes}
-        id={id}
-        customerLikes={customerLikes}
-      />
+      <FeedContentLikeBtn totalLikes={totalLikes} id={id} isLiked={isLiked} />
     </View>
   );
 };
@@ -195,8 +191,8 @@ const FeedContent = ({ data }) => {
       {!!item?.videos && <Video url={item?.videos[0].url} />}
       <BottomContent
         totalComments={item.comment.total_comments}
-        customerLikes={item.like.likes}
         totalLikes={item.like.total_likes}
+        isLiked={item.is_liked}
         id={item._id}
       />
       <CustomModal open={open} setOpen={setOpen}>

@@ -8,15 +8,15 @@ import LikeService from "services/api/LikeService";
 import { GLOBAL_COLORS } from "global";
 import { userStore } from "../../zustand/userStore";
 
-const FeedContentLikeBtn = ({ totalLikes, id, customerLikes }) => {
-  const customerID = userStore((store) => store._id);
+const FeedContentLikeBtn = ({ totalLikes, id, isLiked }) => {
+  const token = userStore((store) => store.api_token);
   const isFocused = useIsFetching();
   const { likeWork, unlikeWork } = LikeService();
   const [isAlreadyLike, setIsAlreadyLike] = useState(false);
   const [likeCount, setLikeCount] = useState(totalLikes);
 
   useEffect(() => {
-    setIsAlreadyLike(customerLikes.includes(customerID));
+    setIsAlreadyLike(isLiked);
   }, [isFocused]);
 
   // for like
@@ -49,15 +49,18 @@ const FeedContentLikeBtn = ({ totalLikes, id, customerLikes }) => {
     // check here if not like yet
     if (!isAlreadyLike) {
       mutateLike({
-        site_id: 1,
-        foreign_id: id,
-        customer_id: customerID, // CHANGE LATER
-        type: "feed",
+        data: {
+          foreign_id: id,
+          type: "feed",
+        },
+        token: token,
       });
     } else {
       mutateUnLike({
-        foreign_id: id,
-        customer_id: customerID, // CHANGE LATER
+        data: {
+          foreign_id: id,
+        },
+        token: token,
       });
     }
   };

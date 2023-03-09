@@ -43,6 +43,7 @@ import { GLOBAL_COLORS } from "global";
 import { useRoute } from "@react-navigation/native";
 import { useQuery } from "@tanstack/react-query";
 import Container from "components/Container";
+import { userStore } from "../zustand/userStore";
 
 const basicHeader = ({ navigation, route }: any) => ({
   headerTitle: route?.params.postTitle,
@@ -74,13 +75,15 @@ const VlogScreen = () => {
   const { getWorkById } = WorkService();
   const [data, setData] = useState([]);
   const [nextID, setNextID] = useState(0);
+  const token = userStore((state) => state.api_token);
+  const queryParams = {
+    workId: !!route.params.all ? route.params.all[nextID] : route.params.id,
+    token: token,
+  };
 
   const { isLoading, refetch } = useQuery({
     queryKey: ["SingleVlog", route.params.id],
-    queryFn: () =>
-      getWorkById(
-        !!route.params.all ? route.params.all[nextID] : route.params.id
-      ),
+    queryFn: () => getWorkById(queryParams),
     onError: (error) => {
       console.log("SingleVlog", error);
     },

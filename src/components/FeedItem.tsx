@@ -1,16 +1,6 @@
 import React, { useState } from "react";
 import { StyleSheet, Pressable, Image, Dimensions } from "react-native";
-import {
-  VStack,
-  HStack,
-  Avatar,
-  Divider,
-  Box,
-  Flex,
-  Modal,
-  Button,
-  Text,
-} from "native-base";
+import { VStack, HStack, Avatar, Divider, Box, Flex, Text } from "native-base";
 import { useNavigation } from "@react-navigation/native";
 import { Video, ResizeMode } from "expo-av";
 import { GLOBAL_COLORS } from "global";
@@ -21,28 +11,9 @@ import Fontisto from "react-native-vector-icons/Fontisto";
 
 import CustomModal from "./CustomModal";
 import FeedContentLikeBtn from "./feed/FeedContentLikeBtn";
+import VIPModalContent from "./VIPModalContent";
 
 type Props = {};
-
-const Content = ({ setOpen }) => {
-  return (
-    <Modal.Content bgColor={GLOBAL_COLORS.headerBasicBg}>
-      <Modal.CloseButton />
-      <Modal.Body>
-        <VStack space={8} alignItems="center" margin={0} py={5}>
-          <Text color="white">Upgrade membership first!</Text>
-          <Button
-            size="sm"
-            style={styles.button}
-            onPress={() => setOpen(false)}
-          >
-            Purchase VIP
-          </Button>
-        </VStack>
-      </Modal.Body>
-    </Modal.Content>
-  );
-};
 
 const FeedItem = ({ item }) => {
   const [open, setOpen] = useState(false);
@@ -174,7 +145,7 @@ const FeedItem = ({ item }) => {
       </HStack>
       <Divider style={styles.divider} color="#999" />
       <CustomModal open={open} setOpen={setOpen}>
-        <Content setOpen={setOpen} />
+        <VIPModalContent setOpen={setOpen} />
       </CustomModal>
     </VStack>
   );

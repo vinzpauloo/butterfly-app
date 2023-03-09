@@ -16,7 +16,7 @@ const FeedContentLikeBtn = ({ totalLikes, id, customerLikes }) => {
   const [likeCount, setLikeCount] = useState(totalLikes);
 
   useEffect(() => {
-    setIsAlreadyLike(customerLikes.includes(customerID));
+    setIsAlreadyLike(customerLikes?.includes(customerID));
   }, [isFocused]);
 
   // for like

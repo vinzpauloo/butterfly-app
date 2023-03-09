@@ -10,7 +10,7 @@ import BestApps from "screens/Account/tabs/BestApps";
 import BottomTabs from "layouts/navigators/BottomTabs";
 import CameraInit from "screens/Settings/AccountRetrievalTabs/CameraInit";
 import CustomerService from "screens/Settings/AccountRetrievalTabs/CustomerService";
-import FollowingFanListScreen from "screens/FollowingFanListScreen";
+import FollowersScreen from "screens/FollowersScreen";
 import InitialLoad from "screens/InitialLoad";
 import InformationScreen from "screens/InformationScreen";
 import Introduction from "screens/Settings/tabs/Introduction";
@@ -317,8 +317,8 @@ export const stackScreens = {
       options: { headerShown: false },
     },
     {
-      name: "FollowingFanListScreen",
-      component: FollowingFanListScreen,
+      name: "FollowersScreen",
+      component: FollowersScreen,
       options: basicHeader,
     },
   ],

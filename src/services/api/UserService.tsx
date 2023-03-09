@@ -4,6 +4,7 @@ import request from "lib/request";
 interface IUserParams {
 	user_id?: number
 	paginate?: number
+	page?: number
 }
 
 const UserService = () => {

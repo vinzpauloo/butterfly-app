@@ -21,6 +21,11 @@ interface IWorkFollowing {
   token: string;
 }
 
+interface IWorkById {
+  workId: string;
+  token: string;
+}
+
 const WorkService = () => {
   const getWorks = (params: IWorksParams) => {
     return request({
@@ -31,10 +36,10 @@ const WorkService = () => {
     });
   };
 
-  const getWorkById = (work_id: string) => {
+  const getWorkById = (params: IWorkById) => {
     return request({
-      headers: getHeaders(),
-      url: `/works/${work_id}`,
+      headers: { ...getHeaders(), Authorization: `Bearer ${params.token}` },
+      url: `/works/${params.workId}`,
       method: "GET",
     });
   };

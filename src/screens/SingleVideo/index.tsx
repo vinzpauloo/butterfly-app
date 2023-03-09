@@ -9,13 +9,13 @@ import {
 } from "@react-navigation/native";
 import Ionicons from "react-native-vector-icons/Ionicons";
 
+import CarouselSkeleton from "components/skeletons/CarouselSkeleton";
+import SingleVideoTab from "screens/SingleVideo/tabs/SingleVideoTabs";
 import VideoPlayer from "components/VideoPlayer";
 import VideoListSkeleton from "components/skeletons/VideoListSkeleton";
-import CarouselSkeleton from "components/skeletons/CarouselSkeleton";
-import { GLOBAL_COLORS } from "global";
-import { Follow } from "hooks/commonActoins/useFollow";
-import SingleVideoTab from "screens/SingleVideo/tabs/SingleVideoTabs";
 import WorkService from "services/api/WorkService";
+import { Follow } from "hooks/commonActoins/useFollow";
+import { GLOBAL_COLORS } from "global";
 import { userStore } from "../../zustand/userStore";
 
 const HeaderTitle = () => {
@@ -94,13 +94,14 @@ const HeaderTitle = () => {
 };
 
 const SingleVideoScreen = () => {
+  const token = userStore((state) => state.api_token);
   const { getWorkById } = WorkService();
   const route = useRoute<any>();
   const isFocus = useIsFocused();
 
   const { data, isLoading } = useQuery({
     queryKey: ["workSingleVideoScreen", route.params.id],
-    queryFn: () => getWorkById(route.params.id),
+    queryFn: () => getWorkById({ workId: route.params.id, token: token }),
     onError: (error) => {
       //error handler
       console.log("workSingleVideo", error);

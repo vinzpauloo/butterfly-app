@@ -14,6 +14,7 @@ import { Center, useDisclose } from "native-base";
 import { MasonryFlashList } from "@shopify/flash-list";
 import { ScrollView } from "react-native-gesture-handler";
 import { useNavigation } from "@react-navigation/native";
+import { useMutation, useQuery } from "@tanstack/react-query";
 
 import BottomMessage from "components/BottomMessage";
 import Container from "components/Container";
@@ -27,7 +28,6 @@ import VIPTag from "components/VIPTag";
 import WorkService from "services/api/WorkService";
 import { GLOBAL_COLORS } from "global";
 import { reelsVideos } from "data/reelsVideos";
-import { useMutation, useQuery } from "@tanstack/react-query";
 import {
   FollowingBottomContent,
   GridVideosBottomContent,
@@ -147,6 +147,7 @@ const NoFollowing = ({
         <Text style={styles.popular}>近期热门用户</Text>
         {data.map((info, index) => (
           <SectionContent
+            key={index}
             index={index}
             info={info}
             onOpen={onOpen}
@@ -190,7 +191,7 @@ const SectionContent = ({ index, info, onOpen, setId, data }) => {
     setIsFollow(true);
   };
   return (
-    <View key={index}>
+    <>
       <View style={styles.usersCategoryContainer}>
         <View style={styles.headerContent}>
           <Pressable
@@ -224,11 +225,12 @@ const SectionContent = ({ index, info, onOpen, setId, data }) => {
             />
           )}
           keyExtractor={(_, index) => "" + index}
-          estimatedItemSize={2}
+          /* BFLYAPP-281 - Adjusted estimatedSize to avoid flickering of container */
+          estimatedItemSize={202}
         />
       </View>
       {data.length - 1 !== index ? <DividerContainer /> : null}
-    </View>
+    </>
   );
 };
 

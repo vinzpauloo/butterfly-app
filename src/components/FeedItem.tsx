@@ -140,7 +140,7 @@ const FeedItem = ({ item }) => {
         <FeedContentLikeBtn
           totalLikes={item.like.total_likes}
           id={item._id}
-          customerLikes={item.like.likes}
+          isLiked={item.is_liked}
         />
       </HStack>
       <Divider style={styles.divider} color="#999" />

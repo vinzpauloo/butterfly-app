@@ -90,8 +90,6 @@ const CustomerService = () => {
   };
 
   const followCreator = (data: IFollow) => {
-    console.log("@@@", data.user_id);
-
     return request({
       headers: { ...getHeaders(), Authorization: `Bearer ${data.token}` },
       url: "/customers/follow-creator",
@@ -105,7 +103,7 @@ const CustomerService = () => {
       headers: { ...getHeaders(), Authorization: `Bearer ${data.token}` },
       url: `/customers/unfollow-creator/`,
       method: "DELETE",
-      data: data.user_id
+      data: data.user_id,
     });
   };
 

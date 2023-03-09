@@ -14,10 +14,17 @@ interface IWorksParams {
 }
 
 interface IWorkFollowing {
-  following_only: boolean;
-  customer_id: string;
-  page: number;
-  paginate: number;
+  data: {
+    following_only: boolean;
+    page: number;
+    paginate: number;
+  };
+  token: string;
+}
+
+interface IWorkById {
+  workId: string;
+  token: string;
 }
 
 const WorkService = () => {
@@ -30,20 +37,20 @@ const WorkService = () => {
     });
   };
 
-  const getWorkById = (work_id: string) => {
+  const getWorkById = (params: IWorkById) => {
     return request({
-      headers: getHeaders(),
-      url: `/works/${work_id}`,
+      headers: { ...getHeaders(), Authorization: `Bearer ${params.token}` },
+      url: `/works/${params.workId}`,
       method: "GET",
     });
   };
 
   const getWorkFollowing = (params: IWorkFollowing) => {
     return request({
-      headers: getHeaders(),
+      headers: { ...getHeaders(), Authorization: `Bearer ${params.token}` },
       url: "/works",
       get: "GET",
-      params,
+      params: params.data,
     });
   };
 

@@ -2,27 +2,26 @@ import { getHeaders } from "lib/cryptoJs";
 import request from "lib/request";
 
 interface ILike {
-  site_id?: number;
-  foreign_id?: string;
-  customer_id?: string;
-  type?: string;
+  data: { foreign_id?: string; type?: string };
+  token: string;
 }
 
 const LikeService = () => {
   const likeWork = (params: ILike) => {
     return request({
-      headers: getHeaders(),
+      headers: { ...getHeaders(), Authorization: `Bearer ${params.token}` },
       url: "/likes",
       method: "POST",
-      params,
+      params: params.data,
     });
   };
 
-  const unlikeWork = (data: ILike) => {
+  const unlikeWork = (params: ILike) => {
     return request({
-      headers: getHeaders(),
-      url: `/likes/${data.foreign_id}/${data.customer_id}`,
+      headers: { ...getHeaders(), Authorization: `Bearer ${params.token}` },
+      url: "/likes",
       method: "DELETE",
+      params: params.data,
     });
   };
 
@@ -35,7 +34,7 @@ const LikeService = () => {
     });
   };
 
-  const likesCount = (data: ILike) => {
+  const likesCount = (data) => {
     return request({
       headers: getHeaders(),
       url: `/likes/count/${data.foreign_id}`,

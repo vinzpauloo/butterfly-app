@@ -14,6 +14,7 @@ import { Center, useDisclose } from "native-base";
 import { MasonryFlashList } from "@shopify/flash-list";
 import { ScrollView } from "react-native-gesture-handler";
 import { useNavigation } from "@react-navigation/native";
+import { useMutation, useQuery } from "@tanstack/react-query";
 
 import BottomMessage from "components/BottomMessage";
 import Container from "components/Container";
@@ -27,7 +28,6 @@ import VIPTag from "components/VIPTag";
 import WorkService from "services/api/WorkService";
 import { GLOBAL_COLORS } from "global";
 import { reelsVideos } from "data/reelsVideos";
-import { useMutation, useQuery } from "@tanstack/react-query";
 import {
   FollowingBottomContent,
   GridVideosBottomContent,
@@ -37,6 +37,9 @@ import { userStore } from "../../../zustand/userStore";
 const { width, height } = Dimensions.get("window");
 
 const Video = ({
+  userId,
+  username,
+  photo,
   item,
   index,
   onOpen,
@@ -49,11 +52,11 @@ const Video = ({
   const handlePress = () => {
     if (item.orientation === "Landscape") {
       navigation.navigate("SingleVideo", {
-        image: item.user.photo,
-        username: item.user.username,
+        image: photo,
+        username: username,
         followers: "123456789",
         id: item._id,
-        userId: item.user.id,
+        userId: userId,
       });
     } else {
       navigation.navigate("VlogScreen", {
@@ -92,7 +95,7 @@ const Video = ({
         <FollowingBottomContent item={item} />
       ) : (
         <GridVideosBottomContent
-          username={item?.user?.username}
+          username={username}
           onOpen={onOpen}
           setId={setId}
           id={item._id}
@@ -112,19 +115,6 @@ const NoFollowing = ({
   setData,
   setRefreshingId,
 }) => {
-  const customerID = userStore((store) => store._id);
-  const navigation = useNavigation<any>();
-  const { followCreator } = CustomerService();
-  // for follow
-  const { mutate: mutateFollow } = useMutation(followCreator, {
-    onSuccess: (data) => {
-      console.log("followingFollowCreator", data);
-    },
-    onError: (error) => {
-      console.log("followingFollowCreator", error);
-    },
-  });
-
   const onRefresh = useCallback(() => {
     setRefreshing(true);
     setTimeout(() => {
@@ -134,20 +124,6 @@ const NoFollowing = ({
     }, 2000);
   }, []);
 
-  const handleFollow = (userId) => {
-    mutateFollow({
-      site_id: 1,
-      user_id: userId,
-      customer_id: customerID,
-    });
-  };
-
-  const navigateSingleUser = (userId) => {
-    navigation.navigate("SingleUser", {
-      userID: userId,
-    });
-  };
-
   if (isLoading || refreshing) {
     return (
       <View style={{ height }}>
@@ -155,6 +131,7 @@ const NoFollowing = ({
       </View>
     );
   }
+
   return (
     <ScrollView
       refreshControl={
@@ -168,48 +145,92 @@ const NoFollowing = ({
       <Container>
         <Image source={NoFollowingImg} style={styles.image} />
         <Text style={styles.popular}>近期热门用户</Text>
-        {data.map((item, index) => (
-          <View key={index}>
-            <View style={styles.usersCategoryContainer}>
-              <View style={styles.headerContent}>
-                <Pressable
-                  style={{ flexDirection: "row", alignItems: "center" }}
-                  onPress={() => navigateSingleUser(item[0].user_id)}
-                >
-                  <Image
-                    source={{ uri: item[0].user.photo }}
-                    style={styles.modelImg}
-                  />
-                  <Text style={styles.modelName}>{item[0].user.username}</Text>
-                </Pressable>
-                <Pressable
-                  style={styles.followBtn}
-                  onPress={() => handleFollow(item[0].user_id)}
-                >
-                  <Text style={styles.followText}>关注</Text>
-                </Pressable>
-              </View>
-              <MasonryFlashList
-                numColumns={2}
-                data={item}
-                renderItem={({ item, index }: any) => (
-                  <Video
-                    item={item}
-                    index={index}
-                    onOpen={onOpen}
-                    setId={setId}
-                  />
-                )}
-                keyExtractor={(_, index) => "" + index}
-                estimatedItemSize={2}
-              />
-            </View>
-            {data.length - 1 !== index ? <DividerContainer /> : null}
-          </View>
+        {data.map((info, index) => (
+          <SectionContent
+            key={index}
+            index={index}
+            info={info}
+            onOpen={onOpen}
+            setId={setId}
+            data={data}
+          />
         ))}
         <BottomMessage />
       </Container>
     </ScrollView>
+  );
+};
+
+const SectionContent = ({ index, info, onOpen, setId, data }) => {
+  const navigation = useNavigation<any>();
+  const { followCreator } = CustomerService();
+  const token = userStore((store) => store.api_token);
+  const [isFollow, setIsFollow] = useState(false);
+
+  //for follow
+  const { mutate: mutateFollow } = useMutation(followCreator, {
+    onSuccess: (data) => {
+      console.log("followingFollowCreator-success", data);
+    },
+    onError: (error) => {
+      console.log("followingFollowCreator-error", error);
+    },
+  });
+
+  const navigateSingleUser = (userId) => {
+    navigation.navigate("SingleUser", {
+      userID: userId,
+    });
+  };
+
+  const handleFollow = (userId) => {
+    mutateFollow({
+      user_id: { user_id: userId },
+      token: token,
+    });
+    setIsFollow(true);
+  };
+  return (
+    <>
+      <View style={styles.usersCategoryContainer}>
+        <View style={styles.headerContent}>
+          <Pressable
+            style={{ flexDirection: "row", alignItems: "center" }}
+            onPress={() => navigateSingleUser(info.id)}
+          >
+            <Image source={{ uri: info.photo }} style={styles.modelImg} />
+            <Text style={styles.modelName}>{info.username}</Text>
+          </Pressable>
+          {isFollow ? null : (
+            <Pressable
+              style={styles.followBtn}
+              onPress={() => handleFollow(info.id)}
+            >
+              <Text style={styles.followText}>关注</Text>
+            </Pressable>
+          )}
+        </View>
+        <MasonryFlashList
+          numColumns={2}
+          data={info.work}
+          renderItem={({ item, index }: any) => (
+            <Video
+              userId={info.id}
+              username={info.username}
+              photo={info.photo}
+              item={item}
+              index={index}
+              onOpen={onOpen}
+              setId={setId}
+            />
+          )}
+          keyExtractor={(_, index) => "" + index}
+          /* BFLYAPP-281 - Adjusted estimatedSize to avoid flickering of container */
+          estimatedItemSize={202}
+        />
+      </View>
+      {data.length - 1 !== index ? <DividerContainer /> : null}
+    </>
   );
 };
 
@@ -227,8 +248,6 @@ const Follow = ({
   setRefreshingId,
 }) => {
   const [startScroll, setStartScroll] = useState(true);
-
-  console.log("refresh");
 
   const onRefresh = useCallback(() => {
     setRefreshing(true);
@@ -276,6 +295,9 @@ const Follow = ({
         estimatedItemSize={200}
         renderItem={({ item, index }: any) => (
           <Video
+            userId={item.user.id}
+            username={item.user.username}
+            photo={item.user.photo}
             item={item}
             index={index}
             onOpen={onOpen}
@@ -302,6 +324,7 @@ const Follow = ({
 };
 
 const Following = () => {
+  const token = userStore((state) => state.api_token);
   const { getWorkFollowing } = WorkService();
   const [haveFollowing, setHaveFollowing] = useState(false);
   const [refreshing, setRefreshing] = useState(false);
@@ -316,13 +339,15 @@ const Following = () => {
     queryKey: ["getWorkFollowing", page, refreshingId],
     queryFn: () =>
       getWorkFollowing({
-        following_only: true,
-        customer_id: "9896c8d2-81c1-4d38-8049-ecf2401bde0d", //id for no following -> 98914c9b-294b-4fa2-a593-06f1ec8a0c7b
-        page: page,
-        paginate: 8,
+        data: {
+          following_only: true,
+          page: page,
+          paginate: 8,
+        },
+        token: token,
       }),
     onSuccess: (data) => {
-      if (Array.isArray(data)) {
+      if (!!data[0]?.work) {
         setHaveFollowing(false);
         setData(data);
       } else {

@@ -23,6 +23,7 @@ import { useMutation, useQuery } from "@tanstack/react-query";
 import { useNavigation } from "@react-navigation/native";
 import CustomerService from "services/api/CustomerService";
 import Loading from "components/Loading";
+import BottomMessage from "components/BottomMessage";
 
 const { width } = Dimensions.get("window");
 
@@ -196,6 +197,7 @@ const Users = ({ searchText }) => {
                   {isLoading ? <Loading /> : null}
                 </View>
               ) : null}
+              {lastPage === page && !isLoading ? <BottomMessage /> : null}
             </>
           )}
         />

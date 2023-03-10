@@ -134,7 +134,10 @@ const Users = ({ searchText }) => {
   const { isLoading } = useQuery({
     queryKey: ["search-user", searchText],
     queryFn: () =>
-      getSearchPage({ creator_only: true, keyword: searchText }, token),
+      getSearchPage({
+        data: { creator_only: true, keyword: searchText },
+        token: token,
+      }),
     onError: (error) => {
       console.log("search-work", error);
     },
@@ -253,7 +256,7 @@ const styles = StyleSheet.create({
   //Model Videos Container
   modelVideosContainer: {
     flexDirection: "row",
-    alignItems: "center",
+    alignItems: "flex-start",
     justifyContent: "space-between",
   },
   title: {

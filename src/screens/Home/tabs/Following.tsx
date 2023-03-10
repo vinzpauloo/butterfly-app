@@ -60,7 +60,7 @@ const Video = ({
       });
     } else {
       navigation.navigate("VlogScreen", {
-        reelsVideos: reelsVideos,
+        id: item?._id,
       });
     }
   };

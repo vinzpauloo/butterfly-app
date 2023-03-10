@@ -17,8 +17,9 @@ interface IFollow extends ICommons {
   token?: string;
 }
 
-interface IFavorite extends ICommons {
-  foreign_id: string /* Work ID */;
+interface IFavorite {
+  data: { foreign_id: string } /* Work ID */;
+  token: string;
 }
 
 interface INewCustomer {
@@ -107,29 +108,30 @@ const CustomerService = () => {
     });
   };
 
-  const favoriteChecker = (data: IFavorite) => {
+  const favoriteChecker = (params: IFavorite) => {
     return request({
-      headers: getHeaders(),
+      headers: { ...getHeaders(), Authorization: `Bearer ${params.token}` },
       url: "/customers/favorite-checker",
       method: "POST",
-      data,
+      data: params.data,
     });
   };
 
-  const favoriteVideo = (data: IFavorite) => {
+  const favoriteVideo = (params: IFavorite) => {
     return request({
-      headers: getHeaders(),
+      headers: { ...getHeaders(), Authorization: `Bearer ${params.token}` },
       url: "/customers/save-favorite",
       method: "POST",
-      data,
+      data: params.data,
     });
   };
 
-  const unfavoriteVideo = (data: IFavorite) => {
+  const unfavoriteVideo = (params: IFavorite) => {
     return request({
-      headers: getHeaders(),
-      url: `/customers/remove-favorite/${data.foreign_id}/${data.customer_id}`,
+      headers: { ...getHeaders(), Authorization: `Bearer ${params.token}` },
+      url: "/customers/remove-favorite",
       method: "DELETE",
+      params: params.data,
     });
   };
 

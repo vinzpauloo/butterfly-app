@@ -4,24 +4,25 @@ import React, { useState } from "react";
 import AntDesign from "react-native-vector-icons/AntDesign";
 import { useMutation, useQuery } from "@tanstack/react-query";
 
-import { Favorite } from "hooks/commonActoins/useFavorite";
+import CustomerService from "services/api/CustomerService";
 import { GLOBAL_COLORS } from "global";
 import { userStore } from "../../../zustand/userStore";
 
 const FavoriteButton = ({ isOpen, id }) => {
-  const customerID = userStore((store) => store._id);
+  const token = userStore((store) => store.api_token);
 
-  const { deleteRemoveFavorite, postSaveFavorite, postFavoriteChecker } =
-    Favorite();
+  const { unfavoriteVideo, favoriteVideo, favoriteChecker } = CustomerService();
   const [isAlreadyFavorite, setIsAlreadyFavorite] = useState(false);
 
   // favorite checker
   const { isLoading } = useQuery({
     queryKey: ["favoriteChecker", id],
     queryFn: () =>
-      postFavoriteChecker({
-        foreign_id: id,
-        customer_id: customerID,
+      favoriteChecker({
+        data: {
+          foreign_id: id,
+        },
+        token: token,
       }),
     onSuccess: (data) => {
       setIsAlreadyFavorite(data);
@@ -33,7 +34,7 @@ const FavoriteButton = ({ isOpen, id }) => {
   });
 
   // for favorite
-  const { mutate: mutateFavorite } = useMutation(postSaveFavorite, {
+  const { mutate: mutateFavorite } = useMutation(favoriteVideo, {
     onSuccess: (data) => {
       if (data.isFavorite) {
         setIsAlreadyFavorite(true);
@@ -45,7 +46,7 @@ const FavoriteButton = ({ isOpen, id }) => {
   });
 
   // for remove as favorite
-  const { mutate: mutateRemoveFavorite } = useMutation(deleteRemoveFavorite, {
+  const { mutate: mutateRemoveFavorite } = useMutation(unfavoriteVideo, {
     onSuccess: (data) => {
       if (data.isRemoved.response) {
         setIsAlreadyFavorite(false);
@@ -60,13 +61,17 @@ const FavoriteButton = ({ isOpen, id }) => {
     // check here if not like yet
     if (!isAlreadyFavorite) {
       mutateFavorite({
-        foreign_id: id,
-        customer_id: customerID,
+        data: {
+          foreign_id: id,
+        },
+        token: token,
       });
     } else {
       mutateRemoveFavorite({
-        foreign_id: id,
-        customer_id: customerID,
+        data: {
+          foreign_id: id,
+        },
+        token: token,
       });
     }
   };

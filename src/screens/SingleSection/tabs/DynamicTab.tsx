@@ -94,7 +94,7 @@ const DynamicTab = ({ id: selectionId, tabCategory }) => {
             <Video
               key={index}
               item={item}
-              isFollowingScreen={false}
+              isFollowingScreen={true}
               onOpen={onOpen}
               setId={setId}
             />

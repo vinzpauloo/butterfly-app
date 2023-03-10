@@ -27,10 +27,10 @@ const Work = ({ searchText }) => {
   const { isLoading } = useQuery({
     queryKey: ["search-work", searchText, page],
     queryFn: () =>
-      getSearchPage(
-        { work_only: true, keyword: searchText, page: page },
-        token
-      ),
+      getSearchPage({
+        data: { work_only: true, keyword: searchText, page: page },
+        token: token,
+      }),
     onError: (error) => {
       console.log("search-work", error);
     },
@@ -75,7 +75,7 @@ const Work = ({ searchText }) => {
             <Video
               key={index}
               item={item}
-              isFollowingScreen={false}
+              isFollowingScreen={true}
               onOpen={onOpen}
               setId={setId}
             />

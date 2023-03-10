@@ -73,13 +73,13 @@ const HeaderComponent = ({ data }) => {
   );
 };
 
-const VideoContainer = ({ data }) => {
+const VideoContainer = ({ data, user }) => {
   const navigation = useNavigation<any>();
 
   const navigateToSingleVideo = () => {
     navigation.navigate("SingleVideo", {
-      image: data?.user.photo,
-      username: data?.user?.username,
+      image: user?.photo,
+      username: user?.username,
       followers: "123456789",
       id: data?._id,
       userId: data?.user_id,
@@ -117,7 +117,7 @@ const ModelVideosContainer = ({ data }) => {
       <HeaderComponent data={data} />
       <View style={styles.modelVideosContainer}>
         {data.work.map((item, index) => (
-          <VideoContainer key={index} data={item} />
+          <VideoContainer key={index} data={item} user={data} />
         ))}
       </View>
       <Pressable onPress={navigateToSingleUser}>

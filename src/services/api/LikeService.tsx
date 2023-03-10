@@ -8,6 +8,8 @@ interface ILike {
 
 const LikeService = () => {
   const likeWork = (params: ILike) => {
+    console.log("@@@@", params);
+
     return request({
       headers: { ...getHeaders(), Authorization: `Bearer ${params.token}` },
       url: "/likes",
@@ -26,11 +28,13 @@ const LikeService = () => {
   };
 
   const likeChecker = (params: ILike) => {
+    console.log("@@@", params.data);
+
     return request({
-      headers: getHeaders(),
+      headers: { ...getHeaders(), Authorization: `Bearer ${params.token}` },
       url: "/likes/checker",
       method: "POST",
-      params,
+      data: params.data,
     });
   };
 

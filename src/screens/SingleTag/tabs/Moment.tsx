@@ -3,13 +3,13 @@ import React, { useState } from "react";
 
 import CommentListSkeleton from "components/skeletons/CommentListSkeleton";
 import Feeds from "components/feed/Feeds";
-import { Feeds as FeedsAPI } from "hooks/useFeeds";
+import FeedService from "services/api/FeedService";
 import { useIsFocused } from "@react-navigation/native";
 import { useQuery } from "@tanstack/react-query";
 import Container from "components/Container";
 
-const Moment = ({ userId }) => {
-  const { getFeedsByTag } = FeedsAPI();
+const Moment = ({ userId, tag }) => {
+  const { getFeeds } = FeedService();
   const [data, setData] = useState([]);
   const [page, setPage] = useState(1);
   const isFocus = useIsFocused();
@@ -20,8 +20,8 @@ const Moment = ({ userId }) => {
   const { isLoading } = useQuery({
     queryKey: [`feedTab${isFocus}`, userId, page, refreshingId],
     queryFn: () =>
-      getFeedsByTag({
-        tag: "Asian", // will change later the Asian have the only one that have data for now
+      getFeeds({
+        tag: tag,
         with: "user,comment,like",
         page: page,
       }),

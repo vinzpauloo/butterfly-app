@@ -1,49 +1,48 @@
 import { getHeaders } from "lib/cryptoJs";
 import request from "lib/request";
 
-interface ILike {
+interface IFeed {
 	site_id?: number;
-	foreign_id?: string;
-	customer_id?: string;
-	type?: string;
+	user_id?: number
+	tag?: string
+	with?: string
+	page?: number
+	ads?: boolean
+	latest?: boolean
+	video_only?: boolean
+	images_only?: boolean
+	services_only?: boolean
+	featured?: boolean
+	recommended?: boolean
 }
 
 const FeedService = () => {
-	const likeWork = (params: ILike) => {
+	const getFeeds = (params: IFeed) => {
 		return request({
 			headers: getHeaders(),
-			url: "/likes",
-			method: "POST",
+			url: "/feeds",
+			method: "GET",
 			params,
 		});
 	};
 
-	const unlikeWork = (data: ILike) => {
+	const getFeaturedFeeds = (params: IFeed) => {
 		return request({
 			headers: getHeaders(),
-			url: `/likes/${data.foreign_id}/${data.customer_id}`,
-			method: "DELETE",
-		});
-	};
-
-	const likeChecker = (params: ILike) => {
-		return request({
-			headers: getHeaders(),
-			url: "/likes/checker",
-			method: "POST",
-			params,
-		});
-	};
-
-	const likesCount = (data: ILike) => {
-		return request({
-			headers: getHeaders(),
-			url: `/likes/count/${data.foreign_id}`,
+			url: "/feeds/featured",
 			method: "GET",
 		});
 	};
 
-	return { likeWork, unlikeWork, likeChecker, likesCount };
+	const getSpecificFeed = (params: IFeed) => {
+		return request({
+			headers: getHeaders(),
+			url: `/feeds/${params}`,
+			method: "GET",
+		});
+	};
+	
+	return { getFeeds, getFeaturedFeeds, getSpecificFeed };
 };
 
 export default FeedService;

@@ -7,11 +7,11 @@ import { useQuery } from "@tanstack/react-query";
 
 import MomentHeaderSkeleton from "components/skeletons/MomentHeaderSkeleton";
 import { GLOBAL_COLORS } from "global";
-import { Feeds } from "hooks/useFeeds";
+import FeedService from "services/api/FeedService";
 
 const MomentHeader = () => {
   const navigation = useNavigation<any>();
-  const { getFeeds } = Feeds();
+  const { getFeeds } = FeedService();
   const { data, isLoading } = useQuery({
     queryKey: ["featuredFeeds"],
     queryFn: () => getFeeds({ featured: true, site_id: 1 }),
@@ -28,7 +28,7 @@ const MomentHeader = () => {
   return (
     <View style={styles.certificateContainer} pointerEvents="box-none">
       {data.featured.map((item, index) => (
-        <>
+        <View key={index}>
           <HStack space={2} alignItems="center" marginRight={5} pointerEvents="box-none">
             <View style={styles.dot} />
             <TouchableWithoutFeedback key={index} onPress={() => navigation.navigate(`SingleFeedScreen`, { feedId: item?.feed_id })}>
@@ -36,7 +36,7 @@ const MomentHeader = () => {
             </TouchableWithoutFeedback>
           </HStack>
           {index === data.featured.length - 1 ? null : <Divider style={styles.divider} color="#999" />}
-        </>
+        </View>
       ))}
     </View>
   );

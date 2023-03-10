@@ -20,7 +20,7 @@ const SingleTagTabs = () => {
       },
       {
         name: "动态",
-        component: () => <Moment userId={route.params.userId} />,
+        component: () => <Moment userId={route.params.userId} tag={route.params.tag} />,
       },
     ],
   };

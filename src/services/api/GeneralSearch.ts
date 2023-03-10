@@ -2,11 +2,14 @@ import { getHeaders } from "lib/cryptoJs";
 import request from "lib/request";
 
 interface IGetSearchPage {
-  keyword?: boolean;
-  creator_only?: boolean;
-  work_only?: boolean;
-  feed_only?: boolean;
-  page?: number;
+  data: {
+    keyword?: boolean;
+    creator_only?: boolean;
+    work_only?: boolean;
+    feed_only?: boolean;
+    page?: number;
+  };
+  token: string;
 }
 interface IDeleteSearchHistory {
   token?: string;
@@ -24,12 +27,12 @@ const GeneralSearch = () => {
       method: "GET",
     });
   };
-  const getSearchPage = (params: IGetSearchPage, token: string) => {
+  const getSearchPage = (params: IGetSearchPage) => {
     return request({
-      headers: { ...getHeaders(), Authorization: `Bearer ${token}` },
+      headers: { ...getHeaders(), Authorization: `Bearer ${params.token}` },
       url: "/search",
       method: "GET",
-      params,
+      params: params.data,
     });
   };
   const deleteSearchHistory = (params: IDeleteSearchHistory) => {

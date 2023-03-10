@@ -18,7 +18,7 @@ import { useNavigation } from "@react-navigation/native";
 import { useMutation, useQuery } from "@tanstack/react-query";
 
 import Container from "components/Container";
-import Feeds from "./tabs/Feeds";
+import Feed from "./tabs/Feed";
 import GeneralSearch from "services/api/GeneralSearch";
 import GridVideos from "features/sectionList/components/GridVideos";
 import MaterialTopTabs from "layouts/navigators/MaterialTopTabs";
@@ -301,7 +301,7 @@ const SearchOutput = ({ searchText }) => {
       },
       {
         name: "动态",
-        component: () => <Feeds searchText={searchText} />,
+        component: () => <Feed searchText={searchText} />,
       },
     ],
   };

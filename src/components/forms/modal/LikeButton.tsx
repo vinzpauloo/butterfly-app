@@ -5,23 +5,24 @@ import Fontisto from "react-native-vector-icons/Fontisto";
 import { useMutation, useQuery } from "@tanstack/react-query";
 
 import { GLOBAL_COLORS } from "global";
-import { Like } from "hooks/commonActoins/useLike";
+import LikeService from "services/api/LikeService";
 import { userStore } from "../../../zustand/userStore";
 
 const LikeButton = ({ isOpen, id }) => {
-  const customerID = userStore((store) => store._id);
-  const { deleteLikeWork, postLikeWork, postLikeChecker } = Like();
+  const token = userStore((store) => store.api_token);
+  const { unlikeWork, likeWork, likeChecker } = LikeService();
   const [isAlreadyLike, setIsAlreadyLike] = useState(false);
 
   // like checker
   const { isLoading } = useQuery({
     queryKey: ["likeChecker", id],
     queryFn: () =>
-      postLikeChecker({
-        site_id: 1,
-        foreign_id: id,
-        customer_id: customerID,
-        type: "work",
+      likeChecker({
+        data: {
+          foreign_id: id,
+          type: "work",
+        },
+        token: token,
       }),
     onSuccess: (data) => {
       setIsAlreadyLike(data);
@@ -33,7 +34,7 @@ const LikeButton = ({ isOpen, id }) => {
   });
 
   // for like
-  const { mutate: mutateLike } = useMutation(postLikeWork, {
+  const { mutate: mutateLike } = useMutation(likeWork, {
     onSuccess: (data) => {
       if (data.isLike) {
         setIsAlreadyLike(true);
@@ -45,7 +46,7 @@ const LikeButton = ({ isOpen, id }) => {
   });
 
   // for unlike
-  const { mutate: mutateUnLike } = useMutation(deleteLikeWork, {
+  const { mutate: mutateUnLike } = useMutation(unlikeWork, {
     onSuccess: (data) => {
       if (data.unLike) {
         setIsAlreadyLike(false);
@@ -60,15 +61,18 @@ const LikeButton = ({ isOpen, id }) => {
     // check here if not like yet
     if (!isAlreadyLike) {
       mutateLike({
-        site_id: 1,
-        foreign_id: id,
-        customer_id: customerID,
-        type: "work",
+        data: {
+          foreign_id: id,
+          type: "work",
+        },
+        token: token,
       });
     } else {
       mutateUnLike({
-        foreign_id: id,
-        customer_id: customerID,
+        data: {
+          foreign_id: id,
+        },
+        token: token,
       });
     }
   };

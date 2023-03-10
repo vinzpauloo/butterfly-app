@@ -8,13 +8,15 @@ import { useQuery } from "@tanstack/react-query";
 import MomentHeaderSkeleton from "components/skeletons/MomentHeaderSkeleton";
 import { GLOBAL_COLORS } from "global";
 import FeedService from "services/api/FeedService";
+import { userStore } from "../../zustand/userStore";
 
 const MomentHeader = () => {
+  const token = userStore((state) => state.api_token);
   const navigation = useNavigation<any>();
   const { getFeeds } = FeedService();
   const { data, isLoading } = useQuery({
     queryKey: ["featuredFeeds"],
-    queryFn: () => getFeeds({ featured: true, site_id: 1 }),
+    queryFn: () => getFeeds({ data: { featured: true }, token }),
   });
 
   if (isLoading) {
@@ -29,13 +31,29 @@ const MomentHeader = () => {
     <View style={styles.certificateContainer} pointerEvents="box-none">
       {data.featured.map((item, index) => (
         <View key={index}>
-          <HStack space={2} alignItems="center" marginRight={5} pointerEvents="box-none">
+          <HStack
+            space={2}
+            alignItems="center"
+            marginRight={5}
+            pointerEvents="box-none"
+          >
             <View style={styles.dot} />
-            <TouchableWithoutFeedback key={index} onPress={() => navigation.navigate(`SingleFeedScreen`, { feedId: item?.feed_id })}>
-              <Text style={styles.whiteText} numberOfLines={1}>{item.title}</Text>
+            <TouchableWithoutFeedback
+              key={index}
+              onPress={() =>
+                navigation.navigate(`SingleFeedScreen`, {
+                  feedId: item?.feed_id,
+                })
+              }
+            >
+              <Text style={styles.whiteText} numberOfLines={1}>
+                {item.title}
+              </Text>
             </TouchableWithoutFeedback>
           </HStack>
-          {index === data.featured.length - 1 ? null : <Divider style={styles.divider} color="#999" />}
+          {index === data.featured.length - 1 ? null : (
+            <Divider style={styles.divider} color="#999" />
+          )}
         </View>
       ))}
     </View>

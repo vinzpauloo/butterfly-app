@@ -7,8 +7,10 @@ import FeedService from "services/api/FeedService";
 import { useIsFocused } from "@react-navigation/native";
 import { useQuery } from "@tanstack/react-query";
 import Container from "components/Container";
+import { userStore } from "../../../zustand/userStore";
 
 const Moment = ({ userId, tag }) => {
+  const token = userStore((state) => state.api_token);
   const { getFeeds } = FeedService();
   const [data, setData] = useState([]);
   const [page, setPage] = useState(1);
@@ -21,9 +23,12 @@ const Moment = ({ userId, tag }) => {
     queryKey: [`feedTab${isFocus}`, userId, page, refreshingId],
     queryFn: () =>
       getFeeds({
-        tag: tag,
-        with: "user,comment,like",
-        page: page,
+        data: {
+          tag: tag,
+          with: "user,comment,like",
+          page: page,
+        },
+        token: token,
       }),
     onError: (error) => {
       console.log("SingleTag-FeedTab", error);

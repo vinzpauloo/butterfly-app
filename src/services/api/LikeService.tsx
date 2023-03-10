@@ -12,7 +12,7 @@ const LikeService = () => {
       headers: { ...getHeaders(), Authorization: `Bearer ${params.token}` },
       url: "/likes",
       method: "POST",
-      params: params.data,
+      data: params.data,
     });
   };
 

@@ -126,7 +126,7 @@ const SingleUserHeader = (props: Props) => {
 			<View style={styles.donatorContainer} pointerEvents="box-none">
 				<View style={styles.profilesImagesContent}>
 					{donatorsList?.data.map((item, index) => (
-						<Image source={{ uri: item?.customer?.photo }} style={[styles.profileImgs, { zIndex: index, left: index * 15 }]} />
+						<Image source={{ uri: item?.customer?.photo }} style={[styles.profileImgs, { zIndex: index, left: index * 20 }]} />
 					))}
 				</View>
 				<View style={styles.buttons} pointerEvents="box-none">
@@ -248,7 +248,6 @@ const styles = StyleSheet.create({
 		alignItems: "center",
 		justifyContent: "space-between",
 		backgroundColor: "#262632",
-		// marginTop: 15,
 		paddingVertical: 5,
 		paddingHorizontal: 15,
 	},
@@ -261,6 +260,7 @@ const styles = StyleSheet.create({
 		width: 40,
 		height: 40,
 		borderRadius: 20,
+		backgroundColor: GLOBAL_COLORS.primaryColor,
 	},
 	buttons: {
 		flexDirection: "row",

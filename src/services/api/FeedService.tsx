@@ -18,6 +18,7 @@ interface IFeed {
 
 interface IFeeds {
   data: {
+    user_id?: number
     feedId?: string;
     tag?: string;
     with?: string;

@@ -1,7 +1,7 @@
 import React, {useState} from "react";
 import { useQuery } from "@tanstack/react-query";
 
-import {Feeds} from "hooks/useFeeds";
+import FeedService from "services/api/FeedService";
 
 import StickyTabs from "layouts/StickyTabs";
 import FeedList from "layouts/FeedList";
@@ -12,7 +12,7 @@ const RecommendedLayout = () => {
     const [page, setPage] = useState(1);
     const [data, setData] = useState([]);
     const [lastPage, setLastPage] = useState(1);
-    const {getFeeds} = Feeds();
+    const { getFeeds } = FeedService();
     const { isLoading } = useQuery({
         queryKey: ["recommendedFeeds", page],
         queryFn: () =>
@@ -45,7 +45,7 @@ const LatestLayout = () => {
     const [page, setPage] = useState(1);
     const [data, setData] = useState([]);
     const [lastPage, setLastPage] = useState(1);
-    const {getFeeds} = Feeds();
+    const { getFeeds } = FeedService();
     const { isLoading } = useQuery({
         queryKey: ["latestFeeds", page],
         queryFn: () =>
@@ -78,7 +78,7 @@ const VideoLayout = () => {
     const [page, setPage] = useState(1);
     const [data, setData] = useState([]);
     const [lastPage, setLastPage] = useState(1);
-    const {getFeeds} = Feeds();
+    const { getFeeds } = FeedService();
     const { isLoading } = useQuery({
         queryKey: ["videoFeeds", page],
         queryFn: () =>
@@ -111,7 +111,7 @@ const PhotoLayout = () => {
     const [page, setPage] = useState(1);
     const [data, setData] = useState([]);
     const [lastPage, setLastPage] = useState(1);
-    const {getFeeds} = Feeds();
+    const { getFeeds } = FeedService();
     const { isLoading } = useQuery({
         queryKey: ["photoFeeds", page],
         queryFn: () =>
@@ -144,7 +144,7 @@ const ServicesLayout = () => {
     const [page, setPage] = useState(1);
     const [data, setData] = useState([]);
     const [lastPage, setLastPage] = useState(1);
-    const {getFeeds} = Feeds();
+    const { getFeeds } = FeedService();
     const { isLoading } = useQuery({
         queryKey: ["servicesFeeds", page],
         queryFn: () =>

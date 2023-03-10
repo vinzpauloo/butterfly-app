@@ -10,7 +10,7 @@ interface IWorksParams {
   user_id?: number;
   with?: string;
   paginate?: number;
-  creator_only: boolean
+  creator_only?: boolean
 }
 
 interface IWorkFollowing {

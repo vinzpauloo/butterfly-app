@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { StyleSheet } from "react-native";
 import { useRoute } from "@react-navigation/native";
-import { Feeds } from "hooks/useFeeds";
+import FeedService from "services/api/FeedService";
 import { useQuery } from "@tanstack/react-query";
 import StickyTabFeeds from "features/feedsList/components/StickyTabFeeds";
 import FeedList from "layouts/FeedList";
@@ -15,7 +15,7 @@ const Moment = (props: Props) => {
 	const [page, setPage] = useState(1);
 	const [data, setData] = useState([]);
 	const [lastPage, setLastPage] = useState(1);
-	const { getFeeds } = Feeds();
+	const { getFeeds } = FeedService();
 	const { isLoading } = useQuery({
 		queryKey: ["specificContentCreatorFeeds", userID, page],
 		queryFn: () =>

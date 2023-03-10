@@ -1,7 +1,7 @@
 import React from 'react'
 import { useRoute } from "@react-navigation/native";
 import { useQuery } from "@tanstack/react-query";
-import { Feeds } from "hooks/useFeeds";
+import FeedService from "services/api/FeedService";
 
 import CommentList from 'features/commentList';
 import FeedItem from 'components/FeedItem'
@@ -16,7 +16,7 @@ const SingleFeedScreen = (props: Props) => {
 	const route = useRoute();
 	const item: any = route.params
 
-	const {getSpecificFeed} = Feeds();
+	const { getSpecificFeed } = FeedService();
 	const {data: specificFeed, isLoading} = useQuery({
 		queryKey: ["specificFeed", item?.feedId],
 		queryFn: () => getSpecificFeed(item?.feedId),
@@ -27,7 +27,6 @@ const SingleFeedScreen = (props: Props) => {
 			console.log(error)
 		}
 	})
-	console.log("FEEED ID",item?.feedId)
 	return (
 		<Container>
 			<SingleFeedHeader title="洋情" />

@@ -37,6 +37,7 @@ import SingleChatScreen from "screens/SingleChatScreen";
 import SingleTag from "screens/SingleTag";
 import SingleFeedScreen from "screens/SingleFeedScreen";
 import TermsOfService from "screens/TermsOfService";
+import OnAppExitScreen from "screens/OnAppExitScreen";
 import WorkService from "services/api/WorkService";
 import { bottomNav } from "./bottomNav";
 import { GLOBAL_COLORS } from "global";
@@ -323,6 +324,11 @@ export const stackScreens = {
       name: "FollowersScreen",
       component: FollowersScreen,
       options: basicHeader,
+    },
+    {
+      name: "OnAppExitScreen",
+      component: OnAppExitScreen,
+      options: { headerShown: false },
     },
   ],
 };

@@ -3,7 +3,6 @@ import { StyleSheet, Text, TouchableWithoutFeedback, View } from "react-native";
 import AntDesign from "react-native-vector-icons/AntDesign";
 import Fontisto from "react-native-vector-icons/Fontisto";
 import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons";
-import MaterialIcons from "react-native-vector-icons/MaterialIcons";
 import Zocial from "react-native-vector-icons/Zocial";
 import { useNavigation, useRoute } from "@react-navigation/native";
 
@@ -27,15 +26,21 @@ export const Header = ({ data }) => {
   };
 
   function testDownload() {
-    const fileName = "test-file-name"
-    alert("start downloading!")
-    downloadFile('http://techslides.com/demos/sample-videos/small.mp4', fileName)
+    const fileName = "test-file-name";
+    alert("start downloading!");
+    downloadFile(
+      "http://techslides.com/demos/sample-videos/small.mp4",
+      fileName
+    );
   }
 
   return (
     <>
       <View style={styles.container} pointerEvents="box-none">
         <Text style={styles.title}>{data?.title}</Text>
+        {data?.description && (
+          <Text style={styles.description}>{data?.description}</Text>
+        )}
         <View style={styles.watchContent}>
           <View style={styles.item}>
             <MaterialCommunityIcons
@@ -60,7 +65,10 @@ export const Header = ({ data }) => {
         </View>
         <View style={styles.tags} pointerEvents="box-none">
           {data?.tags.map((item, index) => (
-            <TouchableWithoutFeedback key={index} onPress={() => handleNavigate(item)}>
+            <TouchableWithoutFeedback
+              key={index}
+              onPress={() => handleNavigate(item)}
+            >
               <Text style={styles.tag}>{item}</Text>
             </TouchableWithoutFeedback>
           ))}
@@ -69,18 +77,35 @@ export const Header = ({ data }) => {
           <LikeButton data={data} id={route.params.id} />
           <FavoriteButton id={route.params.id} />
           <View style={[styles.buttonItem, { flexDirection: "column" }]}>
-            <Zocial name="bitcoin" color="#ff9900" size={18} style={styles.icon}/>
+            <Zocial
+              name="bitcoin"
+              color="#ff9900"
+              size={18}
+              style={styles.icon}
+            />
             <Text style={[styles.text, { marginVertical: 3 }]}>22金币</Text>
           </View>
           <TouchableWithoutFeedback onPress={testDownload}>
             <View style={styles.buttonItem} pointerEvents="box-none">
-              <MaterialCommunityIcons name="download" color="#999" size={18} style={styles.icon}/>
+              <MaterialCommunityIcons
+                name="download"
+                color="#999"
+                size={18}
+                style={styles.icon}
+              />
               <Text style={styles.text}>下载</Text>
             </View>
           </TouchableWithoutFeedback>
-          <TouchableWithoutFeedback onPress={() => navigation.navigate("SharingPromotion")}>
+          <TouchableWithoutFeedback
+            onPress={() => navigation.navigate("SharingPromotion")}
+          >
             <View style={styles.buttonItem} pointerEvents="box-none">
-              <Fontisto name="share-a" color="#999" size={15} style={styles.icon}/>
+              <Fontisto
+                name="share-a"
+                color="#999"
+                size={15}
+                style={styles.icon}
+              />
               <Text style={styles.text}>分享</Text>
             </View>
           </TouchableWithoutFeedback>
@@ -99,6 +124,12 @@ const styles = StyleSheet.create({
     color: "#fff",
     fontSize: 15,
     paddingVertical: 10,
+    paddingHorizontal: 20,
+  },
+  description: {
+    color: "#fff",
+    fontSize: 12,
+    paddingBottom: 10,
     paddingHorizontal: 20,
   },
 

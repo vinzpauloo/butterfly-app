@@ -53,6 +53,7 @@ const SearchBar = ({ search, setSearch, hasSearch, setHasSearch, refetch }) => {
 
   const enterToSearch = () => {
     setSearch(text);
+    setHasSearch(true);
   };
 
   // this will trigger when the history list or top list been click to display in input field
@@ -82,7 +83,7 @@ const SearchBar = ({ search, setSearch, hasSearch, setHasSearch, refetch }) => {
           style={styles.inputField}
           onSubmitEditing={enterToSearch}
         />
-        {search.length > 0 ? (
+        {text.length > 0 ? (
           <AntDesign
             name="closecircle"
             color="#aaa"
@@ -396,6 +397,7 @@ const styles = StyleSheet.create({
   inputField: {
     width: "100%",
     paddingLeft: 40,
+    paddingRight: 35,
   },
   searchBtn: {
     backgroundColor: GLOBAL_COLORS.secondaryColor,

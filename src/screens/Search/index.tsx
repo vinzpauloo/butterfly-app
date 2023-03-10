@@ -231,7 +231,9 @@ const PopularSearchItem = ({ text, index, setSearch, setHasSearch }) => {
       <Text style={[styles.number, { backgroundColor: color(index + 1) }]}>
         {index + 1}
       </Text>
-      <Text style={styles.popularText}>{text}</Text>
+      <Text style={styles.popularText} numberOfLines={1}>
+        {text}
+      </Text>
     </Pressable>
   );
 };

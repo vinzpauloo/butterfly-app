@@ -4,5 +4,6 @@ export const GLOBAL_COLORS = {
   secondaryColor: "#e15655",
   primaryTextColor: "#fff",
   inactiveTextColor: "#999",
+  usernameTextColor: "#777",
   btnColor: "#FF474E",
 };

@@ -3,6 +3,7 @@ import React from "react";
 
 import { useNavigation } from "@react-navigation/native";
 import VideoComponent from "components/VideoComponent";
+import { GLOBAL_COLORS } from "global";
 
 const SingleVideo = ({ data }) => {
   const item = data[0];
@@ -32,7 +33,7 @@ const SingleVideo = ({ data }) => {
           <Text style={styles.text} numberOfLines={1}>
             {item.title}
           </Text>
-          <Text style={styles.text} numberOfLines={1}>
+          <Text style={styles.username} numberOfLines={1}>
             {item.user.username}
           </Text>
         </View>
@@ -70,7 +71,11 @@ const styles = StyleSheet.create({
     justifyContent: "space-evenly",
   },
   text: {
-    color: "#fff",
+    color: GLOBAL_COLORS.primaryTextColor,
+    fontSize: 15,
+  },
+  username: {
+    color: GLOBAL_COLORS.usernameTextColor,
     fontSize: 15,
   },
 });

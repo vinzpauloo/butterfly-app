@@ -13,10 +13,9 @@ import Entypo from "react-native-vector-icons/Entypo";
 import Foundation from "react-native-vector-icons/Foundation";
 import { MasonryFlashList } from "@shopify/flash-list";
 import { useNavigation } from "@react-navigation/native";
-import { Center, NativeBaseProvider, useDisclose } from "native-base";
+import { useDisclose } from "native-base";
 
 import { GLOBAL_COLORS } from "global";
-import { reelsVideos } from "data/reelsVideos";
 import Modal from "components/BottomModal";
 import VIPTag from "components/VIPTag";
 
@@ -48,7 +47,7 @@ export const GridVideosBottomContent = ({ onOpen, username, setId, id }) => {
   };
   return (
     <View style={styles.textContent}>
-      <Text style={styles.text} numberOfLines={1}>
+      <Text style={styles.username} numberOfLines={1}>
         {username}
       </Text>
       <Pressable
@@ -203,7 +202,7 @@ const styles = StyleSheet.create({
   videoContainer: {
     margin: 5,
     borderWidth: 1,
-    borderColor: "#fff",
+    borderColor: GLOBAL_COLORS.primaryTextColor,
   },
   video: {
     width: "100%",
@@ -223,7 +222,11 @@ const styles = StyleSheet.create({
     fontSize: 16,
   },
   text: {
-    color: "#fff",
+    color: GLOBAL_COLORS.primaryTextColor,
+  },
+  username: {
+    color: GLOBAL_COLORS.usernameTextColor,
+    fontSize: 15,
   },
   modelImg: {
     height: 20,
@@ -232,7 +235,7 @@ const styles = StyleSheet.create({
   },
   modelText: {
     fontSize: 12,
-    color: "#fff",
+    color: GLOBAL_COLORS.primaryTextColor,
     paddingHorizontal: 5,
   },
 });

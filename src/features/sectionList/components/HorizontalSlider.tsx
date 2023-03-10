@@ -11,6 +11,7 @@ import React from "react";
 
 import { useNavigation } from "@react-navigation/native";
 import VideoComponent from "components/VideoComponent";
+import { GLOBAL_COLORS } from "global";
 
 const { width } = Dimensions.get("window");
 
@@ -41,14 +42,18 @@ const Video = ({ index, data, item }: any) => {
         <Image source={{ uri: video.thumbnail_url }} style={styles.image} />
       </View>
       <View style={styles.content}>
-        <Pressable onPress={() => navigation.navigate("SingleUser", { userID: video.user_id })}>
+        <Pressable
+          onPress={() =>
+            navigation.navigate("SingleUser", { userID: video.user_id })
+          }
+        >
           <Image source={{ uri: video.user.photo }} style={styles.modelImg} />
         </Pressable>
         <View style={styles.texts}>
           <Text style={styles.text} numberOfLines={1}>
             {video.title}
           </Text>
-          <Text style={styles.text} numberOfLines={1}>
+          <Text style={styles.username} numberOfLines={1}>
             {video.user.username}
           </Text>
         </View>
@@ -109,7 +114,11 @@ const styles = StyleSheet.create({
     width: width * 0.56,
   },
   text: {
-    color: "#fff",
+    color: GLOBAL_COLORS.primaryTextColor,
+    fontSize: 15,
+  },
+  username: {
+    color: GLOBAL_COLORS.usernameTextColor,
     fontSize: 15,
   },
 });

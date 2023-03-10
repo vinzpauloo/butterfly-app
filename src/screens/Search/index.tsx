@@ -134,8 +134,8 @@ const SearchItem = ({ data, setSearch, setHasSearch, setHistory }) => {
       style={styles.searchItemContent}
       onPress={() => handleSearch(data)}
     >
-      <Text style={styles.searchesText}>
-        {data.length > 10 ? data.slice(0, 10) + " ..." : data}
+      <Text style={styles.searchesText} numberOfLines={1}>
+        {data}
       </Text>
       <AntDesign
         name="closecircle"
@@ -382,7 +382,7 @@ const styles = StyleSheet.create({
     position: "relative",
     flexDirection: "row",
     alignItems: "center",
-    backgroundColor: "#fff",
+    backgroundColor: GLOBAL_COLORS.primaryTextColor,
     margin: 10,
     flexGrow: 1,
     // paddingHorizontal: 40,
@@ -405,7 +405,7 @@ const styles = StyleSheet.create({
     borderRadius: 15,
   },
   searchText: {
-    color: "#fff",
+    color: GLOBAL_COLORS.primaryTextColor,
   },
 
   //SEARCH HISTORY STYLES
@@ -421,7 +421,7 @@ const styles = StyleSheet.create({
     marginVertical: 10,
   },
   text: {
-    color: "#fff",
+    color: GLOBAL_COLORS.primaryTextColor,
     fontSize: 16,
   },
   searchesContainer: {
@@ -431,16 +431,16 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "space-between",
-    backgroundColor: "#fff",
+    backgroundColor: GLOBAL_COLORS.primaryTextColor,
     margin: 10,
     paddingHorizontal: 2,
     paddingVertical: 1,
-    minWidth: width * 0.22,
-    maxWidth: width * 0.3,
+    width: width * 0.3,
     borderRadius: 20,
   },
   searchesText: {
-    paddingHorizontal: 5,
+    width: width * 0.22,
+    paddingLeft: 5,
     color: GLOBAL_COLORS.secondaryColor,
   },
 
@@ -456,7 +456,7 @@ const styles = StyleSheet.create({
   },
   number: {
     paddingHorizontal: 5,
-    color: "#fff",
+    color: GLOBAL_COLORS.primaryTextColor,
     textAlign: "center",
   },
   popularText: {

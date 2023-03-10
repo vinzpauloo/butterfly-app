@@ -22,6 +22,12 @@ interface IFeeds {
     tag?: string;
     with?: string;
     page?: number;
+    featured?: boolean;
+    recommended?: boolean;
+    latest?: boolean;
+    video_only?: boolean;
+    images_only?: boolean;
+    services_only?: boolean;
   };
   token: string;
 }

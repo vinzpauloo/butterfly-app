@@ -318,14 +318,13 @@ const Search = () => {
   const { isLoading, data, refetch } = useQuery({
     queryKey: ["search"],
     queryFn: () => getSearchPageRecommended(token),
+    onSuccess: (data) => {
+      setHistory(data.search_history);
+    },
     onError: (error) => {
       console.log("search", error);
     },
   });
-
-  useEffect(() => {
-    setHistory(data.search_history);
-  }, [data.search_history]);
 
   if (isLoading) {
     return <VideoListSkeleton />;

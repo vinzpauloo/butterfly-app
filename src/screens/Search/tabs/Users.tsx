@@ -2,11 +2,12 @@ import {
   Dimensions,
   Image,
   Pressable,
+  RefreshControl,
   StyleSheet,
   Text,
   View,
 } from "react-native";
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 
 import Octicons from "react-native-vector-icons/Octicons";
 import Feather from "react-native-vector-icons/Feather";
@@ -21,6 +22,7 @@ import { userStore } from "../../../zustand/userStore";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { useNavigation } from "@react-navigation/native";
 import CustomerService from "services/api/CustomerService";
+import Loading from "components/Loading";
 
 const { width } = Dimensions.get("window");
 
@@ -130,9 +132,13 @@ const ModelVideosContainer = ({ data }) => {
 const Users = ({ searchText }) => {
   const token = userStore((state) => state.api_token);
   const { getSearchPage } = GeneralSearch();
+  const [page, setPage] = useState(1);
   const [data, setData] = useState([]);
+  const [lastPage, setLastPage] = useState(1);
+  const [startScroll, setStartScroll] = useState(true);
+
   const { isLoading } = useQuery({
-    queryKey: ["search-user", searchText],
+    queryKey: ["search-user", searchText, page],
     queryFn: () =>
       getSearchPage({
         data: { creator_only: true, keyword: searchText },
@@ -142,11 +148,22 @@ const Users = ({ searchText }) => {
       console.log("search-work", error);
     },
     onSuccess: (data) => {
-      setData(data.data);
+      setLastPage(data.last_page);
+      setData((prev) => [...prev].concat(data.data));
     },
   });
 
-  if (isLoading) {
+  const reachEnd = () => {
+    if (startScroll) return null;
+    if (!isLoading) {
+      if (lastPage !== page) {
+        setPage((prev) => prev + 1);
+        setStartScroll(true);
+      }
+    }
+  };
+
+  if (isLoading && page === 1) {
     return (
       <Container>
         <View style={{ height: "100%" }}>
@@ -163,9 +180,23 @@ const Users = ({ searchText }) => {
       ) : (
         <FlashList
           data={data}
+          onEndReachedThreshold={0.01} // always make this default to 0.01 to have no bug for fetching data for the onEndReached -> https://github.com/facebook/react-native/issues/14015#issuecomment-346547942
+          onMomentumScrollBegin={() => setStartScroll(false)}
+          onEndReached={reachEnd}
           keyExtractor={(_, index) => "" + index}
           renderItem={({ item, index }) => (
             <ModelVideosContainer key={index} data={item} />
+          )}
+          ListFooterComponent={() => (
+            <>
+              {/* the gap will be remove if the lastpage is been fetch */}
+              {lastPage !== page || (lastPage === page && isLoading) ? (
+                <View style={{ marginBottom: 60 }}>
+                  {/* to have a gap in bottom part of section to see the loading icon */}
+                  {isLoading ? <Loading /> : null}
+                </View>
+              ) : null}
+            </>
           )}
         />
       )}
@@ -267,7 +298,8 @@ const styles = StyleSheet.create({
   seeMoreBtn: {
     flexDirection: "row",
     alignItems: "center",
-    marginVertical: 20,
+    marginTop: 10,
+    marginBottom: 20,
     color: GLOBAL_COLORS.secondaryColor,
     textAlign: "center",
   },

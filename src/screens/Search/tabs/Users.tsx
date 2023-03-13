@@ -176,7 +176,7 @@ const Users = ({ searchText }) => {
 
   return (
     <Container>
-      {data.length === 0 ? (
+      {data.length === 0 && !isLoading ? (
         <Text style={styles.emptyResult}>No Data</Text>
       ) : (
         <FlashList

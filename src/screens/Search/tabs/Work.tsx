@@ -50,18 +50,20 @@ const Work = ({ searchText }) => {
     }
   };
 
-  if (data.length === 0) {
+  if (isLoading && page === 1) {
     return (
       <Container>
-        <Text style={styles.emptyResult}>No Data</Text>
+        <View style={{ height: "100%" }}>
+          <VideoListSkeleton />
+        </View>
       </Container>
     );
   }
 
   return (
     <Container>
-      {isLoading && page === 1 ? (
-        <VideoListSkeleton />
+      {data.length === 0 && !isLoading ? (
+        <Text style={styles.emptyResult}>No Data</Text>
       ) : (
         <MasonryFlashList
           data={data}

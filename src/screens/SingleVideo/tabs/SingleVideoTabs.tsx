@@ -1,20 +1,20 @@
 import { useState } from "react";
 import { StyleSheet } from "react-native";
 
+import { Tabs } from "react-native-collapsible-tab-view";
 import { useRoute } from "@react-navigation/native";
 import { useQuery } from "@tanstack/react-query";
-import { Tabs } from "react-native-collapsible-tab-view";
 
 import CommentTextInput from "components/CommentTextInput";
 import Container from "components/Container";
 import CommentList from "features/commentList";
 import GridVideos from "features/sectionList/components/GridVideos";
-import StickyTabsGridVideos from "features/sectionList/components/StickyTabsGridVideos";
-import { Header } from "./Header";
 import StickyTabs from "layouts/StickyTabs";
+import StickyTabsGridVideos from "features/sectionList/components/StickyTabsGridVideos";
 import WorkService from "services/api/WorkService";
+import { Header } from "./Header";
 
-const OthersLayout = ({ userId }) => {
+const OthersLayout = ({ userId, workID }) => {
   const [page, setPage] = useState(1);
   const [data, setData] = useState([]);
   const [lastPage, setLastPage] = useState(1);
@@ -23,7 +23,7 @@ const OthersLayout = ({ userId }) => {
 
   const { getWorks } = WorkService();
 
-  const { isLoading } = useQuery({
+  const { isLoading, isRefetching } = useQuery({
     queryKey: ["allWork", userId, page, refreshingId],
     queryFn: () =>
       getWorks({
@@ -32,6 +32,7 @@ const OthersLayout = ({ userId }) => {
         creator_only: true,
         ads: true,
         page: page,
+        exclude: workID,
       }),
     onSuccess: (data) => {
       setLastPage(data.last_page);
@@ -54,11 +55,12 @@ const OthersLayout = ({ userId }) => {
       setPage={setPage}
       lastPage={lastPage}
       layout={<GridVideos data={data} />}
+      isRefetching={isRefetching}
     />
   );
 };
 
-const RecommendedData = ({ recommendedData, id }) => {
+const RecommendedData = ({ id, recommendedData, workID }) => {
   const [page, setPage] = useState(1);
   const [data, setData] = useState([]);
   const [lastPage, setLastPage] = useState(1);
@@ -66,7 +68,7 @@ const RecommendedData = ({ recommendedData, id }) => {
   const [refreshingId, setRefreshingId] = useState(0);
   const { getWorks } = WorkService();
 
-  const { isLoading } = useQuery({
+  const { isLoading, isRefetching } = useQuery({
     queryKey: ["recommendedSingleVideo", id, page, refreshingId],
     queryFn: () =>
       getWorks({
@@ -76,6 +78,7 @@ const RecommendedData = ({ recommendedData, id }) => {
         page: page,
         user_id: id,
         recommended: true,
+        exclude: workID,
       }),
     onSuccess: (data) => {
       setLastPage(data.last_page);
@@ -98,6 +101,7 @@ const RecommendedData = ({ recommendedData, id }) => {
       setPage={setPage}
       lastPage={lastPage}
       layout={<GridVideos data={data} />}
+      isRefetching={isRefetching}
     />
   );
 };
@@ -111,13 +115,19 @@ const SingleVideoTab = ({ data }) => {
       {
         name: "TabOthers",
         label: "TA的视频",
-        Content: <OthersLayout userId={route.params.userId} />,
+        Content: (
+          <OthersLayout userId={route.params.userId} workID={data._id} />
+        ),
       },
       {
         name: "TabRecommended",
         label: "更多推荐",
         Content: (
-          <RecommendedData recommendedData={data} id={route.params.userId} />
+          <RecommendedData
+            workID={data._id}
+            recommendedData={data}
+            id={route.params.userId}
+          />
         ),
       },
       {

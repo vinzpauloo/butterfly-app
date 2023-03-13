@@ -13,6 +13,7 @@ interface IWorksParams {
   paginate?: number;
   creator_only?: boolean;
   recommended?: boolean;
+  exclude?: string;
 }
 
 interface IWorkFollowing {

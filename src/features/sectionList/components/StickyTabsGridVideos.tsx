@@ -1,17 +1,13 @@
 import { RefreshControl, View } from "react-native";
 import React, { useCallback, useState } from "react";
 
-<<<<<<< HEAD
 import { Tabs } from "react-native-collapsible-tab-view";
 
-=======
->>>>>>> 2b2ee2fbd07620f0e6fd3c429bac78687d56b3bd
 import BottomMessage from "components/BottomMessage";
 import Container from "components/Container";
 import Loading from "components/Loading";
 import MasonrySkeleton from "components/skeletons/MasonrySkeleton";
 import { GLOBAL_COLORS } from "global";
-import { Tabs } from "react-native-collapsible-tab-view";
 
 const StickyTabsGridVideos = ({
   isLoading,

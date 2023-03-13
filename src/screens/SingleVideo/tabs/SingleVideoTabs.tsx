@@ -1,18 +1,18 @@
+import { useState } from "react";
 import { StyleSheet } from "react-native";
 
 import { useRoute } from "@react-navigation/native";
 import { useQuery } from "@tanstack/react-query";
+import { Tabs } from "react-native-collapsible-tab-view";
 
-import CommentList from "features/commentList";
-import GridVideos from "features/sectionList/components/GridVideos";
-import StickyTabs from "layouts/StickyTabs";
-import { Header } from "./Header";
-import { Work } from "hooks/useWork";
-import { useState } from "react";
-import StickyTabsGridVideos from "features/sectionList/components/StickyTabsGridVideos";
 import CommentTextInput from "components/CommentTextInput";
 import Container from "components/Container";
-import { Tabs } from "react-native-collapsible-tab-view";
+import CommentList from "features/commentList";
+import GridVideos from "features/sectionList/components/GridVideos";
+import StickyTabsGridVideos from "features/sectionList/components/StickyTabsGridVideos";
+import { Header } from "./Header";
+import StickyTabs from "layouts/StickyTabs";
+import WorkService from "services/api/WorkService";
 
 const OthersLayout = ({ userId }) => {
   const [page, setPage] = useState(1);
@@ -21,12 +21,12 @@ const OthersLayout = ({ userId }) => {
   const [refreshing, setRefreshing] = useState(false);
   const [refreshingId, setRefreshingId] = useState(0);
 
-  const { getWorkAll } = Work();
+  const { getWorks } = WorkService();
 
   const { isLoading } = useQuery({
     queryKey: ["allWork", userId, page, refreshingId],
     queryFn: () =>
-      getWorkAll({
+      getWorks({
         user_id: userId,
         with: "user",
         creator_only: true,
@@ -64,12 +64,12 @@ const RecommendedData = ({ recommendedData, id }) => {
   const [lastPage, setLastPage] = useState(1);
   const [refreshing, setRefreshing] = useState(false);
   const [refreshingId, setRefreshingId] = useState(0);
-  const { getWorkRecommended } = Work();
+  const { getWorks } = WorkService();
 
   const { isLoading } = useQuery({
     queryKey: ["recommendedSingleVideo", id, page, refreshingId],
     queryFn: () =>
-      getWorkRecommended({
+      getWorks({
         tags: recommendedData.tags.toString(),
         with: "user",
         ads: true,

@@ -5,12 +5,13 @@ import AntDesign from "react-native-vector-icons/AntDesign";
 import { useMutation, useQuery } from "@tanstack/react-query";
 
 import { GLOBAL_COLORS } from "global";
-import { Like } from "hooks/commonActoins/useLike";
+import LikeService from "services/api/LikeService";
 import { userStore } from "../../../zustand/userStore";
 
 const LikeButton = ({ data, id }) => {
+  const token = userStore((store) => store.api_token);
   const customerID = userStore((store) => store._id);
-  const { deleteLikeWork, postLikeWork, postLikeChecker } = Like();
+  const { unlikeWork, likeWork, likeChecker } = LikeService();
   const [isAlreadyLike, setIsAlreadyLike] = useState(false);
   const [likeCount, setLikeCount] = useState(data?.like?.total_likes);
 
@@ -18,9 +19,12 @@ const LikeButton = ({ data, id }) => {
   const { isLoading } = useQuery({
     queryKey: ["likeChecker", id],
     queryFn: () =>
-      postLikeChecker({
-        foreign_id: id,
-        customer_id: `${customerID}`, // CHANGE LATER
+      likeChecker({
+        data: {
+          foreign_id: id,
+          type: "feed",
+        },
+        token: token,
       }),
     onSuccess: (data) => {
       setIsAlreadyLike(data);
@@ -31,7 +35,7 @@ const LikeButton = ({ data, id }) => {
   });
 
   // for like
-  const { mutate: mutateLike } = useMutation(postLikeWork, {
+  const { mutate: mutateLike } = useMutation(likeWork, {
     onSuccess: (data) => {
       if (data.isLike) {
         setIsAlreadyLike(true);
@@ -44,7 +48,7 @@ const LikeButton = ({ data, id }) => {
   });
 
   // for unlike
-  const { mutate: mutateUnLike } = useMutation(deleteLikeWork, {
+  const { mutate: mutateUnLike } = useMutation(unlikeWork, {
     onSuccess: (data) => {
       if (data.unLike) {
         setIsAlreadyLike(false);
@@ -60,15 +64,18 @@ const LikeButton = ({ data, id }) => {
     // check here if not like yet
     if (!isAlreadyLike) {
       mutateLike({
-        site_id: 1,
-        foreign_id: id,
-        customer_id: `${customerID}`, // CHANGE LATER
-        type: "feed",
+        data: {
+          foreign_id: id,
+          type: "feed",
+        },
+        token: token,
       });
     } else {
       mutateUnLike({
-        foreign_id: id,
-        customer_id: `${customerID}`, // CHANGE LATER
+        data: {
+          foreign_id: id,
+        },
+        token: token,
       });
     }
   };

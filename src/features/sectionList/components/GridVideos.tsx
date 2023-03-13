@@ -34,7 +34,7 @@ export const FollowingBottomContent = ({ item }) => {
           size={18}
           color={GLOBAL_COLORS.secondaryColor}
         />
-        <Text style={styles.modelText}>{item.like.total_likes}w</Text>
+        <Text style={styles.modelLikeCount}>{item.like.total_likes}w</Text>
       </View>
     </View>
   );
@@ -234,6 +234,11 @@ const styles = StyleSheet.create({
     borderRadius: 10,
   },
   modelText: {
+    fontSize: 12,
+    color: GLOBAL_COLORS.usernameTextColor,
+    paddingHorizontal: 5,
+  },
+  modelLikeCount: {
     fontSize: 12,
     color: GLOBAL_COLORS.primaryTextColor,
     paddingHorizontal: 5,

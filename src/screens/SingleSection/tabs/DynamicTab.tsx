@@ -11,6 +11,7 @@ import WorkgroupService from "services/api/WorkgroupService";
 import { GLOBAL_COLORS } from "global";
 import { MasonryFlashList } from "@shopify/flash-list";
 import { Video } from "features/sectionList/components/GridVideos";
+import Container from "components/Container";
 
 const BottomMessage = () => {
   return (
@@ -31,7 +32,7 @@ const DynamicTab = ({ id: selectionId, tabCategory }) => {
   const [refreshing, setRefreshing] = useState(false);
   const [refreshingId, setRefreshingId] = useState(0);
 
-  const { isLoading } = useQuery({
+  const { isLoading, isRefetching } = useQuery({
     queryKey: [tabCategory, selectionId, page, refreshingId],
     queryFn: () =>
       getWorkgroup({
@@ -70,49 +71,53 @@ const DynamicTab = ({ id: selectionId, tabCategory }) => {
     }
   };
 
+  if ((isLoading || refreshing || isRefetching) && page === 1) {
+    return (
+      <Container>
+        <MasonrySkeleton />
+      </Container>
+    );
+  }
+
   return (
     <View style={styles.gridVideoContainer}>
-      {(isLoading || refreshing) && page === 1 ? (
-        <MasonrySkeleton />
-      ) : (
-        <MasonryFlashList
-          refreshControl={
-            <RefreshControl
-              colors={[GLOBAL_COLORS.secondaryColor]}
-              refreshing={refreshing}
-              onRefresh={onRefresh}
-            />
-          }
-          data={data}
-          numColumns={2}
-          onEndReachedThreshold={0.01} // always make this default to 0.01 to have no bug for fetching data for the onEndReached -> https://github.com/facebook/react-native/issues/14015#issuecomment-346547942
-          onMomentumScrollBegin={() => setStartScroll(false)}
-          onEndReached={reachEnd}
-          estimatedItemSize={200}
-          keyExtractor={(_, index) => "" + index}
-          renderItem={({ item, index }) => (
-            <Video
-              key={index}
-              item={item}
-              isFollowingScreen={true}
-              onOpen={onOpen}
-              setId={setId}
-            />
-          )}
-          ListFooterComponent={() => (
-            <>
-              {/* the gap will be remove if the lastpage is been fetch */}
-              {lastPage !== page || (lastPage === page && isLoading) ? (
-                <View style={{ marginBottom: 60 }}>
-                  {/* to have a gap in bottom part of section to see the loading icon */}
-                  {isLoading ? <Loading /> : null}
-                </View>
-              ) : null}
-              {lastPage === page && !isLoading ? <BottomMessage /> : null}
-            </>
-          )}
-        />
-      )}
+      <MasonryFlashList
+        refreshControl={
+          <RefreshControl
+            colors={[GLOBAL_COLORS.secondaryColor]}
+            refreshing={refreshing}
+            onRefresh={onRefresh}
+          />
+        }
+        data={data}
+        numColumns={2}
+        onEndReachedThreshold={0.01} // always make this default to 0.01 to have no bug for fetching data for the onEndReached -> https://github.com/facebook/react-native/issues/14015#issuecomment-346547942
+        onMomentumScrollBegin={() => setStartScroll(false)}
+        onEndReached={reachEnd}
+        estimatedItemSize={200}
+        keyExtractor={(_, index) => "" + index}
+        renderItem={({ item, index }) => (
+          <Video
+            key={index}
+            item={item}
+            isFollowingScreen={true}
+            onOpen={onOpen}
+            setId={setId}
+          />
+        )}
+        ListFooterComponent={() => (
+          <>
+            {/* the gap will be remove if the lastpage is been fetch */}
+            {lastPage !== page || (lastPage === page && isLoading) ? (
+              <View style={{ marginBottom: 60 }}>
+                {/* to have a gap in bottom part of section to see the loading icon */}
+                {isLoading ? <Loading /> : null}
+              </View>
+            ) : null}
+            {lastPage === page && !isLoading ? <BottomMessage /> : null}
+          </>
+        )}
+      />
       <Modal isOpen={isOpen} onOpen={onOpen} onClose={onClose} id={id} />
     </View>
   );

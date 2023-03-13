@@ -16,6 +16,8 @@ import { useQuery } from "@tanstack/react-query";
 import { photoGalleryImages } from "data/photoGalleryImages";
 import Container from "components/Container";
 import { GLOBAL_COLORS } from "global";
+import BottomMessage from "components/BottomMessage";
+import Loading from "components/Loading";
 import VIPTag from "components/VIPTag";
 import CustomModal from "components/CustomModal";
 import MasonrySkeleton from "components/skeletons/MasonrySkeleton";
@@ -24,6 +26,7 @@ import AlbumsService from "services/api/AlbumsService";
 
 type SingleImageProp = {
   idx: number;
+  albumId: number;
   url: string;
   postTitle: string;
   totalViews: string;
@@ -40,6 +43,7 @@ const SingleImage = (props: SingleImageProp) => {
 
   const handlePress = () => {
     navigation.navigate("PhotoGallery", {
+      albumId: props.albumId,
       postTitle: props.postTitle,
       imageList: photoGalleryImages,
     });
@@ -83,10 +87,11 @@ const MasonryPhotos = ({ filter }) => {
   const { getAlbums } = AlbumsService();
 
   const { isLoading } = useQuery({
-    queryKey: ["albums", filter, refreshingId],
+    queryKey: ["albums", filter, page, refreshingId],
     queryFn: () =>
       getAlbums({
         filter,
+        paginate: 6 /* Temporary for demo only */,
       }),
     onSuccess: (data) => {
       setLastPage(data.last_page);
@@ -118,7 +123,7 @@ const MasonryPhotos = ({ filter }) => {
     }
   };
 
-  if (isLoading) return <MasonrySkeleton />;
+  if (isLoading && page === 1) return <MasonrySkeleton />;
 
   return (
     <>
@@ -142,12 +147,26 @@ const MasonryPhotos = ({ filter }) => {
             renderItem={({ item, index }) => (
               <SingleImage
                 idx={index}
-                url={item.cover_photo}
+                albumId={item._id}
+                url={item.cover.photo}
                 postTitle={item.title}
                 totalViews={item.views}
-                height={200}
+                /* height ratio of the cover photo */
+                height={item.cover.height / 6}
                 setOpen={setOpen}
               />
+            )}
+            ListFooterComponent={() => (
+              <>
+                {/* the gap will be remove if the lastpage is been fetch */}
+                {lastPage !== page || (lastPage === page && isLoading) ? (
+                  <View style={{ marginBottom: 60 }}>
+                    {/* to have a gap in bottom part of section to see the loading icon */}
+                    {isLoading ? <Loading /> : null}
+                  </View>
+                ) : null}
+                {lastPage === page && !isLoading ? <BottomMessage /> : null}
+              </>
             )}
           />
         </View>

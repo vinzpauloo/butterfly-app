@@ -3,6 +3,7 @@ import request from "lib/request";
 
 interface IAlbumParams {
   filter?: string;
+  paginate?: number;
 }
 
 const AlbumService = () => {

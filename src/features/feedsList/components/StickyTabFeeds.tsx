@@ -65,7 +65,13 @@ const StickyTabFeeds = ({ category, key, token }) => {
   if ((isLoading || isRefetching) && page === 1) {
     return (
       <Container>
-        <FeedItemSkeleton />
+        <Tabs.ScrollView
+          accessibilityComponentType={undefined}
+          accessibilityTraits={undefined}
+          scrollEnabled={false}
+        >
+          <FeedItemSkeleton />
+        </Tabs.ScrollView>
       </Container>
     );
   }

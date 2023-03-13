@@ -1,5 +1,12 @@
-import { Dimensions, Image, Pressable, StyleSheet, Text, View } from "react-native";
-import React, { useState } from "react";
+import {
+  Dimensions,
+  Image,
+  Pressable,
+  StyleSheet,
+  Text,
+  View,
+} from "react-native";
+import React, { useEffect, useState } from "react";
 
 import { MasonryFlashList } from "@shopify/flash-list";
 import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons";
@@ -153,7 +160,7 @@ const BottomContent = ({ totalComments, totalLikes, id, isLiked }) => {
 };
 
 const FeedContent = ({ data }) => {
-  const { item } = data;
+  const item = !!data.item ? data.item : data;
   const [open, setOpen] = useState(false);
 
   return (

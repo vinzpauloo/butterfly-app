@@ -7,10 +7,12 @@ interface IWorksParams {
   owner_only?: boolean;
   page?: number;
   tag?: string;
+  tags?: string;
   user_id?: number;
   with?: string;
   paginate?: number;
-  creator_only?: boolean
+  creator_only?: boolean;
+  recommended?: boolean;
 }
 
 interface IWorkFollowing {

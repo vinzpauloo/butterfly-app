@@ -83,10 +83,10 @@ const CustomerService = () => {
 
   const followChecker = (data: IFollow) => {
     return request({
-      headers: getHeaders(),
+      headers: { ...getHeaders(), Authorization: `Bearer ${data.token}` },
       url: "/customers/follow-checker",
       method: "POST",
-      data,
+      data: data.user_id,
     });
   };
 

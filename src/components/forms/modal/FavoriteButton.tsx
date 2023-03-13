@@ -28,7 +28,7 @@ const FavoriteButton = ({ isOpen, id }) => {
       setIsAlreadyFavorite(data);
     },
     onError: (error) => {
-      console.log("postLikeChecker", error);
+      console.log("favoriteChecker", error);
     },
     enabled: isOpen,
   });

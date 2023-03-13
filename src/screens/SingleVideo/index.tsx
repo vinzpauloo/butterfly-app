@@ -13,14 +13,15 @@ import CarouselSkeleton from "components/skeletons/CarouselSkeleton";
 import SingleVideoTab from "screens/SingleVideo/tabs/SingleVideoTabs";
 import VideoPlayer from "components/VideoPlayer";
 import VideoListSkeleton from "components/skeletons/VideoListSkeleton";
-import WorkService from "services/api/WorkService";
-import { Follow } from "hooks/commonActoins/useFollow";
 import { GLOBAL_COLORS } from "global";
+import CustomerService from "services/api/CustomerService";
+import WorkService from "services/api/WorkService";
 import { userStore } from "../../zustand/userStore";
 
 const HeaderTitle = () => {
+  const token = userStore((store) => store.api_token);
   const customerID = userStore((store) => store._id);
-  const { postFollowCreator, postFollowChecker } = Follow();
+  const { followChecker, followCreator } = CustomerService();
   const navigation = useNavigation<any>();
   const route = useRoute<any>();
   const [isFollowed, setIsFollowed] = useState(false);
@@ -28,11 +29,12 @@ const HeaderTitle = () => {
   const { isLoading } = useQuery({
     queryKey: ["follow", route.params.userId],
     queryFn: () =>
-      postFollowChecker({
-        customer_id: customerID, // CHANGE LATER
-        user_id: route.params.userId,
+      followChecker({
+        user_id: { user_id: route.params.userId },
+        token: token,
       }),
     onSuccess: (data) => {
+      console.log("followChecker", data);
       if (data) {
         setIsFollowed(data);
       }
@@ -42,21 +44,21 @@ const HeaderTitle = () => {
     },
   });
 
-  const { mutate } = useMutation(postFollowCreator, {
+  const { mutate: mutateFollow } = useMutation(followCreator, {
     onSuccess: (data) => {
       if (data.isFollowed) {
         setIsFollowed(true);
       }
     },
     onError: (error) => {
-      console.log("postFollowCreator", error);
+      console.log("followCreator", error);
     },
   });
 
   const handleFollow = () => {
-    mutate({
-      user_id: route.params.userId,
-      customer_id: customerID,
+    mutateFollow({
+      user_id: { user_id: route.params.userId },
+      token: token,
     });
   };
   return (

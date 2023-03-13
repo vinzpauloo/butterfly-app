@@ -28,7 +28,7 @@ const LikeButton = ({ isOpen, id }) => {
       setIsAlreadyLike(data);
     },
     onError: (error) => {
-      console.log("postLikeChecker", error);
+      console.log("likeChecker", error);
     },
     enabled: isOpen,
   });

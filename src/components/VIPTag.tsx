@@ -1,13 +1,16 @@
 import { Alert, Pressable, StyleSheet, Text, View } from "react-native";
 import React from "react";
+import { useNavigation } from "@react-navigation/native";
 
 interface IVIPTag {
   isAbsolute?: boolean;
 }
 
 const VIPTag: React.FC<IVIPTag> = ({ isAbsolute }) => {
+  const navigation = useNavigation<any>();
+
   const handlePress = () => {
-    Alert.alert("VIP Pressed!");
+    navigation.navigate("SharingPromotion");
   };
 
   return (

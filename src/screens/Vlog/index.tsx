@@ -20,7 +20,7 @@ const Vlog = (props: Props) => {
   const { isLoading, data, refetch } = useQuery({
     queryKey: ["portraitWorks"],
     queryFn: () =>
-      getWorksPortrait({
+      getWorks({
         data: {
           orientation: "Portrait",
         },

@@ -2,18 +2,21 @@ import { getHeaders } from "lib/cryptoJs";
 import request from "lib/request";
 
 interface IWorksParams {
-  ads?: boolean;
-  orientation?: string;
-  owner_only?: boolean;
-  page?: number;
-  tag?: string;
-  tags?: string;
-  user_id?: number;
-  with?: string;
-  paginate?: number;
-  creator_only?: boolean;
-  recommended?: boolean;
-  exclude?: string;
+  data: {
+    ads?: boolean;
+    orientation?: string;
+    owner_only?: boolean;
+    page?: number;
+    tag?: string;
+    tags?: string;
+    user_id?: number;
+    with?: string;
+    paginate?: number;
+    creator_only?: boolean;
+    recommended?: boolean;
+    exclude?: string;
+  };
+  token: string;
 }
 
 interface IWorkFollowing {
@@ -26,13 +29,6 @@ interface IWorkFollowing {
   token: string;
 }
 
-interface IWorkPortrait {
-  data: {
-    orientation: string;
-  };
-  token: string;
-}
-
 interface IWorkById {
   workId: string;
   token: string;
@@ -41,10 +37,10 @@ interface IWorkById {
 const WorkService = () => {
   const getWorks = (params: IWorksParams) => {
     return request({
-      headers: getHeaders(),
+      headers: { ...getHeaders(), Authorization: `Bearer ${params.token}` },
       url: "/works",
       method: "GET",
-      params,
+      params: params.data,
     });
   };
 
@@ -65,7 +61,7 @@ const WorkService = () => {
     });
   };
 
-  const getWorksPortrait = (params: IWorkPortrait) => {
+  const getWorksPortrait = (params: IWorksParams) => {
     return request({
       headers: { ...getHeaders(), Authorization: `Bearer ${params.token}` },
       url: "/works",

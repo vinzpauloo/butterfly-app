@@ -13,8 +13,9 @@ import StickyTabs from "layouts/StickyTabs";
 import StickyTabsGridVideos from "features/sectionList/components/StickyTabsGridVideos";
 import WorkService from "services/api/WorkService";
 import { Header } from "./Header";
+import { userStore } from "../../../zustand/userStore";
 
-const OthersLayout = ({ userId, workID }) => {
+const OthersLayout = ({ userId, workID, token }) => {
   const [page, setPage] = useState(1);
   const [data, setData] = useState([]);
   const [lastPage, setLastPage] = useState(1);
@@ -27,12 +28,15 @@ const OthersLayout = ({ userId, workID }) => {
     queryKey: ["allWork", userId, page, refreshingId],
     queryFn: () =>
       getWorks({
-        user_id: userId,
-        with: "user",
-        creator_only: true,
-        ads: true,
-        page: page,
-        exclude: workID,
+        data: {
+          user_id: userId,
+          with: "user",
+          creator_only: true,
+          ads: true,
+          page: page,
+          exclude: workID,
+        },
+        token: token,
       }),
     onSuccess: (data) => {
       setLastPage(data.last_page);
@@ -60,7 +64,7 @@ const OthersLayout = ({ userId, workID }) => {
   );
 };
 
-const RecommendedData = ({ id, recommendedData, workID }) => {
+const RecommendedData = ({ id, recommendedData, workID, token }) => {
   const [page, setPage] = useState(1);
   const [data, setData] = useState([]);
   const [lastPage, setLastPage] = useState(1);
@@ -72,13 +76,16 @@ const RecommendedData = ({ id, recommendedData, workID }) => {
     queryKey: ["recommendedSingleVideo", id, page, refreshingId],
     queryFn: () =>
       getWorks({
-        tags: recommendedData.tags.toString(),
-        with: "user",
-        ads: true,
-        page: page,
-        user_id: id,
-        recommended: true,
-        exclude: workID,
+        data: {
+          tags: recommendedData.tags.toString(),
+          with: "user",
+          ads: true,
+          page: page,
+          user_id: id,
+          recommended: true,
+          exclude: workID,
+        },
+        token: token,
       }),
     onSuccess: (data) => {
       setLastPage(data.last_page);
@@ -107,6 +114,7 @@ const RecommendedData = ({ id, recommendedData, workID }) => {
 };
 
 const SingleVideoTab = ({ data }) => {
+  const token = userStore((state) => state.api_token);
   const route = useRoute<any>();
 
   const tabsData = {
@@ -116,7 +124,11 @@ const SingleVideoTab = ({ data }) => {
         name: "TabOthers",
         label: "TA的视频",
         Content: (
-          <OthersLayout userId={route.params.userId} workID={data._id} />
+          <OthersLayout
+            userId={route.params.userId}
+            workID={data._id}
+            token={token}
+          />
         ),
       },
       {
@@ -127,6 +139,7 @@ const SingleVideoTab = ({ data }) => {
             workID={data._id}
             recommendedData={data}
             id={route.params.userId}
+            token={token}
           />
         ),
       },

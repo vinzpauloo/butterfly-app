@@ -12,8 +12,10 @@ import MasonrySkeleton from "components/skeletons/MasonrySkeleton";
 import { Video } from "features/sectionList/components/GridVideos";
 import { GLOBAL_COLORS } from "global";
 import WorkService from "services/api/WorkService";
+import { userStore } from "../../../zustand/userStore";
 
 const Recommended = ({ tag, isFollowingScreen = false }) => {
+  const token = userStore((state) => state.api_token);
   const { isOpen, onOpen, onClose } = useDisclose();
   const [id, setId] = useState<number | null>(null);
   const [page, setPage] = useState(1);
@@ -29,11 +31,14 @@ const Recommended = ({ tag, isFollowingScreen = false }) => {
     queryKey: ["recommendedSingleTag", tag, page, refreshingId],
     queryFn: () =>
       getWorks({
-        tag,
-        with: "user",
-        ads: false,
-        page: page,
-        paginate: 20,
+        data: {
+          tag,
+          with: "user",
+          ads: false,
+          page: page,
+          paginate: 20,
+        },
+        token: token,
       }),
     onSuccess: (data) => {
       setLastPage(data.last_page);

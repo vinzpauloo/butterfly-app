@@ -1,7 +1,12 @@
 const IS_DEV = process.env.APP_VARIANT === "development";
+const IS_SIT = process.env.APP_VARIANT === "sit";
 
 export default {
-  name: IS_DEV ? "Butterfly App (Dev)" : "Butterfly App (Preview)",
+  name: IS_DEV
+    ? "Butterfly App (Dev)"
+    : IS_SIT
+    ? "(SIT) Butterfly"
+    : "Butterfly App (Preview)",
   slug: "butterfly-mobile-app-fe",
   version: "1.0.0",
   orientation: "portrait",

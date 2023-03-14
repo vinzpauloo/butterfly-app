@@ -1,5 +1,7 @@
 import axios from "axios";
-import { API_BASE_URL } from "react-native-dotenv";
+import { API_BASE_URL_LOCAL, API_BASE_URL_SIT } from "react-native-dotenv";
+
+const IS_SIT = process.env.APP_VARIANT === "sit";
 
 // to have a delay in fetching data to see the loading component
 function sleep(ms = 1000) {
@@ -8,7 +10,7 @@ function sleep(ms = 1000) {
 
 const client = (() => {
   return axios.create({
-    baseURL: API_BASE_URL,
+    baseURL: IS_SIT ? API_BASE_URL_SIT : API_BASE_URL_LOCAL,
   });
 })();
 

@@ -5,10 +5,8 @@ s = X-Random
 --------------------
 DateTimeZ|IntegrationKey
 */
+import { AUTH_INTEGRATION_KEY, AUTH_PASSPHRASE } from "react-native-dotenv";
 const CryptoJS = require("crypto-js");
-
-const passphrase = "1bit";
-const integrationKey = "pogimarkthebestt";
 
 const CryptoJSAesJson = {
   stringify: function (cipherParams) {
@@ -33,14 +31,14 @@ const getDateNow = () => {
 };
 
 const encryptData = () => {
-  const dataToEncrypt = `${getDateNow()}|${integrationKey}`;
+  const dataToEncrypt = `${getDateNow()}|${AUTH_INTEGRATION_KEY}`;
 
   // console.log("--- Inside encryptData function ---");
   // console.log("dataToEncrypt:", dataToEncrypt);
 
   const encrypted = CryptoJS.AES.encrypt(
     JSON.stringify(dataToEncrypt),
-    passphrase,
+    AUTH_PASSPHRASE,
     {
       format: CryptoJSAesJson,
     }
@@ -53,7 +51,7 @@ const encryptData = () => {
 
 const decryptData = (dataToDecrypt) => {
   const decrypted = JSON.parse(
-    CryptoJS.AES.decrypt(dataToDecrypt, passphrase, {
+    CryptoJS.AES.decrypt(dataToDecrypt, AUTH_PASSPHRASE, {
       format: CryptoJSAesJson,
     }).toString(CryptoJS.enc.Utf8)
   );

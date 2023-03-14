@@ -11,6 +11,7 @@ import DonateService from 'services/api/DonateService';
 import CustomModal from 'components/CustomModal';
 import VIPModalContent from 'components/VIPModalContent';
 import DonateModalContent from 'components/DonateModalContent';
+import Loading from 'components/Loading';
 
 type Props = {};
 
@@ -21,7 +22,7 @@ const SingleUserHeader = (props: Props) => {
 	const [openVIPModal, setVIPModalOpen] = useState(false)
 	const [openDonateModal, setOpenDonateModal] = useState(false)
 
-	const [isCreatorFollowed, setIsCreatorFollowed] = useState(false)
+	const [isCreatorFollowed, setIsCreatorFollowed] = useState(null)
 	const token = userStore((state) => state.api_token);
 
 	// get specific content creators name, cover photo, photo, note
@@ -65,8 +66,18 @@ const SingleUserHeader = (props: Props) => {
 		onError: (error) => { alert(error) },
 	});
 
+	const { followChecker, followCreator, unfollowCreator } = CustomerService();
+	// check if content creator is already followed
+	const { } = useQuery({
+		queryKey: ["isContentCreatorFollowed", userID],
+		queryFn: () => followChecker({
+			user_id: { user_id: userID },
+			token: token }),
+		onSuccess: (data) => { setIsCreatorFollowed(data) },
+		onError: (error) => { console.log(error) },
+	});
+
 	// follow content creator
-	const { followCreator, unfollowCreator } = CustomerService();
 	const { mutate: mutateFollowCreator } = useMutation(followCreator, {
 		onSuccess: (data) => { if (data?.isFollowed) setIsCreatorFollowed(true) }, onError: (error) => { console.log(error) },
 	});
@@ -96,7 +107,7 @@ const SingleUserHeader = (props: Props) => {
 			token: token,
 		});
 	}
-
+	
 	return (
 		<View pointerEvents="box-none">
 			<ImageBackground source={{ uri: creatorData?.cover_photo }} resizeMode="cover">
@@ -110,9 +121,10 @@ const SingleUserHeader = (props: Props) => {
 							<Text style={styles.usernameUp}>UP</Text>
 						</View>
 						<TouchableWithoutFeedback onPress={isCreatorFollowed ? unfollowContentCreator : followContentCreator}>
+							{isCreatorFollowed === null ? <></> :
 							<View style={isCreatorFollowed ? styles.unfollowBtn : styles.followBtn} pointerEvents="box-none">
 								<Text style={styles.followText}>{isCreatorFollowed ? "己关注" : "关注"}</Text>
-							</View>
+							</View>}
 						</TouchableWithoutFeedback>
 					</View>
 					<Text style={styles.description}>{creatorData?.note}</Text>

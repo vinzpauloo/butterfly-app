@@ -7,7 +7,7 @@ import {
   RefreshControl,
 } from "react-native";
 
-import { useNavigation } from "@react-navigation/native";
+import { useNavigation, useRoute } from "@react-navigation/native";
 import { VStack, HStack, Text } from "native-base";
 import { MasonryFlashList } from "@shopify/flash-list";
 import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons";
@@ -23,6 +23,7 @@ import CustomModal from "components/CustomModal";
 import MasonrySkeleton from "components/skeletons/MasonrySkeleton";
 import VIPModalContent from "components/VIPModalContent";
 import AlbumsService from "services/api/AlbumsService";
+import { captureSuccess, captureError } from "services/sentry";
 import { userStore } from "../zustand/userStore";
 
 type SingleImageProp = {
@@ -79,6 +80,7 @@ const SingleImage = (props: SingleImageProp) => {
 const MasonryPhotos = ({ filter }) => {
   const token = userStore((state) => state.api_token);
   const [open, setOpen] = useState(false);
+  const route = useRoute<any>();
 
   const [data, setData] = useState([]);
   const [page, setPage] = useState(1);
@@ -98,10 +100,13 @@ const MasonryPhotos = ({ filter }) => {
     onSuccess: (data) => {
       setLastPage(data.last_page);
       setData((prev) => [...prev].concat(data.data));
+
+      captureSuccess(route.name, `getAlbums() ${JSON.stringify(data)}`);
     },
     onError: (error) => {
       //error handler
-      console.log("Error", error);
+      console.log("getAlbums()", error);
+      captureError(error, route.name, "queryFn: () => getAlbums()");
     },
   });
 

@@ -23,6 +23,7 @@ import CustomModal from "components/CustomModal";
 import MasonrySkeleton from "components/skeletons/MasonrySkeleton";
 import VIPModalContent from "components/VIPModalContent";
 import AlbumsService from "services/api/AlbumsService";
+import { userStore } from "../zustand/userStore";
 
 type SingleImageProp = {
   idx: number;
@@ -76,6 +77,7 @@ const SingleImage = (props: SingleImageProp) => {
 };
 
 const MasonryPhotos = ({ filter }) => {
+  const token = userStore((state) => state.api_token);
   const [open, setOpen] = useState(false);
 
   const [data, setData] = useState([]);
@@ -90,8 +92,8 @@ const MasonryPhotos = ({ filter }) => {
     queryKey: ["albums", filter, page, refreshingId],
     queryFn: () =>
       getAlbums({
-        filter,
-        paginate: 6 /* Temporary for demo only */,
+        data: { filter },
+        token: token,
       }),
     onSuccess: (data) => {
       setLastPage(data.last_page);

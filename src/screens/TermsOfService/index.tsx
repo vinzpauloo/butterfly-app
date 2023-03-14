@@ -46,6 +46,8 @@ const TermsOfService = ({}) => {
           <View style={styles.btnContainer}>
             <Buttons
               title={"NO"}
+              // if possible change the - animation: "slide_from_right" 
+              // in StackScreen options, specifically for "OnAppExitScreen" to fade instead
               onPress={() => { navigation.navigate("OnAppExitScreen"); BackHandler.exitApp() }}
               backgroundColor={"purple"}
               color={"white"}

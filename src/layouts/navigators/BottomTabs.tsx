@@ -28,6 +28,8 @@ const BottomTabs = ({ data }) => {
     setShowConfirmExitText(true);
     setTimeout(() => setShowConfirmExitText(false), 2000);
     if (showConfirmExitText) { navigation.navigate("OnAppExitScreen"); BackHandler.exitApp() }
+    // if possible change the - animation: "slide_from_right"
+    // in StackScreen options, specifically for "OnAppExitScreen" to fade instead
   };
 
   BackHandler.addEventListener("hardwareBackPress", () => {

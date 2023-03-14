@@ -27,13 +27,13 @@ const SingleUserHeader = (props: Props) => {
 
 	// get specific content creators name, cover photo, photo, note
 	const { getSpecificContentCreator, getFollowersCount, getDonatorsCount } = UserService();
-	const { data: creatorData } = useQuery({
+	const { data: creatorData, isLoading } = useQuery({
 		queryKey: ["specificContentCreatorData", userID],
 		queryFn: () => getSpecificContentCreator({
 			data: { user_id: userID },
 			token: token
 		}),
-		onSuccess: () => { },
+		onSuccess: (data) => { setIsCreatorFollowed(data?.is_followed) },
 		onError: (error) => { console.log(error) },
 	});
 
@@ -66,17 +66,7 @@ const SingleUserHeader = (props: Props) => {
 		onError: (error) => { alert(error) },
 	});
 
-	const { followChecker, followCreator, unfollowCreator } = CustomerService();
-	// check if content creator is already followed
-	const { } = useQuery({
-		queryKey: ["isContentCreatorFollowed", userID],
-		queryFn: () => followChecker({
-			user_id: { user_id: userID },
-			token: token }),
-		onSuccess: (data) => { setIsCreatorFollowed(data) },
-		onError: (error) => { console.log(error) },
-	});
-
+	const { followCreator, unfollowCreator } = CustomerService();
 	// follow content creator
 	const { mutate: mutateFollowCreator } = useMutation(followCreator, {
 		onSuccess: (data) => { if (data?.isFollowed) setIsCreatorFollowed(true) }, onError: (error) => { console.log(error) },
@@ -109,60 +99,63 @@ const SingleUserHeader = (props: Props) => {
 	}
 	
 	return (
-		<View pointerEvents="box-none">
-			<ImageBackground source={{ uri: creatorData?.cover_photo }} resizeMode="cover">
-				<View style={styles.bannerContent} pointerEvents="box-none">
-					<Ionicons name="chevron-back" color="#fff" size={30} style={styles.backIcon} onPress={() => navigation.goBack()} />
-					<Ionicons name="md-chatbox-ellipses-outline" color="#fff" size={35} style={styles.messageIcon} onPress={() => setVIPModalOpen(true)} />
-					<Image source={{ uri: creatorData?.photo }} style={styles.profileImg} />
-					<View style={styles.usernameContainer} pointerEvents="box-none">
-						<View style={styles.usernameContent}>
-							<Text style={styles.usernameText}>{creatorData?.username}</Text>
-							<Text style={styles.usernameUp}>UP</Text>
+		<View style={styles.headerContainer} pointerEvents="box-none">
+			{isLoading ? <Loading /> :
+			<>
+				<ImageBackground source={{ uri: creatorData?.cover_photo }} resizeMode="cover">
+					<View style={styles.bannerContent} pointerEvents="box-none">
+						<Ionicons name="chevron-back" color="#fff" size={30} style={styles.backIcon} onPress={() => navigation.goBack()} />
+						<Ionicons name="md-chatbox-ellipses-outline" color="#fff" size={35} style={styles.messageIcon} onPress={() => setVIPModalOpen(true)} />
+						<Image source={{ uri: creatorData?.photo }} style={styles.profileImg} />
+						<View style={styles.usernameContainer} pointerEvents="box-none">
+							<View style={styles.usernameContent}>
+								<Text style={styles.usernameText}>{creatorData?.username}</Text>
+								<Text style={styles.usernameUp}>UP</Text>
+							</View>
+							<TouchableWithoutFeedback onPress={isCreatorFollowed ? unfollowContentCreator : followContentCreator}>
+								{isCreatorFollowed === null ? <></> :
+								<View style={isCreatorFollowed ? styles.unfollowBtn : styles.followBtn} pointerEvents="box-none">
+									<Text style={styles.followText}>{isCreatorFollowed ? "己关注" : "关注"}</Text>
+								</View>}
+							</TouchableWithoutFeedback>
 						</View>
-						<TouchableWithoutFeedback onPress={isCreatorFollowed ? unfollowContentCreator : followContentCreator}>
-							{isCreatorFollowed === null ? <></> :
-							<View style={isCreatorFollowed ? styles.unfollowBtn : styles.followBtn} pointerEvents="box-none">
-								<Text style={styles.followText}>{isCreatorFollowed ? "己关注" : "关注"}</Text>
-							</View>}
-						</TouchableWithoutFeedback>
+						<Text style={styles.description}>{creatorData?.note}</Text>
+						<View style={styles.summaryContainer}>
+							<TouchableWithoutFeedback onPress={goToFansScreen} >
+								<View style={styles.summaryContentMiddle} pointerEvents="box-none">
+									<Text style={styles.summaryNumber}>{followerCount}</Text>
+									<Text style={styles.summaryText}>粉丝</Text>
+								</View>
+							</TouchableWithoutFeedback>
+							<View style={styles.summaryContent}>
+								<Text style={styles.summaryNumber}>TBD</Text>
+								<Text style={styles.summaryText}>获赞</Text>
+							</View>
+						</View>
 					</View>
-					<Text style={styles.description}>{creatorData?.note}</Text>
-					<View style={styles.summaryContainer}>
-						<TouchableWithoutFeedback onPress={goToFansScreen} >
-							<View style={styles.summaryContentMiddle} pointerEvents="box-none">
-								<Text style={styles.summaryNumber}>{followerCount}</Text>
-								<Text style={styles.summaryText}>粉丝</Text>
+				</ImageBackground>
+				<View style={styles.donatorContainer} pointerEvents="box-none">
+					<View style={styles.profilesImagesContent}>
+						{donatorsList?.data.map((item, index) => (
+							<Image source={{ uri: item?.customer?.photo }} style={[styles.profileImgs, { zIndex: index, left: index * 20 }]} />
+						))}
+					</View>
+					<View style={styles.buttons} pointerEvents="box-none">
+						<Text style={styles.donateText}>{donatorCount?.total_donators}人打赏</Text>
+						<TouchableWithoutFeedback  onPress={() => setOpenDonateModal(true)}>
+							<View style={styles.donateBtn} pointerEvents="box-none">
+								<Text style={styles.donateText}>打赏</Text>
 							</View>
 						</TouchableWithoutFeedback>
-						<View style={styles.summaryContent}>
-							<Text style={styles.summaryNumber}>TBD</Text>
-							<Text style={styles.summaryText}>获赞</Text>
-						</View>
 					</View>
 				</View>
-			</ImageBackground>
-			<View style={styles.donatorContainer} pointerEvents="box-none">
-				<View style={styles.profilesImagesContent}>
-					{donatorsList?.data.map((item, index) => (
-						<Image source={{ uri: item?.customer?.photo }} style={[styles.profileImgs, { zIndex: index, left: index * 20 }]} />
-					))}
-				</View>
-				<View style={styles.buttons} pointerEvents="box-none">
-					<Text style={styles.donateText}>{donatorCount?.total_donators}人打赏</Text>
-					<TouchableWithoutFeedback  onPress={() => setOpenDonateModal(true)}>
-						<View style={styles.donateBtn} pointerEvents="box-none">
-							<Text style={styles.donateText}>打赏</Text>
-						</View>
-					</TouchableWithoutFeedback>
-				</View>
-			</View>
-			<CustomModal open={openVIPModal} setOpen={setVIPModalOpen}>
-				<VIPModalContent setOpen={setVIPModalOpen} />
-			</CustomModal>
-			<CustomModal open={openDonateModal} setOpen={setOpenDonateModal}>
-				<DonateModalContent setOpen={setOpenDonateModal} />
-			</CustomModal>
+				<CustomModal open={openVIPModal} setOpen={setVIPModalOpen}>
+					<VIPModalContent setOpen={setVIPModalOpen} />
+				</CustomModal>
+				<CustomModal open={openDonateModal} setOpen={setOpenDonateModal}>
+					<DonateModalContent setOpen={setOpenDonateModal} />
+				</CustomModal>
+			</>}
 		</View>
 	);
 }
@@ -170,6 +163,11 @@ const SingleUserHeader = (props: Props) => {
 export default SingleUserHeader
 
 const styles = StyleSheet.create({
+	headerContainer: {
+		backgroundColor: GLOBAL_COLORS.primaryColor,
+		height: 290,
+		justifyContent: "center",
+	},
 	bannerContent: {
 		backgroundColor: "rgba(0,0,0, 0.5)",
 		alignItems: "center",

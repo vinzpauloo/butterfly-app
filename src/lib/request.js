@@ -4,7 +4,7 @@ import { API_BASE_URL_LOCAL, API_BASE_URL_SIT } from "react-native-dotenv";
 const IS_SIT = process.env.APP_VARIANT === "sit";
 
 // to have a delay in fetching data to see the loading component
-function sleep(ms = 1000) {
+function sleep(ms = 500) {
   return new Promise((resolve) => setTimeout(resolve, ms));
 }
 

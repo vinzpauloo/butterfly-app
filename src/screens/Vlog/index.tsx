@@ -28,18 +28,19 @@ const Vlog = (props: Props) => {
       }),
     onSuccess: (data) => {
       console.log("=== random portrait video fetched from backend! ===");
+      console.log(data);
       let newElement = {
         // workID of the video (which is also the foreignID to refer to)
-        workID: data[0]._id,
-        userID: data[0].user.id,
-        userName: data[0].user.username,
-        videoURL: data[0].video_url,
-        thumbnailURL: data[0].thumbnail_url,
-        title: data[0].title,
-        tags: data[0].tags,
-        amountOflikes: data[0].like.total_likes,
-        amountOfComments: data[0].comment.total_comments,
-        userPhoto: data[0].user.photo,
+        workID: data._id,
+        userID: data.user.id,
+        userName: data.user.username,
+        videoURL: data.video_url,
+        thumbnailURL: data.thumbnail_url,
+        title: data.title,
+        tags: data.tags,
+        amountOflikes: data.like.total_likes,
+        amountOfComments: data.comment.total_comments,
+        userPhoto: data.user.photo,
       };
       setLocalStoredVlog((oldArray) => [...oldArray, newElement]);
     },
@@ -70,7 +71,7 @@ const Vlog = (props: Props) => {
       reelsVideos={localStoredVlog}
       bottomTabHeight={bottomTabHeight}
       onUserScrollDown={onUserScrollDown}
-      workId={data[0]?._id}
+      workId={data?._id}
     />
   );
 };

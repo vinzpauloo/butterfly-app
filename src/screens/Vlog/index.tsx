@@ -2,24 +2,29 @@ import React, { useState } from "react";
 import { ActivityIndicator, StyleSheet, View } from "react-native";
 
 import { useBottomTabBarHeight } from "@react-navigation/bottom-tabs";
+import { useQuery } from "@tanstack/react-query";
 
 import Container from "components/Container";
 import PortraitVideo from "layouts/PortraitVideo";
 import WorkService from "services/api/WorkService";
-import { useQuery } from "@tanstack/react-query";
+import { userStore } from "../../zustand/userStore";
 
 type Props = {};
 
 const Vlog = (props: Props) => {
+  const token = userStore((state) => state.api_token);
   const bottomTabHeight = useBottomTabBarHeight();
-  const { getWorks } = WorkService();
+  const { getWorks, getWorksPortrait } = WorkService();
   const [localStoredVlog, setLocalStoredVlog] = useState([]);
 
   const { isLoading, data, refetch } = useQuery({
     queryKey: ["portraitWorks"],
     queryFn: () =>
-      getWorks({
-        orientation: "Portrait",
+      getWorksPortrait({
+        data: {
+          orientation: "Portrait",
+        },
+        token: token,
       }),
     onSuccess: (data) => {
       console.log("=== random portrait video fetched from backend! ===");

@@ -21,6 +21,14 @@ interface IWorkFollowing {
     following_only: boolean;
     page: number;
     paginate: number;
+    orientation?: string;
+  };
+  token: string;
+}
+
+interface IWorkPortrait {
+  data: {
+    orientation: string;
   };
   token: string;
 }
@@ -57,7 +65,16 @@ const WorkService = () => {
     });
   };
 
-  return { getWorks, getWorkById, getWorkFollowing };
+  const getWorksPortrait = (params: IWorkPortrait) => {
+    return request({
+      headers: { ...getHeaders(), Authorization: `Bearer ${params.token}` },
+      url: "/works",
+      method: "GET",
+      params: params.data,
+    });
+  };
+
+  return { getWorks, getWorkById, getWorkFollowing, getWorksPortrait };
 };
 
 export default WorkService;

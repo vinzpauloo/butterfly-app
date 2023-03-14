@@ -28,25 +28,32 @@ const SingleUserHeader = (props: Props) => {
 	const { getSpecificContentCreator, getFollowersCount, getDonatorsCount } = UserService();
 	const { data: creatorData } = useQuery({
 		queryKey: ["specificContentCreatorData", userID],
-		queryFn: () => getSpecificContentCreator({ user_id: userID }),
+		queryFn: () => getSpecificContentCreator({
+			data: { user_id: userID },
+			token: token
+		}),
 		onSuccess: () => { },
-		onError: (error) => { alert(error) },
+		onError: (error) => { console.log(error) },
 	});
 
 	// get specific content creators follower count
 	const { data: followerCount } = useQuery({
 		queryKey: ["specificContentCreatorFollowerCount", userID],
-		queryFn: () => getFollowersCount({ user_id: userID }),
+		queryFn: () => getFollowersCount({
+			data: { user_id: userID },
+			token: token }),
 		onSuccess: () => { },
-		onError: (error) => { alert(error) },
+		onError: (error) => { console.log(error) },
 	});
 
 	// get specific content creators follower count
 	const { data: donatorCount } = useQuery({
 		queryKey: ["specificContentCreatorDonatorCount", userID],
-		queryFn: () => getDonatorsCount({ user_id: userID }),
+		queryFn: () => getDonatorsCount({
+			data: { user_id: userID },
+			token: token }),
 		onSuccess: () => { },
-		onError: (error) => { alert(error) },
+		onError: (error) => { console.log(error) },
 	});
 
 	// get specific content creators donators list (the first 6 for display purposes)

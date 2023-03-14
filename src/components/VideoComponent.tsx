@@ -14,8 +14,8 @@ const VideoComponent = ({ item }) => {
       >
         <Foundation name="play-video" size={20} color="#fff" />
         <Text color="#fff" fontSize="md">
-          {!!item.statistic ? item.statistic.watched : 0}w // if the statistic
-          value is null the watch count will be 0
+          {/* if the statistic value is null the watch count will be 0 */}
+          {!!item.statistic ? item.statistic.watched : 0}w
         </Text>
       </HStack>
       <HStack

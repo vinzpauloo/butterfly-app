@@ -96,7 +96,7 @@ const SearchBar = ({ search, setSearch, hasSearch, setHasSearch, refetch }) => {
           <View style={{ width: 35 }} />
         )}
       </View>
-      {/* {hasSearch ? (
+      {hasSearch ? (
         <Pressable style={styles.searchBtn} onPress={searchClear}>
           <Text style={styles.searchText}>Clear</Text>
         </Pressable>
@@ -104,10 +104,7 @@ const SearchBar = ({ search, setSearch, hasSearch, setHasSearch, refetch }) => {
         <Pressable style={styles.searchBtn} onPress={searchWords}>
           <Text style={styles.searchText}>Search</Text>
         </Pressable>
-      )} */}
-      <Pressable style={styles.searchBtn} onPress={searchWords}>
-        <Text style={styles.searchText}>Search</Text>
-      </Pressable>
+      )}
     </View>
   );
 };

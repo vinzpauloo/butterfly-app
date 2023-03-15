@@ -99,11 +99,8 @@ const Images = ({ images }) => {
   };
 
   return (
-    <MasonryFlashList
-      estimatedItemSize={9}
-      numColumns={columnsCount(images.length)}
-      data={images}
-      renderItem={({ item, index }: any) => (
+    <View style={styles.imagesContainer}>
+      {images?.map((item, index) => (
         <Pressable
           onPress={() =>
             navigation.navigate("PhotoGallery", {
@@ -119,13 +116,17 @@ const Images = ({ images }) => {
             style={[styles.image, columnImageWidth(images.length)]}
           />
         </Pressable>
-      )}
-    />
+      ))}
+    </View>
   );
 };
 
 const Video = ({ url }) => {
-  return <VideoPlayer url={url} isFocus={false} />;
+  return (
+    <View style={{ marginTop: 10 }}>
+      <VideoPlayer url={url} isFocus={false} />
+    </View>
+  );
 };
 
 const BottomContent = ({ totalComments, totalLikes, id, isLiked }) => {
@@ -225,7 +226,8 @@ const styles = StyleSheet.create({
   },
   //CAPTIONS
   captionContainer: {
-    marginVertical: 10,
+    marginTop: 10,
+    marginBottom: 5,
   },
   tagsContainer: {
     flexDirection: "row",
@@ -245,9 +247,12 @@ const styles = StyleSheet.create({
     color: GLOBAL_COLORS.primaryTextColor,
   },
   //   IMAGES
+  imagesContainer: {
+    flexDirection: "row",
+    flexWrap: "wrap",
+    justifyContent: "space-evenly",
+  },
   image: {
-    // height: width * 0.3,
-    // width: width * 0.3,
     borderWidth: 1,
     borderColor: "#fff",
   },

@@ -1,5 +1,5 @@
 import { TouchableWithoutFeedback, StyleSheet, Text, View } from "react-native";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 
 import MaterialIcons from "react-native-vector-icons/MaterialIcons";
 import { useMutation, useQuery } from "@tanstack/react-query";
@@ -8,28 +8,14 @@ import CustomerService from "services/api/CustomerService";
 import { GLOBAL_COLORS } from "global";
 import { userStore } from "../../../zustand/userStore";
 
-const FavoriteButton = ({ id }) => {
+const FavoriteButton = ({ data, id }) => {
   const token = userStore((store) => store.api_token);
-  const { favoriteVideo, unfavoriteVideo, favoriteChecker } = CustomerService();
+  const { favoriteVideo, unfavoriteVideo } = CustomerService();
   const [isAlreadyFavorite, setIsAlreadyFavorite] = useState(false);
 
-  // favorite checker
-  const { isLoading } = useQuery({
-    queryKey: ["favoriteChecker", id],
-    queryFn: () =>
-      favoriteChecker({
-        data: {
-          foreign_id: id,
-        },
-        token: token,
-      }),
-    onSuccess: (data) => {
-      setIsAlreadyFavorite(data);
-    },
-    onError: (error) => {
-      console.log("favoriteChecker", error);
-    },
-  });
+  useEffect(() => {
+    setIsAlreadyFavorite(data.is_favorite);
+  }, [data]);
 
   // for favorite
   const { mutate: mutateFavorite } = useMutation(favoriteVideo, {

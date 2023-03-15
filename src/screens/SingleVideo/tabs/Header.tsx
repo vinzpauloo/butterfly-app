@@ -75,7 +75,7 @@ export const Header = ({ data }) => {
         </View>
         <View style={styles.buttonsContent} pointerEvents="box-none">
           <LikeButton data={data} id={route.params.id} />
-          <FavoriteButton id={route.params.id} />
+          <FavoriteButton data={data} id={route.params.id} />
           <View style={[styles.buttonItem, { flexDirection: "column" }]}>
             <Zocial
               name="bitcoin"

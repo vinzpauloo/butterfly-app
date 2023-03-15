@@ -5,6 +5,7 @@ import { GLOBAL_COLORS } from "global";
 import Ionicons from "react-native-vector-icons/Ionicons";
 import LikeService from 'services/api/LikeService';
 import { useMutation } from '@tanstack/react-query';
+import { userStore } from "../../../zustand/userStore";
 
 type Props = {
 	customerID: string
@@ -15,6 +16,7 @@ type Props = {
 const LikeOverlay = (props: Props) => {
 	const [videoIsLiked, setVideoIsLiked] = useState(false);
 	const [amountofLikes, setAmountofLikes] = useState(props.likes)
+	const token = userStore((state) => state.api_token);
 
 	const { likeWork, unlikeWork } = LikeService();
 	const { mutate: mutateLikeVideo } = useMutation(likeWork, {
@@ -39,19 +41,15 @@ const LikeOverlay = (props: Props) => {
 
 	function likeVideo() {
 		mutateLikeVideo({
-			site_id: 1,
-			foreign_id: props.videoID,
-			customer_id: props.customerID,
-			type: "work"
+			data: { foreign_id: props.videoID, type: "work" },
+			token: token
 		})
 	}
 
 	function unlikeVideo() {
 		mutateUnlikeVideo({
-			site_id: 1,
-			foreign_id: props.videoID,
-			customer_id: props.customerID,
-			type: "work"
+			data: { foreign_id: props.videoID, type: "work" },
+			token: token
 		})
 	}
 

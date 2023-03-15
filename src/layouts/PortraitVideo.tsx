@@ -161,7 +161,7 @@ const PortraitVideo: React.FC<PortraitVideoDataType> = ({
   onUserScrollDown = null, // default value
 }) => {
   const navigation = useNavigation<any>();
-  const isFocused = useIsFocused()
+  const isFocused = useIsFocused();
   const [activeVideoIndex, setActiveVideoIndex] = useState(0);
   const { isOpen, onOpen, onClose } = useDisclose();
 

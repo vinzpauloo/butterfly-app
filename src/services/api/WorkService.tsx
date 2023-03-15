@@ -15,6 +15,7 @@ interface IWorksParams {
     creator_only?: boolean;
     recommended?: boolean;
     exclude?: string;
+    random?: boolean;
   };
   token: string;
 }

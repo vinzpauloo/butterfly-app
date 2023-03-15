@@ -10,6 +10,7 @@ const { height } = Dimensions.get("window");
 const Preloading = () => {
   const navigation = useNavigation<any>();
   const [appState, setAppState] = useState(AppState.currentState);
+  const [backWasPressed, setBackWasPressed] = useState(false);
 
   const goToMainHome = () => {
     navigation.dispatch(StackActions.replace("BottomNav"));
@@ -29,7 +30,7 @@ const Preloading = () => {
   })
 
   const handleAppStateChange = (nextAppState) => {
-    if (appState.match(/inactive|background/) && nextAppState === 'active') {
+    if (backWasPressed && appState.match(/inactive|background/) && nextAppState === 'active') {
       // reloads the app on coming back from tab
       Updates.reloadAsync()
     }
@@ -39,6 +40,7 @@ const Preloading = () => {
   AppState.addEventListener('change', handleAppStateChange);
 
   BackHandler.addEventListener("hardwareBackPress", () => {
+    setBackWasPressed(true)
     navigation.navigate("OnAppExitScreen"); BackHandler.exitApp()
     // if possible change the - animation: "slide_from_right"
     // in StackScreen options, specifically for "OnAppExitScreen" to fade instead

@@ -11,6 +11,7 @@ import BottomMessage from "components/BottomMessage";
 import Container from "components/Container";
 import NoCacheMessage from "features/sectionList/components/NoCacheMessage";
 import Loading from "components/Loading";
+import { userStore } from "../../zustand/userStore";
 
 type Props = {
 	customerPictureURL: string;
@@ -37,15 +38,19 @@ const FollowersScreen = () => {
 	const [currentPage, setCurrentPage] = useState(1);
 	const [followerListData, setFollowerListData] = useState([]);
 	const [lastPage, setLastPage] = useState(1);
+	const token = userStore((state) => state.api_token);
 
 	const { isLoading, refetch } = useQuery({
 		queryKey: ["specificContentCreatorFollowerList", userID, currentPage],
-		queryFn: () => getAllFollowerList({ user_id: userID, paginate: 20, page: currentPage }),
+		queryFn: () => getAllFollowerList({
+			data: { user_id: userID, paginate: 20, page: currentPage },
+			token: token
+		}),
 		onSuccess: (data) => {
 			setFollowerListData((prev) => [...prev].concat(data?.data))
 			setLastPage(data?.last_page);
 		},
-		onError: (error) => { alert(error) },
+		onError: (error) => { console.log(error) },
 	});
 
 	const onScrollToEnd = () => {

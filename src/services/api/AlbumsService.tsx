@@ -2,17 +2,20 @@ import { getHeaders } from "lib/cryptoJs";
 import request from "lib/request";
 
 interface IAlbumParams {
-  filter?: string;
-  paginate?: number;
+  data: {
+    filter?: string;
+    paginate?: number;
+  };
+  token: string;
 }
 
 const AlbumService = () => {
   const getAlbums = (params: IAlbumParams) => {
     return request({
-      headers: getHeaders(),
+      headers: { ...getHeaders(), Authorization: `Bearer ${params.token}` },
       url: "/albums",
       method: "GET",
-      params,
+      params: params.data,
     });
   };
 

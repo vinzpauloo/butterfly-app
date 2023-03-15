@@ -11,10 +11,11 @@ type Props = {
 	customerID: string
 	videoID: string
 	likes: number
+	isLiked: boolean
 }
 
 const LikeOverlay = (props: Props) => {
-	const [videoIsLiked, setVideoIsLiked] = useState(false);
+	const [videoIsLiked, setVideoIsLiked] = useState(props.isLiked);
 	const [amountofLikes, setAmountofLikes] = useState(props.likes)
 	const token = userStore((state) => state.api_token);
 

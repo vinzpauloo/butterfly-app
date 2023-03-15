@@ -17,6 +17,7 @@ const Vlog = (props: Props) => {
   const { getWorks, getWorksPortrait } = WorkService();
   const [localStoredVlog, setLocalStoredVlog] = useState([]);
 
+  // FETCH RANDOM PORTRAIT WORKS
   const { isLoading, data, refetch } = useQuery({
     queryKey: ["portraitWorks"],
     queryFn: () =>
@@ -44,6 +45,9 @@ const Vlog = (props: Props) => {
         amountOflikes: data.data[0].like.total_likes,
         amountOfComments: data.data[0].comment.total_comments,
         userPhoto: data.data[0].user.photo,
+        isFollowed: data?.data[0]?.is_followed,
+        isLiked: data?.data[0]?.is_liked,
+        isFavorite: data?.data[0]?.is_favorite,
       };
       setLocalStoredVlog((oldArray) => [...oldArray, newElement]);
     },
@@ -70,7 +74,6 @@ const Vlog = (props: Props) => {
 
   return (
     <PortraitVideo
-      // optional prop if it came from a specified list of video from a user
       reelsVideos={localStoredVlog}
       bottomTabHeight={bottomTabHeight}
       onUserScrollDown={onUserScrollDown}

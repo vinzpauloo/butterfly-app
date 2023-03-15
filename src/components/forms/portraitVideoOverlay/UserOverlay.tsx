@@ -11,11 +11,12 @@ type Props = {
 	customerID: string
 	userID: number
 	userImage: string
+	isFollowed: boolean
 }
 
 const UserOverlay = (props: Props) => {
 	const navigation = useNavigation<any>();
-	const [isCreatorFollowed, setIsCreatorFollowed] = useState(false)
+	const [isCreatorFollowed, setIsCreatorFollowed] = useState(props.isFollowed)
 	const token = userStore((state) => state.api_token);
 
 	const { followCreator, unfollowCreator } = CustomerService();

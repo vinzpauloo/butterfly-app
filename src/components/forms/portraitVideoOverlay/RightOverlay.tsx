@@ -16,6 +16,9 @@ type Props = {
   likes: number;
   amountOfComments: number;
   openComments: () => void;
+  isFollowed: boolean
+  isFavorite: boolean
+  isLiked: boolean
 };
 
 const RightOverlay = (props: Props) => {
@@ -26,11 +29,13 @@ const RightOverlay = (props: Props) => {
         customerID={customerID}
         userID={props.userID}
         userImage={props.userImage}
+        isFollowed={props.isFollowed}
       />
       <LikeOverlay
         customerID={customerID}
         videoID={props.videoID}
         likes={props.likes}
+        isLiked={props.isLiked}
       />
       <View style={styles.verticalBarItem}>
         <Pressable onPress={() => props.openComments()}>
@@ -38,7 +43,7 @@ const RightOverlay = (props: Props) => {
         </Pressable>
         <Text style={styles.iconText}>{props.amountOfComments}</Text>
       </View>
-      <FavoriteOVerlay customerID={customerID} videoID={props.videoID} />
+      <FavoriteOVerlay customerID={customerID} videoID={props.videoID} isFavorite={props.isFavorite} />
       <DownloadOverlay />
     </VStack>
   );

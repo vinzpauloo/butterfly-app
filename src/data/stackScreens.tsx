@@ -81,6 +81,7 @@ const VlogScreen = () => {
     token: token,
   };
 
+  // FETCH SINGLE PORTRAIT WORK
   const { isLoading, refetch } = useQuery({
     queryKey: ["SingleVlog", route.params.id],
     queryFn: () => getWorkById(queryParams),
@@ -108,6 +109,9 @@ const VlogScreen = () => {
           amountOflikes: data.like.total_likes,
           amountOfComments: data.comment.total_comments,
           userPhoto: data.user.photo,
+          isFollowed: data?.is_followed,
+          isLiked: data?.is_liked,
+          isFavorite: data?.is_favorite,
         },
       ]);
     },

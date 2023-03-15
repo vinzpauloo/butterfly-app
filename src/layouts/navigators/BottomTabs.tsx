@@ -1,10 +1,14 @@
 import React, { useState } from "react";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { GLOBAL_COLORS } from "../../global";
-import { BackHandler, Dimensions, StyleSheet, AppState  } from "react-native";
-import { useIsFocused, useNavigation, StackActions } from "@react-navigation/native";
+import { BackHandler, Dimensions, StyleSheet, AppState } from "react-native";
+import {
+  useIsFocused,
+  useNavigation,
+  StackActions,
+} from "@react-navigation/native";
 import Animated, { FadeIn, FadeOut } from "react-native-reanimated";
-import * as Updates from "expo-updates"
+import * as Updates from "expo-updates";
 
 const BottomTab = createBottomTabNavigator();
 
@@ -15,19 +19,26 @@ const BottomTabs = ({ data }) => {
   const [appState, setAppState] = useState(AppState.currentState);
 
   const handleAppStateChange = (nextAppState) => {
-    if (showConfirmExitText && appState.match(/inactive|background/) && nextAppState === 'active') {
+    if (
+      showConfirmExitText &&
+      appState.match(/inactive|background/) &&
+      nextAppState === "active"
+    ) {
       // reloads the app on coming back from tab
-      Updates.reloadAsync()
+      Updates.reloadAsync();
     }
     setAppState(nextAppState);
-  }
+  };
 
-  AppState.addEventListener('change', handleAppStateChange);
-  
+  AppState.addEventListener("change", handleAppStateChange);
+
   const confirmExit = () => {
     setShowConfirmExitText(true);
     setTimeout(() => setShowConfirmExitText(false), 2000);
-    if (showConfirmExitText) { navigation.navigate("OnAppExitScreen"); BackHandler.exitApp() }
+    if (showConfirmExitText) {
+      navigation.navigate("OnAppExitScreen");
+      BackHandler.exitApp();
+    }
     // if possible change the - animation: "slide_from_right"
     // in StackScreen options, specifically for "OnAppExitScreen" to fade instead
   };

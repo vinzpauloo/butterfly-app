@@ -10,6 +10,7 @@ const TopTab = createMaterialTopTabNavigator();
 
 const MaterialTopTabs = ({
   data,
+  intl = null,
   search = null,
   isEqualWidth = false,
   height = 40,
@@ -60,6 +61,7 @@ const MaterialTopTabs = ({
           </TopTab.Screen>
         ))}
       </TopTab.Navigator>
+      {intl}
       {search}
     </>
   );

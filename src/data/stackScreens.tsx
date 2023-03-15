@@ -7,8 +7,9 @@ import About from "screens/Settings/tabs/About";
 import AccountRetrieval from "screens/Settings/tabs/AccountRetrieval";
 import AccountVerification from "screens/Account/tabs/AccountVerification";
 import BestApps from "screens/Account/tabs/BestApps";
-import BottomTabs from "layouts/navigators/BottomTabs";
+import BottomNav from "./bottomNav";
 import CameraInit from "screens/Settings/AccountRetrievalTabs/CameraInit";
+import Container from "components/Container";
 import CustomerService from "screens/Settings/AccountRetrievalTabs/CustomerService";
 import FollowersScreen from "screens/FollowersScreen";
 import InitialLoad from "screens/InitialLoad";
@@ -39,11 +40,9 @@ import SingleFeedScreen from "screens/SingleFeedScreen";
 import TermsOfService from "screens/TermsOfService";
 import OnAppExitScreen from "screens/OnAppExitScreen";
 import WorkService from "services/api/WorkService";
-import { bottomNav } from "./bottomNav";
 import { GLOBAL_COLORS } from "global";
 import { useRoute } from "@react-navigation/native";
 import { useQuery } from "@tanstack/react-query";
-import Container from "components/Container";
 import { userStore } from "../zustand/userStore";
 
 const basicHeader = ({ navigation, route }: any) => ({
@@ -145,10 +144,6 @@ const VlogScreen = () => {
       onUserScrollDown={onUserScrollDown}
     />
   );
-};
-
-const BottomNav = () => {
-  return <BottomTabs data={bottomNav} />;
 };
 
 export const stackScreens = {

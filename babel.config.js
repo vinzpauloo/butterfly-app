@@ -22,6 +22,7 @@ module.exports = function (api) {
             services: "./src/services",
             theme: "./src/theme",
             utils: "./src/utils",
+            i18n: "./src/i18n",
           },
         },
       ],

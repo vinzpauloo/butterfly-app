@@ -88,21 +88,19 @@ const InitialLoad = () => {
     onSuccess: (data) => {
       console.log("=== Customer Registered!! ===", data);
 
-      // set user global store
-      setUserStore({
+      const userData = {
         _id: data._id,
         site_id: data.site_id,
         api_token: data.api_token,
         alias: data.alias,
-      });
+        is_Vip: data.is_Vip,
+      };
+
+      // set user global store
+      setUserStore(userData);
 
       // store user to device storage
-      storeDataObject("UserCacheData", {
-        _id: data._id,
-        site_id: data.site_id,
-        api_token: data.api_token,
-        alias: data.alias,
-      });
+      storeDataObject("UserCacheData", userData);
 
       captureSuccess(route.name, "mutateRegisterCustomer");
 
@@ -118,21 +116,19 @@ const InitialLoad = () => {
     onSuccess: (data) => {
       console.log("=== Customer Logged in!! ===", data);
 
-      // set user global store
-      setUserStore({
+      const userData = {
         _id: data._id,
         site_id: data.site_id,
         api_token: data.api_token,
         alias: data.alias,
-      });
+        is_Vip: data.is_Vip,
+      };
+
+      // set user global store
+      setUserStore(userData);
 
       // store user to device storage
-      storeDataObject("UserCacheData", {
-        _id: data._id,
-        site_id: data.site_id,
-        api_token: data.api_token,
-        alias: data.alias,
-      });
+      storeDataObject("UserCacheData", userData);
 
       captureSuccess(route.name, "mutateLoginCustomer");
 

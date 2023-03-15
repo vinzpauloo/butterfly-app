@@ -1,5 +1,5 @@
 import { Image, Pressable, StyleSheet, Text, View } from "react-native";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 
 import { useMutation, useQuery } from "@tanstack/react-query";
 import {
@@ -18,31 +18,16 @@ import CustomerService from "services/api/CustomerService";
 import WorkService from "services/api/WorkService";
 import { userStore } from "../../zustand/userStore";
 
-const HeaderTitle = () => {
+const HeaderTitle = ({ data }) => {
   const token = userStore((store) => store.api_token);
-  const customerID = userStore((store) => store._id);
-  const { followChecker, followCreator } = CustomerService();
+  const { followCreator } = CustomerService();
   const navigation = useNavigation<any>();
   const route = useRoute<any>();
   const [isFollowed, setIsFollowed] = useState(false);
 
-  const { isLoading } = useQuery({
-    queryKey: ["follow", route.params.userId],
-    queryFn: () =>
-      followChecker({
-        user_id: { user_id: route.params.userId },
-        token: token,
-      }),
-    onSuccess: (data) => {
-      console.log("followChecker", data);
-      if (data) {
-        setIsFollowed(data);
-      }
-    },
-    onError: (error) => {
-      console.log("postFollowChecker", error);
-    },
-  });
+  useEffect(() => {
+    setIsFollowed(data.is_followed);
+  }, [data]);
 
   const { mutate: mutateFollow } = useMutation(followCreator, {
     onSuccess: (data) => {
@@ -121,7 +106,7 @@ const SingleVideoScreen = () => {
 
   return (
     <View style={styles.container}>
-      <HeaderTitle />
+      <HeaderTitle data={data} />
       <View style={styles.videoContent}>
         <Pressable style={styles.watermarkContainer}>
           <Text style={styles.watermarkText}>购买视频观看完整版</Text>

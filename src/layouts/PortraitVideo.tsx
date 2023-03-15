@@ -25,7 +25,7 @@ interface PortraitVideoDataType {
   bottomTabHeight?: number;
   hasBackButton?: boolean;
   onUserScrollDown?: any;
-  workId?: string;
+  workId?: string; // for bottom comments reference as foreign_id
 }
 
 type Props = {
@@ -42,6 +42,9 @@ type Props = {
   isActive: boolean;
   tabBarHeight: number;
   openComments: () => void;
+  isFollowed: boolean
+  isFavorite: boolean
+  isLiked: boolean
 };
 
 const { width: windowWidth, height: windowHeight } = Dimensions.get("window");
@@ -140,6 +143,9 @@ const PortraitVideoContent = (props: Props) => {
         likes={props.likes}
         amountOfComments={props.amountOfComments}
         openComments={props.openComments}
+        isFollowed={props.isFollowed}
+        isFavorite={props.isFavorite}
+        isLiked={props.isLiked}
       />
       <Progress
         h={0.5}
@@ -200,6 +206,9 @@ const PortraitVideo: React.FC<PortraitVideoDataType> = ({
             isActive={activeVideoIndex === index && isFocused}
             tabBarHeight={bottomTabHeight}
             openComments={onOpen}
+            isFollowed={item.isFollowed}
+            isLiked={item.isLiked}
+            isFavorite={item.isFavorite}
           />
         )}
         onScroll={(e) => {

@@ -10,10 +10,11 @@ import { userStore } from "../../../zustand/userStore";
 type Props = {
 	videoID: string
 	customerID: string
+	isFavorite: boolean
 }
 
 const FavoriteOVerlay = (props: Props) => {
-	const [videoIsFaved, setVideoIsFaved] = useState(false);
+	const [videoIsFaved, setVideoIsFaved] = useState(props.isFavorite);
 	const token = userStore((state) => state.api_token);
 
 	const { favoriteVideo, unfavoriteVideo } = CustomerService();

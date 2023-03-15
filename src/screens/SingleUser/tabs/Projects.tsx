@@ -21,8 +21,8 @@ const Projects = (props: Props) => {
   const [refreshingId, setRefreshingId] = useState(0);
 
   const { getWorks } = WorkService();
-  const { isLoading } = useQuery({
-    queryKey: ["testt", userID, page, refreshingId],
+  const { isLoading, isRefetching } = useQuery({
+    queryKey: ["SingleUserProjects", userID, page, refreshingId],
     queryFn: () =>
       getWorks({
         data: {
@@ -55,6 +55,7 @@ const Projects = (props: Props) => {
       setPage={setPage}
       lastPage={lastPage}
       layout={<GridVideos data={data} />}
+      isRefetching={isRefetching}
     />
   );
 };

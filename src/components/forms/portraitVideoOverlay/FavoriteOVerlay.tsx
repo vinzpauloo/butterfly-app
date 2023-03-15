@@ -4,6 +4,7 @@ import { useMutation } from "@tanstack/react-query";
 
 import Ionicons from "react-native-vector-icons/Ionicons";
 import CustomerService from "services/api/CustomerService";
+import { userStore } from "../../../zustand/userStore";
 
 
 type Props = {
@@ -13,6 +14,7 @@ type Props = {
 
 const FavoriteOVerlay = (props: Props) => {
 	const [videoIsFaved, setVideoIsFaved] = useState(false);
+	const token = userStore((state) => state.api_token);
 
 	const { favoriteVideo, unfavoriteVideo } = CustomerService();
 	const { mutate: mutateAddToFavorite } = useMutation(favoriteVideo, {
@@ -27,17 +29,15 @@ const FavoriteOVerlay = (props: Props) => {
 
 	function addVideoToFavorite() {
 		mutateAddToFavorite({
-			site_id: 1,
-			foreign_id: props.videoID,
-			customer_id: props.customerID,
+			data: { foreign_id: props.videoID },
+			token: token
 		});
 	}
 
 	function removeVideoFromFavorite() {
 		mutateRemoveFromFavorite({
-			site_id: 1,
-			foreign_id: props.videoID,
-			customer_id: props.customerID,
+			data: { foreign_id: props.videoID },
+			token: token
 		});
 	}
 

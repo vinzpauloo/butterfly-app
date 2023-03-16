@@ -10,6 +10,7 @@ import {
 import { useNavigation, useRoute } from "@react-navigation/native";
 import { VStack, HStack, Text } from "native-base";
 import { MasonryFlashList } from "@shopify/flash-list";
+import MasonryList from "@react-native-seoul/masonry-list";
 import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons";
 import { useQuery } from "@tanstack/react-query";
 
@@ -136,22 +137,22 @@ const MasonryPhotos = ({ filter }) => {
     <>
       <Container>
         <View style={styles.masonryContainer}>
-          <MasonryFlashList
-            refreshControl={
-              <RefreshControl
-                colors={[GLOBAL_COLORS.secondaryColor]}
-                refreshing={refreshing}
-                onRefresh={onRefresh}
-              />
-            }
+          <MasonryList
+            // refreshControl={
+            //   <RefreshControl
+            //     colors={[GLOBAL_COLORS.secondaryColor]}
+            //     refreshing={refreshing}
+            //     onRefresh={onRefresh}
+            //   />
+            // }
             data={data}
             numColumns={2}
             onEndReachedThreshold={0.01} // always make this default to 0.01 to have no bug for fetching data for the onEndReached -> https://github.com/facebook/react-native/issues/14015#issuecomment-346547942
             onMomentumScrollBegin={() => setStartScroll(false)}
             onEndReached={reachEnd}
-            estimatedItemSize={200}
+            // estimatedItemSize={200}
             keyExtractor={(_, index) => "" + index}
-            renderItem={({ item, index }) => (
+            renderItem={({ item, index }: any) => (
               <SingleImage
                 idx={index}
                 albumId={item._id}
@@ -163,7 +164,7 @@ const MasonryPhotos = ({ filter }) => {
                 setOpen={setOpen}
               />
             )}
-            ListFooterComponent={() => (
+            ListFooterComponent={
               <>
                 {/* the gap will be remove if the lastpage is been fetch */}
                 {lastPage !== page || (lastPage === page && isLoading) ? (
@@ -174,7 +175,7 @@ const MasonryPhotos = ({ filter }) => {
                 ) : null}
                 {lastPage === page && !isLoading ? <BottomMessage /> : null}
               </>
-            )}
+            }
           />
         </View>
       </Container>

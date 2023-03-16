@@ -10,6 +10,7 @@ import Modal from "components/BottomModal";
 import WorkgroupService from "services/api/WorkgroupService";
 import { GLOBAL_COLORS } from "global";
 import { MasonryFlashList } from "@shopify/flash-list";
+import MasonryList from "@react-native-seoul/masonry-list";
 import { Video } from "features/sectionList/components/GridVideos";
 import Container from "components/Container";
 
@@ -81,22 +82,22 @@ const DynamicTab = ({ id: selectionId, tabCategory }) => {
 
   return (
     <View style={styles.gridVideoContainer}>
-      <MasonryFlashList
-        refreshControl={
-          <RefreshControl
-            colors={[GLOBAL_COLORS.secondaryColor]}
-            refreshing={refreshing}
-            onRefresh={onRefresh}
-          />
-        }
+      <MasonryList
+        // refreshControl={
+        //   <RefreshControl
+        //     colors={[GLOBAL_COLORS.secondaryColor]}
+        //     refreshing={refreshing}
+        //     onRefresh={onRefresh}
+        //   />
+        // }
         data={data}
         numColumns={2}
         onEndReachedThreshold={0.01} // always make this default to 0.01 to have no bug for fetching data for the onEndReached -> https://github.com/facebook/react-native/issues/14015#issuecomment-346547942
         onMomentumScrollBegin={() => setStartScroll(false)}
         onEndReached={reachEnd}
-        estimatedItemSize={200}
+        // estimatedItemSize={200}
         keyExtractor={(_, index) => "" + index}
-        renderItem={({ item, index }) => (
+        renderItem={({ item, index }: any) => (
           <Video
             key={index}
             item={item}
@@ -105,7 +106,7 @@ const DynamicTab = ({ id: selectionId, tabCategory }) => {
             setId={setId}
           />
         )}
-        ListFooterComponent={() => (
+        ListFooterComponent={
           <>
             {/* the gap will be remove if the lastpage is been fetch */}
             {lastPage !== page || (lastPage === page && isLoading) ? (
@@ -116,7 +117,7 @@ const DynamicTab = ({ id: selectionId, tabCategory }) => {
             ) : null}
             {lastPage === page && !isLoading ? <BottomMessage /> : null}
           </>
-        )}
+        }
       />
       <Modal isOpen={isOpen} onOpen={onOpen} onClose={onClose} id={id} />
     </View>

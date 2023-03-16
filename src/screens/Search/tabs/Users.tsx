@@ -159,7 +159,7 @@ const Users = ({ searchText }) => {
         setData((prev) => [...prev].concat(data.data));
       }
     },
-    enabled: isFocused,
+    enabled: isFocused && prevSearch !== searchText,
   });
 
   const reachEnd = () => {
@@ -171,6 +171,8 @@ const Users = ({ searchText }) => {
       }
     }
   };
+
+  console.log("User", isFocused);
 
   if (isLoading && page === 1 && prevSearch !== searchText) {
     return (

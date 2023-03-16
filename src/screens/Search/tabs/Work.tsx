@@ -46,8 +46,10 @@ const Work = ({ searchText }) => {
         setData((prev) => [...prev].concat(data.data));
       }
     },
-    enabled: isFocused,
+    enabled: isFocused && prevSearch !== searchText,
   });
+
+  console.log("Works", isFocused);
 
   const reachEnd = () => {
     if (startScroll) return null;

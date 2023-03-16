@@ -40,7 +40,7 @@ const Feed = ({ searchText }) => {
         setData((prev) => [...prev].concat(data.data));
       }
     },
-    enabled: isFocused,
+    enabled: isFocused && prevSearch !== searchText,
   });
 
   if ((isLoading || refreshing) && page === 1 && prevSearch !== searchText) {
@@ -50,6 +50,8 @@ const Feed = ({ searchText }) => {
       </Container>
     );
   }
+
+  console.log("Feeds", isFocused);
 
   return (
     <Container>

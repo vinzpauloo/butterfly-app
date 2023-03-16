@@ -34,18 +34,16 @@ const SingleFeedScreen = (props: Props) => {
   return (
     <Container>
       <SingleFeedHeader title="洋情" />
-      <CommentList
-        workID={item?.feedId}
-        isFromFeed={true}
-        customHeaderComponent={
-          isLoading ? <FeedItemSkeleton /> : <FeedItem item={specificFeed} />
-        }
-      />
-      <CommentTextInput
-        workID={item?.feedId}
-        isFromFeed={true}
-        keyboardAvoidBehavior="height"
-      />
+        <CommentList
+          workID={item?.feedId}
+          isFromFeed={true}
+          customHeaderComponent={<FeedItem item={specificFeed} />}
+        />
+        <CommentTextInput
+          workID={item?.feedId}
+          isFromFeed={true}
+          keyboardAvoidBehavior="height"
+        />
     </Container>
   );
 };

@@ -137,8 +137,9 @@ const Users = ({ searchText }) => {
   const [page, setPage] = useState(1);
   const [lastPage, setLastPage] = useState(1);
   const [startScroll, setStartScroll] = useState(true);
-  const [prevSearch, setPrevSearch] = useState("");
+  const [fetch, setFetch] = useState(true);
   const isFocused = useIsFocused();
+  const [prevSearch, setPrevSearch] = useState("");
 
   const { isLoading } = useQuery({
     queryKey: ["search-user", searchText, page],
@@ -154,12 +155,13 @@ const Users = ({ searchText }) => {
       setLastPage(data.last_page);
       if (prevSearch !== searchText) {
         setPrevSearch(searchText);
+        setFetch(false);
         setData(data.data);
       } else {
         setData((prev) => [...prev].concat(data.data));
       }
     },
-    enabled: isFocused && prevSearch !== searchText,
+    enabled: fetch && isFocused,
   });
 
   const reachEnd = () => {
@@ -172,9 +174,19 @@ const Users = ({ searchText }) => {
     }
   };
 
-  console.log("User", isFocused);
+  useEffect(() => {
+    setFetch(true);
+    setData([]);
+  }, [searchText]);
 
-  if (isLoading && page === 1 && prevSearch !== searchText) {
+  useEffect(() => {
+    setFetch(true);
+  }, [page]);
+
+  if (
+    (isLoading && page === 1 && prevSearch !== searchText) ||
+    (data.length === 0 && fetch)
+  ) {
     return (
       <Container>
         <View style={{ height: "100%" }}>

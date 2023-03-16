@@ -290,7 +290,7 @@ const VideoList = ({ data }) => {
   );
 };
 
-const SearchOutput = ({ searchText }) => {
+const SearchOutput = ({ searchText, prevSearch, setPrevSearch }) => {
   const data = {
     initialRoute: "视频",
     screens: [
@@ -317,6 +317,7 @@ const Search = () => {
   const [hasSearch, setHasSearch] = useState(false);
   const [search, setSearch] = useState<string>("");
   const [history, setHistory] = useState([]);
+  const [prevSearch, setPrevSearch] = useState("");
 
   const { isLoading, data, refetch } = useQuery({
     queryKey: ["search"],
@@ -344,7 +345,11 @@ const Search = () => {
           refetch={refetch}
         />
         {hasSearch ? (
-          <SearchOutput searchText={search} />
+          <SearchOutput
+            searchText={search}
+            prevSearch={prevSearch}
+            setPrevSearch={setPrevSearch}
+          />
         ) : (
           <ScrollView>
             {history.length !== 0 ? (

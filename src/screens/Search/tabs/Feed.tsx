@@ -1,5 +1,5 @@
 import { StyleSheet, Text, View } from "react-native";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 
 import Container from "components/Container";
 import Feeds from "components/feed/Feeds";
@@ -18,6 +18,7 @@ const Feed = ({ searchText }) => {
   const [lastPage, setLastPage] = useState(1);
   const [refreshing, setRefreshing] = useState(false);
   const [refreshingId, setRefreshingId] = useState(0);
+  const [fetch, setFetch] = useState(true);
   const [prevSearch, setPrevSearch] = useState("");
   const isFocused = useIsFocused();
 
@@ -35,23 +36,34 @@ const Feed = ({ searchText }) => {
       setLastPage(data?.last_page);
       if (prevSearch !== searchText) {
         setPrevSearch(searchText);
+        setFetch(false);
         setData(data.data);
       } else {
         setData((prev) => [...prev].concat(data.data));
       }
     },
-    enabled: isFocused && prevSearch !== searchText,
+    enabled: fetch && isFocused,
   });
 
-  if ((isLoading || refreshing) && page === 1 && prevSearch !== searchText) {
+  useEffect(() => {
+    setFetch(true);
+    setData([]);
+  }, [searchText]);
+
+  useEffect(() => {
+    setFetch(true);
+  }, [page]);
+
+  if (
+    ((isLoading || refreshing) && page === 1 && prevSearch !== searchText) ||
+    (data.length === 0 && fetch)
+  ) {
     return (
       <Container>
         <FeedItemSkeleton />
       </Container>
     );
   }
-
-  console.log("Feeds", isFocused);
 
   return (
     <Container>

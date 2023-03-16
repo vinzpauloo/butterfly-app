@@ -1,5 +1,5 @@
 import { ScrollView, StyleSheet, Text, View } from "react-native";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 
 import { useQuery } from "@tanstack/react-query";
 
@@ -24,8 +24,9 @@ const Work = ({ searchText }) => {
   const [lastPage, setLastPage] = useState(1);
   const [startScroll, setStartScroll] = useState(true);
   const [id, setId] = useState<number | null>(null);
-  const [prevSearch, setPrevSearch] = useState("");
+  const [fetch, setFetch] = useState(true);
   const isFocused = useIsFocused();
+  const [prevSearch, setPrevSearch] = useState("");
 
   const { isLoading } = useQuery({
     queryKey: ["search-work", searchText, page],
@@ -41,15 +42,14 @@ const Work = ({ searchText }) => {
       setLastPage(data.last_page);
       if (prevSearch !== searchText) {
         setPrevSearch(searchText);
+        setFetch(false);
         setData(data.data);
       } else {
         setData((prev) => [...prev].concat(data.data));
       }
     },
-    enabled: isFocused && prevSearch !== searchText,
+    enabled: fetch && isFocused,
   });
-
-  console.log("Works", isFocused);
 
   const reachEnd = () => {
     if (startScroll) return null;
@@ -61,7 +61,19 @@ const Work = ({ searchText }) => {
     }
   };
 
-  if (isLoading && page === 1 && prevSearch !== searchText) {
+  useEffect(() => {
+    setFetch(true);
+    setData([]);
+  }, [searchText]);
+
+  useEffect(() => {
+    setFetch(true);
+  }, [page]);
+
+  if (
+    (isLoading && page === 1 && prevSearch !== searchText) ||
+    (data.length === 0 && fetch)
+  ) {
     return (
       <Container>
         <View style={{ height: "100%" }}>

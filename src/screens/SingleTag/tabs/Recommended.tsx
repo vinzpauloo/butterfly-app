@@ -4,6 +4,7 @@ import React, { useCallback, useState } from "react";
 import { useDisclose } from "native-base";
 import { useQuery } from "@tanstack/react-query";
 import { MasonryFlashList } from "@shopify/flash-list";
+import MasonryList from "@react-native-seoul/masonry-list";
 
 import BottomMessage from "components/BottomMessage";
 import Modal from "components/BottomModal";
@@ -75,22 +76,22 @@ const Recommended = ({ tag, isFollowingScreen = false }) => {
       {(isLoading || refreshing) && page === 1 ? (
         <MasonrySkeleton />
       ) : (
-        <MasonryFlashList
-          refreshControl={
-            <RefreshControl
-              colors={[GLOBAL_COLORS.secondaryColor]}
-              refreshing={refreshing}
-              onRefresh={onRefresh}
-            />
-          }
+        <MasonryList
+          // refreshControl={
+          //   <RefreshControl
+          //     colors={[GLOBAL_COLORS.secondaryColor]}
+          //     refreshing={refreshing}
+          //     onRefresh={onRefresh}
+          //   />
+          // }
           data={data}
           numColumns={2}
           onEndReachedThreshold={0.01} // always make this default to 0.01 to have no bug for fetching data for the onEndReached -> https://github.com/facebook/react-native/issues/14015#issuecomment-346547942
           onMomentumScrollBegin={() => setStartScroll(false)}
           onEndReached={reachEnd}
-          estimatedItemSize={200}
+          // estimatedItemSize={200}
           keyExtractor={(_, index) => "" + index}
-          renderItem={({ item, index }) => (
+          renderItem={({ item, index }: any) => (
             <Video
               key={index}
               item={item}
@@ -99,7 +100,7 @@ const Recommended = ({ tag, isFollowingScreen = false }) => {
               setId={setId}
             />
           )}
-          ListFooterComponent={() => (
+          ListFooterComponent={
             <>
               {/* the gap will be remove if the lastpage is been fetch */}
               {lastPage !== page || (lastPage === page && isLoading) ? (
@@ -110,7 +111,7 @@ const Recommended = ({ tag, isFollowingScreen = false }) => {
               ) : null}
               {lastPage === page && !isLoading ? <BottomMessage /> : null}
             </>
-          )}
+          }
         />
       )}
       <Modal isOpen={isOpen} onOpen={onOpen} onClose={onClose} id={id} />

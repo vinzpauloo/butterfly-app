@@ -24,7 +24,7 @@ interface IWorkFollowing {
   data: {
     following_only: boolean;
     page: number;
-    paginate: number;
+    paginate?: number;
     orientation?: string;
   };
   token: string;

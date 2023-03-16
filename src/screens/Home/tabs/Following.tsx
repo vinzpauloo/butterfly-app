@@ -12,6 +12,7 @@ import React, { useCallback, useState } from "react";
 
 import { Center, useDisclose } from "native-base";
 import { MasonryFlashList } from "@shopify/flash-list";
+import MasonryList from "@react-native-seoul/masonry-list";
 import { ScrollView } from "react-native-gesture-handler";
 import { useNavigation } from "@react-navigation/native";
 import { useMutation, useQuery } from "@tanstack/react-query";
@@ -210,7 +211,7 @@ const SectionContent = ({ index, info, onOpen, setId, data }) => {
             </Pressable>
           )}
         </View>
-        <MasonryFlashList
+        <MasonryList
           numColumns={2}
           data={info.work}
           renderItem={({ item, index }: any) => (
@@ -226,7 +227,7 @@ const SectionContent = ({ index, info, onOpen, setId, data }) => {
           )}
           keyExtractor={(_, index) => "" + index}
           /* BFLYAPP-281 - Adjusted estimatedSize to avoid flickering of container */
-          estimatedItemSize={202}
+          // estimatedItemSize={202}
         />
       </View>
       {data.length - 1 !== index ? <DividerContainer /> : null}
@@ -279,20 +280,22 @@ const Follow = ({
 
   return (
     <View style={styles.gridVideoContainer}>
-      <MasonryFlashList
-        refreshControl={
-          <RefreshControl
-            colors={[GLOBAL_COLORS.secondaryColor]}
-            refreshing={refreshing}
-            onRefresh={onRefresh}
-          />
-        }
+      <MasonryList
+        // refreshControl={
+        //   <RefreshControl
+        //     colors={[GLOBAL_COLORS.secondaryColor]}
+        //     refreshing={refreshing}
+        //     onRefresh={onRefresh}
+        //   />
+        // }
         data={data}
         numColumns={2}
         onEndReachedThreshold={0.01} // always make this default to 0.01 to have no bug for fetching data for the onEndReached -> https://github.com/facebook/react-native/issues/14015#issuecomment-346547942
         onMomentumScrollBegin={() => setStartScroll(false)}
         onEndReached={reachEnd}
-        estimatedItemSize={200}
+        refreshing={refreshing}
+        onRefresh={onRefresh}
+        // estimatedItemSize={200}
         renderItem={({ item, index }: any) => (
           <Video
             userId={item.user.id}
@@ -306,7 +309,7 @@ const Follow = ({
           />
         )}
         keyExtractor={(_, index) => "" + index}
-        ListFooterComponent={() => (
+        ListFooterComponent={
           <>
             {/* the gap will be remove if the lastpage is been fetch */}
             {lastPage !== page || (lastPage === page && isLoading) ? (
@@ -317,7 +320,7 @@ const Follow = ({
             ) : null}
             {lastPage === page && !isLoading ? <BottomMessage /> : null}
           </>
-        )}
+        }
       />
     </View>
   );
@@ -342,7 +345,6 @@ const Following = () => {
         data: {
           following_only: true,
           page: page,
-          paginate: 8,
         },
         token: token,
       }),

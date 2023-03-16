@@ -12,6 +12,7 @@ import React, { useState } from "react";
 import Entypo from "react-native-vector-icons/Entypo";
 import Foundation from "react-native-vector-icons/Foundation";
 import { MasonryFlashList } from "@shopify/flash-list";
+import MasonryList from "@react-native-seoul/masonry-list";
 import { useNavigation } from "@react-navigation/native";
 import { useDisclose } from "native-base";
 
@@ -168,8 +169,8 @@ const GridVideos = ({ data, isFollowingScreen = false }) => {
 
   return (
     <View style={styles.gridVideoContainer}>
-      <MasonryFlashList
-        estimatedItemSize={166}
+      <MasonryList
+        // estimatedItemSize={166}
         numColumns={2}
         data={data}
         renderItem={({ item }: any) => (

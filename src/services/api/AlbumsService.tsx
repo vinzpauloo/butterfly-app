@@ -5,7 +5,13 @@ interface IAlbumParams {
   data: {
     filter?: string;
     paginate?: number;
+    albumId?: number;
   };
+  token: string;
+}
+
+interface IAlbumSingleParams {
+  albumId: number;
   token: string;
 }
 
@@ -19,10 +25,10 @@ const AlbumService = () => {
     });
   };
 
-  const getAlbumById = (albumId: string) => {
+  const getAlbumById = (params: IAlbumSingleParams) => {
     return request({
-      headers: getHeaders(),
-      url: `/albums/${albumId}`,
+      headers: { ...getHeaders(), Authorization: `Bearer ${params.token}` },
+      url: `/albums/${params.albumId}`,
       method: "GET",
     });
   };

@@ -38,6 +38,7 @@ type SingleImageProp = {
 
 const SingleImage = (props: SingleImageProp) => {
   const navigation = useNavigation<any>();
+  const isVip = userStore((state) => state.is_Vip);
 
   const openVIPModal = () => {
     props.setOpen(true);
@@ -47,12 +48,11 @@ const SingleImage = (props: SingleImageProp) => {
     navigation.navigate("PhotoGallery", {
       albumId: props.albumId,
       postTitle: props.postTitle,
-      imageList: photoGalleryImages,
     });
   };
 
   return (
-    <Pressable onPress={props.idx === 0 ? openVIPModal : handlePress}>
+    <Pressable onPress={!isVip ? openVIPModal : handlePress}>
       <ImageBackground
         source={{ uri: props.url, cache: "only-if-cached" }}
         style={[styles.singleImage, { height: props.height }]}

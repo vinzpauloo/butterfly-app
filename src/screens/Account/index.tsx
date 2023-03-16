@@ -9,7 +9,7 @@ import {
   Pressable,
   Linking,
 } from "react-native";
-import { HStack, VStack } from "native-base";
+import { Button, HStack, VStack } from "native-base";
 import { useNavigation } from "@react-navigation/native";
 
 import Fontisto from "react-native-vector-icons/Fontisto";
@@ -20,6 +20,9 @@ import Container from "components/Container";
 import profilePhoto from "assets/images/profilePhoto.jpg";
 import { profileTabSubNav } from "data/profileTabSubNav";
 import { GLOBAL_COLORS } from "global";
+import CustomerService from "services/api/CustomerService";
+import { useMutation } from "@tanstack/react-query";
+import { userStore } from "../../zustand/userStore";
 
 const Header = () => {
   const navigation = useNavigation<any>();
@@ -76,9 +79,46 @@ const Summary = () => {
 };
 
 const VIP = () => {
+  const [token, isVip, userId, setVip] = userStore((state) => [
+    state.api_token,
+    state.is_Vip,
+    state._id,
+    state.setVip,
+  ]);
+  const { subscribeToVIP } = CustomerService();
+
+  const { mutate: mutateSubscribe } = useMutation(subscribeToVIP, {
+    onSuccess: (data) => {
+      console.log("subscribeToVIP", data);
+
+      /* Update is_vip state */
+      setVip(true);
+    },
+    onError: (error) => {
+      console.log("subscribeToVIP", error);
+    },
+  });
+
+  const handlePress = () => {
+    console.log("vip pressed!");
+    mutateSubscribe({
+      data: { amount: 200.0, title: "Diamond Privillege Card" },
+      token,
+    });
+  };
+
   return (
     <View style={styles.vipContainer}>
       <Text style={styles.copyBtn}>VIP Section</Text>
+
+      <Text style={styles.copyBtn}>User ID: {userId}</Text>
+      <Text style={styles.copyBtn}>Is VIP?: {isVip.toString()}</Text>
+
+      {!isVip && (
+        <Button style={styles.btnVip} onPress={handlePress}>
+          Subscribe to VIP
+        </Button>
+      )}
     </View>
   );
 };
@@ -187,9 +227,13 @@ const styles = StyleSheet.create({
   vipContainer: {
     backgroundColor: GLOBAL_COLORS.headerBasicBg,
     borderRadius: 5,
-    height: 80,
+    height: 120,
     flex: 1,
     justifyContent: "center",
     marginBottom: 5,
+  },
+  btnVip: {
+    marginTop: 10,
+    marginHorizontal: 10,
   },
 });

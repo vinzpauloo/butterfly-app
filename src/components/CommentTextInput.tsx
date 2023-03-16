@@ -30,6 +30,7 @@ const CommentTextInput = (props: Props) => {
   const [text, setText] = useState("");
   const [isKeyboardShown, setIsKeyboardShown] = useState(false);
   const textInputRef = useRef<TextInput>();
+  const token = userStore((store) => store.api_token);
 
   // subscribe to comment global store
   const [
@@ -97,11 +98,12 @@ const CommentTextInput = (props: Props) => {
     setText("");
     Keyboard.dismiss();
     mutateAddComment({
-      site_id: 1,
-      foreign_id: props.workID,
-      customer_id: customerID,
-      comment: text,
-      type: props.isFromFeed ? "feed" : "work",
+      data: {
+        foreign_id: props.workID,
+        comment: text,
+        type: props.isFromFeed ? "feed" : "work",
+      },
+      token: token
     });
     globalCommentListRef.current.scrollToOffset({ animated: true, offset: 0 });
   }
@@ -110,9 +112,12 @@ const CommentTextInput = (props: Props) => {
     setText("");
     Keyboard.dismiss();
     mutateReplyComment({
-      comment_id: commentIDToReplyTo,
-      customer_id: customerID,
-      comment: text,
+      data: {
+        foreign_id: props.workID,
+        comment_id: commentIDToReplyTo,
+        comment: text,
+      },
+      token: token
     });
   }
 

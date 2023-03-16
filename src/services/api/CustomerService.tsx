@@ -22,6 +22,11 @@ interface IFavorite {
   token: string;
 }
 
+interface ISubscription {
+  data: { amount: number; title: string };
+  token: string;
+}
+
 interface INewCustomer {
   device: {
     type: string;
@@ -135,6 +140,15 @@ const CustomerService = () => {
     });
   };
 
+  const subscribeToVIP = (params: ISubscription) => {
+    return request({
+      headers: { ...getHeaders(), Authorization: `Bearer ${params.token}` },
+      url: "/customers/subscription",
+      method: "POST",
+      data: params.data,
+    });
+  };
+
   return {
     getCustomerById,
     postLoginCustomer,
@@ -147,6 +161,7 @@ const CustomerService = () => {
     favoriteChecker,
     favoriteVideo,
     unfavoriteVideo,
+    subscribeToVIP,
   };
 };
 

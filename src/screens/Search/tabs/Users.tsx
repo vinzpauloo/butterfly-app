@@ -20,7 +20,7 @@ import VIPTag from "components/VIPTag";
 import { GLOBAL_COLORS } from "global";
 import { userStore } from "../../../zustand/userStore";
 import { useMutation, useQuery } from "@tanstack/react-query";
-import { useNavigation } from "@react-navigation/native";
+import { useIsFocused, useNavigation } from "@react-navigation/native";
 import CustomerService from "services/api/CustomerService";
 import Loading from "components/Loading";
 import BottomMessage from "components/BottomMessage";
@@ -138,6 +138,7 @@ const Users = ({ searchText }) => {
   const [lastPage, setLastPage] = useState(1);
   const [startScroll, setStartScroll] = useState(true);
   const [prevSearch, setPrevSearch] = useState("");
+  const isFocused = useIsFocused();
 
   const { isLoading } = useQuery({
     queryKey: ["search-user", searchText, page],
@@ -158,6 +159,7 @@ const Users = ({ searchText }) => {
         setData((prev) => [...prev].concat(data.data));
       }
     },
+    enabled: isFocused,
   });
 
   const reachEnd = () => {

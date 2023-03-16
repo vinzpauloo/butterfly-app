@@ -8,6 +8,7 @@ import GeneralSearch from "services/api/GeneralSearch";
 import { GLOBAL_COLORS } from "global";
 import { userStore } from "../../../zustand/userStore";
 import { useQuery } from "@tanstack/react-query";
+import { useIsFocused } from "@react-navigation/native";
 
 const Feed = ({ searchText }) => {
   const token = userStore((state) => state.api_token);
@@ -18,6 +19,7 @@ const Feed = ({ searchText }) => {
   const [refreshing, setRefreshing] = useState(false);
   const [refreshingId, setRefreshingId] = useState(0);
   const [prevSearch, setPrevSearch] = useState("");
+  const isFocused = useIsFocused();
 
   const { isLoading } = useQuery({
     queryKey: ["feed-user", searchText, page, refreshingId],
@@ -38,6 +40,7 @@ const Feed = ({ searchText }) => {
         setData((prev) => [...prev].concat(data.data));
       }
     },
+    enabled: isFocused,
   });
 
   if ((isLoading || refreshing) && page === 1 && prevSearch !== searchText) {

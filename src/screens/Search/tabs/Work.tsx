@@ -13,6 +13,7 @@ import { MasonryFlashList } from "@shopify/flash-list";
 import { useDisclose } from "native-base";
 import Loading from "components/Loading";
 import BottomMessage from "components/BottomMessage";
+import { useIsFocused } from "@react-navigation/native";
 
 const Work = ({ searchText }) => {
   const token = userStore((state) => state.api_token);
@@ -24,6 +25,7 @@ const Work = ({ searchText }) => {
   const [startScroll, setStartScroll] = useState(true);
   const [id, setId] = useState<number | null>(null);
   const [prevSearch, setPrevSearch] = useState("");
+  const isFocused = useIsFocused();
 
   const { isLoading } = useQuery({
     queryKey: ["search-work", searchText, page],
@@ -44,6 +46,7 @@ const Work = ({ searchText }) => {
         setData((prev) => [...prev].concat(data.data));
       }
     },
+    enabled: isFocused,
   });
 
   const reachEnd = () => {

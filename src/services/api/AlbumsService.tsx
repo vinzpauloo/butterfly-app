@@ -4,6 +4,7 @@ import request from "lib/request";
 interface IAlbumParams {
   data: {
     filter?: string;
+    page?: number;
     paginate?: number;
     albumId?: number;
   };

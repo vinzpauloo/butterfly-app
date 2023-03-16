@@ -133,10 +133,11 @@ const ModelVideosContainer = ({ data }) => {
 const Users = ({ searchText }) => {
   const token = userStore((state) => state.api_token);
   const { getSearchPage } = GeneralSearch();
-  const [page, setPage] = useState(1);
   const [data, setData] = useState([]);
+  const [page, setPage] = useState(1);
   const [lastPage, setLastPage] = useState(1);
   const [startScroll, setStartScroll] = useState(true);
+  const [prevSearch, setPrevSearch] = useState("");
 
   const { isLoading } = useQuery({
     queryKey: ["search-user", searchText, page],
@@ -150,7 +151,12 @@ const Users = ({ searchText }) => {
     },
     onSuccess: (data) => {
       setLastPage(data.last_page);
-      setData((prev) => [...prev].concat(data.data));
+      if (prevSearch !== searchText) {
+        setPrevSearch(searchText);
+        setData(data.data);
+      } else {
+        setData((prev) => [...prev].concat(data.data));
+      }
     },
   });
 
@@ -164,7 +170,7 @@ const Users = ({ searchText }) => {
     }
   };
 
-  if (isLoading && page === 1) {
+  if (isLoading && page === 1 && prevSearch !== searchText) {
     return (
       <Container>
         <View style={{ height: "100%" }}>

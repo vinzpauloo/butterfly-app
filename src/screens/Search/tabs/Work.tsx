@@ -23,6 +23,7 @@ const Work = ({ searchText }) => {
   const [lastPage, setLastPage] = useState(1);
   const [startScroll, setStartScroll] = useState(true);
   const [id, setId] = useState<number | null>(null);
+  const [prevSearch, setPrevSearch] = useState("");
 
   const { isLoading } = useQuery({
     queryKey: ["search-work", searchText, page],
@@ -36,7 +37,12 @@ const Work = ({ searchText }) => {
     },
     onSuccess: (data) => {
       setLastPage(data.last_page);
-      setData((prev) => [...prev].concat(data.data));
+      if (prevSearch !== searchText) {
+        setPrevSearch(searchText);
+        setData(data.data);
+      } else {
+        setData((prev) => [...prev].concat(data.data));
+      }
     },
   });
 
@@ -50,7 +56,7 @@ const Work = ({ searchText }) => {
     }
   };
 
-  if (isLoading && page === 1) {
+  if (isLoading && page === 1 && prevSearch !== searchText) {
     return (
       <Container>
         <View style={{ height: "100%" }}>

@@ -14,9 +14,10 @@ const Feed = ({ searchText }) => {
   const { getSearchPage } = GeneralSearch();
   const [data, setData] = useState([]);
   const [page, setPage] = useState(1);
+  const [lastPage, setLastPage] = useState(1);
   const [refreshing, setRefreshing] = useState(false);
   const [refreshingId, setRefreshingId] = useState(0);
-  const [lastPage, setLastPage] = useState(1);
+  const [prevSearch, setPrevSearch] = useState("");
 
   const { isLoading } = useQuery({
     queryKey: ["feed-user", searchText, page, refreshingId],
@@ -29,12 +30,17 @@ const Feed = ({ searchText }) => {
       console.log("feed-work", error);
     },
     onSuccess: (data) => {
-      setData((prev) => [...prev].concat(data.data));
       setLastPage(data?.last_page);
+      if (prevSearch !== searchText) {
+        setPrevSearch(searchText);
+        setData(data.data);
+      } else {
+        setData((prev) => [...prev].concat(data.data));
+      }
     },
   });
 
-  if ((isLoading || refreshing) && page === 1) {
+  if ((isLoading || refreshing) && page === 1 && prevSearch !== searchText) {
     return (
       <Container>
         <FeedItemSkeleton />

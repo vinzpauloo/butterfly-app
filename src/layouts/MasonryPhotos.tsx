@@ -94,7 +94,7 @@ const MasonryPhotos = ({ filter }) => {
     queryKey: ["albums", filter, page, refreshingId],
     queryFn: () =>
       getAlbums({
-        data: { filter },
+        data: { filter, page },
         token: token,
       }),
     onSuccess: (data) => {

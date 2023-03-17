@@ -13,8 +13,6 @@ import { translationStore } from "../zustand/translationStore";
 const BottomNav = () => {
   const translations = translationStore((state) => state.translations);
 
-  console.log("from zustand!", translations);
-
   const bottomNav = [
     {
       name: "Home",

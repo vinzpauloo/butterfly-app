@@ -324,7 +324,7 @@ const SearchOutput = ({
             fetchChecker={fetchChecker}
             setFetchChecker={setFetchChecker}
             page={usersPage}
-            setPage={setFeedPage}
+            setPage={setUsersPage}
           />
         ),
       },
@@ -351,11 +351,10 @@ const Search = () => {
   const [hasSearch, setHasSearch] = useState(false);
   const [search, setSearch] = useState<string>("");
   const [history, setHistory] = useState([]);
-  const [prevSearch, setPrevSearch] = useState("");
   const [fetchChecker, setFetchChecker] = useState({
     work: true,
     users: true,
-    feed: false,
+    feed: true,
   });
   const [workPage, setWorkPage] = useState(1);
   const [usersPage, setUsersPage] = useState(1);
@@ -371,6 +370,12 @@ const Search = () => {
       console.log("search", error);
     },
   });
+
+  useEffect(() => {
+    setFeedPage(1);
+    setWorkPage(1);
+    setUsersPage(1);
+  }, [search]);
 
   if (isLoading) {
     return <VideoListSkeleton />;

@@ -140,10 +140,8 @@ const Users = ({
   const token = userStore((state) => state.api_token);
   const { getSearchPage } = GeneralSearch();
   const [data, setData] = useState([]);
-  // const [page, setPage] = useState(1);
   const [lastPage, setLastPage] = useState(1);
   const [startScroll, setStartScroll] = useState(true);
-  // const [fetch, setFetch] = useState(true);
   const isFocused = useIsFocused();
   const [prevSearch, setPrevSearch] = useState("");
 
@@ -151,7 +149,7 @@ const Users = ({
     queryKey: ["search-user", searchText, page],
     queryFn: () =>
       getSearchPage({
-        data: { creator_only: true, keyword: searchText },
+        data: { creator_only: true, keyword: searchText, page: page },
         token: token,
       }),
     onError: (error) => {
@@ -183,9 +181,6 @@ const Users = ({
   };
 
   useEffect(() => {
-    setFetchChecker((prev) => {
-      return { ...prev, users: true };
-    });
     setData([]);
   }, [searchText]);
 
@@ -193,7 +188,7 @@ const Users = ({
     setFetchChecker((prev) => {
       return { ...prev, users: true };
     });
-  }, [page]);
+  }, [page, searchText]);
 
   if (
     (isLoading && page === 1 && prevSearch !== searchText) ||

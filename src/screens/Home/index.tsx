@@ -9,11 +9,12 @@ import { topMainNav } from "data/topMainNav";
 
 import PopupAds from "features/ads/components/PopupAds";
 import Announcement from "features/announcement";
-import { useLanguage } from "../../../App";
+import localizations from "i18n/localizations";
+import { translationStore } from "../../zustand/translationStore";
 
 // Search Icon
 const Search = () => {
-  const [lang, setLang] = useLanguage();
+  const translations = translationStore((state) => state.translations);
   const navigation = useNavigation<any>();
   const handlePress = () => {
     navigation.navigate("Search");
@@ -26,23 +27,24 @@ const Search = () => {
       style={styles.searchContainer}
     >
       <Ionicons name="search" size={20} color="#fff" />
-      <Text style={styles.searchText}>{lang.searchButton}</Text>
+      <Text style={styles.searchText}>{translations.searchButton}</Text>
     </TouchableOpacity>
   );
 };
 
 // Change Language
 const Intl = () => {
-  // const { setLocale } = useGlobalContext();
-  const [lang, setLang] = useLanguage();
+  const [setLang, setTranslations] = translationStore((state) => [
+    state.setLang,
+    state.setTranslations,
+  ]);
   const [isEnabled, setIsEnabled] = useState(false);
   const toggleSwitch = (event) => {
     setIsEnabled((previousState) => !previousState);
-    if (event) {
-      setLang("zh");
-    } else {
-      setLang("en");
-    }
+
+    let newLang = event ? "cn" : "en";
+    setLang(newLang);
+    setTranslations(localizations[newLang]);
   };
 
   return (

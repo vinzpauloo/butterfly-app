@@ -1,18 +1,25 @@
 import { RefreshControl, View } from "react-native";
 import React, { useCallback, useState } from "react";
 
-import { Tabs } from "react-native-collapsible-tab-view";
-
 import BottomMessage from "components/BottomMessage";
 import Container from "components/Container";
 import FeedContent from "components/feed/FeedContent";
 import FeedItemSkeleton from "components/skeletons/FeedItemSkeleton";
 import FeedService from "services/api/FeedService";
 import Loading from "components/Loading";
+import MomentHeader from "components/headers/MomentHeader";
+import MomentHeaderSkeleton from "components/skeletons/MomentHeaderSkeleton";
+import { FlashList } from "@shopify/flash-list";
 import { GLOBAL_COLORS } from "global";
 import { useQuery } from "@tanstack/react-query";
 
-const StickyTabFeeds = ({ category, key, token }) => {
+const StickyTabFeeds = ({
+  category,
+  key,
+  headerData,
+  headerLoading,
+  token,
+}) => {
   const [data, setData] = useState([]);
   const [page, setPage] = useState(1);
   const [lastPage, setLastPage] = useState(1);
@@ -65,20 +72,15 @@ const StickyTabFeeds = ({ category, key, token }) => {
   if ((isLoading || isRefetching) && page === 1) {
     return (
       <Container>
-        <Tabs.ScrollView
-          accessibilityComponentType={undefined}
-          accessibilityTraits={undefined}
-          scrollEnabled={false}
-        >
-          <FeedItemSkeleton />
-        </Tabs.ScrollView>
+        <MomentHeaderSkeleton />
+        <FeedItemSkeleton />
       </Container>
     );
   }
 
   return (
     <Container>
-      <Tabs.FlatList
+      <FlashList
         refreshControl={
           <RefreshControl
             colors={[GLOBAL_COLORS.secondaryColor]}
@@ -86,14 +88,18 @@ const StickyTabFeeds = ({ category, key, token }) => {
             onRefresh={onRefresh}
           />
         }
-        nestedScrollEnabled={true}
         onEndReachedThreshold={0.01} // always make this default to 0.01 to have no bug for fetching data for the onEndReached -> https://github.com/facebook/react-native/issues/14015#issuecomment-346547942
         onTouchStart={() => setStartScroll(false)}
         onEndReached={reachEnd}
         data={data}
         keyExtractor={(item, index) => "" + index}
         renderItem={({ item, index }) => (
-          <FeedContent key={index} data={item} />
+          <>
+            {index === 0 && (
+              <MomentHeader data={headerData} isLoading={headerLoading} />
+            )}
+            <FeedContent key={index} data={item} />
+          </>
         )}
         ListFooterComponent={() => (
           <>

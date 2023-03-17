@@ -1,27 +1,18 @@
 import React from "react";
 import { StyleSheet, Text, View, TouchableWithoutFeedback } from "react-native";
 
-import { HStack, Divider } from "native-base";
+import { Divider } from "native-base";
 import { useNavigation } from "@react-navigation/native";
-import { useQuery } from "@tanstack/react-query";
 
 import MomentHeaderSkeleton from "components/skeletons/MomentHeaderSkeleton";
 import { GLOBAL_COLORS } from "global";
-import FeedService from "services/api/FeedService";
-import { userStore } from "../../zustand/userStore";
 
-const MomentHeader = () => {
-  const token = userStore((state) => state.api_token);
+const MomentHeader = ({ data, isLoading }) => {
   const navigation = useNavigation<any>();
-  const { getFeeds } = FeedService();
-  const { data, isLoading } = useQuery({
-    queryKey: ["featuredFeeds"],
-    queryFn: () => getFeeds({ data: { featured: true }, token }),
-  });
 
   if (isLoading) {
     return (
-      <View style={styles.certificateContainer}>
+      <View style={styles.certificateContainerSkeleton}>
         <MomentHeaderSkeleton />
       </View>
     );
@@ -31,12 +22,7 @@ const MomentHeader = () => {
     <View style={styles.certificateContainer} pointerEvents="box-none">
       {data.featured.map((item, index) => (
         <View key={index}>
-          <HStack
-            space={2}
-            alignItems="center"
-            marginRight={5}
-            pointerEvents="box-none"
-          >
+          <View style={styles.content}>
             <View style={styles.dot} />
             <TouchableWithoutFeedback
               key={index}
@@ -50,7 +36,7 @@ const MomentHeader = () => {
                 {item.title}
               </Text>
             </TouchableWithoutFeedback>
-          </HStack>
+          </View>
           {index === data.featured.length - 1 ? null : (
             <Divider style={styles.divider} color="#999" />
           )}
@@ -66,7 +52,16 @@ const styles = StyleSheet.create({
   certificateContainer: {
     backgroundColor: GLOBAL_COLORS.headerBasicBg,
     padding: 12,
+    // flex: 1,
+  },
+  certificateContainerSkeleton: {
+    backgroundColor: GLOBAL_COLORS.headerBasicBg,
+    padding: 12,
     flex: 1,
+  },
+  content: {
+    flexDirection: "row",
+    alignItems: "center",
   },
   whiteText: {
     color: "white",
@@ -79,5 +74,7 @@ const styles = StyleSheet.create({
     height: 8,
     width: 8,
     borderRadius: 4,
+    marginLeft: 5,
+    marginRight: 10,
   },
 });

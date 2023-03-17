@@ -28,7 +28,7 @@ const Recommended = ({ tag, isFollowingScreen = false }) => {
 
   const { getWorks } = WorkService();
 
-  const { isLoading } = useQuery({
+  const { isLoading, isRefetching } = useQuery({
     queryKey: ["recommendedSingleTag", tag, page, refreshingId],
     queryFn: () =>
       getWorks({
@@ -73,7 +73,7 @@ const Recommended = ({ tag, isFollowingScreen = false }) => {
 
   return (
     <View style={styles.gridVideoContainer}>
-      {(isLoading || refreshing) && page === 1 ? (
+      {(isLoading || refreshing || isRefetching) && page === 1 ? (
         <MasonrySkeleton />
       ) : (
         <MasonryList

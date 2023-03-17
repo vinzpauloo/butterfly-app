@@ -7,17 +7,19 @@ import AccountTab from "screens/Account";
 import BottomTabs from "layouts/navigators/BottomTabs";
 import Chat from "screens/Chat";
 import HomeTab from "screens/Home";
-import i18n from "i18n-js";
 import Vlog from "screens/Vlog";
-import { useLanguage } from "../../App";
+import { translationStore } from "../zustand/translationStore";
 
 const BottomNav = () => {
-  const [lang, setLang] = useLanguage();
+  const translations = translationStore((state) => state.translations);
+
+  console.log("from zustand!", translations);
+
   const bottomNav = [
     {
       name: "Home",
       component: HomeTab,
-      label: lang.home,
+      label: translations.homeTab,
       icon: ({ color, size }) => (
         <Feather name="home" color={color} size={size} />
       ),
@@ -25,7 +27,7 @@ const BottomNav = () => {
     {
       name: "Vlog",
       component: Vlog,
-      label: lang.vlog,
+      label: translations.vlogTab,
       unmountOnBlur: true,
       icon: ({ color, size }) => (
         <MaterialCommunityIcons
@@ -38,7 +40,7 @@ const BottomNav = () => {
     {
       name: "Chat",
       component: Chat,
-      label: lang.chat,
+      label: translations.chatTab,
       icon: ({ color, size }) => (
         <Ionicons name="chatbubbles-outline" color={color} size={size} />
       ),
@@ -46,7 +48,7 @@ const BottomNav = () => {
     {
       name: "Account",
       component: AccountTab,
-      label: lang.account,
+      label: translations.accountTab,
       icon: ({ color, size }) => (
         <Octicons name="person" color={color} size={size} />
       ),

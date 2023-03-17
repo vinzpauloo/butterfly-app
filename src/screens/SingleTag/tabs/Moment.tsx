@@ -19,7 +19,7 @@ const Moment = ({ userId, tag }) => {
   const [refreshingId, setRefreshingId] = useState(0);
   const [lastPage, setLastPage] = useState(1);
 
-  const { isLoading } = useQuery({
+  const { isLoading, isRefetching } = useQuery({
     queryKey: [`feedTab${isFocus}`, userId, page, refreshingId],
     queryFn: () =>
       getFeeds({
@@ -40,7 +40,7 @@ const Moment = ({ userId, tag }) => {
     enabled: isFocus,
   });
 
-  if ((isLoading || refreshing) && page === 1) {
+  if ((isLoading || refreshing || isRefetching) && page === 1) {
     return (
       <Container>
         <CommentListSkeleton />

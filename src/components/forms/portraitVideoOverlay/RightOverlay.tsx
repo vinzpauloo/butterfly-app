@@ -1,12 +1,12 @@
 import React from "react";
-import { Pressable, StyleSheet, Text, View } from "react-native";
+import { StyleSheet } from "react-native";
 import { VStack } from "native-base";
 
-import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons";
 import UserOverlay from "./UserOverlay";
 import LikeOverlay from "./LikeOverlay";
 import FavoriteOVerlay from "./FavoriteOVerlay";
 import DownloadOverlay from "./DownloadOverlay";
+import CommentOverlay from "./CommentOverlay";
 import { userStore } from "../../../zustand/userStore";
 
 type Props = {
@@ -37,12 +37,10 @@ const RightOverlay = (props: Props) => {
         likes={props.likes}
         isLiked={props.isLiked}
       />
-      <View style={styles.verticalBarItem}>
-        <Pressable onPress={() => props.openComments()}>
-          <MaterialCommunityIcons name="comment" color={"white"} size={40} />
-        </Pressable>
-        <Text style={styles.iconText}>{props.amountOfComments}</Text>
-      </View>
+      <CommentOverlay
+        amountOfComments={props.amountOfComments}
+        openComments={props.openComments}
+      />
       <FavoriteOVerlay customerID={customerID} videoID={props.videoID} isFavorite={props.isFavorite} />
       <DownloadOverlay />
     </VStack>
@@ -57,15 +55,5 @@ const styles = StyleSheet.create({
     right: 8,
     paddingBottom: 16,
     bottom: 0,
-  },
-  verticalBarItem: {
-    width: "100%",
-    alignItems: "center",
-  },
-  iconText: {
-    color: "white",
-    textShadowColor: "black",
-    textShadowOffset: { width: 0, height: 0 },
-    textShadowRadius: 24,
-  },
+  }
 });

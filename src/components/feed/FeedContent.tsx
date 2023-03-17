@@ -12,15 +12,17 @@ import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityI
 
 import VideoPlayer from "components/VideoPlayer";
 import CustomModal from "components/CustomModal";
-import { GLOBAL_COLORS } from "global";
-import { useNavigation } from "@react-navigation/native";
 import FeedContentLikeBtn from "./FeedContentLikeBtn";
 import Fontisto from "react-native-vector-icons/Fontisto";
 import VIPModalContent from "components/VIPModalContent";
+import { GLOBAL_COLORS } from "global";
+import { translationStore } from "../../zustand/translationStore";
+import { useNavigation } from "@react-navigation/native";
 
 const { height, width } = Dimensions.get("window");
 
 const Header = ({ user, userId, setOpen }) => {
+  const translations = translationStore((state) => state.translations);
   const navigation = useNavigation<any>();
   const navigateSingleUser = () => {
     navigation.navigate(`SingleUser`, {
@@ -37,7 +39,7 @@ const Header = ({ user, userId, setOpen }) => {
         <Text style={styles.username}>{user.username}</Text>
       </Pressable>
       <Pressable style={styles.privateBtn} onPress={openVIPModal}>
-        <Text style={styles.privateText}>私信</Text>
+        <Text style={styles.privateText}>{translations.chat}</Text>
       </Pressable>
     </View>
   );

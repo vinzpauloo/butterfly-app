@@ -17,7 +17,7 @@ const BottomNav = () => {
     {
       name: "Home",
       component: HomeTab,
-      label: translations.homeTab,
+      label: translations.home,
       icon: ({ color, size }) => (
         <Feather name="home" color={color} size={size} />
       ),
@@ -25,7 +25,7 @@ const BottomNav = () => {
     {
       name: "Vlog",
       component: Vlog,
-      label: translations.vlogTab,
+      label: translations.vlog,
       unmountOnBlur: true,
       icon: ({ color, size }) => (
         <MaterialCommunityIcons
@@ -38,7 +38,7 @@ const BottomNav = () => {
     {
       name: "Chat",
       component: Chat,
-      label: translations.chatTab,
+      label: translations.chat,
       icon: ({ color, size }) => (
         <Ionicons name="chatbubbles-outline" color={color} size={size} />
       ),
@@ -46,7 +46,7 @@ const BottomNav = () => {
     {
       name: "Account",
       component: AccountTab,
-      label: translations.accountTab,
+      label: translations.account,
       icon: ({ color, size }) => (
         <Octicons name="person" color={color} size={size} />
       ),

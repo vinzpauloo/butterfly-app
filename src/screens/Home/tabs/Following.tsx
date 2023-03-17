@@ -11,7 +11,6 @@ import {
 import React, { useCallback, useState } from "react";
 
 import { Center, useDisclose } from "native-base";
-import { MasonryFlashList } from "@shopify/flash-list";
 import MasonryList from "@react-native-seoul/masonry-list";
 import { ScrollView } from "react-native-gesture-handler";
 import { useNavigation } from "@react-navigation/native";
@@ -28,12 +27,12 @@ import VideoListSkeleton from "components/skeletons/VideoListSkeleton";
 import VIPTag from "components/VIPTag";
 import WorkService from "services/api/WorkService";
 import { GLOBAL_COLORS } from "global";
-import { reelsVideos } from "data/reelsVideos";
 import {
   FollowingBottomContent,
   GridVideosBottomContent,
 } from "features/sectionList/components/GridVideos";
 import { userStore } from "../../../zustand/userStore";
+import { translationStore } from "../../../zustand/translationStore";
 
 const { width, height } = Dimensions.get("window");
 
@@ -163,6 +162,7 @@ const NoFollowing = ({
 };
 
 const SectionContent = ({ index, info, onOpen, setId, data }) => {
+  const translations = translationStore((state) => state.translations);
   const navigation = useNavigation<any>();
   const { followCreator } = CustomerService();
   const token = userStore((store) => store.api_token);
@@ -207,7 +207,7 @@ const SectionContent = ({ index, info, onOpen, setId, data }) => {
               style={styles.followBtn}
               onPress={() => handleFollow(info.id)}
             >
-              <Text style={styles.followText}>关注</Text>
+              <Text style={styles.followText}>{translations.follow}</Text>
             </Pressable>
           )}
         </View>

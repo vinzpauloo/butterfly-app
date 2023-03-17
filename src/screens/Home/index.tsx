@@ -27,7 +27,7 @@ const Search = () => {
       style={styles.searchContainer}
     >
       <Ionicons name="search" size={20} color="#fff" />
-      <Text style={styles.searchText}>{translations.searchButton}</Text>
+      <Text style={styles.searchText}>{translations.search}</Text>
     </TouchableOpacity>
   );
 };

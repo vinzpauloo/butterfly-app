@@ -25,13 +25,15 @@ import MaterialTopTabs from "layouts/navigators/MaterialTopTabs";
 import Users from "./tabs/Users";
 import VideoListSkeleton from "components/skeletons/VideoListSkeleton";
 import Work from "./tabs/Work";
-import { GLOBAL_COLORS } from "global";
-import { userStore } from "../../zustand/userStore";
 import { FlashList } from "@shopify/flash-list";
+import { GLOBAL_COLORS } from "global";
+import { translationStore } from "../../zustand/translationStore";
+import { userStore } from "../../zustand/userStore";
 
 const { width } = Dimensions.get("window");
 
 const SearchBar = ({ search, setSearch, hasSearch, setHasSearch, refetch }) => {
+  const translations = translationStore((state) => state.translations);
   const navigation = useNavigation<any>();
   const [text, setText] = useState("");
 
@@ -94,11 +96,11 @@ const SearchBar = ({ search, setSearch, hasSearch, setHasSearch, refetch }) => {
       </View>
       {hasSearch ? (
         <Pressable style={styles.searchBtn} onPress={searchClear}>
-          <Text style={styles.searchText}>Clear</Text>
+          <Text style={styles.searchText}>{translations.clear}</Text>
         </Pressable>
       ) : (
         <Pressable style={styles.searchBtn} onPress={searchWords}>
-          <Text style={styles.searchText}>Search</Text>
+          <Text style={styles.searchText}>{translations.search}</Text>
         </Pressable>
       )}
     </View>
@@ -146,6 +148,7 @@ const SearchItem = ({ data, setSearch, setHasSearch, setHistory }) => {
 
 const SearchHistory = ({ history, setSearch, setHasSearch, setHistory }) => {
   const token = userStore((state) => state.api_token);
+  const translations = translationStore((state) => state.translations);
   const { deleteSearchHistory } = GeneralSearch();
 
   const { mutate } = useMutation(deleteSearchHistory, {
@@ -166,7 +169,7 @@ const SearchHistory = ({ history, setSearch, setHasSearch, setHistory }) => {
         <View style={styles.iconContent}>
           <AntDesign name="clockcircleo" color="#fff" size={18} />
           <Text style={[styles.text, { marginLeft: 10 }]}>
-            Previous Searches
+            {translations.previousSearches}
           </Text>
         </View>
         <View style={styles.iconContent}>
@@ -176,7 +179,9 @@ const SearchHistory = ({ history, setSearch, setHasSearch, setHistory }) => {
             size={22}
           />
           <Pressable onPress={handleClear}>
-            <Text style={[styles.text, { marginLeft: 4 }]}>Clear Searches</Text>
+            <Text style={[styles.text, { marginLeft: 4 }]}>
+              {translations.clearSearches}
+            </Text>
           </Pressable>
         </View>
       </View>
@@ -235,13 +240,14 @@ const PopularSearchItem = ({ text, index, setSearch, setHasSearch }) => {
 };
 
 const PopularSearches = ({ data, setSearch, setHasSearch }) => {
+  const translations = translationStore((state) => state.translations);
   return (
     <View>
       <View style={styles.headerContent}>
         <View style={styles.iconContent}>
           <MaterialCommunityIcons name="fire" color="#fff" size={22} />
           <Text style={[styles.text, { marginLeft: 5 }]}>
-            Top Keywords List
+            {translations.topKeywordsList}
           </Text>
         </View>
       </View>
@@ -267,6 +273,7 @@ const PopularSearches = ({ data, setSearch, setHasSearch }) => {
 };
 
 const VideoList = ({ data }) => {
+  const translations = translationStore((state) => state.translations);
   return (
     <View style={{ height: "100%" }}>
       <View style={styles.headerContent}>
@@ -277,7 +284,7 @@ const VideoList = ({ data }) => {
             size={22}
           />
           <Text style={[styles.text, { marginLeft: 5 }]}>
-            Recommended Videos List
+            {translations.recommendedVideosList}
           </Text>
         </View>
       </View>

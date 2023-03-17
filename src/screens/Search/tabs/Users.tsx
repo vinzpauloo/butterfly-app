@@ -13,21 +13,23 @@ import Octicons from "react-native-vector-icons/Octicons";
 import Feather from "react-native-vector-icons/Feather";
 import { FlashList } from "@shopify/flash-list";
 
+import BottomMessage from "components/BottomMessage";
 import Container from "components/Container";
+import CustomerService from "services/api/CustomerService";
 import GeneralSearch from "services/api/GeneralSearch";
+import Loading from "components/Loading";
 import VideoListSkeleton from "components/skeletons/VideoListSkeleton";
 import VIPTag from "components/VIPTag";
 import { GLOBAL_COLORS } from "global";
 import { userStore } from "../../../zustand/userStore";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { useIsFocused, useNavigation } from "@react-navigation/native";
-import CustomerService from "services/api/CustomerService";
-import Loading from "components/Loading";
-import BottomMessage from "components/BottomMessage";
+import { translationStore } from "../../../zustand/translationStore";
 
 const { width } = Dimensions.get("window");
 
 const HeaderComponent = ({ data }) => {
+  const translations = translationStore((state) => state.translations);
   const [isFollowed, setIsFollowed] = useState(false);
   const token = userStore((state) => state.api_token);
   const navigation = useNavigation<any>();
@@ -61,7 +63,8 @@ const HeaderComponent = ({ data }) => {
         <View>
           <Text style={styles.headerTitle}>{data.username}</Text>
           <Text style={styles.headerSubTitle}>
-            Followers: {data.total_followers} Videos: {data.total_work}
+            {translations.followers}: {data.total_followers}{" "}
+            {translations.videos}: {data.total_work}
           </Text>
           <Text style={styles.headerSubTitle}>Description</Text>
         </View>
@@ -69,7 +72,7 @@ const HeaderComponent = ({ data }) => {
       {isFollowed ? null : (
         <Pressable style={styles.followBtn} onPress={followBtn}>
           <Feather name="plus" color="#fff" />
-          <Text style={styles.followText}>关注</Text>
+          <Text style={styles.followText}>{translations.follow}</Text>
         </Pressable>
       )}
     </View>
@@ -110,6 +113,7 @@ const VideoContainer = ({ data, user }) => {
 };
 
 const ModelVideosContainer = ({ data }) => {
+  const translations = translationStore((state) => state.translations);
   const navigation = useNavigation<any>();
 
   const navigateToSingleUser = () => {
@@ -124,7 +128,7 @@ const ModelVideosContainer = ({ data }) => {
         ))}
       </View>
       <Pressable onPress={navigateToSingleUser}>
-        <Text style={styles.seeMoreBtn}>See more videos button</Text>
+        <Text style={styles.seeMoreBtn}>{translations.seeMoreVideos}</Text>
       </Pressable>
     </View>
   );

@@ -14,11 +14,9 @@ const Feed = ({ searchText, fetchChecker, setFetchChecker, page, setPage }) => {
   const token = userStore((state) => state.api_token);
   const { getSearchPage } = GeneralSearch();
   const [data, setData] = useState([]);
-  // const [page, setPage] = useState(1);
   const [lastPage, setLastPage] = useState(1);
   const [refreshing, setRefreshing] = useState(false);
   const [refreshingId, setRefreshingId] = useState(0);
-  // const [fetch, setFetch] = useState(true);
   const [prevSearch, setPrevSearch] = useState("");
   const isFocused = useIsFocused();
 
@@ -26,7 +24,7 @@ const Feed = ({ searchText, fetchChecker, setFetchChecker, page, setPage }) => {
     queryKey: ["feed-user", searchText, page, refreshingId],
     queryFn: () =>
       getSearchPage({
-        data: { feed_only: true, keyword: searchText },
+        data: { feed_only: true, keyword: searchText, page: page },
         token: token,
       }),
     onError: (error) => {
@@ -48,21 +46,14 @@ const Feed = ({ searchText, fetchChecker, setFetchChecker, page, setPage }) => {
   });
 
   useEffect(() => {
-    setFetchChecker((prev) => {
-      return { ...prev, feed: true };
-    });
     setData([]);
   }, [searchText]);
 
   useEffect(() => {
-    console.log("hahahaha");
-
     setFetchChecker((prev) => {
       return { ...prev, feed: true };
     });
-  }, [page]);
-
-  console.log("hununu");
+  }, [page, searchText]);
 
   if (
     ((isLoading || refreshing) && page === 1 && prevSearch !== searchText) ||

@@ -20,11 +20,9 @@ const Work = ({ searchText, fetchChecker, setFetchChecker, page, setPage }) => {
   const { isOpen, onOpen, onClose } = useDisclose();
   const { getSearchPage } = GeneralSearch();
   const [data, setData] = useState([]);
-  // const [page, setPage] = useState(1);
   const [lastPage, setLastPage] = useState(1);
   const [startScroll, setStartScroll] = useState(true);
   const [id, setId] = useState<number | null>(null);
-  // const [fetch, setFetch] = useState(true);
   const isFocused = useIsFocused();
   const [prevSearch, setPrevSearch] = useState("");
 
@@ -64,21 +62,14 @@ const Work = ({ searchText, fetchChecker, setFetchChecker, page, setPage }) => {
   };
 
   useEffect(() => {
-    setFetchChecker((prev) => {
-      return { ...prev, work: true };
-    });
     setData([]);
   }, [searchText]);
 
   useEffect(() => {
-    console.log("hahahaha");
-
     setFetchChecker((prev) => {
       return { ...prev, work: true };
     });
-  }, [page]);
-
-  console.log("@@@@", fetchChecker.work);
+  }, [page, searchText]);
 
   if (
     (isLoading && page === 1 && prevSearch !== searchText) ||

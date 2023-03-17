@@ -15,14 +15,8 @@ const BottomOverlay = (props: Props) => {
 
   return (
     <VStack space={2} style={styles.bottomSection}>
-      <Pressable
-        onPress={() => {
-          navigation.navigate("SingleUser", { userID: props.userID });
-        }}
-      >
-        <Text style={[styles.userName, styles.iconText]}>
-          @{props.userName}
-        </Text>
+      <Pressable onPress={() => navigation.navigate("SingleUser", { userID: props.userID })}>
+        <Text style={[styles.userName, styles.iconText]}>@{props.userName}</Text>
       </Pressable>
       <Text style={styles.iconText}>{props.title}</Text>
       <View style={styles.tags}>
@@ -38,12 +32,10 @@ const BottomOverlay = (props: Props) => {
           </Pressable>
         ))}
       </View>
-      <Pressable
-        onPress={() => {
-          navigation.navigate("SharingPromotion");
-        }}
-      >
-        <Text style={styles.subscribe}>Subscription needed or gold coin</Text>
+      <Pressable onPress={() => navigation.navigate("SharingPromotion")}>
+        <View>
+          <Text style={styles.subscribe}>Subscription needed or gold coin</Text>
+        </View>
       </Pressable>
     </VStack>
   );
@@ -84,5 +76,6 @@ const styles = StyleSheet.create({
     textShadowColor: "black",
     textShadowOffset: { width: 0, height: 0 },
     textShadowRadius: 24,
+    alignSelf: "flex-start"
   },
 });

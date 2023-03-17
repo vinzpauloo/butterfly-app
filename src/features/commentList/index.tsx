@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from "react";
-import { StyleSheet, Text, View } from "react-native";
+import { FlatList, StyleSheet, Text, View } from "react-native";
 import { Divider } from "native-base";
 import { FlashList } from "@shopify/flash-list";
 
@@ -14,9 +14,12 @@ import { useQuery } from "@tanstack/react-query";
 import { commentGlobalStore } from "../../zustand/commentGlobalStore";
 import Loading from "components/Loading";
 import { userStore } from "../../zustand/userStore";
+import Container from "components/Container";
+import { Tabs } from "react-native-collapsible-tab-view";
 
 type CommentListProps = {
 	isFromFeed?: boolean
+	isFromSingleVideo?: boolean
 	workID: string
 	customHeaderComponent?: React.ReactComponentElement<any>
 }
@@ -55,9 +58,44 @@ const CommentList = (props: CommentListProps) => {
 	useEffect(() => {
 		setGlobalCommentListRef(commentListRef)
 		return () => { setGlobalCommentListRef(null) }
-	},[])
+	}, [])
 	
-	return (
+	if (props.isFromSingleVideo) {
+		return (
+			<Container>
+				{amountOfCommentsToGet === 10 && isLoading ?  
+					<Tabs.FlatList
+						style={{ padding: 12 }}
+						data={null}
+						renderItem={null}
+						ListEmptyComponent={<CommentListSkeleton />}
+					/> :
+					<Tabs.FlatList
+						style={{padding: 12}}
+						ref={commentListRef}
+						data={data?.data}
+						ListHeaderComponent={<Text style={styles.commentHeader}>全部评论 {data?.total}</Text>}
+						ListFooterComponent={data?.next_page_url === null ? <BottomMessage isFromSingleVideo /> : null}
+						keyExtractor={(_, index) => "" + index}
+						renderItem={({ item }: any) => (
+							<CommentItem
+								commentID={item.comment_id}
+								comment={item.comment}
+								username={item.username}
+								photo={item.photo}
+								replies={item.replies}
+							/>)}
+						ItemSeparatorComponent={() => <Divider color="#999" style={styles.divider} />}
+						onEndReachedThreshold={0.1}
+						onEndReached={onScrollToEnd}
+					/>}
+				{/* temporary solution for loading - needs improvement */}
+				{(isLoading || isRefetching) && amountOfCommentsToGet > 10 ? <Loading /> : null}
+			</Container>
+		)
+	}
+	
+	else return (
 		<View style={styles.commentsContainer}>
 			{amountOfCommentsToGet === 10 && isLoading ? 
 				props.isFromFeed ? 
@@ -89,7 +127,7 @@ const CommentList = (props: CommentListProps) => {
 						onEndReachedThreshold={0.1}
 						onEndReached={onScrollToEnd}
 					/>
-					{/* Loading has to be here else its too fast on ListFooterComponent */}
+					{/* temporary solution for loading - needs improvement */}
 					{(isLoading || isRefetching) && amountOfCommentsToGet > 10 ? <Loading /> : null}
 				</>
 			}

@@ -17,9 +17,11 @@ import { GLOBAL_COLORS } from "global";
 import CustomerService from "services/api/CustomerService";
 import WorkService from "services/api/WorkService";
 import { userStore } from "../../zustand/userStore";
+import { translationStore } from "../../zustand/translationStore";
 
 const HeaderTitle = ({ data }) => {
   const token = userStore((store) => store.api_token);
+  const translations = translationStore((state) => state.translations);
   const { followCreator } = CustomerService();
   const navigation = useNavigation<any>();
   const route = useRoute<any>();
@@ -73,7 +75,7 @@ const HeaderTitle = ({ data }) => {
       </View>
       {isFollowed ? null : (
         <Pressable style={styles.followBtn} onPress={handleFollow}>
-          <Text style={styles.followText}>+关注</Text>
+          <Text style={styles.followText}>+{translations.follow}</Text>
         </Pressable>
       )}
     </View>

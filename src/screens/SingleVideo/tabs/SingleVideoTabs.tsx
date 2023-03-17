@@ -14,6 +14,7 @@ import StickyTabsGridVideos from "features/sectionList/components/StickyTabsGrid
 import WorkService from "services/api/WorkService";
 import { Header } from "./Header";
 import { userStore } from "../../../zustand/userStore";
+import { translationStore } from "../../../zustand/translationStore";
 
 const OthersLayout = ({ userId, workID, token }) => {
   const [page, setPage] = useState(1);
@@ -115,6 +116,7 @@ const RecommendedData = ({ id, recommendedData, workID, token }) => {
 
 const SingleVideoTab = ({ data }) => {
   const token = userStore((state) => state.api_token);
+  const translations = translationStore((state) => state.translations);
   const route = useRoute<any>();
 
   const tabsData = {
@@ -122,7 +124,7 @@ const SingleVideoTab = ({ data }) => {
     tabItems: [
       {
         name: "TabOthers",
-        label: "TA的视频",
+        label: translations.others,
         Content: (
           <OthersLayout
             userId={route.params.userId}
@@ -133,7 +135,7 @@ const SingleVideoTab = ({ data }) => {
       },
       {
         name: "TabRecommended",
-        label: "更多推荐",
+        label: translations.recommended,
         Content: (
           <RecommendedData
             workID={data._id}
@@ -145,7 +147,7 @@ const SingleVideoTab = ({ data }) => {
       },
       {
         name: "TabComments",
-        label: "评论",
+        label: translations.comments,
         Content: (
           <Container>
             {/* TEMPORARY BUGGY UI - FOR NOW COMMENT PAGING SHOULD WORK */}

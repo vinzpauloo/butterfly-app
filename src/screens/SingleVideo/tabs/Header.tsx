@@ -7,12 +7,14 @@ import Zocial from "react-native-vector-icons/Zocial";
 import { useNavigation, useRoute } from "@react-navigation/native";
 
 import BannerAds from "features/ads/components/BannerAds";
-import { GLOBAL_COLORS } from "global";
-import LikeButton from "components/forms/singleVideo/LikeButton";
 import FavoriteButton from "components/forms/singleVideo/FavoriteButton";
+import LikeButton from "components/forms/singleVideo/LikeButton";
 import { downloadFile } from "utils/downloadFile";
+import { GLOBAL_COLORS } from "global";
+import { translationStore } from "../../../zustand/translationStore";
 
 export const Header = ({ data }) => {
+  const translations = translationStore((state) => state.translations);
   const route = useRoute<any>();
   const navigation = useNavigation<any>();
 
@@ -50,7 +52,8 @@ export const Header = ({ data }) => {
               style={styles.icon}
             />
             <Text style={styles.text}>
-              {data?.statistic.watched} | 时长: {data?.duration}
+              {data?.statistic.watched} | {translations.duration}:{" "}
+              {data?.duration}
             </Text>
           </View>
           <View style={styles.item}>
@@ -83,7 +86,9 @@ export const Header = ({ data }) => {
               size={18}
               style={styles.icon}
             />
-            <Text style={[styles.text, { marginVertical: 3 }]}>22金币</Text>
+            <Text style={[styles.text, { marginVertical: 3 }]}>
+              22{translations.coin}
+            </Text>
           </View>
           <TouchableWithoutFeedback onPress={testDownload}>
             <View style={styles.buttonItem} pointerEvents="box-none">
@@ -93,7 +98,7 @@ export const Header = ({ data }) => {
                 size={18}
                 style={styles.icon}
               />
-              <Text style={styles.text}>下载</Text>
+              <Text style={styles.text}>{translations.download}</Text>
             </View>
           </TouchableWithoutFeedback>
           <TouchableWithoutFeedback
@@ -106,7 +111,7 @@ export const Header = ({ data }) => {
                 size={15}
                 style={styles.icon}
               />
-              <Text style={styles.text}>分享</Text>
+              <Text style={styles.text}>{translations.share}</Text>
             </View>
           </TouchableWithoutFeedback>
         </View>

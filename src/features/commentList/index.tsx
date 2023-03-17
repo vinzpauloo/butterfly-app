@@ -23,11 +23,12 @@ type CommentListProps = {
 
 const CommentList = (props: CommentListProps) => {
 	const token = userStore((store) => store.api_token);
+	
 	const [amountOfCommentsToGet, setAmountOfCommentsToGet] = useState(10);
 	const commentListRef = useRef<any>()
 	const { getComments } = CommentsService();
-	const { isLoading, refetch, data } = useQuery({
-		queryKey: ["workComments", props.workID],
+	const { isLoading, data, isRefetching } = useQuery({
+    queryKey: ["workComments", props.workID, amountOfCommentsToGet],
 		queryFn: () => getComments({
 			data: {
 				foreign_id: props.workID,
@@ -44,19 +45,12 @@ const CommentList = (props: CommentListProps) => {
 		},
 	});
 
-	async function increaseCommentsToGet() {
-		setAmountOfCommentsToGet((prev) => prev + 10)
-	}
-
-	function onScrollToEnd() {
-		if (data?.next_page_url !== null) {
-			increaseCommentsToGet().then(() => refetch())
-		}
+	const onScrollToEnd = () => {
+    if (data?.next_page_url !== null) setAmountOfCommentsToGet((prev) => prev + 10)
 	}
 
 	// subscribe to comment global store
-	const [setGlobalCommentListRef] = commentGlobalStore(
-		(state) => [state.setGlobalCommentListRef])
+	const [setGlobalCommentListRef] = commentGlobalStore((state) => [state.setGlobalCommentListRef])
 
 	useEffect(() => {
 		setGlobalCommentListRef(commentListRef)
@@ -73,27 +67,31 @@ const CommentList = (props: CommentListProps) => {
 				</>
 					: <CommentListSkeleton /> 
 				:
-				<FlashList
-					ref={commentListRef}
-					removeClippedSubviews={true}
-					estimatedItemSize={117}
-					showsVerticalScrollIndicator={false}
-					data={data?.data}
-					ListHeaderComponent={<>{props.customHeaderComponent}<Text style={styles.commentHeader}>全部评论 {data?.total}</Text></>}
-					ListFooterComponent={isLoading ? <Loading/> : <BottomMessage />}
-					keyExtractor={(_, index) => "" + index}
-					renderItem={({ item }: any) => (
-						<CommentItem
-							commentID={item.comment_id}
-							comment={item.comment}
-							username={item.username}
-							photo={item.photo}
-							replies={item.replies}
-						/>)}
-					ItemSeparatorComponent={() => <Divider color="#999" style={styles.divider} />}
-					onEndReachedThreshold={0.1}
-					onEndReached={onScrollToEnd}
-				/>
+				<>
+					<FlashList
+						ref={commentListRef}
+						removeClippedSubviews={true}
+						estimatedItemSize={117}
+						showsVerticalScrollIndicator={false}
+						data={data?.data}
+						ListHeaderComponent={<>{props.customHeaderComponent}<Text style={styles.commentHeader}>全部评论 {data?.total}</Text></>}
+						ListFooterComponent={data?.next_page_url === null ? <BottomMessage /> : null}
+						keyExtractor={(_, index) => "" + index}
+						renderItem={({ item }: any) => (
+							<CommentItem
+								commentID={item.comment_id}
+								comment={item.comment}
+								username={item.username}
+								photo={item.photo}
+								replies={item.replies}
+							/>)}
+						ItemSeparatorComponent={() => <Divider color="#999" style={styles.divider} />}
+						onEndReachedThreshold={0.1}
+						onEndReached={onScrollToEnd}
+					/>
+					{/* Loading has to be here else its too fast on ListFooterComponent */}
+					{(isLoading || isRefetching) && amountOfCommentsToGet > 10 ? <Loading /> : null}
+				</>
 			}
 		</View>
 	);

@@ -40,6 +40,7 @@ const SearchBar = ({ search, setSearch, hasSearch, setHasSearch, refetch }) => {
   };
 
   const searchWords = () => {
+    if (text.trim().length === 0) return null;
     setSearch(text);
     setHasSearch(true);
   };
@@ -49,11 +50,6 @@ const SearchBar = ({ search, setSearch, hasSearch, setHasSearch, refetch }) => {
     setSearch("");
     setText("");
     refetch();
-  };
-
-  const enterToSearch = () => {
-    setSearch(text);
-    setHasSearch(true);
   };
 
   // this will trigger when the history list or top list been click to display in input field
@@ -81,7 +77,7 @@ const SearchBar = ({ search, setSearch, hasSearch, setHasSearch, refetch }) => {
           onChangeText={(text: string) => setText(text)}
           placeholder="search model name"
           style={styles.inputField}
-          onSubmitEditing={enterToSearch}
+          onSubmitEditing={searchWords}
         />
         {text.length > 0 ? (
           <AntDesign

@@ -57,7 +57,7 @@ const Feed = ({ searchText, fetchChecker, setFetchChecker, page, setPage }) => {
 
   if (
     ((isLoading || refreshing) && page === 1 && prevSearch !== searchText) ||
-    (data.length === 0 && fetch)
+    (data.length === 0 && fetchChecker.feed)
   ) {
     return (
       <Container>

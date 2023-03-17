@@ -73,7 +73,7 @@ const Work = ({ searchText, fetchChecker, setFetchChecker, page, setPage }) => {
 
   if (
     (isLoading && page === 1 && prevSearch !== searchText) ||
-    (data.length === 0 && fetch)
+    (data.length === 0 && fetchChecker.work)
   ) {
     return (
       <Container>

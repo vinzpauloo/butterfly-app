@@ -192,7 +192,7 @@ const Users = ({
 
   if (
     (isLoading && page === 1 && prevSearch !== searchText) ||
-    (data.length === 0 && fetch)
+    (data.length === 0 && fetchChecker.users)
   ) {
     return (
       <Container>

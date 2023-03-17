@@ -14,11 +14,11 @@ type Props = {};
 const Vlog = (props: Props) => {
   const token = userStore((state) => state.api_token);
   const bottomTabHeight = useBottomTabBarHeight();
-  const { getWorks, getWorksPortrait } = WorkService();
-  const [localStoredVlog, setLocalStoredVlog] = useState([]);
+  const { getWorks } = WorkService();
+  const [data, setData] = useState([]);
 
   // FETCH RANDOM PORTRAIT WORKS
-  const { isLoading, data, refetch } = useQuery({
+  const { isLoading, refetch } = useQuery({
     queryKey: ["portraitWorks"],
     queryFn: () =>
       getWorks({
@@ -32,35 +32,14 @@ const Vlog = (props: Props) => {
       }),
     onSuccess: (data) => {
       console.log("=== random portrait video fetched from backend! ===");
-
-      let newElement = {
-        // workID of the video (which is also the foreignID to refer to)
-        workID: data.data[0]._id,
-        userID: data.data[0].user.id,
-        userName: data.data[0].user.username,
-        videoURL: data.data[0].video_url,
-        thumbnailURL: data.data[0].thumbnail_url,
-        title: data.data[0].title,
-        tags: data.data[0].tags,
-        amountOflikes: data.data[0].like.total_likes,
-        amountOfComments: data.data[0].comment.total_comments,
-        userPhoto: data.data[0].user.photo,
-        isFollowed: data?.data[0]?.is_followed,
-        isLiked: data?.data[0]?.is_liked,
-        isFavorite: data?.data[0]?.is_favorite,
-      };
-      setLocalStoredVlog((oldArray) => [...oldArray, newElement]);
+      setData((prev) => [...prev].concat(data?.data[0]));
     },
     onError: (error) => {
       console.log("Error", error);
     },
   });
 
-  // if reelsVideos props is passed, use that data list, else use a temporary array with randomly fetch videos
-  function onUserScrollDown() {
-    refetch();
-    console.log("total vids in VLOG: ", localStoredVlog.length);
-  }
+  const onUserScrollDown = () => { refetch() }
 
   if (isLoading) {
     return (
@@ -74,10 +53,9 @@ const Vlog = (props: Props) => {
 
   return (
     <PortraitVideo
-      reelsVideos={localStoredVlog}
+      reelsVideos={data}
       bottomTabHeight={bottomTabHeight}
       onUserScrollDown={onUserScrollDown}
-      workId={data.data[0]._id}
     />
   );
 };

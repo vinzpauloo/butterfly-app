@@ -89,31 +89,7 @@ const VlogScreen = () => {
       console.log("SingleVlog", error);
     },
     onSuccess: (data) => {
-      /*
-        this use to fetch only one time the single work id
-      */
-      if (nextID === 0) {
-        setNextID((prev) => prev + 1);
-      }
-
-      setData((prev) => [
-        ...prev,
-        {
-          workID: data._id,
-          userID: data.user_id,
-          userName: data.user.username,
-          videoURL: data.video_url,
-          thumbnail: data.thumbnail_url,
-          title: data.title,
-          tags: data.tags,
-          amountOflikes: data.like.total_likes,
-          amountOfComments: data.comment.total_comments,
-          userPhoto: data.user.photo,
-          isFollowed: data?.is_followed,
-          isLiked: data?.is_liked,
-          isFavorite: data?.is_favorite,
-        },
-      ]);
+      setData((prev) => [...prev].concat(data));
     },
   });
 
@@ -143,7 +119,6 @@ const VlogScreen = () => {
   return (
     <PortraitVideo
       reelsVideos={data}
-      workId={data[0]?.workID}
       hasBackButton={true}
       onUserScrollDown={onUserScrollDown}
     />

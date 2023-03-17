@@ -35,9 +35,9 @@ const PhotoGallery = () => {
   const [refreshing, setRefreshing] = useState(false);
   const [refreshingId, setRefreshingId] = useState(0);
 
-  const { isLoading } = useQuery({
+  const { isLoading, isRefetching } = useQuery({
     queryKey: ["singleAlbum", albumId, page, refreshingId],
-    queryFn: () => getAlbumById({ albumId, token }),
+    queryFn: () => getAlbumById({ albumId, token, page }),
     onSuccess: (data) => {
       console.log(`getAlbumById(${albumId})`, data.data);
       setLastPage(data.last_page);
@@ -115,10 +115,11 @@ const PhotoGallery = () => {
           ListFooterComponent={() => (
             <>
               {/* the gap will be remove if the lastpage is been fetch */}
-              {lastPage !== page || (lastPage === page && isLoading) ? (
+              {lastPage !== page ||
+              (lastPage === page && (isLoading || isRefetching)) ? (
                 <View style={{ marginBottom: 60 }}>
                   {/* to have a gap in bottom part of section to see the loading icon */}
-                  {isLoading ? <Loading /> : null}
+                  {isLoading || isRefetching ? <Loading /> : null}
                 </View>
               ) : null}
               {lastPage === page && !isLoading ? <BottomMessage /> : null}

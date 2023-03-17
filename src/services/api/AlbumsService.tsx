@@ -14,6 +14,7 @@ interface IAlbumParams {
 interface IAlbumSingleParams {
   albumId: number;
   token: string;
+  page: number;
 }
 
 const AlbumService = () => {
@@ -31,6 +32,7 @@ const AlbumService = () => {
       headers: { ...getHeaders(), Authorization: `Bearer ${params.token}` },
       url: `/albums/${params.albumId}`,
       method: "GET",
+      params: { page: params.page },
     });
   };
 

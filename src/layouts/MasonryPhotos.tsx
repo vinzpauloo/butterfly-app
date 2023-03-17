@@ -137,20 +137,20 @@ const MasonryPhotos = ({ filter }) => {
     <>
       <Container>
         <View style={styles.masonryContainer}>
-          <MasonryList
-            // refreshControl={
-            //   <RefreshControl
-            //     colors={[GLOBAL_COLORS.secondaryColor]}
-            //     refreshing={refreshing}
-            //     onRefresh={onRefresh}
-            //   />
-            // }
+          <MasonryFlashList
+            refreshControl={
+              <RefreshControl
+                colors={[GLOBAL_COLORS.secondaryColor]}
+                refreshing={refreshing}
+                onRefresh={onRefresh}
+              />
+            }
             data={data}
             numColumns={2}
             onEndReachedThreshold={0.01} // always make this default to 0.01 to have no bug for fetching data for the onEndReached -> https://github.com/facebook/react-native/issues/14015#issuecomment-346547942
             onMomentumScrollBegin={() => setStartScroll(false)}
             onEndReached={reachEnd}
-            // estimatedItemSize={200}
+            estimatedItemSize={200}
             keyExtractor={(_, index) => "" + index}
             renderItem={({ item, index }: any) => (
               <SingleImage

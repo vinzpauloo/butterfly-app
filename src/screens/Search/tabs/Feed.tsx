@@ -10,15 +10,15 @@ import { userStore } from "../../../zustand/userStore";
 import { useQuery } from "@tanstack/react-query";
 import { useIsFocused } from "@react-navigation/native";
 
-const Feed = ({ searchText }) => {
+const Feed = ({ searchText, fetchChecker, setFetchChecker, page, setPage }) => {
   const token = userStore((state) => state.api_token);
   const { getSearchPage } = GeneralSearch();
   const [data, setData] = useState([]);
-  const [page, setPage] = useState(1);
+  // const [page, setPage] = useState(1);
   const [lastPage, setLastPage] = useState(1);
   const [refreshing, setRefreshing] = useState(false);
   const [refreshingId, setRefreshingId] = useState(0);
-  const [fetch, setFetch] = useState(true);
+  // const [fetch, setFetch] = useState(true);
   const [prevSearch, setPrevSearch] = useState("");
   const isFocused = useIsFocused();
 
@@ -34,25 +34,35 @@ const Feed = ({ searchText }) => {
     },
     onSuccess: (data) => {
       setLastPage(data?.last_page);
+      setFetchChecker((prev) => {
+        return { ...prev, feed: false };
+      });
       if (prevSearch !== searchText) {
         setPrevSearch(searchText);
-        setFetch(false);
         setData(data.data);
       } else {
         setData((prev) => [...prev].concat(data.data));
       }
     },
-    enabled: fetch && isFocused,
+    enabled: fetchChecker.feed && isFocused,
   });
 
   useEffect(() => {
-    setFetch(true);
+    setFetchChecker((prev) => {
+      return { ...prev, feed: true };
+    });
     setData([]);
   }, [searchText]);
 
   useEffect(() => {
-    setFetch(true);
+    console.log("hahahaha");
+
+    setFetchChecker((prev) => {
+      return { ...prev, feed: true };
+    });
   }, [page]);
+
+  console.log("hununu");
 
   if (
     ((isLoading || refreshing) && page === 1 && prevSearch !== searchText) ||

@@ -15,16 +15,16 @@ import Loading from "components/Loading";
 import BottomMessage from "components/BottomMessage";
 import { useIsFocused } from "@react-navigation/native";
 
-const Work = ({ searchText }) => {
+const Work = ({ searchText, fetchChecker, setFetchChecker, page, setPage }) => {
   const token = userStore((state) => state.api_token);
   const { isOpen, onOpen, onClose } = useDisclose();
   const { getSearchPage } = GeneralSearch();
   const [data, setData] = useState([]);
-  const [page, setPage] = useState(1);
+  // const [page, setPage] = useState(1);
   const [lastPage, setLastPage] = useState(1);
   const [startScroll, setStartScroll] = useState(true);
   const [id, setId] = useState<number | null>(null);
-  const [fetch, setFetch] = useState(true);
+  // const [fetch, setFetch] = useState(true);
   const isFocused = useIsFocused();
   const [prevSearch, setPrevSearch] = useState("");
 
@@ -40,15 +40,17 @@ const Work = ({ searchText }) => {
     },
     onSuccess: (data) => {
       setLastPage(data.last_page);
+      setFetchChecker((prev) => {
+        return { ...prev, work: false };
+      });
       if (prevSearch !== searchText) {
         setPrevSearch(searchText);
-        setFetch(false);
         setData(data.data);
       } else {
         setData((prev) => [...prev].concat(data.data));
       }
     },
-    enabled: fetch && isFocused,
+    enabled: fetchChecker.work && isFocused,
   });
 
   const reachEnd = () => {
@@ -62,13 +64,21 @@ const Work = ({ searchText }) => {
   };
 
   useEffect(() => {
-    setFetch(true);
+    setFetchChecker((prev) => {
+      return { ...prev, work: true };
+    });
     setData([]);
   }, [searchText]);
 
   useEffect(() => {
-    setFetch(true);
+    console.log("hahahaha");
+
+    setFetchChecker((prev) => {
+      return { ...prev, work: true };
+    });
   }, [page]);
+
+  console.log("@@@@", fetchChecker.work);
 
   if (
     (isLoading && page === 1 && prevSearch !== searchText) ||

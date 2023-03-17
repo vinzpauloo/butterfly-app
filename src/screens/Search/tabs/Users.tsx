@@ -130,14 +130,20 @@ const ModelVideosContainer = ({ data }) => {
   );
 };
 
-const Users = ({ searchText }) => {
+const Users = ({
+  searchText,
+  fetchChecker,
+  setFetchChecker,
+  page,
+  setPage,
+}) => {
   const token = userStore((state) => state.api_token);
   const { getSearchPage } = GeneralSearch();
   const [data, setData] = useState([]);
-  const [page, setPage] = useState(1);
+  // const [page, setPage] = useState(1);
   const [lastPage, setLastPage] = useState(1);
   const [startScroll, setStartScroll] = useState(true);
-  const [fetch, setFetch] = useState(true);
+  // const [fetch, setFetch] = useState(true);
   const isFocused = useIsFocused();
   const [prevSearch, setPrevSearch] = useState("");
 
@@ -153,15 +159,17 @@ const Users = ({ searchText }) => {
     },
     onSuccess: (data) => {
       setLastPage(data.last_page);
+      setFetchChecker((prev) => {
+        return { ...prev, users: false };
+      });
       if (prevSearch !== searchText) {
         setPrevSearch(searchText);
-        setFetch(false);
         setData(data.data);
       } else {
         setData((prev) => [...prev].concat(data.data));
       }
     },
-    enabled: fetch && isFocused,
+    enabled: fetchChecker.users && isFocused,
   });
 
   const reachEnd = () => {
@@ -175,12 +183,16 @@ const Users = ({ searchText }) => {
   };
 
   useEffect(() => {
-    setFetch(true);
+    setFetchChecker((prev) => {
+      return { ...prev, users: true };
+    });
     setData([]);
   }, [searchText]);
 
   useEffect(() => {
-    setFetch(true);
+    setFetchChecker((prev) => {
+      return { ...prev, users: true };
+    });
   }, [page]);
 
   if (

@@ -290,21 +290,55 @@ const VideoList = ({ data }) => {
   );
 };
 
-const SearchOutput = ({ searchText, prevSearch, setPrevSearch }) => {
+const SearchOutput = ({
+  searchText,
+  fetchChecker,
+  setFetchChecker,
+  workPage,
+  setWorkPage,
+  usersPage,
+  setUsersPage,
+  feedPage,
+  setFeedPage,
+}) => {
   const data = {
     initialRoute: "视频",
     screens: [
       {
         name: "视频",
-        component: () => <Work searchText={searchText} />,
+        component: () => (
+          <Work
+            searchText={searchText}
+            fetchChecker={fetchChecker}
+            setFetchChecker={setFetchChecker}
+            page={workPage}
+            setPage={setWorkPage}
+          />
+        ),
       },
       {
         name: "用户",
-        component: () => <Users searchText={searchText} />,
+        component: () => (
+          <Users
+            searchText={searchText}
+            fetchChecker={fetchChecker}
+            setFetchChecker={setFetchChecker}
+            page={usersPage}
+            setPage={setFeedPage}
+          />
+        ),
       },
       {
         name: "动态",
-        component: () => <Feed searchText={searchText} />,
+        component: () => (
+          <Feed
+            searchText={searchText}
+            fetchChecker={fetchChecker}
+            setFetchChecker={setFetchChecker}
+            page={feedPage}
+            setPage={setFeedPage}
+          />
+        ),
       },
     ],
   };
@@ -318,6 +352,14 @@ const Search = () => {
   const [search, setSearch] = useState<string>("");
   const [history, setHistory] = useState([]);
   const [prevSearch, setPrevSearch] = useState("");
+  const [fetchChecker, setFetchChecker] = useState({
+    work: true,
+    users: true,
+    feed: false,
+  });
+  const [workPage, setWorkPage] = useState(1);
+  const [usersPage, setUsersPage] = useState(1);
+  const [feedPage, setFeedPage] = useState(1);
 
   const { isLoading, data, refetch } = useQuery({
     queryKey: ["search"],
@@ -347,8 +389,14 @@ const Search = () => {
         {hasSearch ? (
           <SearchOutput
             searchText={search}
-            prevSearch={prevSearch}
-            setPrevSearch={setPrevSearch}
+            fetchChecker={fetchChecker}
+            setFetchChecker={setFetchChecker}
+            workPage={workPage}
+            setWorkPage={setWorkPage}
+            usersPage={usersPage}
+            setUsersPage={setUsersPage}
+            feedPage={feedPage}
+            setFeedPage={setFeedPage}
           />
         ) : (
           <ScrollView>

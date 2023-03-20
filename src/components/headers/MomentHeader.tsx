@@ -20,7 +20,7 @@ const MomentHeader = ({ data, isLoading }) => {
 
   return (
     <View style={styles.certificateContainer} pointerEvents="box-none">
-      {data.featured.map((item, index) => (
+      {data?.featured?.map((item, index) => (
         <View key={index}>
           <View style={styles.content}>
             <View style={styles.dot} />
@@ -37,7 +37,7 @@ const MomentHeader = ({ data, isLoading }) => {
               </Text>
             </TouchableWithoutFeedback>
           </View>
-          {index === data.featured.length - 1 ? null : (
+          {index === data?.featured?.length - 1 ? null : (
             <Divider style={styles.divider} color="#999" />
           )}
         </View>

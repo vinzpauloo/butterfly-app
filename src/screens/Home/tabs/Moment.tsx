@@ -9,10 +9,10 @@ import { userStore } from "../../../zustand/userStore";
 
 const Moment = () => {
   const token = userStore((state) => state.api_token);
-  const { getFeeds } = FeedService();
+  const { getFeaturedFeeds } = FeedService();
   const { data, isLoading } = useQuery({
     queryKey: ["featuredFeeds"],
-    queryFn: () => getFeeds({ data: { featured: true }, token }),
+    queryFn: () => getFeaturedFeeds(token),
   });
 
   const tabsData = [

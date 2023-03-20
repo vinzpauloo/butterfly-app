@@ -15,12 +15,10 @@ const Home = () => {
   const [tabItems, setTabItems] = useState({ initialRoute: "", screens: [] });
   const { getNavbar } = SiteSettingsService();
 
-  const { isLoading } = useQuery({
+  const { isLoading, isRefetching } = useQuery({
     queryKey: ["navbar", lang],
     queryFn: () => getNavbar({ Locale: lang }),
     onSuccess: (data) => {
-      console.log("@@@@", data);
-
       const homeMainTab = data.filter((item) => item.title === "Home");
       const { subs, site_id } = homeMainTab[0];
       setTabItems(() => {
@@ -42,7 +40,7 @@ const Home = () => {
     },
   });
 
-  if (isLoading) {
+  if (isLoading || isRefetching) {
     return (
       <>
         <CarouselSkeleton />

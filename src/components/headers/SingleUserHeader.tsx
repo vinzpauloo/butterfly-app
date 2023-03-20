@@ -61,7 +61,9 @@ const SingleUserHeader = (props: Props) => {
 	const { getDonatorsOfContentCreator } = DonateService();
 	const { data: donatorsList } = useQuery({
 		queryKey: ["specificContentCreatorDonatorsList", userID],
-		queryFn: () => getDonatorsOfContentCreator({ user_id: userID, paginate: 6 }),
+		queryFn: () => getDonatorsOfContentCreator({
+			data: { user_id: userID, paginate: 6 },
+			token: token}),
 		onSuccess: (data) => {  },
 		onError: (error) => { alert(error) },
 	});

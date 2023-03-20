@@ -4,11 +4,10 @@ import { useQuery } from "@tanstack/react-query";
 import FeedService from "services/api/FeedService";
 
 import CommentList from "features/commentList";
-import FeedItem from "components/FeedItem";
-import Container from "components/Container";
-import FeedItemSkeleton from "components/skeletons/FeedItemSkeleton";
-import SingleFeedHeader from "components/headers/SingleFeedHeader";
 import CommentTextInput from "components/CommentTextInput";
+import Container from "components/Container";
+import FeedContent from "components/feed/FeedContent";
+import SingleFeedHeader from "components/headers/SingleFeedHeader";
 import { userStore } from "../../zustand/userStore";
 
 type Props = {};
@@ -30,20 +29,19 @@ const SingleFeedScreen = (props: Props) => {
       console.log(error);
     },
   });
-  console.log("FEEED ID", item?.feedId);
   return (
     <Container>
       <SingleFeedHeader title="洋情" />
-        <CommentList
-          workID={item?.feedId}
-          isFromFeed={true}
-          customHeaderComponent={<FeedItem item={specificFeed} />}
-        />
-        <CommentTextInput
-          workID={item?.feedId}
-          isFromFeed={true}
-          keyboardAvoidBehavior="height"
-        />
+      <CommentList
+        workID={item?.feedId}
+        isFromFeed={true}
+        customHeaderComponent={<FeedContent data={specificFeed} />}
+      />
+      <CommentTextInput
+        workID={item?.feedId}
+        isFromFeed={true}
+        keyboardAvoidBehavior="height"
+      />
     </Container>
   );
 };

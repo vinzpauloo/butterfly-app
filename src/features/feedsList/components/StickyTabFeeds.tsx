@@ -98,7 +98,7 @@ const StickyTabFeeds = ({
             {index === 0 && (
               <MomentHeader data={headerData} isLoading={headerLoading} />
             )}
-            <FeedContent key={index} data={item} />
+            <FeedContent key={index} data={item} singleFeedPadding={10} />
           </>
         )}
         ListFooterComponent={() => (

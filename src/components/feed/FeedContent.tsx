@@ -161,12 +161,14 @@ const BottomContent = ({ totalComments, totalLikes, id, isLiked }) => {
   );
 };
 
-const FeedContent = ({ data }) => {
+const FeedContent = ({ data, singleFeedPadding = 0 }) => {
   const item = !!data.item ? data.item : data;
   const [open, setOpen] = useState(false);
 
   return (
-    <View style={styles.mainContainer}>
+    <View
+      style={[styles.mainContainer, { paddingHorizontal: singleFeedPadding }]}
+    >
       <Header user={item.user} userId={item.user_id} setOpen={setOpen} />
       <Captions tags={item.tags} story={item.string_story} id={item._id} />
       {!!item?.images && <Images images={item?.images} />}
@@ -189,7 +191,6 @@ export default FeedContent;
 const styles = StyleSheet.create({
   //FEEDCONTENT
   mainContainer: {
-    paddingHorizontal: 10,
     paddingVertical: 10,
     backgroundColor: GLOBAL_COLORS.primaryColor,
   },

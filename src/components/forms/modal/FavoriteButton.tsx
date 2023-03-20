@@ -6,10 +6,12 @@ import { useMutation, useQuery } from "@tanstack/react-query";
 
 import CustomerService from "services/api/CustomerService";
 import { GLOBAL_COLORS } from "global";
+import { translationStore } from "../../../zustand/translationStore";
 import { userStore } from "../../../zustand/userStore";
 
 const FavoriteButton = ({ isOpen, id }) => {
   const token = userStore((store) => store.api_token);
+  const translations = translationStore((state) => state.translations);
 
   const { unfavoriteVideo, favoriteVideo, favoriteChecker } = CustomerService();
   const [isAlreadyFavorite, setIsAlreadyFavorite] = useState(false);
@@ -105,7 +107,7 @@ const FavoriteButton = ({ isOpen, id }) => {
           marginVertical: 10,
         }}
       >
-        收藏
+        {translations.favorite}
       </Text>
     </Pressable>
   );

@@ -12,12 +12,14 @@ import Ionicons from "react-native-vector-icons/Ionicons";
 
 import Banner10 from "assets/images/banner10.jpg";
 import SingleTagTabs from "./tabs/SingleTagTabs";
+import { translationStore } from "../../zustand/translationStore";
 
 const { height, width } = Dimensions.get("window");
 
 const ProfileBanner = () => {
   const navigation = useNavigation<any>();
   const route = useRoute<any>();
+  const translations = translationStore((state) => state.translations);
 
   return (
     <View style={styles.bannerContainer}>
@@ -36,7 +38,7 @@ const ProfileBanner = () => {
         />
         <View style={styles.descriptionContainer}>
           <Text style={styles.description}>{route.params?.tag}</Text>
-          <Text style={styles.description}>点赞</Text>
+          <Text style={styles.description}>{translations.like}</Text>
         </View>
       </View>
     </View>

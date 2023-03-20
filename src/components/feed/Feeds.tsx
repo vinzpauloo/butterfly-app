@@ -48,7 +48,9 @@ const Feeds = ({
 
   return (
     <Container>
-      {isLoading && page === 1 ? <FeedItemSkeleton/> :
+      {isLoading && page === 1 ? (
+        <FeedItemSkeleton />
+      ) : (
         <VirtualizedList
           refreshControl={
             <RefreshControl
@@ -69,7 +71,7 @@ const Feeds = ({
           getItemCount={() => data.length}
           keyExtractor={(item: any) => item.id}
           renderItem={({ item, index }) => (
-            <FeedContent key={index} data={item} />
+            <FeedContent key={index} data={item} singleFeedPadding={10} />
           )}
           ListFooterComponent={() => (
             <>
@@ -84,7 +86,7 @@ const Feeds = ({
             </>
           )}
         />
-      }
+      )}
     </Container>
   );
 };

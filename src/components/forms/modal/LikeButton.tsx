@@ -4,12 +4,14 @@ import React, { useState } from "react";
 import Fontisto from "react-native-vector-icons/Fontisto";
 import { useMutation, useQuery } from "@tanstack/react-query";
 
-import { GLOBAL_COLORS } from "global";
 import LikeService from "services/api/LikeService";
+import { GLOBAL_COLORS } from "global";
+import { translationStore } from "../../../zustand/translationStore";
 import { userStore } from "../../../zustand/userStore";
 
 const LikeButton = ({ isOpen, id }) => {
   const token = userStore((store) => store.api_token);
+  const translations = translationStore((state) => state.translations);
   const { unlikeWork, likeWork, likeChecker } = LikeService();
   const [isAlreadyLike, setIsAlreadyLike] = useState(false);
 
@@ -106,7 +108,7 @@ const LikeButton = ({ isOpen, id }) => {
           marginVertical: 10,
         }}
       >
-        关注
+        {translations.like}
       </Text>
     </Pressable>
   );

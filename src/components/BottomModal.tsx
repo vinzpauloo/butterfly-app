@@ -2,15 +2,17 @@ import React from "react";
 import { Actionsheet, Box, Center } from "native-base";
 import { Dimensions, Pressable, StyleSheet, Text, View } from "react-native";
 
-import { GLOBAL_COLORS } from "global";
+import FavoriteButton from "./forms/modal/FavoriteButton";
 import Fontisto from "react-native-vector-icons/Fontisto";
 import LikeButton from "./forms/modal/LikeButton";
-import FavoriteButton from "./forms/modal/FavoriteButton";
+import { GLOBAL_COLORS } from "global";
 import { useNavigation } from "@react-navigation/native";
+import { translationStore } from "../zustand/translationStore";
 
 const { width } = Dimensions.get("window");
 
 const Modal = ({ onOpen, isOpen, onClose, id }) => {
+  const translations = translationStore((state) => state.translations);
   const navigation = useNavigation<any>();
   return (
     <Center>
@@ -52,14 +54,16 @@ const Modal = ({ onOpen, isOpen, onClose, id }) => {
                     marginVertical: 10,
                   }}
                 >
-                  分享
+                  {translations.share}
                 </Text>
               </Pressable>
               <LikeButton isOpen={isOpen} id={id} />
               <FavoriteButton isOpen={isOpen} id={id} />
             </View>
             <Pressable onPress={onClose}>
-              <Text style={{ color: "#fff", marginVertical: 15 }}>取消</Text>
+              <Text style={{ color: "#fff", marginVertical: 15 }}>
+                {translations.cancel}
+              </Text>
             </Pressable>
           </Box>
         </Actionsheet.Content>

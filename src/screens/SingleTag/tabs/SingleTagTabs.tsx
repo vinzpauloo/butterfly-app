@@ -7,20 +7,24 @@ import MaterialTopTabs from "layouts/navigators/MaterialTopTabs";
 import Moment from "./Moment";
 import Recommended from "./Recommended";
 import { GLOBAL_COLORS } from "global";
+import { translationStore } from "../../../zustand/translationStore";
 
 const SingleTagTabs = () => {
   const route = useRoute<any>();
+  const translations = translationStore((state) => state.translations);
 
   const singleTagSubNav = {
-    initialRoute: "推荐",
+    initialRoute: translations.recommend,
     screens: [
       {
-        name: "推荐",
+        name: translations.recommend,
         component: () => <Recommended tag={route.params.tag} />,
       },
       {
-        name: "动态",
-        component: () => <Moment userId={route.params.userId} tag={route.params.tag} />,
+        name: translations.moment,
+        component: () => (
+          <Moment userId={route.params.userId} tag={route.params.tag} />
+        ),
       },
     ],
   };

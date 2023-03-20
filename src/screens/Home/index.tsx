@@ -4,13 +4,16 @@ import React, { useState } from "react";
 import Ionicons from "react-native-vector-icons/Ionicons";
 import MaterialTopTabs from "layouts/navigators/MaterialTopTabs";
 import { SelectCountry } from "react-native-element-dropdown";
-import { topMainNav } from "data/topMainNav";
 import { useNavigation } from "@react-navigation/native";
 
 import Announcement from "features/announcement";
 import FlagUSA from "assets/images/Flag-USA.png";
 import FlagChina from "assets/images/Flag-China.webp";
+import Following from "./tabs/Following";
+import Home from "./tabs/Home";
+import Moment from "./tabs/Moment";
 import localizations from "i18n/localizations";
+import Photography from "./tabs/Photography";
 import PopupAds from "features/ads/components/PopupAds";
 import { GLOBAL_COLORS } from "global";
 import { translationStore } from "../../zustand/translationStore";
@@ -97,6 +100,28 @@ const Intl = () => {
 };
 
 const HomeTab = () => {
+  const translations = translationStore((state) => state.translations);
+  const topMainNav = {
+    initialRoute: translations.home,
+    screens: [
+      {
+        name: translations.following,
+        component: () => <Following />,
+      },
+      {
+        name: translations.home,
+        component: () => <Home />,
+      },
+      {
+        name: translations.moment,
+        component: () => <Moment />,
+      },
+      {
+        name: translations.photography,
+        component: () => <Photography />,
+      },
+    ],
+  };
   return (
     <>
       <MaterialTopTabs data={topMainNav} intl={<Intl />} search={<Search />} />
@@ -138,22 +163,22 @@ const styles = StyleSheet.create({
   dropdown: {
     marginHorizontal: 16,
     height: 30,
-    width: 90,
+    width: 80,
     backgroundColor: GLOBAL_COLORS.primaryTextColor,
     borderRadius: 22,
     paddingHorizontal: 8,
   },
   imageStyle: {
-    width: 24,
-    height: 24,
-    borderRadius: 12,
+    width: 20,
+    height: 20,
+    borderRadius: 10,
   },
   placeholderStyle: {
-    fontSize: 16,
+    fontSize: 14,
   },
   selectedTextStyle: {
-    fontSize: 16,
-    marginLeft: 8,
+    fontSize: 14,
+    marginLeft: 5,
   },
   iconStyle: {
     width: 20,

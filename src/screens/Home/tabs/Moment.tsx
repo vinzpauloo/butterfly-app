@@ -4,11 +4,13 @@ import FeedService from "services/api/FeedService";
 import Container from "components/Container";
 import MaterialTopTabs from "layouts/navigators/MaterialTopTabs";
 import StickyTabFeeds from "features/feedsList/components/StickyTabFeeds";
+import { translationStore } from "../../../zustand/translationStore";
 import { useQuery } from "@tanstack/react-query";
 import { userStore } from "../../../zustand/userStore";
 
 const Moment = () => {
   const token = userStore((state) => state.api_token);
+  const translations = translationStore((state) => state.translations);
   const { getFeaturedFeeds } = FeedService();
   const { data, isLoading } = useQuery({
     queryKey: ["featuredFeeds"],
@@ -17,8 +19,7 @@ const Moment = () => {
 
   const tabsData = [
     {
-      // name: "recommended",
-      name: "推荐",
+      name: translations.recommend,
       component: () => (
         <StickyTabFeeds
           key="recommendedFeeds"
@@ -30,8 +31,7 @@ const Moment = () => {
       ),
     },
     {
-      // name: "latest",
-      name: "最新",
+      name: translations.latest,
       component: () => (
         <StickyTabFeeds
           key="latestFeeds"
@@ -43,8 +43,7 @@ const Moment = () => {
       ),
     },
     {
-      // name: "videos",
-      name: "视频",
+      name: translations.video,
       component: () => (
         <StickyTabFeeds
           key="videoFeeds"
@@ -56,8 +55,7 @@ const Moment = () => {
       ),
     },
     {
-      // name: "photo",
-      name: "图片",
+      name: translations.photo,
       component: () => (
         <StickyTabFeeds
           key="photoFeeds"
@@ -69,8 +67,7 @@ const Moment = () => {
       ),
     },
     {
-      // name: "services",
-      name: "服务",
+      name: translations.service,
       component: () => (
         <StickyTabFeeds
           key="servicesFeeds"
@@ -84,7 +81,7 @@ const Moment = () => {
   ];
 
   const tabItems = {
-    initialRoute: "推荐",
+    initialRoute: translations.recommend,
     screens: tabsData,
   };
 

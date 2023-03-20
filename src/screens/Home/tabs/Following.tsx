@@ -115,6 +115,7 @@ const NoFollowing = ({
   setData,
   setRefreshingId,
 }) => {
+  const translations = translationStore((state) => state.translations);
   const onRefresh = useCallback(() => {
     setRefreshing(true);
     setTimeout(() => {
@@ -144,18 +145,20 @@ const NoFollowing = ({
     >
       <Container>
         <Image source={NoFollowingImg} style={styles.image} />
-        <Text style={styles.popular}>近期热门用户</Text>
+        <Text style={styles.popular}>{translations.popularUsers}</Text>
         {data.map((info, index) => (
-          <SectionContent
-            key={index}
-            index={index}
-            info={info}
-            onOpen={onOpen}
-            setId={setId}
-            data={data}
-          />
+          <>
+            <SectionContent
+              key={index}
+              index={index}
+              info={info}
+              onOpen={onOpen}
+              setId={setId}
+              data={data}
+            />
+            {data.length - 1 === index && <BottomMessage />}
+          </>
         ))}
-        <BottomMessage />
       </Container>
     </ScrollView>
   );
@@ -403,6 +406,7 @@ export default Following;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    backgroundColor: GLOBAL_COLORS.primaryColor,
   },
   thumbnailContainer: {
     position: "relative",

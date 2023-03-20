@@ -68,7 +68,7 @@ const FollowersScreen = () => {
 				numColumns={4}
 				renderItem={({ item, index }: any) => <Customer customerPictureURL={item?.photo} customerName={item?.username} />}
 				keyExtractor={(item, index) => "" + index}
-				ListEmptyComponent={NoCacheMessage}
+				ListEmptyComponent={isLoading ? null : <NoCacheMessage/>}
 				ListFooterComponent={isLoading ? <Loading/> : <BottomMessage />}
 				onEndReachedThreshold={0.1}
 				onEndReached={onScrollToEnd}

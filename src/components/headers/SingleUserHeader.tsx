@@ -25,47 +25,18 @@ const SingleUserHeader = (props: Props) => {
 	const [isCreatorFollowed, setIsCreatorFollowed] = useState(null)
 	const token = userStore((state) => state.api_token);
 
-	// get specific content creators name, cover photo, photo, note
-	const { getSpecificContentCreator, getFollowersCount, getDonatorsCount } = UserService();
+	// get specific content creators data
+	const { getSpecificContentCreator } = UserService();
 	const { data: creatorData, isLoading } = useQuery({
 		queryKey: ["specificContentCreatorData", userID],
 		queryFn: () => getSpecificContentCreator({
 			data: { user_id: userID },
 			token: token
 		}),
-		onSuccess: (data) => { setIsCreatorFollowed(data?.is_followed) },
+		onSuccess: (data) => {
+			setIsCreatorFollowed(data?.is_followed)
+		},
 		onError: (error) => { console.log(error) },
-	});
-
-	// get specific content creators follower count
-	const { data: followerCount } = useQuery({
-		queryKey: ["specificContentCreatorFollowerCount", userID],
-		queryFn: () => getFollowersCount({
-			data: { user_id: userID },
-			token: token }),
-		onSuccess: () => { },
-		onError: (error) => { console.log(error) },
-	});
-
-	// get specific content creators follower count
-	const { data: donatorCount } = useQuery({
-		queryKey: ["specificContentCreatorDonatorCount", userID],
-		queryFn: () => getDonatorsCount({
-			data: { user_id: userID },
-			token: token }),
-		onSuccess: () => { },
-		onError: (error) => { console.log(error) },
-	});
-
-	// get specific content creators donators list (the first 6 for display purposes)
-	const { getDonatorsOfContentCreator } = DonateService();
-	const { data: donatorsList } = useQuery({
-		queryKey: ["specificContentCreatorDonatorsList", userID],
-		queryFn: () => getDonatorsOfContentCreator({
-			data: { user_id: userID, paginate: 6 },
-			token: token}),
-		onSuccess: (data) => {  },
-		onError: (error) => { alert(error) },
 	});
 
 	const { followCreator, unfollowCreator } = CustomerService();
@@ -125,7 +96,7 @@ const SingleUserHeader = (props: Props) => {
 						<View style={styles.summaryContainer}>
 							<TouchableWithoutFeedback onPress={goToFansScreen} >
 								<View style={styles.summaryContentMiddle} pointerEvents="box-none">
-									<Text style={styles.summaryNumber}>{followerCount}</Text>
+										<Text style={styles.summaryNumber}>{creatorData?.follower_count}</Text>
 									<Text style={styles.summaryText}>粉丝</Text>
 								</View>
 							</TouchableWithoutFeedback>
@@ -138,12 +109,12 @@ const SingleUserHeader = (props: Props) => {
 				</ImageBackground>
 				<View style={styles.donatorContainer} pointerEvents="box-none">
 					<View style={styles.profilesImagesContent}>
-						{donatorsList?.data.map((item, index) => (
-							<Image source={{ uri: item?.customer?.photo }} style={[styles.profileImgs, { zIndex: index, left: index * 20 }]} />
+						{creatorData?.donator_list?.map((item, index) => (
+							<Image source={{ uri: item?.photo }} style={[styles.profileImgs, { zIndex: index, left: index * 20 }]} />
 						))}
 					</View>
 					<View style={styles.buttons} pointerEvents="box-none">
-						<Text style={styles.donateText}>{donatorCount?.total_donators}人打赏</Text>
+						<Text style={styles.donateText}>{creatorData?.donator_count}人打赏</Text>
 						<TouchableWithoutFeedback  onPress={() => setOpenDonateModal(true)}>
 							<View style={styles.donateBtn} pointerEvents="box-none">
 								<Text style={styles.donateText}>打赏</Text>

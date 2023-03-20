@@ -1,24 +1,9 @@
 import { getHeaders } from "lib/cryptoJs";
 import request from "lib/request";
 
-interface IFeed {
-  site_id?: number;
-  user_id?: number;
-  tag?: string;
-  with?: string;
-  page?: number;
-  ads?: boolean;
-  latest?: boolean;
-  video_only?: boolean;
-  images_only?: boolean;
-  services_only?: boolean;
-  featured?: boolean;
-  recommended?: boolean;
-}
-
 interface IFeeds {
-  data: {
-    user_id?: number
+  data?: {
+    user_id?: number;
     feedId?: string;
     tag?: string;
     with?: string;
@@ -43,10 +28,10 @@ const FeedService = () => {
     });
   };
 
-  const getFeaturedFeeds = (params: IFeed) => {
+  const getFeaturedFeeds = (token: string) => {
     return request({
-      headers: getHeaders(),
-      url: "/feeds/featured",
+      headers: { ...getHeaders(), Authorization: `Bearer ${token}` },
+      url: "/feature/feeds",
       method: "GET",
     });
   };

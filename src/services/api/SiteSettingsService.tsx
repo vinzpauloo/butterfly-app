@@ -1,10 +1,14 @@
 import { getHeaders } from "lib/cryptoJs";
 import request from "lib/request";
 
+interface INavbarParams {
+  Locale: string;
+}
+
 const SiteSettingsService = () => {
-  const getNavbar = () => {
+  const getNavbar = (params: INavbarParams) => {
     return request({
-      headers: getHeaders(),
+      headers: { ...getHeaders(), Locale: params.Locale },
       url: "/navbars",
       method: "GET",
     });

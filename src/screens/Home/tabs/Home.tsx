@@ -8,15 +8,19 @@ import MaterialTopTabs from "layouts/navigators/MaterialTopTabs";
 import CarouselSkeleton from "components/skeletons/CarouselSkeleton";
 import VideoListSkeleton from "components/skeletons/VideoListSkeleton";
 import SiteSettingsService from "services/api/SiteSettingsService";
+import { translationStore } from "../../../zustand/translationStore";
 
 const Home = () => {
+  const lang = translationStore((state) => state.lang);
   const [tabItems, setTabItems] = useState({ initialRoute: "", screens: [] });
   const { getNavbar } = SiteSettingsService();
 
   const { isLoading } = useQuery({
-    queryKey: ["navbar"],
-    queryFn: () => getNavbar(),
+    queryKey: ["navbar", lang],
+    queryFn: () => getNavbar({ Locale: lang }),
     onSuccess: (data) => {
+      console.log("@@@@", data);
+
       const homeMainTab = data.filter((item) => item.title === "Home");
       const { subs, site_id } = homeMainTab[0];
       setTabItems(() => {

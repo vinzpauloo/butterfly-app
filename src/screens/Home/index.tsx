@@ -48,7 +48,7 @@ const Intl = () => {
     },
     {
       value: "2",
-      lable: "CH",
+      lable: "CN",
       image: FlagChina,
     },
   ];
@@ -163,7 +163,7 @@ const styles = StyleSheet.create({
   dropdown: {
     marginHorizontal: 16,
     height: 30,
-    width: 80,
+    width: 60,
     backgroundColor: GLOBAL_COLORS.primaryTextColor,
     borderRadius: 22,
     paddingHorizontal: 8,
@@ -181,7 +181,8 @@ const styles = StyleSheet.create({
     marginLeft: 5,
   },
   iconStyle: {
-    width: 20,
-    height: 20,
+    width: 15,
+    height: 15,
+    marginRight: 5,
   },
 });

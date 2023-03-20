@@ -63,7 +63,9 @@ export const Header = ({ data }) => {
               size={13}
               style={styles.icon}
             />
-            <Text style={styles.text}>未经作者允许禁止转载</Text>
+            <Text style={styles.text} numberOfLines={2}>
+              {translations.reprinting}
+            </Text>
           </View>
         </View>
         <View style={styles.tags} pointerEvents="box-none">

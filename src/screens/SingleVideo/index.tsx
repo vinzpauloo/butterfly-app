@@ -84,6 +84,7 @@ const HeaderTitle = ({ data }) => {
 
 const SingleVideoScreen = () => {
   const token = userStore((state) => state.api_token);
+  const translations = translationStore((state) => state.translations);
   const { getWorkById } = WorkService();
   const route = useRoute<any>();
   const isFocus = useIsFocused();
@@ -111,7 +112,7 @@ const SingleVideoScreen = () => {
       <HeaderTitle data={data} />
       <View style={styles.videoContent}>
         <Pressable style={styles.watermarkContainer}>
-          <Text style={styles.watermarkText}>购买视频观看完整版</Text>
+          <Text style={styles.watermarkText}>{translations.buyTheVideo}</Text>
         </Pressable>
         <VideoPlayer url={data?.video_url} isFocus={isFocus} />
       </View>

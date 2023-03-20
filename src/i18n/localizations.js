@@ -22,6 +22,8 @@ const localizations = {
     others: "Others",
     recommended: "Recommended",
     comments: "Comments",
+    buyTheVideo: "Buy the video to watch the full version",
+    reprinting: "Copyright do not distribute",
   },
   cn: {
     home: "首页",
@@ -46,6 +48,8 @@ const localizations = {
     others: "TA的视频",
     recommended: "更多推荐",
     comments: "评论",
+    buyTheVideo: "购买视频观看完整版",
+    reprinting: "未经作者允许禁止转载",
   },
 };
 

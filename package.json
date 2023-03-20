@@ -47,6 +47,7 @@
     "react-native": "0.70.5",
     "react-native-collapsible-tab-view": "^5.0.0-rc.13",
     "react-native-dotenv": "^3.4.7",
+    "react-native-element-dropdown": "^2.8.1",
     "react-native-gesture-handler": "~2.8.0",
     "react-native-mmkv": "2.5.1",
     "react-native-modal": "^13.0.1",

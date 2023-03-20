@@ -1,15 +1,18 @@
-import { StyleSheet, Switch, Text, TouchableOpacity } from "react-native";
+import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import React, { useState } from "react";
 
 import Ionicons from "react-native-vector-icons/Ionicons";
+import MaterialTopTabs from "layouts/navigators/MaterialTopTabs";
+import { SelectCountry } from "react-native-element-dropdown";
+import { topMainNav } from "data/topMainNav";
 import { useNavigation } from "@react-navigation/native";
 
-import MaterialTopTabs from "layouts/navigators/MaterialTopTabs";
-import { topMainNav } from "data/topMainNav";
-
-import PopupAds from "features/ads/components/PopupAds";
 import Announcement from "features/announcement";
+import FlagUSA from "assets/images/Flag-USA.png";
+import FlagChina from "assets/images/Flag-China.webp";
 import localizations from "i18n/localizations";
+import PopupAds from "features/ads/components/PopupAds";
+import { GLOBAL_COLORS } from "global";
 import { translationStore } from "../../zustand/translationStore";
 
 // Search Icon
@@ -34,28 +37,62 @@ const Search = () => {
 
 // Change Language
 const Intl = () => {
+  const local_data = [
+    {
+      value: "1",
+      lable: "EN",
+      image: FlagUSA,
+    },
+    {
+      value: "2",
+      lable: "CH",
+      image: FlagChina,
+    },
+  ];
+  const [country, setCountry] = useState("1");
   const [setLang, setTranslations] = translationStore((state) => [
     state.setLang,
     state.setTranslations,
   ]);
-  const [isEnabled, setIsEnabled] = useState(false);
-  const toggleSwitch = (event) => {
-    setIsEnabled((previousState) => !previousState);
 
-    let newLang = event ? "cn" : "en";
+  const changeLanguage = (value) => {
+    switch (value) {
+      case "1":
+        return "en";
+      case "2":
+        return "cn";
+      default:
+        return "en";
+    }
+  };
+
+  const toggleSwitch = (event) => {
+    setCountry(event.value);
+
+    let newLang = changeLanguage(event.value);
     setLang(newLang);
     setTranslations(localizations[newLang]);
   };
 
   return (
-    <Switch
-      style={styles.intl}
-      trackColor={{ false: "#767577", true: "#81b0ff" }}
-      thumbColor={isEnabled ? "#f5dd4b" : "#f4f3f4"}
-      ios_backgroundColor="#3e3e3e"
-      onValueChange={toggleSwitch}
-      value={isEnabled}
-    />
+    <View style={styles.intl}>
+      <SelectCountry
+        style={[styles.dropdown]}
+        selectedTextStyle={styles.selectedTextStyle}
+        placeholderStyle={styles.placeholderStyle}
+        imageStyle={styles.imageStyle}
+        iconStyle={styles.iconStyle}
+        maxHeight={200}
+        value={country}
+        data={local_data}
+        valueField="value"
+        labelField="lable"
+        imageField="image"
+        onChange={(event) => {
+          toggleSwitch(event);
+        }}
+      />
+    </View>
   );
 };
 
@@ -86,15 +123,40 @@ const styles = StyleSheet.create({
     position: "absolute",
     top: 0,
     right: 60,
-    height: 40,
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "center",
     marginRight: 10,
+    marginVertical: 5,
   },
   searchText: {
     color: "#fff",
     fontSize: 12,
     marginHorizontal: 5,
+  },
+
+  dropdown: {
+    marginHorizontal: 16,
+    height: 30,
+    width: 90,
+    backgroundColor: GLOBAL_COLORS.primaryTextColor,
+    borderRadius: 22,
+    paddingHorizontal: 8,
+  },
+  imageStyle: {
+    width: 24,
+    height: 24,
+    borderRadius: 12,
+  },
+  placeholderStyle: {
+    fontSize: 16,
+  },
+  selectedTextStyle: {
+    fontSize: 16,
+    marginLeft: 8,
+  },
+  iconStyle: {
+    width: 20,
+    height: 20,
   },
 });

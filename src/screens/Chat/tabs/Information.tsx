@@ -137,7 +137,7 @@ const Information = (props: Props) => {
             navigation.navigate("InformationScreen", { postTitle: "粉丝" });
           }}
         >
-          <VStack space={1.5}>
+          <VStack space={1.5} style={styles.boxContainer}>
             <Box style={styles.box}>
               <Feather name="heart" color={"white"} size={24} />
             </Box>
@@ -149,7 +149,7 @@ const Information = (props: Props) => {
             navigation.navigate("InformationScreen", { postTitle: "点赞" });
           }}
         >
-          <VStack space={1.5}>
+          <VStack space={1.5} style={styles.boxContainer}>
             <Box style={styles.box}>
               <AntDesign name="like2" color={"white"} size={24} />
             </Box>
@@ -161,7 +161,7 @@ const Information = (props: Props) => {
             navigation.navigate("InformationScreen", { postTitle: "评论" });
           }}
         >
-          <VStack space={1.5}>
+          <VStack space={1.5} style={styles.boxContainer}>
             <Box style={styles.box}>
               <FontAwesome name="comment-o" color={"white"} size={24} />
             </Box>
@@ -173,7 +173,7 @@ const Information = (props: Props) => {
             navigation.navigate("InformationScreen", { postTitle: "收益" });
           }}
         >
-          <VStack space={1.5}>
+          <VStack space={1.5} style={styles.boxContainer}>
             <Box style={styles.box}>
               <Fontisto name="money-symbol" color={"white"} size={24} />
             </Box>
@@ -185,7 +185,7 @@ const Information = (props: Props) => {
             navigation.navigate("InformationScreen", { postTitle: "系统" });
           }}
         >
-          <VStack space={1.5}>
+          <VStack space={1.5} style={styles.boxContainer}>
             <Box style={styles.box}>
               <Octicons name="gear" color={"white"} size={24} />
             </Box>
@@ -224,7 +224,14 @@ const styles = StyleSheet.create({
     paddingHorizontal: 24,
     justifyContent: "space-between",
   },
+  boxContainer: {
+    alignItems: "center",
+  },
   box: {
+    alignItems: "center",
+    justifyContent: "center",
+    width: 50,
+    height: 50,
     padding: 8,
     borderWidth: 1,
     borderColor: "white",

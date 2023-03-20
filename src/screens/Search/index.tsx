@@ -304,11 +304,12 @@ const SearchOutput = ({
   feedPage,
   setFeedPage,
 }) => {
+  const translations = translationStore((state) => state.translations);
   const data = {
-    initialRoute: "视频",
+    initialRoute: translations.video,
     screens: [
       {
-        name: "视频",
+        name: translations.video,
         component: () => (
           <Work
             searchText={searchText}
@@ -320,7 +321,7 @@ const SearchOutput = ({
         ),
       },
       {
-        name: "用户",
+        name: translations.user,
         component: () => (
           <Users
             searchText={searchText}
@@ -332,7 +333,7 @@ const SearchOutput = ({
         ),
       },
       {
-        name: "动态",
+        name: translations.moment,
         component: () => (
           <Feed
             searchText={searchText}

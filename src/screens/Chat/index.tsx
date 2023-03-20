@@ -1,11 +1,27 @@
-import React from 'react'
+import React from "react";
 import MaterialTopTabs from "layouts/navigators/MaterialTopTabs";
-import { chatTabSubNav } from "data/chatTabSubNav";
+import All from "./tabs/All";
+import Information from "./tabs/Information";
+import { translationStore } from "../../zustand/translationStore";
 
-type Props = {}
+type Props = {};
 
 const Chat = (props: Props) => {
+  const translations = translationStore((state) => state.translations);
+  const chatTabSubNav = {
+    initialRoute: translations.all,
+    screens: [
+      {
+        name: translations.all,
+        component: (props) => <All {...props} title={"all"} />,
+      },
+      {
+        name: translations.information,
+        component: (props) => <Information {...props} title={"information"} />,
+      },
+    ],
+  };
   return <MaterialTopTabs data={chatTabSubNav} />;
-}
+};
 
-export default Chat
+export default Chat;

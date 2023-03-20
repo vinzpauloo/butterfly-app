@@ -21,6 +21,7 @@ import BottomMessage from "components/BottomMessage";
 
 import { messageList } from "data/messageList";
 import { useNavigation } from "@react-navigation/native";
+import { translationStore } from "../../../zustand/translationStore";
 
 const windowWidth = Dimensions.get("window").width;
 
@@ -89,43 +90,44 @@ const MessageItemSkeleton = () => {
     <>
       <VStack style={styles.messageContainer}>
         <HStack space={3}>
-          <Skeleton size={42} rounded="full"/>
+          <Skeleton size={42} rounded="full" />
           <VStack space={1} w="full">
-            <Skeleton.Text lines={1} w="1/6"/>
-            <Skeleton.Text lines={2} w="5/6" mt={3}/>
+            <Skeleton.Text lines={1} w="1/6" />
+            <Skeleton.Text lines={2} w="5/6" mt={3} />
           </VStack>
         </HStack>
       </VStack>
       <VStack style={styles.messageContainer}>
         <HStack space={3}>
-          <Skeleton size={42} rounded="full"/>
+          <Skeleton size={42} rounded="full" />
           <VStack space={1} w="full">
-            <Skeleton.Text lines={1} w="1/6"/>
-            <Skeleton.Text lines={2} w="5/6" mt={3}/>
+            <Skeleton.Text lines={1} w="1/6" />
+            <Skeleton.Text lines={2} w="5/6" mt={3} />
           </VStack>
         </HStack>
       </VStack>
       <VStack style={styles.messageContainer}>
         <HStack space={3}>
-          <Skeleton size={42} rounded="full"/>
+          <Skeleton size={42} rounded="full" />
           <VStack space={1} w="full">
-            <Skeleton.Text lines={1} w="1/6"/>
-            <Skeleton.Text lines={2} w="5/6" mt={3}/>
+            <Skeleton.Text lines={1} w="1/6" />
+            <Skeleton.Text lines={2} w="5/6" mt={3} />
           </VStack>
         </HStack>
       </VStack>
     </>
-  )
-}
+  );
+};
 
 const Information = (props: Props) => {
+  const translations = translationStore((state) => state.translations);
   const navigation = useNavigation<any>();
 
-  const [messageListIsLoaded, setmessageListIsLoaded] = useState(false)
+  const [messageListIsLoaded, setmessageListIsLoaded] = useState(false);
 
   useEffect(() => {
     setTimeout(() => setmessageListIsLoaded(true), 1000);
-  },);
+  });
 
   return (
     <Container>
@@ -139,7 +141,7 @@ const Information = (props: Props) => {
             <Box style={styles.box}>
               <Feather name="heart" color={"white"} size={24} />
             </Box>
-            <Text style={styles.centerText}>粉丝</Text>
+            <Text style={styles.centerText}>{translations.fan}</Text>
           </VStack>
         </Pressable>
         <Pressable
@@ -151,7 +153,7 @@ const Information = (props: Props) => {
             <Box style={styles.box}>
               <AntDesign name="like2" color={"white"} size={24} />
             </Box>
-            <Text style={styles.centerText}>点赞</Text>
+            <Text style={styles.centerText}>{translations.like}</Text>
           </VStack>
         </Pressable>
         <Pressable
@@ -163,7 +165,7 @@ const Information = (props: Props) => {
             <Box style={styles.box}>
               <FontAwesome name="comment-o" color={"white"} size={24} />
             </Box>
-            <Text style={styles.centerText}>评论</Text>
+            <Text style={styles.centerText}>{translations.comments}</Text>
           </VStack>
         </Pressable>
         <Pressable
@@ -175,7 +177,7 @@ const Information = (props: Props) => {
             <Box style={styles.box}>
               <Fontisto name="money-symbol" color={"white"} size={24} />
             </Box>
-            <Text style={styles.centerText}>收益</Text>
+            <Text style={styles.centerText}>{translations.income}</Text>
           </VStack>
         </Pressable>
         <Pressable
@@ -187,12 +189,12 @@ const Information = (props: Props) => {
             <Box style={styles.box}>
               <Octicons name="gear" color={"white"} size={24} />
             </Box>
-            <Text style={styles.centerText}>系统</Text>
+            <Text style={styles.centerText}>{translations.system}</Text>
           </VStack>
         </Pressable>
       </HStack>
-      <Text style={styles.categoryText}>私信列表</Text>
-      {messageListIsLoaded ? 
+      <Text style={styles.categoryText}>{translations.privateMessage}</Text>
+      {messageListIsLoaded ? (
         <FlatList
           data={messageList}
           scrollEnabled={true}
@@ -207,8 +209,9 @@ const Information = (props: Props) => {
           keyExtractor={(item, index) => "" + index}
           ListFooterComponent={<BottomMessage />}
         />
-      : 
-        <MessageItemSkeleton/>}
+      ) : (
+        <MessageItemSkeleton />
+      )}
     </Container>
   );
 };

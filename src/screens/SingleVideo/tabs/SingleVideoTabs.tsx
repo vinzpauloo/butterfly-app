@@ -1,12 +1,10 @@
 import { useState } from "react";
 import { StyleSheet } from "react-native";
 
-import { Tabs } from "react-native-collapsible-tab-view";
 import { useRoute } from "@react-navigation/native";
 import { useQuery } from "@tanstack/react-query";
 
 import CommentTextInput from "components/CommentTextInput";
-import Container from "components/Container";
 import CommentList from "features/commentList";
 import GridVideos from "features/sectionList/components/GridVideos";
 import StickyTabs from "layouts/StickyTabs";
@@ -149,25 +147,10 @@ const SingleVideoTab = ({ data }) => {
         name: "TabComments",
         label: translations.comments,
         Content: (
-          <Container>
-            {/* TEMPORARY BUGGY UI - FOR NOW COMMENT PAGING SHOULD WORK */}
-            {/*
-            <Tabs.Tab name="asd">
-              <CommentList workID={data._id} />
-              <CommentTextInput workID={data._id} keyboardAvoidBehavior="position" />
-            </Tabs.Tab>
-            */}
-            <Tabs.ScrollView
-              accessibilityComponentType={undefined}
-              accessibilityTraits={undefined}
-            >
-              <CommentList workID={data._id} />
-            </Tabs.ScrollView>
-            <CommentTextInput
-              workID={data._id}
-              keyboardAvoidBehavior="position"
-            />
-          </Container>
+          <>
+            <CommentList workID={data._id} isFromSingleVideo />
+            <CommentTextInput workID={data._id} keyboardAvoidBehavior="position" />
+          </>
         ),
       },
     ],

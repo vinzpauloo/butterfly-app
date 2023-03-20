@@ -1,12 +1,14 @@
 import { StyleSheet, Text, View } from "react-native";
 import React from "react";
 
-type Props = {};
+type Props = {
+  isFromSingleVideo?: boolean
+};
 
 const BottomMessage = (props: Props) => {
   return (
     <View>
-      <Text style={styles.bottomText}>人家也是有底线的啦！</Text>
+      <Text style={[styles.bottomText, props.isFromSingleVideo ? { marginBottom: 24 } : null]}>人家也是有底线的啦！</Text>
     </View>
   );
 };

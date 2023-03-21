@@ -125,7 +125,7 @@ const SingleVideoTab = ({ data }) => {
         label: translations.others,
         Content: (
           <OthersLayout
-            userId={route.params.userId}
+            userId={data.user?.id}
             workID={data._id}
             token={token}
           />
@@ -138,7 +138,7 @@ const SingleVideoTab = ({ data }) => {
           <RecommendedData
             workID={data._id}
             recommendedData={data}
-            id={route.params.userId}
+            id={data.user?.id}
             token={token}
           />
         ),
@@ -149,7 +149,10 @@ const SingleVideoTab = ({ data }) => {
         Content: (
           <>
             <CommentList workID={data._id} isFromSingleVideo />
-            <CommentTextInput workID={data._id} keyboardAvoidBehavior="position" />
+            <CommentTextInput
+              workID={data._id}
+              keyboardAvoidBehavior="position"
+            />
           </>
         ),
       },

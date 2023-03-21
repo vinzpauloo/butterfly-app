@@ -24,7 +24,6 @@ const HeaderTitle = ({ data }) => {
   const translations = translationStore((state) => state.translations);
   const { followCreator } = CustomerService();
   const navigation = useNavigation<any>();
-  const route = useRoute<any>();
   const [isFollowed, setIsFollowed] = useState(false);
 
   useEffect(() => {
@@ -44,7 +43,7 @@ const HeaderTitle = ({ data }) => {
 
   const handleFollow = () => {
     mutateFollow({
-      user_id: { user_id: route.params.userId },
+      user_id: { user_id: data?.user.id },
       token: token,
     });
   };
@@ -63,14 +62,14 @@ const HeaderTitle = ({ data }) => {
         />
         <Pressable
           onPress={() =>
-            navigation.navigate("SingleUser", { userID: route.params.userId })
+            navigation.navigate("SingleUser", { userID: data?.user.id })
           }
         >
-          <Image source={{ uri: route.params?.image }} style={styles.image} />
+          <Image source={{ uri: data?.user.photo }} style={styles.image} />
         </Pressable>
         <View>
-          <Text style={styles.title}>{route.params?.username}</Text>
-          <Text style={styles.followers}>{route.params?.followers}粉丝</Text>
+          <Text style={styles.title}>{data?.user.username}</Text>
+          <Text style={styles.followers}>{data?.followers}粉丝</Text>
         </View>
       </View>
       {isFollowed ? null : (

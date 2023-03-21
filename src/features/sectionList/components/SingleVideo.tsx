@@ -13,11 +13,7 @@ const SingleVideo = ({ data }) => {
 
   const handlePress = () => {
     navigation.navigate("SingleVideo", {
-      image: item.user.photo,
-      username: item.user.username,
-      followers: "123456789",
       id: item._id,
-      userId: item?.user_id,
     });
   };
 

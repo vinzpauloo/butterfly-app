@@ -11,7 +11,6 @@ import React, { useState } from "react";
 
 import Entypo from "react-native-vector-icons/Entypo";
 import Foundation from "react-native-vector-icons/Foundation";
-import { MasonryFlashList } from "@shopify/flash-list";
 import MasonryList from "@react-native-seoul/masonry-list";
 import { useNavigation } from "@react-navigation/native";
 import { useDisclose } from "native-base";
@@ -107,11 +106,7 @@ export const Video = ({ item, isFollowingScreen, onOpen, setId }: any) => {
   const handlePress = () => {
     if (item.orientation === "Landscape") {
       navigation.navigate("SingleVideo", {
-        image: item?.user.photo,
-        username: item?.user?.username,
-        followers: "123456789",
         id: item?._id,
-        userId: item?.user_id,
       });
     } else {
       navigation.navigate("VlogScreen", {

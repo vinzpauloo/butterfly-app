@@ -87,7 +87,7 @@ const Moment = () => {
 
   return (
     <Container>
-      <MaterialTopTabs data={tabItems} isEqualWidth />
+      <MaterialTopTabs data={tabItems} />
     </Container>
   );
 };

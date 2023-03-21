@@ -57,20 +57,18 @@ const InitialLoad = () => {
         // fetch ads from backend and put into ads global store
         setAdsGlobalStore(
           // all arrays
-          data.advertisement.fullscreen_banner[0].banners,
-          data.advertisement.popup_banner[0].banners,
-          data.advertisement.carousel_banner[0].banners,
-          data.advertisement.single_banner.banners
+          data[0].banners,
+          data[1].banners,
+          data[2].banners,
+          data[3].banners
         );
 
         // store ads to local app cache
         storeDataObject("AdvertisementCacheData", {
-          localCache_fullscreen_banner:
-            data.advertisement.fullscreen_banner[0].banners,
-          localCache_popup_banner: data.advertisement.popup_banner[0].banners,
-          localCache_carousel_banner:
-            data.advertisement.carousel_banner[0].banners,
-          localCache_single_banner: data.advertisement.single_banner.banners,
+          localCache_fullscreen_banner: data[0].banners,
+          localCache_popup_banner: data[1].banners,
+          localCache_carousel_banner: data[2].banners,
+          localCache_single_banner: data[3].banners,
         });
       } else {
         console.log("=== No ads available. ===");
@@ -177,7 +175,7 @@ const InitialLoad = () => {
       if (value.message === "Key not found or is empty") {
         setIsQueryEnable(true);
       } else {
-        console.log("=== Local AdsCacheData is used! ===");
+        console.log("=== Local AdsCacheData is used! ===", value);
 
         // update ads global store according to cached data
         setAdsGlobalStore(

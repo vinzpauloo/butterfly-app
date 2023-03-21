@@ -20,7 +20,7 @@ const Moment = ({ userId, tag }) => {
   const [lastPage, setLastPage] = useState(1);
 
   const { isLoading, isRefetching } = useQuery({
-    queryKey: [`feedTab${isFocus}`, userId, page, refreshingId],
+    queryKey: [`singleTagMoment`, tag, page, refreshingId],
     queryFn: () =>
       getFeeds({
         data: {
@@ -37,7 +37,6 @@ const Moment = ({ userId, tag }) => {
       setData((prev) => [...prev].concat(data.data));
       setLastPage(data?.last_page);
     },
-    enabled: isFocus,
   });
 
   if ((isLoading || refreshing || isRefetching) && page === 1) {

@@ -29,13 +29,12 @@ const Recommended = ({ tag, isFollowingScreen = false }) => {
   const { getWorks } = WorkService();
 
   const { isLoading, isRefetching } = useQuery({
-    queryKey: ["recommendedSingleTag", tag, page, refreshingId],
+    queryKey: ["singleTagRecommended", tag, page, refreshingId],
     queryFn: () =>
       getWorks({
         data: {
           tag,
           with: "user",
-          ads: false,
           page: page,
           paginate: 20,
         },

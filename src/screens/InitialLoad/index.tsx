@@ -52,25 +52,29 @@ const InitialLoad = () => {
     queryKey: ["ads"],
     queryFn: () => getAds(),
     onSuccess: (data) => {
-      console.log("=== Data Fetched from backend! ===");
-      // fetch ads from backend and put into ads global store
-      setAdsGlobalStore(
-        // all arrays
-        data.advertisement.fullscreen_banner[0].banners,
-        data.advertisement.popup_banner[0].banners,
-        data.advertisement.carousel_banner[0].banners,
-        data.advertisement.single_banner.banners
-      );
-
-      // store ads to local app cache
-      storeDataObject("AdvertisementCacheData", {
-        localCache_fullscreen_banner:
+      if (data.advertisement) {
+        console.log("=== Ads Fetched from backend! ===");
+        // fetch ads from backend and put into ads global store
+        setAdsGlobalStore(
+          // all arrays
           data.advertisement.fullscreen_banner[0].banners,
-        localCache_popup_banner: data.advertisement.popup_banner[0].banners,
-        localCache_carousel_banner:
+          data.advertisement.popup_banner[0].banners,
           data.advertisement.carousel_banner[0].banners,
-        localCache_single_banner: data.advertisement.single_banner.banners,
-      });
+          data.advertisement.single_banner.banners
+        );
+
+        // store ads to local app cache
+        storeDataObject("AdvertisementCacheData", {
+          localCache_fullscreen_banner:
+            data.advertisement.fullscreen_banner[0].banners,
+          localCache_popup_banner: data.advertisement.popup_banner[0].banners,
+          localCache_carousel_banner:
+            data.advertisement.carousel_banner[0].banners,
+          localCache_single_banner: data.advertisement.single_banner.banners,
+        });
+      } else {
+        console.log("=== No ads available. ===");
+      }
 
       captureSuccess(route.name, "storeDataObject(AdvertisementCacheData)");
       navigation.dispatch(StackActions.replace("TermsOfService"));

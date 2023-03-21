@@ -80,7 +80,7 @@ const Intl = () => {
   return (
     <View style={styles.intl}>
       <SelectCountry
-        style={[styles.dropdown]}
+        style={styles.dropdown}
         selectedTextStyle={styles.selectedTextStyle}
         placeholderStyle={styles.placeholderStyle}
         imageStyle={styles.imageStyle}
@@ -163,7 +163,7 @@ const styles = StyleSheet.create({
   dropdown: {
     marginHorizontal: 16,
     height: 30,
-    width: 60,
+    width: 65,
     backgroundColor: GLOBAL_COLORS.primaryTextColor,
     borderRadius: 22,
     paddingHorizontal: 8,
@@ -181,8 +181,8 @@ const styles = StyleSheet.create({
     marginLeft: 5,
   },
   iconStyle: {
-    width: 15,
-    height: 15,
+    width: 20,
+    height: 20,
     marginRight: 5,
   },
 });

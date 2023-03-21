@@ -1,7 +1,6 @@
 import { useState } from "react";
 import { StyleSheet } from "react-native";
 
-import { useRoute } from "@react-navigation/native";
 import { useQuery } from "@tanstack/react-query";
 
 import CommentTextInput from "components/CommentTextInput";
@@ -112,13 +111,26 @@ const RecommendedData = ({ id, recommendedData, workID, token }) => {
   );
 };
 
-const SingleVideoTab = ({ data }) => {
+const SingleVideoTab = ({
+  data,
+  like,
+  setLike,
+  isAlreadyFavorite,
+  setIsAlreadyFavorite,
+}) => {
   const token = userStore((state) => state.api_token);
   const translations = translationStore((state) => state.translations);
-  const route = useRoute<any>();
 
   const tabsData = {
-    Header: () => <Header data={data} />,
+    Header: () => (
+      <Header
+        data={data}
+        like={like}
+        setLike={setLike}
+        isAlreadyFavorite={isAlreadyFavorite}
+        setIsAlreadyFavorite={setIsAlreadyFavorite}
+      />
+    ),
     tabItems: [
       {
         name: "TabOthers",

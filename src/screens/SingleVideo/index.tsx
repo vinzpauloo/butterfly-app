@@ -65,10 +65,10 @@ const HeaderTitle = ({ data }) => {
             navigation.navigate("SingleUser", { userID: data?.user.id })
           }
         >
-          <Image source={{ uri: data?.user.photo }} style={styles.image} />
+          <Image source={{ uri: data?.user?.photo }} style={styles.image} />
         </Pressable>
         <View>
-          <Text style={styles.title}>{data?.user.username}</Text>
+          <Text style={styles.title}>{data?.user?.username}</Text>
           <Text style={styles.followers}>{data?.followers}粉丝</Text>
         </View>
       </View>
@@ -87,17 +87,28 @@ const SingleVideoScreen = () => {
   const { getWorkById } = WorkService();
   const route = useRoute<any>();
   const isFocus = useIsFocused();
+  const [data, setData] = useState<any>({});
+  const [like, setLike] = useState({ isAlreadyLike: false, likeCount: 0 });
+  const [isAlreadyFavorite, setIsAlreadyFavorite] = useState(false);
 
-  const { data, isLoading } = useQuery({
+  const { isLoading, isFetching } = useQuery({
     queryKey: ["workSingleVideoScreen", route.params.id],
     queryFn: () => getWorkById({ workId: route.params.id, token: token }),
     onError: (error) => {
       //error handler
       console.log("workSingleVideo", error);
     },
+    onSuccess: (data) => {
+      setData(data);
+      setLike({
+        isAlreadyLike: data.is_liked,
+        likeCount: data?.like?.total_likes,
+      });
+      setIsAlreadyFavorite(data.is_favorite);
+    },
   });
 
-  if (isLoading) {
+  if (isLoading || isFetching) {
     return (
       <>
         <CarouselSkeleton />
@@ -115,7 +126,13 @@ const SingleVideoScreen = () => {
         </Pressable>
         <VideoPlayer url={data?.video_url} isFocus={isFocus} />
       </View>
-      <SingleVideoTab data={data} />
+      <SingleVideoTab
+        data={data}
+        like={like}
+        setLike={setLike}
+        isAlreadyFavorite={isAlreadyFavorite}
+        setIsAlreadyFavorite={setIsAlreadyFavorite}
+      />
     </View>
   );
 };

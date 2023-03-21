@@ -1,23 +1,18 @@
 import { TouchableWithoutFeedback, StyleSheet, Text, View } from "react-native";
-import React, { useEffect, useState } from "react";
+import React from "react";
 
 import MaterialIcons from "react-native-vector-icons/MaterialIcons";
-import { useMutation, useQuery } from "@tanstack/react-query";
+import { useMutation } from "@tanstack/react-query";
 
 import CustomerService from "services/api/CustomerService";
 import { GLOBAL_COLORS } from "global";
 import { userStore } from "../../../zustand/userStore";
 import { translationStore } from "../../../zustand/translationStore";
 
-const FavoriteButton = ({ data, id }) => {
+const FavoriteButton = ({ id, isAlreadyFavorite, setIsAlreadyFavorite }) => {
   const token = userStore((store) => store.api_token);
   const translations = translationStore((state) => state.translations);
   const { favoriteVideo, unfavoriteVideo } = CustomerService();
-  const [isAlreadyFavorite, setIsAlreadyFavorite] = useState(false);
-
-  useEffect(() => {
-    setIsAlreadyFavorite(data.is_favorite);
-  }, [data]);
 
   // for favorite
   const { mutate: mutateFavorite } = useMutation(favoriteVideo, {

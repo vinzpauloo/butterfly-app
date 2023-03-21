@@ -13,7 +13,13 @@ import { downloadFile } from "utils/downloadFile";
 import { GLOBAL_COLORS } from "global";
 import { translationStore } from "../../../zustand/translationStore";
 
-export const Header = ({ data }) => {
+export const Header = ({
+  data,
+  like,
+  setLike,
+  isAlreadyFavorite,
+  setIsAlreadyFavorite,
+}) => {
   const translations = translationStore((state) => state.translations);
   const route = useRoute<any>();
   const navigation = useNavigation<any>();
@@ -52,7 +58,7 @@ export const Header = ({ data }) => {
               style={styles.icon}
             />
             <Text style={styles.text}>
-              {data?.statistic.watched} | {translations.duration}:{" "}
+              {data?.statistic?.watched} | {translations.duration}:{" "}
               {data?.duration}
             </Text>
           </View>
@@ -69,7 +75,7 @@ export const Header = ({ data }) => {
           </View>
         </View>
         <View style={styles.tags} pointerEvents="box-none">
-          {data?.tags.map((item, index) => (
+          {data?.tags?.map((item, index) => (
             <TouchableWithoutFeedback
               key={index}
               onPress={() => handleNavigate(item)}
@@ -79,8 +85,12 @@ export const Header = ({ data }) => {
           ))}
         </View>
         <View style={styles.buttonsContent} pointerEvents="box-none">
-          <LikeButton data={data} id={route.params.id} />
-          <FavoriteButton data={data} id={route.params.id} />
+          <LikeButton id={route.params.id} like={like} setLike={setLike} />
+          <FavoriteButton
+            id={route.params.id}
+            isAlreadyFavorite={isAlreadyFavorite}
+            setIsAlreadyFavorite={setIsAlreadyFavorite}
+          />
           <View style={[styles.buttonItem, { flexDirection: "column" }]}>
             <Zocial
               name="bitcoin"

@@ -8,22 +8,17 @@ import { GLOBAL_COLORS } from "global";
 import LikeService from "services/api/LikeService";
 import { userStore } from "../../../zustand/userStore";
 
-const LikeButton = ({ data, id }) => {
+const LikeButton = ({ id, like, setLike }) => {
   const token = userStore((store) => store.api_token);
   const { unlikeWork, likeWork } = LikeService();
-  const [isAlreadyLike, setIsAlreadyLike] = useState(false);
-  const [likeCount, setLikeCount] = useState(data?.like?.total_likes);
-
-  useEffect(() => {
-    setIsAlreadyLike(data.is_liked);
-  }, [data]);
 
   // for like
   const { mutate: mutateLike } = useMutation(likeWork, {
     onSuccess: (data) => {
       if (data.isLike) {
-        setIsAlreadyLike(true);
-        setLikeCount((prev) => prev + 1);
+        setLike((prev) => {
+          return { isAlreadyLike: true, likeCount: prev.likeCount + 1 };
+        });
       }
     },
     onError: (error) => {
@@ -35,8 +30,9 @@ const LikeButton = ({ data, id }) => {
   const { mutate: mutateUnLike } = useMutation(unlikeWork, {
     onSuccess: (data) => {
       if (data.unLike) {
-        setIsAlreadyLike(false);
-        setLikeCount((prev) => prev - 1);
+        setLike((prev) => {
+          return { isAlreadyLike: false, likeCount: prev.likeCount - 1 };
+        });
       }
     },
     onError: (error) => {
@@ -46,7 +42,7 @@ const LikeButton = ({ data, id }) => {
 
   const handleLike = () => {
     // check here if not like yet
-    if (!isAlreadyLike) {
+    if (!like.isAlreadyLike) {
       mutateLike({
         data: {
           foreign_id: id,
@@ -73,14 +69,17 @@ const LikeButton = ({ data, id }) => {
       <View style={styles.buttonItem} pointerEvents="box-none">
         <AntDesign
           name="heart"
-          color={changeButtonColor(isAlreadyLike)}
+          color={changeButtonColor(like.isAlreadyLike)}
           size={15}
           style={styles.icon}
         />
         <Text
-          style={[styles.text, { color: changeButtonColor(isAlreadyLike) }]}
+          style={[
+            styles.text,
+            { color: changeButtonColor(like.isAlreadyLike) },
+          ]}
         >
-          {likeCount}
+          {like.likeCount}
         </Text>
       </View>
     </TouchableWithoutFeedback>

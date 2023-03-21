@@ -87,11 +87,10 @@ const SingleVideoScreen = () => {
   const { getWorkById } = WorkService();
   const route = useRoute<any>();
   const isFocus = useIsFocused();
-  const [data, setData] = useState<any>({});
   const [like, setLike] = useState({ isAlreadyLike: false, likeCount: 0 });
   const [isAlreadyFavorite, setIsAlreadyFavorite] = useState(false);
 
-  const { isLoading, isFetching } = useQuery({
+  const { data, isLoading, isFetching } = useQuery({
     queryKey: ["workSingleVideoScreen", route.params.id],
     queryFn: () => getWorkById({ workId: route.params.id, token: token }),
     onError: (error) => {
@@ -99,7 +98,6 @@ const SingleVideoScreen = () => {
       console.log("workSingleVideo", error);
     },
     onSuccess: (data) => {
-      setData(data);
       setLike({
         isAlreadyLike: data.is_liked,
         likeCount: data?.like?.total_likes,

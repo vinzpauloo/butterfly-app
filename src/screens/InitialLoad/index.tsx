@@ -52,7 +52,7 @@ const InitialLoad = () => {
     queryKey: ["ads"],
     queryFn: () => getAds(),
     onSuccess: (data) => {
-      if (data.advertisement) {
+      if (data && data.length) {
         console.log("=== Ads Fetched from backend! ===");
         // fetch ads from backend and put into ads global store
         setAdsGlobalStore(

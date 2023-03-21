@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import {
   StyleSheet,
   Text,
@@ -17,12 +17,76 @@ import Ionicons from "react-native-vector-icons/Ionicons";
 import { FontAwesome5 } from "@expo/vector-icons";
 
 import Container from "components/Container";
-import profilePhoto from "assets/images/profilePhoto.jpg";
-import { profileTabSubNav } from "data/profileTabSubNav";
-import { GLOBAL_COLORS } from "global";
 import CustomerService from "services/api/CustomerService";
+import FlagUSA from "assets/images/Flag-USA.png";
+import FlagChina from "assets/images/Flag-China.webp";
+import localizations from "i18n/localizations";
+import profilePhoto from "assets/images/profilePhoto.jpg";
+import { GLOBAL_COLORS } from "global";
+import { profileTabSubNav } from "data/profileTabSubNav";
+import { translationStore } from "../../zustand/translationStore";
 import { useMutation } from "@tanstack/react-query";
 import { userStore } from "../../zustand/userStore";
+import { SelectCountry } from "react-native-element-dropdown";
+
+// Change Language
+const Intl = () => {
+  const local_data = [
+    {
+      value: "1",
+      lable: "EN",
+      image: FlagUSA,
+    },
+    {
+      value: "2",
+      lable: "CN",
+      image: FlagChina,
+    },
+  ];
+  const [country, setCountry] = useState("1");
+  const [setLang, setTranslations] = translationStore((state) => [
+    state.setLang,
+    state.setTranslations,
+  ]);
+
+  const changeLanguage = (value) => {
+    switch (value) {
+      case "1":
+        return "en";
+      case "2":
+        return "cn";
+      default:
+        return "en";
+    }
+  };
+
+  const toggleSwitch = (event) => {
+    setCountry(event.value);
+
+    let newLang = changeLanguage(event.value);
+    setLang(newLang);
+    setTranslations(localizations[newLang]);
+  };
+
+  return (
+    <SelectCountry
+      style={styles.dropdown}
+      selectedTextStyle={styles.selectedTextStyle}
+      placeholderStyle={styles.placeholderStyle}
+      imageStyle={styles.imageStyle}
+      iconStyle={styles.iconStyle}
+      maxHeight={200}
+      value={country}
+      data={local_data}
+      valueField="value"
+      labelField="lable"
+      imageField="image"
+      onChange={(event) => {
+        toggleSwitch(event);
+      }}
+    />
+  );
+};
 
 const Header = () => {
   const navigation = useNavigation<any>();
@@ -32,7 +96,8 @@ const Header = () => {
   };
 
   return (
-    <HStack justifyContent={"flex-end"} pr={2}>
+    <HStack justifyContent={"flex-end"} pr={2} alignItems="center">
+      <Intl />
       <Fontisto name="bell" color="#fff" size={25} style={styles.icon} />
       <Pressable onPress={handlePressSettings}>
         <Ionicons
@@ -235,5 +300,29 @@ const styles = StyleSheet.create({
   btnVip: {
     marginTop: 10,
     marginHorizontal: 10,
+  },
+
+  dropdown: {
+    height: 30,
+    width: 80,
+    backgroundColor: GLOBAL_COLORS.primaryTextColor,
+    borderRadius: 22,
+    paddingHorizontal: 8,
+  },
+  imageStyle: {
+    width: 20,
+    height: 20,
+    borderRadius: 10,
+  },
+  placeholderStyle: {
+    fontSize: 14,
+  },
+  selectedTextStyle: {
+    fontSize: 14,
+    textAlign: "center",
+  },
+  iconStyle: {
+    width: 15,
+    height: 15,
   },
 });

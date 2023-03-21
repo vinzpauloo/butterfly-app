@@ -52,11 +52,7 @@ const Video = ({
   const handlePress = () => {
     if (item.orientation === "Landscape") {
       navigation.navigate("SingleVideo", {
-        image: photo,
-        username: username,
-        followers: "123456789",
         id: item._id,
-        userId: userId,
       });
     } else {
       navigation.navigate("VlogScreen", {

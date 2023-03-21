@@ -34,7 +34,9 @@ export const FollowingBottomContent = ({ item }) => {
           size={18}
           color={GLOBAL_COLORS.secondaryColor}
         />
-        <Text style={styles.modelLikeCount}>{item.like.total_likes}w</Text>
+        <Text style={styles.modelLikeCount}>
+          {!!item?.like?.total_likes ? item?.like?.total_likes : 0}w
+        </Text>
       </View>
     </View>
   );

@@ -6,9 +6,9 @@ import FeedService from "services/api/FeedService";
 import CommentList from "features/commentList";
 import CommentTextInput from "components/CommentTextInput";
 import Container from "components/Container";
-import FeedContent from "components/feed/FeedContent";
 import SingleFeedHeader from "components/headers/SingleFeedHeader";
 import { userStore } from "../../zustand/userStore";
+import FeedContent from "./FeedContent";
 
 type Props = {};
 
@@ -29,13 +29,20 @@ const SingleFeedScreen = (props: Props) => {
       console.log(error);
     },
   });
+
   return (
     <Container>
       <SingleFeedHeader title="洋情" />
       <CommentList
         workID={item?.feedId}
         isFromFeed={true}
-        customHeaderComponent={<FeedContent data={specificFeed} />}
+        customHeaderComponent={
+          <FeedContent
+            data={specificFeed}
+            like={item.like}
+            setLike={item.setLike}
+          />
+        }
       />
       <CommentTextInput
         workID={item?.feedId}

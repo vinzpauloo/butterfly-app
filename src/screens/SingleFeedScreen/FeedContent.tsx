@@ -12,12 +12,12 @@ import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityI
 
 import VideoPlayer from "components/VideoPlayer";
 import CustomModal from "components/CustomModal";
-import FeedContentLikeBtn from "./FeedContentLikeBtn";
 import Fontisto from "react-native-vector-icons/Fontisto";
 import VIPModalContent from "components/VIPModalContent";
 import { GLOBAL_COLORS } from "global";
 import { translationStore } from "../../zustand/translationStore";
 import { useNavigation } from "@react-navigation/native";
+import FeedContentLikeBtn from "./FeedContentLikeBtn";
 
 const { height, width } = Dimensions.get("window");
 
@@ -52,13 +52,6 @@ const Captions = ({ tags, story, id, like, setLike }) => {
       tag: tag,
     });
   };
-  const navigateSingleFeed = () => {
-    navigation.navigate("SingleFeedScreen", {
-      feedId: id,
-      like: like,
-      setLike: setLike,
-    });
-  };
   return (
     <View style={styles.captionContainer}>
       <View style={styles.tagsContainer}>
@@ -68,9 +61,8 @@ const Captions = ({ tags, story, id, like, setLike }) => {
           </Pressable>
         ))}
       </View>
-      <Pressable onPress={navigateSingleFeed}>
-        <Text style={styles.contentText}>{story}</Text>
-      </Pressable>
+
+      <Text style={styles.contentText}>{story}</Text>
     </View>
   );
 };
@@ -136,13 +128,6 @@ const Video = ({ url }) => {
 
 const BottomContent = ({ totalComments, id, like, setLike }) => {
   const navigation = useNavigation<any>();
-  const navigateSingleFeed = () => {
-    navigation.navigate("SingleFeedScreen", {
-      feedId: id,
-      like: like,
-      setLike: setLike,
-    });
-  };
 
   return (
     <View style={styles.bottomContentContainer}>
@@ -156,46 +141,39 @@ const BottomContent = ({ totalComments, id, like, setLike }) => {
           color={GLOBAL_COLORS.inactiveTextColor}
         />
       </Pressable>
-      <Pressable style={styles.bottomItem} onPress={navigateSingleFeed}>
+      <View style={styles.bottomItem}>
         <Fontisto
           name="commenting"
           size={16}
           color={GLOBAL_COLORS.inactiveTextColor}
         />
         <Text style={styles.bottomText}>{totalComments}</Text>
-      </Pressable>
+      </View>
       <FeedContentLikeBtn id={id} like={like} setLike={setLike} />
     </View>
   );
 };
 
-const FeedContent = ({ data, singleFeedPadding = 0 }) => {
-  const item = data.item;
+const FeedContent = ({ data, like, setLike }) => {
   const [open, setOpen] = useState(false);
-  const [like, setLike] = useState({
-    isAlreadyLike: item.is_liked,
-    likeCount: item.like.total_likes,
-  });
 
   return (
-    <View
-      style={[styles.mainContainer, { paddingHorizontal: singleFeedPadding }]}
-    >
-      <Header user={item.user} userId={item.user_id} setOpen={setOpen} />
+    <View style={styles.mainContainer}>
+      <Header user={data.user} userId={data.user_id} setOpen={setOpen} />
       <Captions
-        tags={item.tags}
-        story={item.string_story}
-        id={item._id}
+        tags={data.tags}
+        story={data.string_story}
+        id={data._id}
         like={like}
         setLike={setLike}
       />
-      {!!item?.images && <Images images={item?.images} />}
-      {!!item?.videos && <Video url={item?.videos[0].url} />}
+      {!!data?.images && <Images images={data?.images} />}
+      {!!data?.videos && <Video url={data?.videos[0].url} />}
       <BottomContent
-        totalComments={item.comment.total_comments}
+        totalComments={data.comment.total_comments}
         like={like}
         setLike={setLike}
-        id={item._id}
+        id={data._id}
       />
       <CustomModal open={open} setOpen={setOpen}>
         <VIPModalContent setOpen={setOpen} />
@@ -209,6 +187,7 @@ export default FeedContent;
 const styles = StyleSheet.create({
   //FEEDCONTENT
   mainContainer: {
+    paddingHorizontal: 0,
     paddingVertical: 10,
     backgroundColor: GLOBAL_COLORS.primaryColor,
   },

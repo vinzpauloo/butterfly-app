@@ -12,11 +12,20 @@ const FeedContentLikeBtn = ({ id, like, setLike }) => {
   const token = userStore((store) => store.api_token);
   const isFocused = useIsFetching();
   const { likeWork, unlikeWork } = LikeService();
+  const [isAlreadyLike, setIsAlreadyLike] = useState(false);
+  const [likeCount, setLikeCount] = useState(like.likeCount);
+
+  useEffect(() => {
+    setIsAlreadyLike(like.isAlreadyLike);
+    setLikeCount(like.likeCount);
+  }, []);
 
   // for like
   const { mutate: mutateLike } = useMutation(likeWork, {
     onSuccess: (data) => {
       if (data.isLike) {
+        setIsAlreadyLike(true);
+        setLikeCount((prev) => prev + 1);
         setLike((prev) => {
           return { isAlreadyLike: true, likeCount: prev.likeCount + 1 };
         });
@@ -31,6 +40,8 @@ const FeedContentLikeBtn = ({ id, like, setLike }) => {
   const { mutate: mutateUnLike } = useMutation(unlikeWork, {
     onSuccess: (data) => {
       if (data.unLike) {
+        setIsAlreadyLike(false);
+        setLikeCount((prev) => prev - 1);
         setLike((prev) => {
           return { isAlreadyLike: false, likeCount: prev.likeCount - 1 };
         });
@@ -43,7 +54,7 @@ const FeedContentLikeBtn = ({ id, like, setLike }) => {
 
   const handleLike = () => {
     // check here if not like yet
-    if (!like.isAlreadyLike) {
+    if (!isAlreadyLike) {
       mutateLike({
         data: {
           foreign_id: id,
@@ -71,16 +82,13 @@ const FeedContentLikeBtn = ({ id, like, setLike }) => {
     <Pressable style={styles.bottomItem} onPress={handleLike}>
       <AntDesign
         name="heart"
-        color={changeButtonColor(like.isAlreadyLike)}
+        color={changeButtonColor(isAlreadyLike)}
         size={15}
       />
       <Text
-        style={[
-          styles.bottomText,
-          { color: changeButtonColor(like.isAlreadyLike) },
-        ]}
+        style={[styles.bottomText, { color: changeButtonColor(isAlreadyLike) }]}
       >
-        {like.likeCount}
+        {likeCount}
       </Text>
     </Pressable>
   );

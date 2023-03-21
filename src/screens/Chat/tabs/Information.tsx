@@ -134,7 +134,9 @@ const Information = (props: Props) => {
       <HStack space={3} style={styles.optionsList}>
         <Pressable
           onPress={() => {
-            navigation.navigate("InformationScreen", { postTitle: "粉丝" });
+            navigation.navigate("InformationScreen", {
+              postTitle: translations.fan,
+            });
           }}
         >
           <VStack space={1.5} style={styles.boxContainer}>
@@ -146,19 +148,23 @@ const Information = (props: Props) => {
         </Pressable>
         <Pressable
           onPress={() => {
-            navigation.navigate("InformationScreen", { postTitle: "点赞" });
+            navigation.navigate("InformationScreen", {
+              postTitle: translations.liked,
+            });
           }}
         >
           <VStack space={1.5} style={styles.boxContainer}>
             <Box style={styles.box}>
               <AntDesign name="like2" color={"white"} size={24} />
             </Box>
-            <Text style={styles.centerText}>{translations.like}</Text>
+            <Text style={styles.centerText}>{translations.liked}</Text>
           </VStack>
         </Pressable>
         <Pressable
           onPress={() => {
-            navigation.navigate("InformationScreen", { postTitle: "评论" });
+            navigation.navigate("InformationScreen", {
+              postTitle: translations.comments,
+            });
           }}
         >
           <VStack space={1.5} style={styles.boxContainer}>
@@ -170,7 +176,9 @@ const Information = (props: Props) => {
         </Pressable>
         <Pressable
           onPress={() => {
-            navigation.navigate("InformationScreen", { postTitle: "收益" });
+            navigation.navigate("InformationScreen", {
+              postTitle: translations.income,
+            });
           }}
         >
           <VStack space={1.5} style={styles.boxContainer}>
@@ -182,7 +190,9 @@ const Information = (props: Props) => {
         </Pressable>
         <Pressable
           onPress={() => {
-            navigation.navigate("InformationScreen", { postTitle: "系统" });
+            navigation.navigate("InformationScreen", {
+              postTitle: translations.system,
+            });
           }}
         >
           <VStack space={1.5} style={styles.boxContainer}>

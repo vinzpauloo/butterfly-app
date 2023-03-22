@@ -13,7 +13,8 @@ type Props = {
   videoID: string;
   userID: number;
   userImage: string;
-  likes: number;
+  likeCount: number;
+  setLikeCount: (number) => void;
   amountOfComments: number;
   openComments: () => void;
   isFollowed: boolean;
@@ -38,7 +39,8 @@ const RightOverlay = (props: Props) => {
       <LikeOverlay
         customerID={customerID}
         videoID={props.videoID}
-        likes={props.likes}
+        likeCount={props.likeCount}
+        setLikeCount={props.setLikeCount}
         isLiked={props.isLiked}
         setIsLiked={props.setIsLiked}
       />

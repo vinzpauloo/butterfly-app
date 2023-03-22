@@ -10,21 +10,22 @@ import { userStore } from "../../../zustand/userStore";
 type Props = {
   customerID: string;
   videoID: string;
-  likes: number;
+  likeCount: number;
+  setLikeCount: (number) => void;
   isLiked: boolean;
   setIsLiked: (boolean) => void;
 };
 
 const LikeOverlay = (props: Props) => {
   // const [videoIsLiked, setVideoIsLiked] = useState(props.isLiked);
-  const [amountofLikes, setAmountofLikes] = useState(props.likes);
+  // const [amountofLikes, setAmountofLikes] = useState(props.likes);
   const token = userStore((state) => state.api_token);
 
   const { likeWork, unlikeWork } = LikeService();
   const { mutate: mutateLikeVideo } = useMutation(likeWork, {
     onSuccess: (data) => {
       if (data?.isLike) {
-        setAmountofLikes((prev) => prev + 1);
+        props.setLikeCount((prev) => prev + 1);
         props.setIsLiked(true);
       }
     },
@@ -36,7 +37,7 @@ const LikeOverlay = (props: Props) => {
   const { mutate: mutateUnlikeVideo } = useMutation(unlikeWork, {
     onSuccess: (data) => {
       if (data?.unLike) {
-        setAmountofLikes((prev) => prev - 1);
+        props.setLikeCount((prev) => prev - 1);
         props.setIsLiked(false);
       }
     },
@@ -68,7 +69,7 @@ const LikeOverlay = (props: Props) => {
           size={40}
         />
       </Pressable>
-      <Text style={styles.iconText}>{amountofLikes}</Text>
+      <Text style={styles.iconText}>{props.likeCount}</Text>
     </View>
   );
 };

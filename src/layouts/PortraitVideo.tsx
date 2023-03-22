@@ -43,6 +43,7 @@ const { width: windowWidth, height: windowHeight } = Dimensions.get("window");
 const PortraitVideoContent = (props: Props) => {
   const [isFollowed, setIsFollowed] = useState(props.isFollowed);
   const [isLiked, setIsLiked] = useState(props.isLiked);
+  const [likeCount, setLikeCount] = useState(props.likes);
   const [isFavorite, setIsFavorite] = useState(props.isFavorite);
 
   useEffect(() => {
@@ -77,7 +78,8 @@ const PortraitVideoContent = (props: Props) => {
             videoID={props.videoID}
             userID={props.userID}
             userImage={props.userImage}
-            likes={props.likes}
+            likeCount={likeCount}
+            setLikeCount={setLikeCount}
             amountOfComments={props.amountOfComments}
             openComments={props.openComments}
             isFollowed={isFollowed}

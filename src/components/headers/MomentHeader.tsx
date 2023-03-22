@@ -10,8 +10,8 @@ import { GLOBAL_COLORS } from "global";
 const SpecificMoment = ({ index, item, data }) => {
   const navigation = useNavigation<any>();
   const [like, setLike] = useState({
-    isAlreadyLike: false,
-    likeCount: 0,
+    isAlreadyLike: item.is_liked,
+    likeCount: item.total_likes,
   });
   return (
     <View key={index}>
@@ -51,8 +51,8 @@ const MomentHeader = ({ data, isLoading }) => {
 
   return (
     <View style={styles.certificateContainer} pointerEvents="box-none">
-      {data?.featured?.map((item, index) => (
-        <SpecificMoment item={item} index={index} data={data} />
+      {data?.map((item, index) => (
+        <SpecificMoment key={index} item={item} index={index} data={data} />
       ))}
     </View>
   );

@@ -24,7 +24,7 @@ const Moment = () => {
         <StickyTabFeeds
           key="recommendedFeeds"
           category="recommended"
-          headerData={data}
+          headerData={data?.data}
           headerLoading={isLoading}
           token={token}
         />
@@ -36,7 +36,7 @@ const Moment = () => {
         <StickyTabFeeds
           key="latestFeeds"
           category="latest"
-          headerData={data}
+          headerData={data?.data}
           headerLoading={isLoading}
           token={token}
         />
@@ -48,7 +48,7 @@ const Moment = () => {
         <StickyTabFeeds
           key="videoFeeds"
           category="video_only"
-          headerData={data}
+          headerData={data?.data}
           headerLoading={isLoading}
           token={token}
         />
@@ -60,7 +60,7 @@ const Moment = () => {
         <StickyTabFeeds
           key="photoFeeds"
           category="images_only"
-          headerData={data}
+          headerData={data?.data}
           headerLoading={isLoading}
           token={token}
         />
@@ -72,7 +72,7 @@ const Moment = () => {
     //     <StickyTabFeeds
     //       key="servicesFeeds"
     //       category="services_only"
-    //       headerData={data}
+    //       headerData={data?.data}
     //       headerLoading={isLoading}
     //       token={token}
     //     />

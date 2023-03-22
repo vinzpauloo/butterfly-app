@@ -40,7 +40,7 @@ const SingleFeedScreen = (props: Props) => {
 
   return (
     <Container>
-      <SingleFeedHeader title={translations.westernSentiment} />
+      <SingleFeedHeader title={translations.feed} />
       <CommentList
         workID={item?.feedId}
         isFromFeed={true}

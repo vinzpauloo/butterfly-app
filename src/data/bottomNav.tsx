@@ -15,7 +15,7 @@ const BottomNav = () => {
 
   const bottomNav = [
     {
-      name: "Home",
+      name: "HomeTab",
       component: HomeTab,
       label: translations.home,
       icon: ({ color, size }) => (

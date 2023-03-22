@@ -66,18 +66,18 @@ const Moment = () => {
         />
       ),
     },
-    {
-      name: translations.service,
-      component: () => (
-        <StickyTabFeeds
-          key="servicesFeeds"
-          category="services_only"
-          headerData={data}
-          headerLoading={isLoading}
-          token={token}
-        />
-      ),
-    },
+    // {
+    //   name: translations.service,
+    //   component: () => (
+    //     <StickyTabFeeds
+    //       key="servicesFeeds"
+    //       category="services_only"
+    //       headerData={data}
+    //       headerLoading={isLoading}
+    //       token={token}
+    //     />
+    //   ),
+    // },
   ];
 
   const tabItems = {
@@ -87,7 +87,7 @@ const Moment = () => {
 
   return (
     <Container>
-      <MaterialTopTabs data={tabItems} />
+      <MaterialTopTabs data={tabItems} isEqualWidth />
     </Container>
   );
 };

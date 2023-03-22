@@ -16,9 +16,12 @@ type Props = {
   likes: number;
   amountOfComments: number;
   openComments: () => void;
-  isFollowed: boolean
-  isFavorite: boolean
-  isLiked: boolean
+  isFollowed: boolean;
+  setIsFollowed: (boolean) => void;
+  isFavorite: boolean;
+  setIsFavorite: (boolean) => void;
+  isLiked: boolean;
+  setIsLiked: (boolean) => void;
 };
 
 const RightOverlay = (props: Props) => {
@@ -30,18 +33,25 @@ const RightOverlay = (props: Props) => {
         userID={props.userID}
         userImage={props.userImage}
         isFollowed={props.isFollowed}
+        setIsFollowed={props.setIsFollowed}
       />
       <LikeOverlay
         customerID={customerID}
         videoID={props.videoID}
         likes={props.likes}
         isLiked={props.isLiked}
+        setIsLiked={props.setIsLiked}
       />
       <CommentOverlay
         amountOfComments={props.amountOfComments}
         openComments={props.openComments}
       />
-      <FavoriteOVerlay customerID={customerID} videoID={props.videoID} isFavorite={props.isFavorite} />
+      <FavoriteOVerlay
+        customerID={customerID}
+        videoID={props.videoID}
+        isFavorite={props.isFavorite}
+        setIsFavorite={props.setIsFavorite}
+      />
       <DownloadOverlay />
     </VStack>
   );
@@ -55,5 +65,5 @@ const styles = StyleSheet.create({
     right: 8,
     paddingBottom: 16,
     bottom: 0,
-  }
+  },
 });

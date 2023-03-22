@@ -39,7 +39,9 @@ const Vlog = (props: Props) => {
     },
   });
 
-  const onUserScrollDown = () => { refetch() }
+  const onUserScrollDown = () => {
+    refetch();
+  };
 
   if (isLoading) {
     return (

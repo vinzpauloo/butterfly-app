@@ -15,7 +15,6 @@ import { useMutation, useQuery } from "@tanstack/react-query";
 import CustomModal from "components/CustomModal";
 import CustomerService from "services/api/CustomerService";
 import DonateModalContent from "components/DonateModalContent";
-import DonateService from "services/api/DonateService";
 import Loading from "components/Loading";
 import UserService from "services/api/UserService";
 import VIPModalContent from "components/VIPModalContent";
@@ -57,7 +56,10 @@ const SingleUserHeader = (props: Props) => {
   // follow content creator
   const { mutate: mutateFollowCreator } = useMutation(followCreator, {
     onSuccess: (data) => {
-      if (data?.isFollowed) setIsCreatorFollowed(true);
+      if (data?.isFollowed) {
+        setIsCreatorFollowed(true);
+        route.params.setIsFollowed(true); // this is use to update the vlog screen status when followed the model
+      }
     },
     onError: (error) => {
       console.log(error);
@@ -67,7 +69,10 @@ const SingleUserHeader = (props: Props) => {
   // unfollow content creator
   const { mutate: mutateUnfollowCreator } = useMutation(unfollowCreator, {
     onSuccess: (data) => {
-      if (data?.isUnfollowed) setIsCreatorFollowed(false);
+      if (data?.isUnfollowed) {
+        setIsCreatorFollowed(false);
+        route.params.setIsFollowed(false); // this is use to update the vlog screen status when unfollowed the model
+      }
     },
     onError: (error) => {
       console.log(error);

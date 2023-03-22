@@ -33,27 +33,46 @@ type Props = {
   isActive: boolean;
   tabBarHeight: number;
   openComments: () => void;
-  isFollowed: boolean
-  isFavorite: boolean
-  isLiked: boolean
+  isFollowed: boolean;
+  isFavorite: boolean;
+  isLiked: boolean;
 };
 
 const { width: windowWidth, height: windowHeight } = Dimensions.get("window");
 
 const PortraitVideoContent = (props: Props) => {
+  const [isFollowed, setIsFollowed] = useState(props.isFollowed);
+  const [isLiked, setIsLiked] = useState(props.isLiked);
+  const [isFavorite, setIsFavorite] = useState(props.isFavorite);
+
   useEffect(() => {
-    if (props.isActive) { setCurrentVLOGWorkID(props.videoID) }
+    if (props.isActive) {
+      setCurrentVLOGWorkID(props.videoID);
+    }
   }, [props.isActive]);
 
   // subscribe to comment global store
-  const [setCurrentVLOGWorkID] = commentGlobalStore((state) => [state.setCurrentVLOGWorkID])
+  const [setCurrentVLOGWorkID] = commentGlobalStore((state) => [
+    state.setCurrentVLOGWorkID,
+  ]);
 
   return (
-    <View style={[styles.container, { height: windowHeight - props.tabBarHeight }]} >
-      {props.isActive && 
+    <View
+      style={[styles.container, { height: windowHeight - props.tabBarHeight }]}
+    >
+      {props.isActive && (
         <>
-          <VideoOverlay isActive={props.isActive} videoURL={props.videoURL} thumbnail={props.thumbnail} />
-          <BottomOverlay userID={props.userID} userName={props.userName} title={props.title} tags={props.tags} />
+          <VideoOverlay
+            isActive={props.isActive}
+            videoURL={props.videoURL}
+            thumbnail={props.thumbnail}
+          />
+          <BottomOverlay
+            userID={props.userID}
+            userName={props.userName}
+            title={props.title}
+            tags={props.tags}
+          />
           <RightOverlay
             videoID={props.videoID}
             userID={props.userID}
@@ -61,12 +80,15 @@ const PortraitVideoContent = (props: Props) => {
             likes={props.likes}
             amountOfComments={props.amountOfComments}
             openComments={props.openComments}
-            isFollowed={props.isFollowed}
-            isFavorite={props.isFavorite}
-            isLiked={props.isLiked}
+            isFollowed={isFollowed}
+            setIsFollowed={setIsFollowed}
+            isFavorite={isFavorite}
+            setIsFavorite={setIsFavorite}
+            isLiked={isLiked}
+            setIsLiked={setIsLiked}
           />
         </>
-      }
+      )}
     </View>
   );
 };
@@ -83,7 +105,9 @@ const PortraitVideo: React.FC<PortraitVideoDataType> = ({
   const { isOpen, onOpen, onClose } = useDisclose();
 
   // subscribe to comment global store
-  const [currentVLOGWorkID] = commentGlobalStore((state) => [state.currentVLOGWorkID])
+  const [currentVLOGWorkID] = commentGlobalStore((state) => [
+    state.currentVLOGWorkID,
+  ]);
 
   return (
     <Container>
@@ -126,11 +150,17 @@ const PortraitVideo: React.FC<PortraitVideoDataType> = ({
           />
         )}
         onScroll={(e) => {
-          const index = Math.round(e.nativeEvent.contentOffset.y / (windowHeight - bottomTabHeight));
+          const index = Math.round(
+            e.nativeEvent.contentOffset.y / (windowHeight - bottomTabHeight)
+          );
           setActiveVideoIndex(index);
         }}
       />
-      <BottomComment workID={currentVLOGWorkID} isOpen={isOpen} onClose={onClose} />
+      <BottomComment
+        workID={currentVLOGWorkID}
+        isOpen={isOpen}
+        onClose={onClose}
+      />
     </Container>
   );
 };

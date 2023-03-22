@@ -15,7 +15,9 @@ const SectionHeader = ({ id, title }) => {
 
   return (
     <View style={styles.titleContent}>
-      <Text style={styles.title}>{title}</Text>
+      <Text style={styles.title} numberOfLines={1}>
+        {title}
+      </Text>
       <Pressable onPress={() => handlePress(title)}>
         <MaterialCommunityIcons
           name="chevron-triple-right"

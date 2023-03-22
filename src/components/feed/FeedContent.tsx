@@ -170,7 +170,8 @@ const BottomContent = ({ totalComments, id, like, setLike }) => {
 };
 
 const FeedContent = ({ data, singleFeedPadding = 0 }) => {
-  const item = data.item;
+  console.log("FeedContent", data);
+  const item = !!data.item ? data.item : data;
   const [open, setOpen] = useState(false);
   const [like, setLike] = useState({
     isAlreadyLike: item.is_liked,

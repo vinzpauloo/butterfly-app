@@ -24,7 +24,7 @@ const Video = ({ item, index, data, all }: any) => {
   const handlePress = () => {
     navigation.navigate("VlogScreen", {
       id: video._id,
-      all: nextArray.concat(prevArray), // add the prev id's to the next id's and it will go to the end part of the array
+      // all: nextArray.concat(prevArray), // add the prev id's to the next id's and it will go to the end part of the array
     });
   };
 

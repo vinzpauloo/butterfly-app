@@ -72,8 +72,8 @@ const CommentItem = (props: commentItemProps) => {
             }}
           >
             <Text style={styles.secondaryColor}>
-              {translations.check} {props?.replies?.length}{" "}
-              {translations.thenReply}
+              {!repliesIsShown ? translations.check : translations.hide} (
+              {props?.replies?.length}) {translations.thenReply}
             </Text>
           </Pressable>
         ) : null}

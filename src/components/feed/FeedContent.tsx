@@ -18,6 +18,7 @@ import VIPModalContent from "components/VIPModalContent";
 import { GLOBAL_COLORS } from "global";
 import { translationStore } from "../../zustand/translationStore";
 import { useNavigation } from "@react-navigation/native";
+import Foundation from "react-native-vector-icons/Foundation";
 
 const { height, width } = Dimensions.get("window");
 
@@ -126,11 +127,26 @@ const Images = ({ images }) => {
   );
 };
 
-const Video = ({ url }) => {
+const Video = ({ id, like, setLike }) => {
+  const navigation = useNavigation<any>();
+  const translations = translationStore((state) => state.translations);
+
+  const navigateSingleFeed = () => {
+    navigation.navigate("SingleFeedScreen", {
+      feedId: id,
+      like: like,
+      setLike: setLike,
+    });
+  };
+
   return (
-    <View style={{ marginTop: 10 }}>
-      <VideoPlayer url={url} isFocus={false} />
-    </View>
+    <Pressable style={styles.videoCont} onPress={navigateSingleFeed}>
+      {/* <VideoPlayer url={url} isFocus={false} /> */}
+      <Foundation name="play-video" size={50} color="#fff" />
+      <Text style={[styles.contentText, { marginHorizontal: 10 }]}>
+        {translations.videoIncluded}
+      </Text>
+    </Pressable>
   );
 };
 
@@ -190,7 +206,7 @@ const FeedContent = ({ data, singleFeedPadding = 0 }) => {
         setLike={setLike}
       />
       {!!item?.images && <Images images={item?.images} />}
-      {!!item?.videos && <Video url={item?.videos[0].url} />}
+      {!!item?.videos && <Video like={like} setLike={setLike} id={item._id} />}
       <BottomContent
         totalComments={item.comment.total_comments}
         like={like}
@@ -276,12 +292,18 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: "#fff",
   },
+  // VIDEO
+  videoCont: {
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "center",
+  },
   //BOTTOMCONTENT
   bottomContentContainer: {
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "space-between",
-    marginTop: 30,
+    marginTop: 10,
     paddingBottom: 10,
     borderBottomColor: GLOBAL_COLORS.inactiveTextColor,
     borderBottomWidth: 2,

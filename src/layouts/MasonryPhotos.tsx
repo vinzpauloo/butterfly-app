@@ -160,7 +160,7 @@ const MasonryPhotos = ({ filter }) => {
                 postTitle={item.title}
                 totalViews={item.views}
                 /* height ratio of the cover photo */
-                height={item.cover.height / 6}
+                height={item.cover.height / 2}
                 setOpen={setOpen}
               />
             )}

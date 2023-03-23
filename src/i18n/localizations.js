@@ -3,7 +3,7 @@ const localizations = {
     account: "Account",
     all: "All",
     allComments: "All Comments",
-    bottomMessage: "People also have a bottom line!",
+    bottomMessage: "You have reached the end!",
     buyTheVideo: "Buy the video to watch the full version",
     cancel: "Cancel",
     chat: "Chat",

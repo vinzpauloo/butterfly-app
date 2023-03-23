@@ -105,7 +105,7 @@ const localizations = {
     mostFavorite: "最多收藏",
     mostViewed: "最多观看",
     muchLove: "多少都是爱",
-    mwah: "mwah",
+    mwah: "哇哦",
     others: "TA的视频",
     people: "人打赏",
     photo: "图片",

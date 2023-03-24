@@ -77,7 +77,7 @@ const SearchBar = ({ search, setSearch, hasSearch, setHasSearch, refetch }) => {
         <TextInput
           value={text}
           onChangeText={(text: string) => setText(text)}
-          placeholder="search model name"
+          placeholder={translations.search}
           style={styles.inputField}
           onSubmitEditing={searchWords}
         />

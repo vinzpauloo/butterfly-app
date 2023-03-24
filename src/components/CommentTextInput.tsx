@@ -14,9 +14,10 @@ import { HStack, VStack } from "native-base";
 import { useMutation } from "@tanstack/react-query";
 import { useQueryClient } from "@tanstack/react-query";
 
-import { GLOBAL_COLORS } from "global";
 import CommentsService from "services/api/CommentsService";
 import { commentGlobalStore } from "../zustand/commentGlobalStore";
+import { GLOBAL_COLORS } from "global";
+import { translationStore } from "../zustand/translationStore";
 import { userStore } from "../zustand/userStore";
 
 type Props = {
@@ -26,7 +27,7 @@ type Props = {
 };
 
 const CommentTextInput = (props: Props) => {
-  const customerID = userStore((store) => store._id);
+  const translations = translationStore((state) => state.translations);
   const [text, setText] = useState("");
   const [isKeyboardShown, setIsKeyboardShown] = useState(false);
   const textInputRef = useRef<TextInput>();
@@ -103,7 +104,7 @@ const CommentTextInput = (props: Props) => {
         comment: text,
         type: props.isFromFeed ? "feed" : "work",
       },
-      token: token
+      token: token,
     });
     globalCommentListRef.current.scrollToOffset({ animated: true, offset: 0 });
   }
@@ -117,7 +118,7 @@ const CommentTextInput = (props: Props) => {
         comment_id: commentIDToReplyTo,
         comment: text,
       },
-      token: token
+      token: token,
     });
   }
 
@@ -141,7 +142,7 @@ const CommentTextInput = (props: Props) => {
             multiline={true}
             style={styles.textInput}
             value={text}
-            placeholder="发表评论"
+            placeholder={translations.comment}
             placeholderTextColor="#999"
             keyboardType="default"
             onChangeText={(text) => setText(text)}

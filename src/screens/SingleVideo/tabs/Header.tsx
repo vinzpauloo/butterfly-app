@@ -1,4 +1,5 @@
 import { StyleSheet, Text, TouchableWithoutFeedback, View } from "react-native";
+import { useEffect } from "react";
 
 import AntDesign from "react-native-vector-icons/AntDesign";
 import Fontisto from "react-native-vector-icons/Fontisto";
@@ -9,7 +10,7 @@ import { useNavigation, useRoute } from "@react-navigation/native";
 import BannerAds from "features/ads/components/BannerAds";
 import FavoriteButton from "components/forms/singleVideo/FavoriteButton";
 import LikeButton from "components/forms/singleVideo/LikeButton";
-import { downloadFile } from "utils/downloadFile";
+import { downloadFile, readFileDirectory } from "lib/expoFileSystem";
 import { GLOBAL_COLORS } from "global";
 import { translationStore } from "../../../zustand/translationStore";
 
@@ -33,14 +34,19 @@ export const Header = ({
     });
   };
 
-  function testDownload() {
-    const fileName = "test-file-name";
-    alert("start downloading!");
-    downloadFile(
-      "http://techslides.com/demos/sample-videos/small.mp4",
-      fileName
-    );
-  }
+  const handleDownload = () => {
+    // const fileUrl = data.video_url;
+    const fileUrl = "http://techslides.com/demos/sample-videos/small.mp4"; // Temporary file for testing
+    const fileName = data._id + ".mp4"; // Work ID + video extension
+
+    console.log("Downloading ...", fileName);
+
+    downloadFile(fileUrl, fileName);
+  };
+
+  useEffect(() => {
+    readFileDirectory();
+  }, []);
 
   return (
     <>
@@ -102,7 +108,7 @@ export const Header = ({
               22{translations.coin}
             </Text>
           </View>
-          <TouchableWithoutFeedback onPress={testDownload}>
+          <TouchableWithoutFeedback onPress={handleDownload}>
             <View style={styles.buttonItem} pointerEvents="box-none">
               <MaterialCommunityIcons
                 name="download"

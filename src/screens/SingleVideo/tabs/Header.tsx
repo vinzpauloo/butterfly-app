@@ -1,5 +1,4 @@
 import { StyleSheet, Text, TouchableWithoutFeedback, View } from "react-native";
-import { useEffect } from "react";
 
 import AntDesign from "react-native-vector-icons/AntDesign";
 import Fontisto from "react-native-vector-icons/Fontisto";
@@ -10,7 +9,7 @@ import { useNavigation, useRoute } from "@react-navigation/native";
 import BannerAds from "features/ads/components/BannerAds";
 import FavoriteButton from "components/forms/singleVideo/FavoriteButton";
 import LikeButton from "components/forms/singleVideo/LikeButton";
-import { downloadFile, readFileDirectory } from "lib/expoFileSystem";
+import { downloadFile } from "lib/expoFileSystem";
 import { GLOBAL_COLORS } from "global";
 import { translationStore } from "../../../zustand/translationStore";
 
@@ -43,10 +42,6 @@ export const Header = ({
 
     downloadFile(fileUrl, fileName);
   };
-
-  useEffect(() => {
-    readFileDirectory();
-  }, []);
 
   return (
     <>

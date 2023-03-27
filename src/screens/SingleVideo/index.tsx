@@ -10,14 +10,14 @@ import {
 import Ionicons from "react-native-vector-icons/Ionicons";
 
 import CarouselSkeleton from "components/skeletons/CarouselSkeleton";
+import CustomerService from "services/api/CustomerService";
 import SingleVideoTab from "screens/SingleVideo/tabs/SingleVideoTabs";
 import VideoPlayer from "components/VideoPlayer";
 import VideoListSkeleton from "components/skeletons/VideoListSkeleton";
-import { GLOBAL_COLORS } from "global";
-import CustomerService from "services/api/CustomerService";
 import WorkService from "services/api/WorkService";
-import { userStore } from "../../zustand/userStore";
+import { GLOBAL_COLORS } from "global";
 import { translationStore } from "../../zustand/translationStore";
+import { userStore } from "../../zustand/userStore";
 
 const HeaderTitle = ({ data }) => {
   const token = userStore((store) => store.api_token);

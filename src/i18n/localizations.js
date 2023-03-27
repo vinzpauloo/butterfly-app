@@ -84,7 +84,7 @@ const localizations = {
     clear: "清除",
     clearSearches: "清除搜索",
     coin: "金币",
-    commnent: "发表评论",
+    comment: "发表评论",
     comments: "评论",
     download: "下载",
     duration: "时长",

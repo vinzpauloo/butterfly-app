@@ -7,6 +7,7 @@ export const downloadFile = async (url: string, fileName: string) => {
   try {
     const res = await FileSystem.downloadAsync(url, fileUri);
     console.log("File downloaded successfully:", res.uri);
+    return res;
   } catch (err) {
     console.log("Error downloading file:", err);
   }

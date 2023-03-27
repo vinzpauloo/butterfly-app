@@ -1,9 +1,16 @@
-import { StyleSheet, Text, TouchableWithoutFeedback, View } from "react-native";
+import {
+  Pressable,
+  StyleSheet,
+  Text,
+  TouchableWithoutFeedback,
+  View,
+} from "react-native";
 import { useEffect, useState } from "react";
 
 import AntDesign from "react-native-vector-icons/AntDesign";
 import Fontisto from "react-native-vector-icons/Fontisto";
 import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons";
+import MaterialIcons from "react-native-vector-icons/MaterialIcons";
 import Zocial from "react-native-vector-icons/Zocial";
 import { useNavigation, useRoute } from "@react-navigation/native";
 
@@ -12,12 +19,15 @@ import CustomModal from "components/CustomModal";
 import FavoriteButton from "components/forms/singleVideo/FavoriteButton";
 import LikeButton from "components/forms/singleVideo/LikeButton";
 import WatchVideo from "services/api/WatchVideo";
-import { downloadFile, readFileDirectory } from "lib/expoFileSystem";
+import VIPModalContent from "components/VIPModalContent";
+import { downloadFile } from "lib/expoFileSystem";
+import { downloadStore } from "../../../zustand/downloadStore";
 import { GLOBAL_COLORS } from "global";
 import { translationStore } from "../../../zustand/translationStore";
 import { userStore } from "../../../zustand/userStore";
-import VIPModalContent from "components/VIPModalContent";
 import { useQuery } from "@tanstack/react-query";
+
+const videoID = "98c135a9-9b70-475d-a2b8-983d3192f29e";
 
 export const Header = ({
   data,
@@ -26,12 +36,14 @@ export const Header = ({
   isAlreadyFavorite,
   setIsAlreadyFavorite,
 }) => {
+  const route = useRoute<any>();
+  const navigation = useNavigation<any>();
   const translations = translationStore((state) => state.translations);
   const token = userStore((store) => store.api_token);
   const isVIP = userStore((state) => state.is_Vip);
+  const { downloaded, downloading, setDownloaded, setDownloading } =
+    downloadStore((state) => state);
   const { getDownloadVideo } = WatchVideo();
-  const route = useRoute<any>();
-  const navigation = useNavigation<any>();
   const [open, setOpen] = useState(false);
   const [toDownload, setToDownload] = useState(false);
 
@@ -48,12 +60,19 @@ export const Header = ({
     queryKey: ["download-video-single-video"],
     queryFn: () =>
       getDownloadVideo({ data: { work_id: data._id }, token: token }),
-    onSuccess: (res: any) => {
+    onSuccess: async (res: any) => {
       const fileUrl = res.url;
-      // const fileUrl = "http://techslides.com/demos/sample-videos/small.mp4"; // Temporary file for testing
       const fileName = data._id + ".mp4"; // Work ID + video extension
       console.log("Downloading ...", fileUrl);
-      downloadFile(fileUrl, fileName);
+      const result = await downloadFile(fileUrl, fileName);
+      if (result.status === 200) {
+        // remove the video id in downloading
+        const newDownloadingVideoIDS = downloading.filter(
+          (item) => item !== data._id
+        );
+        setDownloading(newDownloadingVideoIDS); // add the new array of downloading that been remove the id
+        setDownloaded([...downloaded, data._id]); // add the id in downloaded video
+      }
       setToDownload(false);
     },
     enabled: toDownload,
@@ -61,9 +80,55 @@ export const Header = ({
 
   const handleDownload = () => {
     if (isVIP) {
+      setDownloading([...downloading, data._id]); // add the id in downloading
       setToDownload(true);
     } else {
       setOpen(true);
+    }
+  };
+
+  const DownloadStatus = ({ videoID }) => {
+    if (!downloaded.includes(videoID) && !downloading.includes(videoID)) {
+      // if the video is not download yet
+      return (
+        <Pressable onPress={handleDownload}>
+          <View style={styles.buttonItem} pointerEvents="box-none">
+            <MaterialCommunityIcons
+              name="download"
+              color="#999"
+              size={18}
+              style={styles.icon}
+            />
+            <Text style={styles.text}>{translations.download}</Text>
+          </View>
+        </Pressable>
+      );
+    } else if (!downloaded.includes(videoID) && downloading.includes(videoID)) {
+      // if the video is downloading
+      return (
+        <View style={styles.buttonItem} pointerEvents="box-none">
+          <MaterialCommunityIcons
+            name="progress-download"
+            color="#999"
+            size={18}
+            style={styles.icon}
+          />
+          <Text style={styles.text}>{translations.downloading}...</Text>
+        </View>
+      );
+    } else if (downloaded.includes(videoID) && !downloading.includes(videoID)) {
+      // if the video is downloaded
+      return (
+        <View style={styles.buttonItem} pointerEvents="box-none">
+          <MaterialIcons
+            name="file-download-done"
+            color="#999"
+            size={18}
+            style={styles.icon}
+          />
+          <Text style={styles.text}>{translations.downloaded}</Text>
+        </View>
+      );
     }
   };
 
@@ -127,17 +192,7 @@ export const Header = ({
               22{translations.coin}
             </Text>
           </View>
-          <TouchableWithoutFeedback onPress={handleDownload}>
-            <View style={styles.buttonItem} pointerEvents="box-none">
-              <MaterialCommunityIcons
-                name="download"
-                color="#999"
-                size={18}
-                style={styles.icon}
-              />
-              <Text style={styles.text}>{translations.download}</Text>
-            </View>
-          </TouchableWithoutFeedback>
+          <DownloadStatus videoID={data._id} />
           <TouchableWithoutFeedback
             onPress={() => navigation.navigate("SharingPromotion")}
           >

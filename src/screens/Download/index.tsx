@@ -2,11 +2,11 @@ import { StyleSheet, View } from "react-native";
 import React, { useEffect, useState } from "react";
 
 import { FlashList } from "@shopify/flash-list";
+import * as FileSystem from "expo-file-system";
 
 import Container from "components/Container";
-import * as FileSystem from "expo-file-system";
 import VideoPlayer from "components/VideoPlayer";
-import { readFileDirectory } from "lib/expoFileSystem";
+import { downloadStore } from "../../zustand/downloadStore";
 
 const DEFAULT_DIRECTORY = FileSystem.documentDirectory + "downloads/";
 
@@ -20,19 +20,12 @@ const VideoContainer = ({ data }) => {
 };
 
 const DownloadScreen = () => {
-  const [videos, setVideos] = useState([]);
-
-  useEffect(() => {
-    (async () => {
-      const directories = await readFileDirectory();
-      setVideos(directories);
-    })();
-  }, []);
+  const { downloaded } = downloadStore((state) => state);
 
   return (
     <Container>
       <FlashList
-        data={videos}
+        data={downloaded}
         keyExtractor={(_, index) => "" + index}
         renderItem={({ item, index }) => (
           <VideoContainer key={index} data={item} />

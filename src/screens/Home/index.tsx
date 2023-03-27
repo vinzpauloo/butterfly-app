@@ -1,5 +1,5 @@
 import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
-import React from "react";
+import React, { useEffect } from "react";
 
 import Ionicons from "react-native-vector-icons/Ionicons";
 import MaterialTopTabs from "layouts/navigators/MaterialTopTabs";
@@ -11,6 +11,8 @@ import Home from "./tabs/Home";
 import Moment from "./tabs/Moment";
 import Photography from "./tabs/Photography";
 import PopupAds from "features/ads/components/PopupAds";
+import { downloadStore } from "../../zustand/downloadStore";
+import { readFileDirectory } from "lib/expoFileSystem";
 import { translationStore } from "../../zustand/translationStore";
 
 // Search Icon
@@ -35,6 +37,8 @@ const Search = () => {
 
 const HomeTab = () => {
   const translations = translationStore((state) => state.translations);
+  const { setDownloaded } = downloadStore((state) => state);
+
   const topMainNav = {
     initialRoute: translations.home,
     screens: [
@@ -56,6 +60,14 @@ const HomeTab = () => {
       },
     ],
   };
+
+  useEffect(() => {
+    (async () => {
+      const directories = await readFileDirectory();
+      setDownloaded(directories);
+    })();
+  }, []);
+
   return (
     <>
       <MaterialTopTabs data={topMainNav} search={<Search />} />

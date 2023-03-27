@@ -11,6 +11,7 @@ import StackNavigators from "layouts/navigators/StackNavigators";
 import { GLOBAL_COLORS } from "global";
 import { stackScreens } from "data/stackScreens";
 import { initializeSentry } from "services/sentry";
+import { readFileDirectory } from "lib/expoFileSystem";
 
 // Create a client
 const queryClient = new QueryClient({
@@ -28,6 +29,7 @@ axios.defaults.headers.common["Accept"] = "application/json";
 export default function App() {
   useEffect(() => {
     initializeSentry();
+    readFileDirectory();
   }, []);
 
   // prevent screens UI going under the screen header

@@ -67,10 +67,6 @@ export const Header = ({
     }
   };
 
-  useEffect(() => {
-    readFileDirectory();
-  }, []);
-
   return (
     <>
       <View style={styles.container} pointerEvents="box-none">

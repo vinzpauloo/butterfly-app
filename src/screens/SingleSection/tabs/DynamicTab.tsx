@@ -1,23 +1,24 @@
-import { RefreshControl, StyleSheet, Text, View } from "react-native";
+import { StyleSheet, Text, View } from "react-native";
 import { useCallback, useState } from "react";
 
+import MasonryList from "@react-native-seoul/masonry-list";
 import { useDisclose } from "native-base";
 import { useQuery } from "@tanstack/react-query";
 
+import Container from "components/Container";
 import Loading from "components/Loading";
 import MasonrySkeleton from "components/skeletons/MasonrySkeleton";
 import Modal from "components/BottomModal";
 import WorkgroupService from "services/api/WorkgroupService";
 import { GLOBAL_COLORS } from "global";
-import { MasonryFlashList } from "@shopify/flash-list";
-import MasonryList from "@react-native-seoul/masonry-list";
+import { translationStore } from "../../../zustand/translationStore";
 import { Video } from "features/sectionList/components/GridVideos";
-import Container from "components/Container";
 
 const BottomMessage = () => {
+  const translation = translationStore((state) => state.translations);
   return (
     <View>
-      <Text style={styles.bottomText}>人家也是有底线的啦！</Text>
+      <Text style={styles.bottomText}>{translation.bottomMessage}！</Text>
     </View>
   );
 };

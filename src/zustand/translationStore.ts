@@ -9,7 +9,7 @@ interface ITranslationStore {
 }
 
 /* Default language on initial load */
-const defaultLang = "en";
+const defaultLang = "en_us";
 
 export const translationStore = create<ITranslationStore>((set) => ({
   lang: defaultLang,

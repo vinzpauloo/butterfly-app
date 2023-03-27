@@ -1,4 +1,4 @@
-export default en = {
+export default en_us = {
   account: "Account",
   all: "All",
   allComments: "All Comments",

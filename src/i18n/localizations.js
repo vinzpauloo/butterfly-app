@@ -1,8 +1,8 @@
-import en from "i18n/en";
+import en_us from "i18n/en";
 import zh_cn from "i18n/zh-cn";
 
 const localizations = {
-  en,
+  en_us,
   zh_cn,
 };
 

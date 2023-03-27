@@ -34,7 +34,7 @@ const Intl = () => {
   const local_data = [
     {
       value: "1",
-      lable: "EN",
+      lable: "EN-US",
       image: FlagUSA,
     },
     {
@@ -52,11 +52,11 @@ const Intl = () => {
   const changeLanguage = (value) => {
     switch (value) {
       case "1":
-        return "en";
+        return "en_us";
       case "2":
         return "zh_cn";
       default:
-        return "en";
+        return "en_us";
     }
   };
 

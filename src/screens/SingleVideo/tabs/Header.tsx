@@ -1,4 +1,5 @@
 import { StyleSheet, Text, TouchableWithoutFeedback, View } from "react-native";
+import { useEffect, useState } from "react";
 
 import AntDesign from "react-native-vector-icons/AntDesign";
 import Fontisto from "react-native-vector-icons/Fontisto";
@@ -7,11 +8,16 @@ import Zocial from "react-native-vector-icons/Zocial";
 import { useNavigation, useRoute } from "@react-navigation/native";
 
 import BannerAds from "features/ads/components/BannerAds";
+import CustomModal from "components/CustomModal";
 import FavoriteButton from "components/forms/singleVideo/FavoriteButton";
 import LikeButton from "components/forms/singleVideo/LikeButton";
-import { downloadFile } from "lib/expoFileSystem";
+import WatchVideo from "services/api/WatchVideo";
+import { downloadFile, readFileDirectory } from "lib/expoFileSystem";
 import { GLOBAL_COLORS } from "global";
 import { translationStore } from "../../../zustand/translationStore";
+import { userStore } from "../../../zustand/userStore";
+import VIPModalContent from "components/VIPModalContent";
+import { useQuery } from "@tanstack/react-query";
 
 export const Header = ({
   data,
@@ -21,8 +27,13 @@ export const Header = ({
   setIsAlreadyFavorite,
 }) => {
   const translations = translationStore((state) => state.translations);
+  const token = userStore((store) => store.api_token);
+  const isVIP = userStore((state) => state.is_Vip);
+  const { getDownloadVideo } = WatchVideo();
   const route = useRoute<any>();
   const navigation = useNavigation<any>();
+  const [open, setOpen] = useState(false);
+  const [toDownload, setToDownload] = useState(false);
 
   // navigate to single tag screen
   const handleNavigate = (item) => {
@@ -33,14 +44,27 @@ export const Header = ({
     });
   };
 
+  const { isLoading } = useQuery({
+    queryKey: ["download-video-single-video"],
+    queryFn: () =>
+      getDownloadVideo({ data: { work_id: data._id }, token: token }),
+    onSuccess: (res: any) => {
+      const fileUrl = res.url;
+      // const fileUrl = "http://techslides.com/demos/sample-videos/small.mp4"; // Temporary file for testing
+      const fileName = data._id + ".mp4"; // Work ID + video extension
+      console.log("Downloading ...", fileUrl);
+      downloadFile(fileUrl, fileName);
+      setToDownload(false);
+    },
+    enabled: toDownload,
+  });
+
   const handleDownload = () => {
-    // const fileUrl = data.video_url;
-    const fileUrl = "http://techslides.com/demos/sample-videos/small.mp4"; // Temporary file for testing
-    const fileName = data._id + ".mp4"; // Work ID + video extension
-
-    console.log("Downloading ...", fileName);
-
-    downloadFile(fileUrl, fileName);
+    if (isVIP) {
+      setToDownload(true);
+    } else {
+      setOpen(true);
+    }
   };
 
   return (
@@ -130,6 +154,9 @@ export const Header = ({
         </View>
       </View>
       <BannerAds />
+      <CustomModal open={open} setOpen={setOpen}>
+        <VIPModalContent setOpen={setOpen} />
+      </CustomModal>
     </>
   );
 };

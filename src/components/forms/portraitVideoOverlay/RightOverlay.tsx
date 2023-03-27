@@ -2,11 +2,11 @@ import React from "react";
 import { StyleSheet } from "react-native";
 import { VStack } from "native-base";
 
-import UserOverlay from "./UserOverlay";
-import LikeOverlay from "./LikeOverlay";
-import FavoriteOVerlay from "./FavoriteOVerlay";
-import DownloadOverlay from "./DownloadOverlay";
 import CommentOverlay from "./CommentOverlay";
+import DownloadOverlay from "./DownloadOverlay";
+import FavoriteOVerlay from "./FavoriteOVerlay";
+import LikeOverlay from "./LikeOverlay";
+import UserOverlay from "./UserOverlay";
 import { userStore } from "../../../zustand/userStore";
 
 type Props = {
@@ -27,6 +27,7 @@ type Props = {
 
 const RightOverlay = (props: Props) => {
   const customerID = userStore((store) => store._id);
+
   return (
     <VStack space={2} style={styles.verticalBar}>
       <UserOverlay
@@ -54,7 +55,7 @@ const RightOverlay = (props: Props) => {
         isFavorite={props.isFavorite}
         setIsFavorite={props.setIsFavorite}
       />
-      <DownloadOverlay />
+      <DownloadOverlay videoID={props.videoID} />
     </VStack>
   );
 };

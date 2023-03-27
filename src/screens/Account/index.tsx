@@ -39,7 +39,7 @@ const Intl = () => {
     },
     {
       value: "2",
-      lable: "CN",
+      lable: "ZH-CN",
       image: FlagChina,
     },
   ];
@@ -54,7 +54,7 @@ const Intl = () => {
       case "1":
         return "en";
       case "2":
-        return "cn";
+        return "zh_cn";
       default:
         return "en";
     }
@@ -71,8 +71,10 @@ const Intl = () => {
   return (
     <SelectCountry
       style={styles.dropdown}
+      activeColor={GLOBAL_COLORS.inactiveTextColor}
       selectedTextStyle={styles.selectedTextStyle}
       placeholderStyle={styles.placeholderStyle}
+      containerStyle={styles.container}
       imageStyle={styles.imageStyle}
       iconStyle={styles.iconStyle}
       maxHeight={200}
@@ -312,13 +314,20 @@ const styles = StyleSheet.create({
     marginTop: 10,
     marginHorizontal: 10,
   },
-
+  // COUNTRY SELECT
+  container: {
+    backgroundColor: GLOBAL_COLORS.primaryColor,
+    borderWidth: 1,
+    borderColor: GLOBAL_COLORS.primaryTextColor,
+  },
   dropdown: {
     height: 30,
-    width: 80,
-    backgroundColor: GLOBAL_COLORS.primaryTextColor,
+    width: 95,
+    backgroundColor: GLOBAL_COLORS.primaryColor,
     borderRadius: 22,
     paddingHorizontal: 8,
+    borderWidth: 1,
+    borderColor: GLOBAL_COLORS.primaryTextColor,
   },
   imageStyle: {
     width: 20,
@@ -329,6 +338,7 @@ const styles = StyleSheet.create({
     fontSize: 14,
   },
   selectedTextStyle: {
+    color: GLOBAL_COLORS.primaryTextColor,
     fontSize: 14,
     textAlign: "center",
   },

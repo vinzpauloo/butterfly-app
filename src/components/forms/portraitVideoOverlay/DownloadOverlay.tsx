@@ -43,15 +43,6 @@ const DownloadOverlay: React.FC<Props> = ({ videoID }) => {
     }
   };
 
-  function testDownload() {
-    const fileName = "test-file-name";
-    alert("start downloading!");
-    downloadFile(
-      "http://techslides.com/demos/sample-videos/small.mp4",
-      fileName
-    );
-  }
-
   useEffect(() => {
     readFileDirectory();
   }, []);

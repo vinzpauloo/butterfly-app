@@ -230,6 +230,7 @@ const LinkList = () => {
 };
 
 const AccountTab = () => {
+  const navigation = useNavigation<any>();
   return (
     <Container>
       <Header />
@@ -238,6 +239,16 @@ const AccountTab = () => {
           <Summary />
           <VIP />
           <LinkList />
+          <Pressable
+            style={styles.downloadBtn}
+            onPress={() =>
+              navigation.navigate("Downloads", {
+                previousScreen: "Account",
+              })
+            }
+          >
+            <Text style={styles.downloadText}>Go to downloads</Text>
+          </Pressable>
         </VStack>
       </ScrollView>
     </Container>
@@ -324,5 +335,15 @@ const styles = StyleSheet.create({
   iconStyle: {
     width: 15,
     height: 15,
+  },
+  //DOWNLOAD BUTTON
+  downloadBtn: {
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  downloadText: {
+    fontSize: 20,
+    color: GLOBAL_COLORS.primaryTextColor,
+    textDecorationLine: "underline",
   },
 });

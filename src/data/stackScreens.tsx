@@ -11,6 +11,8 @@ import BottomNav from "./bottomNav";
 import CameraInit from "screens/Settings/AccountRetrievalTabs/CameraInit";
 import Container from "components/Container";
 import CustomerService from "screens/Settings/AccountRetrievalTabs/CustomerService";
+import DownloadScreen from "screens/Download";
+
 import FollowersScreen from "screens/FollowersScreen";
 import InitialLoad from "screens/InitialLoad";
 import InformationScreen from "screens/InformationScreen";
@@ -18,6 +20,7 @@ import Introduction from "screens/Settings/tabs/Introduction";
 import MobileBindRequest from "screens/Settings/tabs/MobileBindRequest";
 import MobileRetrieval from "screens/Settings/AccountRetrievalTabs/MobileRetrieval";
 import OfflineCache from "../screens/Account/tabs/OfflineCache";
+import OnAppExitScreen from "screens/OnAppExitScreen";
 import PasscodeLock from "screens/Settings/tabs/PasscodeLock";
 import PetName from "screens/Settings/tabs/PetName";
 import PhotoGallery from "screens/PhotoGallery";
@@ -38,11 +41,10 @@ import SingleChatScreen from "screens/SingleChatScreen";
 import SingleTag from "screens/SingleTag";
 import SingleFeedScreen from "screens/SingleFeedScreen";
 import TermsOfService from "screens/TermsOfService";
-import OnAppExitScreen from "screens/OnAppExitScreen";
 import WorkService from "services/api/WorkService";
 import { GLOBAL_COLORS } from "global";
-import { useRoute } from "@react-navigation/native";
 import { useQuery } from "@tanstack/react-query";
+import { useRoute } from "@react-navigation/native";
 import { userStore } from "../zustand/userStore";
 
 const basicHeader = ({ navigation, route }: any) => ({
@@ -130,58 +132,13 @@ export const stackScreens = {
   screenOptions: { animation: "slide_from_right" },
   screens: [
     {
-      name: "BottomNav",
-      component: BottomNav,
+      name: "About",
+      component: About,
       options: { headerShown: false },
     },
     {
-      name: "SingleVideo",
-      component: SingleVideoScreen,
-      options: { headerShown: false },
-    },
-    {
-      name: "Search",
-      component: Search,
-      options: { headerShown: false },
-    },
-    {
-      name: "VlogScreen",
-      component: VlogScreen,
-      options: { headerShown: false },
-    },
-    {
-      name: "Preloading",
-      component: Preloading,
-      options: { headerShown: false },
-    },
-    {
-      name: "TermsOfService",
-      component: TermsOfService,
-      options: { headerShown: false },
-    },
-    {
-      name: "PhotoGallery",
-      component: PhotoGallery,
-      options: basicHeader,
-    },
-    {
-      name: "SingleSection",
-      component: SingleSectionScreen,
-      options: basicHeader,
-    },
-    {
-      name: "RecordingHistory",
-      component: RecordingHistory,
-      options: { headerShown: false },
-    },
-    {
-      name: "OfflineCache",
-      component: OfflineCache,
-      options: { headerShown: false },
-    },
-    {
-      name: "SharingPromotion",
-      component: SharingPromotion,
+      name: "AccountRetrieval",
+      component: AccountRetrieval,
       options: { headerShown: false },
     },
     {
@@ -195,43 +152,8 @@ export const stackScreens = {
       options: { headerShown: false },
     },
     {
-      name: "SingleUser",
-      component: SingleUser,
-      options: { headerShown: false },
-    },
-    {
-      name: "Settings",
-      component: Settings,
-      options: basicHeader,
-    },
-    {
-      name: "ProfilePhoto",
-      component: ProfilePhoto,
-      options: { headerShown: false },
-    },
-    {
-      name: "PetName",
-      component: PetName,
-      options: { headerShown: false },
-    },
-    {
-      name: "MobileBindRequest",
-      component: MobileBindRequest,
-      options: { headerShown: false },
-    },
-    {
-      name: "Introduction",
-      component: Introduction,
-      options: { headerShown: false },
-    },
-    {
-      name: "AccountRetrieval",
-      component: AccountRetrieval,
-      options: { headerShown: false },
-    },
-    {
-      name: "MobileRetrieval",
-      component: MobileRetrieval,
+      name: "BottomNav",
+      component: BottomNav,
       options: { headerShown: false },
     },
     {
@@ -245,23 +167,48 @@ export const stackScreens = {
       options: { headerShown: false },
     },
     {
-      name: "RequestCode",
-      component: RequestCode,
+      name: "Downloads",
+      component: DownloadScreen,
+      options: basicHeader,
+    },
+    {
+      name: "FollowersScreen",
+      component: FollowersScreen,
+      options: basicHeader,
+    },
+    {
+      name: "InformationScreen",
+      component: InformationScreen,
+      options: basicHeader,
+    },
+    {
+      name: "InitialLoad",
+      component: InitialLoad,
       options: { headerShown: false },
     },
     {
-      name: "PrivacyPolicy",
-      component: PrivacyPolicy,
+      name: "Introduction",
+      component: Introduction,
       options: { headerShown: false },
     },
     {
-      name: "ServiceProvisions",
-      component: ServiceProvisions,
+      name: "MobileBindRequest",
+      component: MobileBindRequest,
       options: { headerShown: false },
     },
     {
-      name: "About",
-      component: About,
+      name: "MobileRetrieval",
+      component: MobileRetrieval,
+      options: { headerShown: false },
+    },
+    {
+      name: "OfflineCache",
+      component: OfflineCache,
+      options: { headerShown: false },
+    },
+    {
+      name: "OnAppExitScreen",
+      component: OnAppExitScreen,
       options: { headerShown: false },
     },
     {
@@ -270,8 +217,43 @@ export const stackScreens = {
       options: { headerShown: false },
     },
     {
-      name: "InformationScreen",
-      component: InformationScreen,
+      name: "PetName",
+      component: PetName,
+      options: { headerShown: false },
+    },
+    {
+      name: "PhotoGallery",
+      component: PhotoGallery,
+      options: basicHeader,
+    },
+    {
+      name: "Preloading",
+      component: Preloading,
+      options: { headerShown: false },
+    },
+    {
+      name: "PrivacyPolicy",
+      component: PrivacyPolicy,
+      options: { headerShown: false },
+    },
+    {
+      name: "RecordingHistory",
+      component: RecordingHistory,
+      options: { headerShown: false },
+    },
+    {
+      name: "RequestCode",
+      component: RequestCode,
+      options: { headerShown: false },
+    },
+    {
+      name: "Search",
+      component: Search,
+      options: { headerShown: false },
+    },
+    {
+      name: "Settings",
+      component: Settings,
       options: basicHeader,
     },
     {
@@ -280,13 +262,18 @@ export const stackScreens = {
       options: basicHeader,
     },
     {
-      name: "SingleTag",
-      component: SingleTag,
+      name: "SingleSection",
+      component: SingleSectionScreen,
+      options: basicHeader,
+    },
+    {
+      name: "ProfilePhoto",
+      component: ProfilePhoto,
       options: { headerShown: false },
     },
     {
-      name: "InitialLoad",
-      component: InitialLoad,
+      name: "ServiceProvisions",
+      component: ServiceProvisions,
       options: { headerShown: false },
     },
     {
@@ -295,13 +282,33 @@ export const stackScreens = {
       options: { headerShown: false },
     },
     {
-      name: "FollowersScreen",
-      component: FollowersScreen,
-      options: basicHeader,
+      name: "SingleTag",
+      component: SingleTag,
+      options: { headerShown: false },
     },
     {
-      name: "OnAppExitScreen",
-      component: OnAppExitScreen,
+      name: "SingleUser",
+      component: SingleUser,
+      options: { headerShown: false },
+    },
+    {
+      name: "SingleVideo",
+      component: SingleVideoScreen,
+      options: { headerShown: false },
+    },
+    {
+      name: "SharingPromotion",
+      component: SharingPromotion,
+      options: { headerShown: false },
+    },
+    {
+      name: "TermsOfService",
+      component: TermsOfService,
+      options: { headerShown: false },
+    },
+    {
+      name: "VlogScreen",
+      component: VlogScreen,
       options: { headerShown: false },
     },
   ],

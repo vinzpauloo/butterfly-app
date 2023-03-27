@@ -17,6 +17,7 @@ export const readFileDirectory = async () => {
   try {
     const res = await FileSystem.readDirectoryAsync(DEFAULT_DIRECTORY);
     console.log("Read directory successfully:", res);
+    return res;
   } catch (err) {
     console.log("Directory not found.", err);
     console.log("Creating 'downloads' directory ...");

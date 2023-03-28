@@ -50,6 +50,7 @@ export default zh_cn = {
   recommended: "更多推荐",
   recommendedVideosList: "推荐视频列表",
   reply: "回复",
+  replyTo: "回复",
   reprinting: "未经作者允许禁止转载",
   reward: "打赏",
   rewarded: "赏了",

@@ -50,6 +50,7 @@ export default en_us = {
   recommended: "Recommended",
   recommendedVideosList: "Recommended Videos List",
   reply: "Reply",
+  replyTo: "Reply to",
   reprinting: "Copyright do not distribute",
   reward: "Reward",
   rewarded: "Rewarded",

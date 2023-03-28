@@ -130,10 +130,10 @@ const CommentTextInput = (props: Props) => {
       <VStack pt={isOnReplyMode ? 0 : 3} style={styles.bottomForm} space={1}>
         <HStack alignItems="center" display={isOnReplyMode ? "flex" : "none"}>
           <Text style={styles.whiteText}>
-            Replying to: {userNameToReplyTo} ·{" "}
+            {translations.replyTo}: {userNameToReplyTo} ·{" "}
           </Text>
           <Pressable onPress={() => setIsOnReplyMode(false)}>
-            <Text style={styles.cancelReply}>Cancel</Text>
+            <Text style={styles.cancelReply}>{translations.cancel}</Text>
           </Pressable>
         </HStack>
         <HStack style={styles.inputContainer} space={3}>

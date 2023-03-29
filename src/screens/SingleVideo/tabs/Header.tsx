@@ -5,7 +5,7 @@ import {
   TouchableWithoutFeedback,
   View,
 } from "react-native";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 
 import AntDesign from "react-native-vector-icons/AntDesign";
 import Fontisto from "react-native-vector-icons/Fontisto";
@@ -20,14 +20,12 @@ import FavoriteButton from "components/forms/singleVideo/FavoriteButton";
 import LikeButton from "components/forms/singleVideo/LikeButton";
 import WatchVideo from "services/api/WatchVideo";
 import VIPModalContent from "components/VIPModalContent";
-import { downloadFile } from "lib/expoFileSystem";
+import { downloadFile, writeAsString } from "lib/expoFileSystem";
 import { downloadStore } from "../../../zustand/downloadStore";
 import { GLOBAL_COLORS } from "global";
 import { translationStore } from "../../../zustand/translationStore";
 import { userStore } from "../../../zustand/userStore";
 import { useQuery } from "@tanstack/react-query";
-
-const videoID = "98c135a9-9b70-475d-a2b8-983d3192f29e";
 
 export const Header = ({
   data,
@@ -70,6 +68,8 @@ export const Header = ({
         const newDownloadingVideoIDS = downloading.filter(
           (item) => item !== data._id
         );
+
+        writeAsString(data._id + ".txt", data); //write the data for the downloaded file
         setDownloading(newDownloadingVideoIDS); // add the new array of downloading that been remove the id
         setDownloaded([...downloaded, data._id]); // add the id in downloaded video
       }

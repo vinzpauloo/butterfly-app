@@ -1,13 +1,12 @@
 import { Image, StyleSheet, Text, Pressable, View } from "react-native";
 import React from "react";
 
-import { useNavigation } from "@react-navigation/native";
 import VideoComponent from "components/VideoComponent";
 import { GLOBAL_COLORS } from "global";
+import { useNavigation } from "@react-navigation/native";
 
 const SingleVideo = ({ data }) => {
   const item = data[0];
-  console.log("!!!", item);
 
   const navigation = useNavigation<any>();
 

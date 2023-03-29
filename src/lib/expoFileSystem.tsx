@@ -27,3 +27,25 @@ export const readFileDirectory = async () => {
     console.log("'Downloads' directory created!");
   }
 };
+
+export const writeAsString = async (fileName: string, data: any) => {
+  const fileUri = DEFAULT_DIRECTORY + fileName;
+  try {
+    await FileSystem.writeAsStringAsync(fileUri, JSON.stringify(data));
+    console.log("Writing as string successfully");
+  } catch (err) {
+    console.log("Error writing as string:", err);
+  }
+};
+
+export const readAsString = async (fileName: string) => {
+  const fileUri = DEFAULT_DIRECTORY + fileName;
+  try {
+    const payloadJSON = await FileSystem.readAsStringAsync(fileUri);
+    const payload = JSON.parse(payloadJSON);
+    console.log("Read as string successfully:", payload);
+    return payload;
+  } catch (err) {
+    console.log("Error read as string:", err);
+  }
+};

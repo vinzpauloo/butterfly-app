@@ -12,7 +12,7 @@ import CameraInit from "screens/Settings/AccountRetrievalTabs/CameraInit";
 import Container from "components/Container";
 import CustomerService from "screens/Settings/AccountRetrievalTabs/CustomerService";
 import DownloadScreen from "screens/Download";
-
+import DownloadVideo from "screens/DownloadVideo";
 import FollowersScreen from "screens/FollowersScreen";
 import InitialLoad from "screens/InitialLoad";
 import InformationScreen from "screens/InformationScreen";
@@ -169,6 +169,11 @@ export const stackScreens = {
     {
       name: "Downloads",
       component: DownloadScreen,
+      options: basicHeader,
+    },
+    {
+      name: "DownloadVideo",
+      component: DownloadVideo,
       options: basicHeader,
     },
     {

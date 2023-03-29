@@ -1,10 +1,18 @@
-import { Dimensions, ImageBackground, Pressable, StyleSheet, Text, AppState, BackHandler } from "react-native";
+import {
+  Dimensions,
+  ImageBackground,
+  Pressable,
+  StyleSheet,
+  Text,
+  AppState,
+  BackHandler,
+} from "react-native";
 import { StackActions, useNavigation } from "@react-navigation/native";
 import * as Linking from "expo-linking";
 import { GLOBAL_COLORS } from "global";
-import { adsGlobalStore } from "../../zustand/adsGlobalStore"
+import { adsGlobalStore } from "../../zustand/adsGlobalStore";
 import { useState } from "react";
-import * as Updates from "expo-updates"
+import * as Updates from "expo-updates";
 
 const { height } = Dimensions.get("window");
 const Preloading = () => {
@@ -17,31 +25,29 @@ const Preloading = () => {
   };
 
   // subscribe to ads global store
-  const [fullscreen_banner] = adsGlobalStore(
-    (state) => [state.fullscreen_banner],
-  )
+  const fullscreen_banner = adsGlobalStore((state) => state.fullscreen_banner);
 
-  let imgURL = ""
-  let adsURL = ""
-  
-  fullscreen_banner.map((item: any) => {
-    imgURL = item.photo_url
-    adsURL = item.url
-  })
+  let imgURL = fullscreen_banner.photo_url;
+  let adsURL = fullscreen_banner.url;
 
   const handleAppStateChange = (nextAppState) => {
-    if (backWasPressed && appState.match(/inactive|background/) && nextAppState === 'active') {
+    if (
+      backWasPressed &&
+      appState.match(/inactive|background/) &&
+      nextAppState === "active"
+    ) {
       // reloads the app on coming back from tab
-      Updates.reloadAsync()
+      Updates.reloadAsync();
     }
     setAppState(nextAppState);
-  }
+  };
 
-  AppState.addEventListener('change', handleAppStateChange);
+  AppState.addEventListener("change", handleAppStateChange);
 
   BackHandler.addEventListener("hardwareBackPress", () => {
-    setBackWasPressed(true)
-    navigation.navigate("OnAppExitScreen"); BackHandler.exitApp()
+    setBackWasPressed(true);
+    navigation.navigate("OnAppExitScreen");
+    BackHandler.exitApp();
     // if possible change the - animation: "slide_from_right"
     // in StackScreen options, specifically for "OnAppExitScreen" to fade instead
     return true;

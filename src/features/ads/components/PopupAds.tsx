@@ -11,22 +11,20 @@ import { adsGlobalStore } from "../../../zustand/adsGlobalStore";
 const { width } = Dimensions.get("window");
 
 const Content = ({ setOpen }) => {
-
   // subscribe to ads global store
-  const [popup_banner] = adsGlobalStore(
-    (state) => [state.popup_banner],
-  )
+  const popup_banner = adsGlobalStore((state) => state.popup_banner);
 
-  let imgURL = ""
-  let adsURL = ""
-
-  popup_banner.map((item: any) => {
-    imgURL = item.photo_url
-    adsURL = item.url
-  })
+  let imgURL = popup_banner.photo_url;
+  let adsURL = popup_banner.url;
 
   return (
-    <Modal.Content h={400} borderRadius={0} backgroundColor="contrastThreshold" shadow="none" width={width}>
+    <Modal.Content
+      h={400}
+      borderRadius={0}
+      backgroundColor="contrastThreshold"
+      shadow="none"
+      width={width}
+    >
       <Modal.Body alignItems="center">
         <Pressable onPress={() => Linking.openURL(adsURL)}>
           <Image source={{ uri: imgURL }} style={styles.ads} />

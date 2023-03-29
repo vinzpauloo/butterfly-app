@@ -57,18 +57,27 @@ const InitialLoad = () => {
         // fetch ads from backend and put into ads global store
         setAdsGlobalStore(
           // all arrays
-          data[0].banners,
-          data[1].banners,
+          { photo_url: data[0].banners.photo_url, url: data[0].banners.url },
+          { photo_url: data[1].banners.photo_url, url: data[1].banners.url },
           data[2].banners,
-          data[3].banners
+          { photo_url: data[3].banners.photo_url, url: data[3].banners.url }
         );
 
         // store ads to local app cache
         storeDataObject("AdvertisementCacheData", {
-          localCache_fullscreen_banner: data[0].banners,
-          localCache_popup_banner: data[1].banners,
+          localCache_fullscreen_banner: {
+            photo_url: data[0].banners.photo_url,
+            url: data[0].banners.url,
+          },
+          localCache_popup_banner: {
+            photo_url: data[1].banners.photo_url,
+            url: data[1].banners.url,
+          },
           localCache_carousel_banner: data[2].banners,
-          localCache_single_banner: data[3].banners,
+          localCache_single_banner: {
+            photo_url: data[3].banners.photo_url,
+            url: data[3].banners.url,
+          },
         });
       } else {
         console.log("=== No ads available. ===");

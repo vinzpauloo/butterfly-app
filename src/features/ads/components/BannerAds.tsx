@@ -1,35 +1,32 @@
-import React from 'react'
-import { StyleSheet, Image, TouchableWithoutFeedback } from 'react-native'
+import React from "react";
+import { StyleSheet, Image, TouchableWithoutFeedback } from "react-native";
 import * as Linking from "expo-linking";
-import { adsGlobalStore } from '../../../zustand/adsGlobalStore'
+import { adsGlobalStore } from "../../../zustand/adsGlobalStore";
 
-type Props = {}
+type Props = {};
 
 const BannerAds = (props: Props) => {
-	// subscribe to ads global store
-	const [single_banner] = adsGlobalStore(
-		(state) => [state.single_banner],
-	)
+  // subscribe to ads global store
+  const single_banner = adsGlobalStore((state) => state.single_banner);
 
-	let imgURL = ""
-	let adsURL = ""
+  let imgURL = single_banner.photo_url;
+  let adsURL = single_banner.url;
 
-	single_banner.map((item: any) => {
-		imgURL = item.photo_url
-		adsURL = item.url
-	})
+  return (
+    <TouchableWithoutFeedback onPress={() => Linking.openURL(adsURL)}>
+      <Image
+        style={styles.bannerAds}
+        source={{ uri: imgURL, cache: "only-if-cached" }}
+        resizeMode={"cover"}
+      />
+    </TouchableWithoutFeedback>
+  );
+};
 
-	return (
-		<TouchableWithoutFeedback onPress={() => Linking.openURL(adsURL)}>
-			<Image style={styles.bannerAds} source={{ uri: imgURL, cache: 'only-if-cached' }} resizeMode={"cover"}/>
-		</TouchableWithoutFeedback>
-	)
-}
-
-export default BannerAds
+export default BannerAds;
 
 const styles = StyleSheet.create({
-	bannerAds: {
-		height: 100,
-	},
-})
+  bannerAds: {
+    height: 100,
+  },
+});

@@ -23,23 +23,23 @@ import FlagChina from "assets/images/Flag-China.webp";
 import localizations from "i18n/localizations";
 import profilePhoto from "assets/images/profilePhoto.jpg";
 import { GLOBAL_COLORS } from "global";
-import { profileTabSubNav } from "data/profileTabSubNav";
+// import { profileTabSubNav } from "data/profileTabSubNav";
 import { translationStore } from "../../zustand/translationStore";
 import { useMutation } from "@tanstack/react-query";
 import { userStore } from "../../zustand/userStore";
-import { SelectCountry } from "react-native-element-dropdown";
+import { Dropdown, SelectCountry } from "react-native-element-dropdown";
 
 // Change Language
 const Intl = () => {
   const local_data = [
     {
       value: "1",
-      lable: "EN-US",
+      label: "English - US",
       image: FlagUSA,
     },
     {
       value: "2",
-      lable: "ZH-CN",
+      label: "Chinese - China",
       image: FlagChina,
     },
   ];
@@ -68,6 +68,16 @@ const Intl = () => {
     setTranslations(localizations[newLang]);
   };
 
+  const renderItem = (item) => {
+    return (
+      <View style={{ width: 500 }}>
+        <Text style={styles.imageStyle}>{item.label}</Text>
+
+        <Image source={FlagUSA} />
+      </View>
+    );
+  };
+
   return (
     <SelectCountry
       style={styles.dropdown}
@@ -81,12 +91,23 @@ const Intl = () => {
       value={country}
       data={local_data}
       valueField="value"
-      labelField="lable"
+      labelField="label"
       imageField="image"
       onChange={(event) => {
         toggleSwitch(event);
       }}
     />
+    // <Dropdown
+    //   itemContainerStyle={{ width: 500 }}
+    //   containerStyle={{ width: 500, lef }}
+    //   style={styles.dropdown}
+    //   data={local_data}
+    //   labelField="label"
+    //   valueField="value"
+    //   search={false}
+    //   renderItem={renderItem}
+    //   onChange={(e) => console.log(e)}
+    // />
   );
 };
 
@@ -115,6 +136,7 @@ const Header = () => {
 
 const Summary = () => {
   const navigation = useNavigation<any>();
+  const translations = translationStore((store) => store.translations);
 
   return (
     <HStack
@@ -133,7 +155,7 @@ const Summary = () => {
         }
       >
         <HStack>
-          <Text style={styles.homeBtn}>主页</Text>
+          <Text style={styles.homeBtn}>{translations.profile}</Text>
           <FontAwesome5
             name="angle-right"
             size={15}
@@ -192,6 +214,45 @@ const VIP = () => {
 
 const LinkList = () => {
   const navigation = useNavigation<any>();
+  const translations = translationStore((store) => store.translations);
+
+  const profileTabSubNav = [
+    {
+      title: translations.recordingHistory,
+      screen: "RecordingHistory",
+    },
+    {
+      title: translations.offlineCache,
+      screen: "OfflineCache",
+    },
+    {
+      title: translations.sharingPromotion,
+      screen: "SharingPromotion",
+    },
+    {
+      title: translations.accountVerification,
+      screen: "AccountVerification",
+    },
+    {
+      title: translations.onlineCustomerService,
+      screen: "CustomerService",
+      params: {
+        postTitle: "Test Sender",
+        senderUserName: "Test Sender Username",
+        senderMessage: "Test Sender Message",
+        senderImgURL: "https://randomuser.me/api/portraits/men/3.jpg",
+        senderTimeStamp: "Test Date",
+      },
+    },
+    {
+      title: translations.bestApps,
+      screen: "BestApps",
+    },
+    {
+      title: translations.officialGroup,
+      screen: "OfficialGroup",
+    },
+  ];
 
   return (
     <VStack p={3} backgroundColor={GLOBAL_COLORS.headerBasicBg}>
@@ -220,10 +281,12 @@ const LinkList = () => {
       ))}
 
       <HStack justifyContent={"center"} alignItems={"center"} p={3}>
-        <Text style={styles.fifthText}>官方邮箱linnannan101@gmail.com</Text>
+        <Text style={styles.fifthText}>
+          {translations.officialEmail} linnannan101@gmail.com
+        </Text>
         <TouchableOpacity>
           <View style={styles.copyBtnContainer}>
-            <Text style={styles.copyBtn}>复制</Text>
+            <Text style={styles.copyBtn}>{translations.copy}</Text>
           </View>
         </TouchableOpacity>
       </HStack>
@@ -233,6 +296,8 @@ const LinkList = () => {
 
 const AccountTab = () => {
   const navigation = useNavigation<any>();
+  const translations = translationStore((store) => store.translations);
+
   return (
     <Container>
       <Header />
@@ -249,7 +314,7 @@ const AccountTab = () => {
               })
             }
           >
-            <Text style={styles.downloadText}>Go to downloads</Text>
+            <Text style={styles.downloadText}>{translations.gotoDownload}</Text>
           </Pressable>
         </VStack>
       </ScrollView>
@@ -319,10 +384,12 @@ const styles = StyleSheet.create({
     backgroundColor: GLOBAL_COLORS.primaryColor,
     borderWidth: 1,
     borderColor: GLOBAL_COLORS.primaryTextColor,
+    width: 150,
+    position: "relative",
   },
   dropdown: {
     height: 30,
-    width: 95,
+    width: 70,
     backgroundColor: GLOBAL_COLORS.primaryColor,
     borderRadius: 22,
     paddingHorizontal: 8,
@@ -343,7 +410,7 @@ const styles = StyleSheet.create({
     textAlign: "center",
   },
   iconStyle: {
-    width: 15,
+    width: 30,
     height: 15,
   },
   //DOWNLOAD BUTTON

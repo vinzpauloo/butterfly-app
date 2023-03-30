@@ -18,7 +18,7 @@ const BottomMessage = () => {
   const translation = translationStore((state) => state.translations);
   return (
     <View>
-      <Text style={styles.bottomText}>{translation.bottomMessage}！</Text>
+      <Text style={styles.bottomText}>{translation.bottomMessage}</Text>
     </View>
   );
 };

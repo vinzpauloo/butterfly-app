@@ -111,6 +111,10 @@ const PortraitVideo: React.FC<PortraitVideoDataType> = ({
     state.currentVLOGWorkID,
   ]);
 
+  useEffect(() => {
+    console.log("reelsVideos", reelsVideos);
+  }, []);
+
   return (
     <Container>
       {hasBackButton ? (
@@ -137,7 +141,8 @@ const PortraitVideo: React.FC<PortraitVideoDataType> = ({
             userID={item.user.id}
             userName={item.user.username}
             userImage={item.user.photo}
-            videoURL={item.video_url}
+            // videoURL={item.video_url}
+            videoURL={item.trial_video_hls} // Temporarily change to trial videos only
             thumbnail={item.thumbnail_url}
             title={item.title}
             tags={item.tags}

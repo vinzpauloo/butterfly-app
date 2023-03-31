@@ -28,6 +28,18 @@ const LayoutContainer = ({ id, title, dataLength, index, children }) => {
   );
 };
 
+const SingleVideoMultiple = ({ data }) => {
+  return (
+    <>
+      {data.map((item, index) => (
+        <View style={{ marginBottom: index === data.length - 1 ? 0 : 15 }}>
+          <SingleVideo data={item} isSingleVideoMultiple={true} />
+        </View>
+      ))}
+    </>
+  );
+};
+
 const SectionContent = ({
   id,
   single,
@@ -49,7 +61,8 @@ const SectionContent = ({
         <GridVideos data={multiple} />
       </>
     ),
-    singleVideoList: <GridVideos data={multiple} />,
+    // singleVideoList: <GridVideos data={multiple} />,
+    singleVideoList: <SingleVideoMultiple data={multiple} />,
     grid: <GridVideos data={multiple} />,
   };
 
@@ -79,7 +92,13 @@ const DynamicTabContent = ({ tabTitle }) => {
   const { isLoading } = useQuery({
     queryKey: [`tabName${tabTitle}`, page, refreshingId],
     queryFn: () =>
-      getWorkgroup({ navbar: tabTitle, paginate: paginate, page: page }),
+      getWorkgroup({
+        navbar: tabTitle,
+        paginate: paginate,
+        page: page,
+        with: "user",
+        lookup: true,
+      }),
     onError: (error) => {
       console.log(`tabName-${tabTitle}`, error);
     },

@@ -10,6 +10,7 @@ interface IWorkgroupParams {
   most_viewed?: boolean;
   most_liked?: boolean;
   with?: string;
+  lookup?: boolean;
 }
 
 const WorkgroupService = () => {

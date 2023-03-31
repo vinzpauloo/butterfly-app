@@ -5,8 +5,8 @@ import VideoComponent from "components/VideoComponent";
 import { GLOBAL_COLORS } from "global";
 import { useNavigation } from "@react-navigation/native";
 
-const SingleVideo = ({ data }) => {
-  const item = data[0];
+const SingleVideo = ({ data, isSingleVideoMultiple = false }) => {
+  const item = isSingleVideoMultiple ? data : data[0];
 
   const navigation = useNavigation<any>();
 

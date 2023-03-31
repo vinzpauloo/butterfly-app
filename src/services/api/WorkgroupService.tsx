@@ -11,6 +11,8 @@ interface IWorkgroupParams {
   most_liked?: boolean;
   with?: string;
   lookup?: boolean;
+  sort?: string;
+  sort_by?: string;
 }
 
 const WorkgroupService = () => {

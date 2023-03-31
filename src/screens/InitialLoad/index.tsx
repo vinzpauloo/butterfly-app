@@ -21,7 +21,7 @@ const InitialLoad = () => {
   const navigation = useNavigation<any>();
   const route = useRoute<any>();
 
-  const [isQueryEnable, setIsQueryEnable] = useState(false);
+  const [isQueryEnable, setIsQueryEnable] = useState(true); // Set to true, change cache logic for ads
 
   // subscribe to ads global store
   const setAdsGlobalStore = adsGlobalStore((state) => state.setAdvertisement);
@@ -179,6 +179,7 @@ const InitialLoad = () => {
   };
 
   const processAdsCacheData = () => {
+    /*
     getDataObject("AdvertisementCacheData").then((value) => {
       // Ads cache logic
       if (value.message === "Key not found or is empty") {
@@ -198,6 +199,7 @@ const InitialLoad = () => {
         navigation.dispatch(StackActions.replace("TermsOfService"));
       }
     });
+    */
   };
 
   useEffect(() => {

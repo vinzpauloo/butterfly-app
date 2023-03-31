@@ -8,7 +8,7 @@ export default {
     ? "(SIT) Butterfly"
     : "Butterfly App (Preview)",
   slug: "butterfly-mobile-app-fe",
-  version: "0.0.2",
+  version: "0.0.3",
   orientation: "portrait",
   icon: "./assets/icon.png",
   userInterfaceStyle: "light",

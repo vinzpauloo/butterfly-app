@@ -61,20 +61,15 @@ const InitialLoad = () => {
 
   const { getAds, getLatestVersion } = SiteSettingsService();
 
-  console.log(isLatestVersion);
   const { data: apkData } = useQuery({
     queryKey: ["apkVersion"],
     queryFn: () => getLatestVersion(),
     onSuccess: (data) => {
       const { version } = data;
-      // if (version === getLatestVersion()) {
-      //   processUserCacheData();
-      //   setIsQueryEnable(true);
-      // } else {
-      //   setIsLatestVersion(false);
-      // }
-
-      if (version !== getLatestVersion()) {
+      if (version === getLatestVersion()) {
+        processUserCacheData();
+        setIsQueryEnable(true);
+      } else {
         setIsLatestVersion(false);
       }
     },
@@ -279,9 +274,7 @@ const InitialLoad = () => {
 
             <Pressable
               style={styles.followBtn}
-              onPress={() =>
-                navigation.dispatch(StackActions.replace("TermsOfService"))
-              }
+              onPress={() => setIsQueryEnable(true)}
             >
               <Text style={styles.followText}>Proceed (TEST)</Text>
             </Pressable>

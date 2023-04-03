@@ -1,4 +1,10 @@
-import { Platform, StyleSheet } from "react-native";
+import {
+  Dimensions,
+  Image,
+  Platform,
+  Pressable,
+  StyleSheet,
+} from "react-native";
 import React, { useEffect, useState } from "react";
 
 import { Box, Center, Spinner, Text, VStack } from "native-base";
@@ -8,24 +14,31 @@ import {
   useRoute,
 } from "@react-navigation/native";
 import { useMutation, useQuery } from "@tanstack/react-query";
+import * as Linking from "expo-linking";
 
 import { storeDataObject, getDataObject } from "lib/asyncStorage";
-import { getDeviceId } from "lib/appInfo";
+import { getDeviceId, getCurrentVersion } from "lib/appInfo";
 import SiteSettingsService from "services/api/SiteSettingsService";
 import CustomerService from "services/api/CustomerService";
 import { captureSuccess, captureError } from "services/sentry";
 import { adsGlobalStore } from "../../zustand/adsGlobalStore";
 import { userStore } from "../../zustand/userStore";
+import { translationStore } from "../../zustand/translationStore";
+import { GLOBAL_COLORS } from "global";
 
 const InitialLoad = () => {
+  // ** Hooks
   const navigation = useNavigation<any>();
   const route = useRoute<any>();
 
-  const [isQueryEnable, setIsQueryEnable] = useState(true); // Set to true, change cache logic for ads
+  // ** States
+  const [isQueryEnable, setIsQueryEnable] = useState(false);
+  const [isLatestVersion, setIsLatestVersion] = useState(true);
 
-  // subscribe to ads global store
+  // ** Stores
   const setAdsGlobalStore = adsGlobalStore((state) => state.setAdvertisement);
   const setUserStore = userStore((state) => state.setUserData);
+  const translations = translationStore((state) => state.translations);
 
   const generateCustomerData = async () => {
     const customerDevice = {
@@ -46,9 +59,34 @@ const InitialLoad = () => {
     });
   };
 
+  const { getAds, getLatestVersion } = SiteSettingsService();
+
+  console.log(isLatestVersion);
+  const { data: apkData } = useQuery({
+    queryKey: ["apkVersion"],
+    queryFn: () => getLatestVersion(),
+    onSuccess: (data) => {
+      const { version } = data;
+      // if (version === getLatestVersion()) {
+      //   processUserCacheData();
+      //   setIsQueryEnable(true);
+      // } else {
+      //   setIsLatestVersion(false);
+      // }
+
+      if (version !== getLatestVersion()) {
+        setIsLatestVersion(false);
+      }
+    },
+    onError: (error) => {
+      console.log("getLatestVersion Error", error);
+      captureError(error, route.name, "queryFn: () => getLatestVersion()");
+    },
+    enabled: isLatestVersion,
+  });
+
   // if local app cache dont have ads, fetch all ads data from backend
-  const { getAds } = SiteSettingsService();
-  const { isLoading: isAdsLoading } = useQuery({
+  const {} = useQuery({
     queryKey: ["ads"],
     queryFn: () => getAds(),
     onSuccess: (data) => {
@@ -202,10 +240,6 @@ const InitialLoad = () => {
     });
   };
 
-  useEffect(() => {
-    processUserCacheData();
-  }, []);
-
   return (
     <Center flex={1}>
       <Box
@@ -217,12 +251,42 @@ const InitialLoad = () => {
           lg: 400,
         }}
       >
-        <VStack space={10} alignItems="center">
-          <Spinner color="danger.400" size="lg" />
-          <Text color="white" fontSize="md">
-            Loading ...
-          </Text>
-        </VStack>
+        {isLatestVersion ? (
+          <VStack space={10} alignItems="center">
+            <Spinner color="danger.400" size="lg" />
+            <Text color="white" fontSize="md">
+              {translations.loading} ...
+            </Text>
+          </VStack>
+        ) : (
+          <VStack space={3} alignItems="center">
+            <Text color="white" fontSize="md">
+              A new version is available.
+            </Text>
+            <Text color="white" fontSize="md">
+              Current version: {getCurrentVersion()}
+            </Text>
+            <Text color="white" fontSize="md">
+              Latest version: {apkData.version}
+            </Text>
+
+            <Pressable
+              style={styles.followBtn}
+              onPress={() => Linking.openURL(apkData.download_link)}
+            >
+              <Text style={styles.followText}>{translations.download}</Text>
+            </Pressable>
+
+            <Pressable
+              style={styles.followBtn}
+              onPress={() =>
+                navigation.dispatch(StackActions.replace("TermsOfService"))
+              }
+            >
+              <Text style={styles.followText}>Proceed (TEST)</Text>
+            </Pressable>
+          </VStack>
+        )}
       </Box>
     </Center>
   );
@@ -230,4 +294,22 @@ const InitialLoad = () => {
 
 export default InitialLoad;
 
-const styles = StyleSheet.create({});
+const styles = StyleSheet.create({
+  followBtn: {
+    backgroundColor: GLOBAL_COLORS.secondaryColor,
+    borderRadius: 15,
+    borderWidth: 1,
+    marginTop: 15,
+    borderColor: "crimson",
+  },
+  followText: {
+    color: "#fff",
+    fontSize: 14,
+    paddingVertical: 5,
+    paddingHorizontal: 30,
+  },
+  ads: {
+    height: 200,
+    width: 200,
+  },
+});

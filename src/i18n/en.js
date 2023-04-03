@@ -33,6 +33,7 @@ export default en_us = {
   income: "Income",
   information: "Information",
   latest: "Latest",
+  loading: "Loading",
   like: "Like",
   liked: "Like",
   moment: "Moment",

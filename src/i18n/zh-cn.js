@@ -33,6 +33,7 @@ export default zh_cn = {
   income: "收益",
   information: "消息",
   latest: "最新",
+  loading: "加载中",
   like: "关注",
   liked: "关注",
   moment: "动态",

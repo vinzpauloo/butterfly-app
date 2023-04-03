@@ -23,3 +23,7 @@ export const getDeviceId = async () => {
     return deviceId;
   }
 };
+
+export const getCurrentVersion = () => {
+  return Constants.manifest.version;
+};

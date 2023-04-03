@@ -30,7 +30,20 @@ const SiteSettingsService = () => {
     });
   };
 
-  return { getNavbar, getAds, getAnnouncement };
+  const getLatestVersion = () => {
+    const params = {
+      latest_only: true,
+    };
+
+    return request({
+      headers: getHeaders(),
+      url: "/apks",
+      method: "GET",
+      params,
+    });
+  };
+
+  return { getNavbar, getAds, getAnnouncement, getLatestVersion };
 };
 
 export default SiteSettingsService;

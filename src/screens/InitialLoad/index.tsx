@@ -10,7 +10,7 @@ import {
 import { useMutation, useQuery } from "@tanstack/react-query";
 
 import { storeDataObject, getDataObject } from "lib/asyncStorage";
-import { getDeviceId } from "lib/deviceInfo";
+import { getDeviceId } from "lib/appInfo";
 import SiteSettingsService from "services/api/SiteSettingsService";
 import CustomerService from "services/api/CustomerService";
 import { captureSuccess, captureError } from "services/sentry";
@@ -115,7 +115,8 @@ const InitialLoad = () => {
 
       captureSuccess(route.name, "mutateRegisterCustomer");
 
-      processAdsCacheData();
+      // Removed ads cache to get latest ads on every initial load
+      // processAdsCacheData();
     },
     onError: (error) => {
       console.log("mutateRegisterCustomer Error", error);
@@ -143,7 +144,8 @@ const InitialLoad = () => {
 
       captureSuccess(route.name, "mutateLoginCustomer");
 
-      processAdsCacheData();
+      // Removed ads cache to get latest ads on every initial load
+      // processAdsCacheData();
     },
     onError: (error) => {
       console.log("mutateLoginCustomer Error", error);
@@ -179,7 +181,6 @@ const InitialLoad = () => {
   };
 
   const processAdsCacheData = () => {
-    /*
     getDataObject("AdvertisementCacheData").then((value) => {
       // Ads cache logic
       if (value.message === "Key not found or is empty") {
@@ -199,7 +200,6 @@ const InitialLoad = () => {
         navigation.dispatch(StackActions.replace("TermsOfService"));
       }
     });
-    */
   };
 
   useEffect(() => {

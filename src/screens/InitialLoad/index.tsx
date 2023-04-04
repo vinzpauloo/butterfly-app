@@ -1,11 +1,5 @@
-import {
-  Dimensions,
-  Image,
-  Platform,
-  Pressable,
-  StyleSheet,
-} from "react-native";
-import React, { useEffect, useState } from "react";
+import { Platform, Pressable, StyleSheet } from "react-native";
+import React, { useState } from "react";
 
 import { Box, Center, Spinner, Text, VStack } from "native-base";
 import {
@@ -266,17 +260,22 @@ const InitialLoad = () => {
             </Text>
 
             <Pressable
-              style={styles.followBtn}
+              style={styles.downloadBtn}
               onPress={() => Linking.openURL(apkData.download_link)}
             >
-              <Text style={styles.followText}>{translations.download}</Text>
+              <Text style={styles.downloadTxt}>{translations.download}</Text>
             </Pressable>
 
+            <Spinner color="danger.400" size="lg" />
+
             <Pressable
-              style={styles.followBtn}
-              onPress={() => setIsQueryEnable(true)}
+              style={styles.downloadBtn}
+              onPress={() => {
+                processUserCacheData();
+                setIsQueryEnable(true);
+              }}
             >
-              <Text style={styles.followText}>Proceed (TEST)</Text>
+              <Text style={styles.downloadTxt}>Proceed (TEST)</Text>
             </Pressable>
           </VStack>
         )}
@@ -288,21 +287,17 @@ const InitialLoad = () => {
 export default InitialLoad;
 
 const styles = StyleSheet.create({
-  followBtn: {
+  downloadBtn: {
     backgroundColor: GLOBAL_COLORS.secondaryColor,
     borderRadius: 15,
     borderWidth: 1,
     marginTop: 15,
     borderColor: "crimson",
   },
-  followText: {
+  downloadTxt: {
     color: "#fff",
     fontSize: 14,
     paddingVertical: 5,
     paddingHorizontal: 30,
-  },
-  ads: {
-    height: 200,
-    width: 200,
   },
 });

@@ -12,7 +12,7 @@ const LikeButton = ({ data, id }) => {
   const token = userStore((store) => store.api_token);
   const { unlikeWork, likeWork, likeChecker } = LikeService();
   const [isAlreadyLike, setIsAlreadyLike] = useState(false);
-  const [likeCount, setLikeCount] = useState(data?.like?.total_likes);
+  const [likeCount, setLikeCount] = useState(data?.like?.total_likes || 0);
 
   // like checker
   const { isLoading } = useQuery({

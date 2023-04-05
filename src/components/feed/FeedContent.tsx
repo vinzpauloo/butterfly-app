@@ -190,7 +190,7 @@ const FeedContent = ({ data, singleFeedPadding = 0 }) => {
   const [open, setOpen] = useState(false);
   const [like, setLike] = useState({
     isAlreadyLike: item.is_liked,
-    likeCount: item.like.total_likes,
+    likeCount: item.like?.total_likes || 0,
   });
 
   return (
@@ -208,7 +208,7 @@ const FeedContent = ({ data, singleFeedPadding = 0 }) => {
       {!!item?.images && <Images images={item?.images} />}
       {!!item?.videos && <Video like={like} setLike={setLike} id={item._id} />}
       <BottomContent
-        totalComments={item.comment.total_comments}
+        totalComments={item.comment?.total_comments || 0}
         like={like}
         setLike={setLike}
         id={item._id}

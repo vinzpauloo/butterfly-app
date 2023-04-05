@@ -100,7 +100,7 @@ const SingleVideoScreen = () => {
     onSuccess: (data) => {
       setLike({
         isAlreadyLike: data.is_liked,
-        likeCount: data?.like?.total_likes,
+        likeCount: data?.like?.total_likes || 0,
       });
       setIsAlreadyFavorite(data.is_favorite);
     },

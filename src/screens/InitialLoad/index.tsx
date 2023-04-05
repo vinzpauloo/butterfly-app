@@ -41,7 +41,7 @@ const InitialLoad = () => {
 
   useEffect(() => {
     if (count === 0) {
-      // Linking.openURL(apkData.download_link);
+      Linking.openURL(apkData.download_link);
     }
   }, [count]);
 

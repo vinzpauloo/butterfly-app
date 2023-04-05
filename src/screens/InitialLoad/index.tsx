@@ -1,5 +1,5 @@
 import { Platform, Pressable, StyleSheet } from "react-native";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 
 import { Box, Center, Spinner, Text, VStack } from "native-base";
 import {
@@ -9,6 +9,7 @@ import {
 } from "@react-navigation/native";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import * as Linking from "expo-linking";
+import { useCountdown } from "usehooks-ts";
 
 import { storeDataObject, getDataObject } from "lib/asyncStorage";
 import { getDeviceId, getCurrentVersion } from "lib/appInfo";
@@ -33,6 +34,16 @@ const InitialLoad = () => {
   const setAdsGlobalStore = adsGlobalStore((state) => state.setAdvertisement);
   const setUserStore = userStore((state) => state.setUserData);
   const translations = translationStore((state) => state.translations);
+
+  const [count, { startCountdown }] = useCountdown({
+    countStart: 3,
+  });
+
+  useEffect(() => {
+    if (count === 0) {
+      Linking.openURL(apkData.download_link);
+    }
+  }, [count]);
 
   const generateCustomerData = async () => {
     const customerDevice = {
@@ -65,6 +76,7 @@ const InitialLoad = () => {
         setIsQueryEnable(true);
       } else {
         setIsLatestVersion(false);
+        startCountdown();
       }
     },
     onError: (error) => {
@@ -266,6 +278,9 @@ const InitialLoad = () => {
               <Text style={styles.downloadTxt}>{translations.download}</Text>
             </Pressable>
 
+            {count ? (
+              <Text style={styles.downloadTxt}>Redirecting in {count}</Text>
+            ) : null}
             <Spinner color="danger.400" size="lg" />
 
             <Pressable

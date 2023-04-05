@@ -99,6 +99,7 @@ const MasonryPhotos = ({ filter }) => {
         token: token,
       }),
     onSuccess: (data) => {
+      console.log("getAlbums()", data);
       setLastPage(data.last_page);
       setData((prev) => [...prev].concat(data.data));
 
@@ -156,11 +157,11 @@ const MasonryPhotos = ({ filter }) => {
               <SingleImage
                 idx={index}
                 albumId={item._id}
-                url={item.cover.photo}
+                url={item.cover.cover_photo}
                 postTitle={item.title}
                 totalViews={item.views}
                 /* height ratio of the cover photo */
-                height={item.cover.height / 2}
+                height={item.cover.cover_height / 2}
                 setOpen={setOpen}
               />
             )}

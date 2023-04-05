@@ -71,7 +71,7 @@ const InitialLoad = () => {
     queryFn: () => getLatestVersion(),
     onSuccess: (data) => {
       const { version } = data;
-      if (version === getLatestVersion()) {
+      if (version === getCurrentVersion()) {
         processUserCacheData();
         setIsQueryEnable(true);
       } else {

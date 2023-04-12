@@ -168,7 +168,7 @@ const FeedContent = ({ data, like, setLike }) => {
         setLike={setLike}
       />
       {!!data?.images && <Images images={data?.images} />}
-      {!!data?.videos && <Video url={data?.videos[0].url} />}
+      {!!data?.videos && <Video url={data?.videos.url} />}
       <BottomContent
         totalComments={data.comment?.total_comments || 0}
         like={like}

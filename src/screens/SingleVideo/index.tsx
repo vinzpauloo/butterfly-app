@@ -82,7 +82,7 @@ const HeaderTitle = ({ data }) => {
 };
 
 const SingleVideoScreen = () => {
-  const token = userStore((state) => state.api_token);
+  const [token, isVip] = userStore((state) => [state.api_token, state.is_Vip]);
   const translations = translationStore((state) => state.translations);
   const { getWorkById } = WorkService();
   const route = useRoute<any>();
@@ -119,9 +119,11 @@ const SingleVideoScreen = () => {
     <View style={styles.container}>
       <HeaderTitle data={data} />
       <View style={styles.videoContent}>
-        <Pressable style={styles.watermarkContainer}>
-          <Text style={styles.watermarkText}>{translations.buyTheVideo}</Text>
-        </Pressable>
+        {!isVip && (
+          <Pressable style={styles.watermarkContainer}>
+            <Text style={styles.watermarkText}>{translations.buyTheVideo}</Text>
+          </Pressable>
+        )}
         <VideoPlayer url={data?.video_url} isFocus={isFocus} />
       </View>
       <SingleVideoTab

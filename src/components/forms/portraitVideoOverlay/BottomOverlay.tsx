@@ -2,6 +2,7 @@ import React from "react";
 import { Pressable, StyleSheet, Text, View } from "react-native";
 import { VStack } from "native-base";
 import { useNavigation } from "@react-navigation/native";
+import { userStore } from "../../../zustand/userStore";
 
 type Props = {
   userID: number;
@@ -12,11 +13,18 @@ type Props = {
 
 const BottomOverlay = (props: Props) => {
   const navigation = useNavigation<any>();
+  const isVip = userStore((state) => state.is_Vip);
 
   return (
     <VStack space={2} style={styles.bottomSection}>
-      <Pressable onPress={() => navigation.navigate("SingleUser", { userID: props.userID })}>
-        <Text style={[styles.userName, styles.iconText]}>@{props.userName}</Text>
+      <Pressable
+        onPress={() =>
+          navigation.navigate("SingleUser", { userID: props.userID })
+        }
+      >
+        <Text style={[styles.userName, styles.iconText]}>
+          @{props.userName}
+        </Text>
       </Pressable>
       <Text style={styles.iconText}>{props.title}</Text>
       <View style={styles.tags}>
@@ -32,11 +40,15 @@ const BottomOverlay = (props: Props) => {
           </Pressable>
         ))}
       </View>
-      <Pressable onPress={() => navigation.navigate("SharingPromotion")}>
-        <View>
-          <Text style={styles.subscribe}>Subscription needed or gold coin</Text>
-        </View>
-      </Pressable>
+      {!isVip && (
+        <Pressable onPress={() => navigation.navigate("SharingPromotion")}>
+          <View>
+            <Text style={styles.subscribe}>
+              Subscription needed or gold coin
+            </Text>
+          </View>
+        </Pressable>
+      )}
     </VStack>
   );
 };
@@ -76,6 +88,6 @@ const styles = StyleSheet.create({
     textShadowColor: "black",
     textShadowOffset: { width: 0, height: 0 },
     textShadowRadius: 24,
-    alignSelf: "flex-start"
+    alignSelf: "flex-start",
   },
 });

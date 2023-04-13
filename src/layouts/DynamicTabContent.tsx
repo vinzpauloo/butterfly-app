@@ -98,8 +98,8 @@ const DynamicTabContent = ({ tabTitle }) => {
         page: page,
         with: "user",
         lookup: true,
-        sort: "created_at",
-        sort_by: "desc",
+        sort: "desc",
+        sort_by: "created_at",
       }),
     onError: (error) => {
       console.log(`tabName-${tabTitle}`, error);

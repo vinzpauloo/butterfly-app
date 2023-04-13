@@ -8,20 +8,22 @@ import { useQuery } from "@tanstack/react-query";
 import { GLOBAL_COLORS } from "global";
 import CustomModal from "components/CustomModal";
 import SiteSettingsService from "services/api/SiteSettingsService";
+import { userStore } from "../../zustand/userStore";
 
 const Content = ({ setOpen }) => {
   const [isQueryEnable, setIsQueryEnable] = useState(true);
   const [announcementTitle, setAnnouncementTitle] = useState("");
   const [announcementDescription, setAnnouncementDescription] = useState("");
+  const token = userStore((store) => store.api_token);
 
   const { getAnnouncement } = SiteSettingsService();
   const { isLoading, isError, data, error, status } = useQuery({
     queryKey: ["announcement"],
-    queryFn: () => getAnnouncement(),
+    queryFn: () => getAnnouncement(token),
     onSuccess: (data) => {
-      console.log("=== Announcement fetched from backend! ===");
-      setAnnouncementTitle(data[0].introductions[1].title);
-      setAnnouncementDescription(data[0].introductions[1].description);
+      console.log("=== Announcement fetched from backend! ===", data);
+      setAnnouncementTitle(data.introductions[1].title);
+      setAnnouncementDescription(data.introductions[1].description);
     },
     onError: (error) => {
       console.log("Error", error);

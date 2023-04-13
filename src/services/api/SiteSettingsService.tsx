@@ -22,10 +22,10 @@ const SiteSettingsService = () => {
     });
   };
 
-  const getAnnouncement = () => {
+  const getAnnouncement = (token: string) => {
     return request({
-      headers: getHeaders(),
-      url: "/announcements/list",
+      headers: { ...getHeaders(), Authorization: `Bearer ${token}` },
+      url: "/announcements",
       method: "GET",
     });
   };

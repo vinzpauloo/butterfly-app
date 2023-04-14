@@ -22,8 +22,8 @@ const Content = ({ setOpen }) => {
     queryFn: () => getAnnouncement(token),
     onSuccess: (data) => {
       console.log("=== Announcement fetched from backend! ===", data);
-      setAnnouncementTitle(data[1].title);
-      setAnnouncementDescription(data[1].description);
+      setAnnouncementTitle(data.introductions.title);
+      setAnnouncementDescription(data.introductions.description);
     },
     onError: (error) => {
       console.log("Error", error);

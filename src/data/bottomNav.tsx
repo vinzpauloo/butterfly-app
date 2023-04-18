@@ -7,7 +7,9 @@ import AccountTab from "screens/Account";
 import BottomTabs from "layouts/navigators/BottomTabs";
 import Chat from "screens/Chat";
 import HomeTab from "screens/Home";
+import MainProfile from "screens/MainProfile";
 import Vlog from "screens/Vlog";
+
 import { translationStore } from "../zustand/translationStore";
 
 const BottomNav = () => {
@@ -45,12 +47,20 @@ const BottomNav = () => {
     },
     {
       name: "Account",
-      component: AccountTab,
+      component: MainProfile, // AccountTab
       label: translations.account,
       icon: ({ color, size }) => (
         <Octicons name="person" color={color} size={size} />
       ),
     },
+    // {
+    //   name: "MyProfile",
+    //   component: MyProfile,
+    //   label: "MyProfile",
+    //   icon: ({ color, size }) => (
+    //     <Octicons name="person" color={color} size={size} />
+    //   ),
+    // },
   ];
 
   return <BottomTabs data={bottomNav} />;

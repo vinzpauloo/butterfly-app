@@ -34,6 +34,7 @@
     "expo-device": "~5.0.0",
     "expo-file-system": "~15.1.1",
     "expo-image-picker": "~14.0.2",
+    "expo-linear-gradient": "~12.0.1",
     "expo-linking": "~3.3.1",
     "expo-media-library": "~15.0.0",
     "expo-screen-orientation": "^5.0.1",
@@ -52,12 +53,13 @@
     "react-native-mmkv": "2.5.1",
     "react-native-modal": "^13.0.1",
     "react-native-pager-view": "6.0.1",
+    "react-native-qrcode-svg": "^6.2.0",
     "react-native-reanimated": "~2.12.0",
     "react-native-reanimated-carousel": "^3.3.0",
     "react-native-render-html": "^6.3.4",
     "react-native-safe-area-context": "4.4.1",
     "react-native-screens": "~3.18.0",
-    "react-native-svg": "13.4.0",
+    "react-native-svg": "^13.4.0",
     "react-native-tab-view": "^3.3.4",
     "react-native-vector-icons": "^9.2.0",
     "react-native-web": "~0.18.9",
@@ -66,8 +68,7 @@
     "sentry-expo": "~6.0.0",
     "typescript": "^4.6.3",
     "usehooks-ts": "^2.9.1",
-    "zustand": "^4.3.3",
-    "expo-linear-gradient": "~12.0.1"
+    "zustand": "^4.3.3"
   },
   "devDependencies": {
     "@babel/core": "^7.12.9",

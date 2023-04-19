@@ -4,6 +4,7 @@ import React, { useState } from "react";
 import Ionicons from "react-native-vector-icons/Ionicons";
 
 import About from "screens/Settings/tabs/About";
+import AccountCredentials from "screens/AccountCredentials";
 import AccountRetrieval from "screens/Settings/tabs/AccountRetrieval";
 import AccountVerification from "screens/Account/tabs/AccountVerification";
 import BestApps from "screens/Account/tabs/BestApps";
@@ -136,6 +137,11 @@ export const stackScreens = {
       name: "About",
       component: About,
       options: { headerShown: false },
+    },
+    {
+      name: "AccountCredentials",
+      component: AccountCredentials,
+      options: basicHeader,
     },
     {
       name: "AccountRetrieval",

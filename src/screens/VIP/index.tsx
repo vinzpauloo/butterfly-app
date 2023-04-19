@@ -356,9 +356,6 @@ const VIPMenu = () => {
 };
 
 const index = () => {
-  const id = userStore((store) => store._id);
-  console.log("###", id);
-
   return (
     <Container>
       <Header />

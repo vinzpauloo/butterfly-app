@@ -219,34 +219,62 @@ const DeviceID = () => {
 };
 
 const LinkList = () => {
+  const navigation = useNavigation<any>();
+
   const lists = [
-    "历史记录",
-    "离线缓存",
-    "分享推广",
-    "账户凭证",
-    "在线服务",
-    "精品应用",
-    "官方组",
+    {
+      title: "历史记录",
+      navigate: () => {},
+    },
+    {
+      title: "离线缓存",
+      navigate: () => {},
+    },
+    {
+      title: "分享推广",
+      navigate: () => {},
+    },
+    {
+      title: "账户凭证",
+      navigate: () => {
+        navigation.navigate("AccountCredentials", { postTitle: "账户凭证" });
+      },
+    },
+    {
+      title: "在线服务",
+      navigate: () => {},
+    },
+    {
+      title: "精品应用",
+      navigate: () => {},
+    },
+    {
+      title: "官方组",
+      navigate: () => {},
+    },
   ];
+
   return (
     <Box m={2} style={styles.mainContainer}>
       <VStack style={styles.linkListContainer}>
         {lists.map((item, index) => (
-          <HStack
-            py={1}
-            key={index}
-            pl={5}
-            pr={2}
-            justifyContent="space-between"
-            alignItems="center"
-          >
-            <Text style={styles.listText}>{item}</Text>
-            <Entypo
-              name="chevron-right"
-              color={GLOBAL_COLORS.primaryTextColor}
-              size={30}
-            />
-          </HStack>
+          <Pressable onPress={item.navigate}>
+            <HStack
+              py={1}
+              key={index}
+              pl={5}
+              pr={2}
+              justifyContent="space-between"
+              alignItems="center"
+            >
+              <Text style={styles.listText}>{item.title}</Text>
+              <Entypo
+                name="chevron-right"
+                color={GLOBAL_COLORS.primaryTextColor}
+                size={30}
+              />
+            </HStack>
+          </Pressable>
         ))}
       </VStack>
     </Box>

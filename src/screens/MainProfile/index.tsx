@@ -126,14 +126,14 @@ const User = () => {
             <VStack justifyContent="space-evenly">
               <HStack w="72" justifyContent="space-between">
                 <Text style={styles.usernameText}>犹豫的香气</Text>
-                <HStack alignItems="center" space={1}>
+                {/* <HStack alignItems="center" space={1}>
                   <Text style={styles.bottomText}>轮廓</Text>
                   <Entypo
                     name="chevron-right"
                     color={GLOBAL_COLORS.primaryTextColor}
                     size={18}
                   />
-                </HStack>
+                </HStack> */}
               </HStack>
               <HStack space={5}>
                 <Text style={styles.middleText}>金币 : 0</Text>
@@ -155,9 +155,17 @@ const User = () => {
 };
 
 const VIP = () => {
+  const navigation = useNavigation<any>();
+
+  const handlePressVIP = () => {
+    navigation.navigate("VIPScreen", { postTitle: "会员中心" });
+  };
+
   return (
     <Box m={1} style={styles.mainContainer}>
-      <Image source={VipBanner} style={{ width: "100%", height: 90 }} />
+      <Pressable onPress={handlePressVIP}>
+        <Image source={VipBanner} style={{ width: "100%", height: 90 }} />
+      </Pressable>
     </Box>
   );
 };
@@ -396,7 +404,7 @@ const styles = StyleSheet.create({
   },
   // EMAIL
   emailBtn: {
-    backgroundColor: "#ae1128",
+    backgroundColor: GLOBAL_COLORS.secondaryColor,
     paddingHorizontal: 10,
     borderRadius: 10,
     paddingVertical: 2,

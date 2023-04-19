@@ -41,6 +41,7 @@ import SingleChatScreen from "screens/SingleChatScreen";
 import SingleTag from "screens/SingleTag";
 import SingleFeedScreen from "screens/SingleFeedScreen";
 import TermsOfService from "screens/TermsOfService";
+import VIPScreen from "screens/VIP";
 import WorkService from "services/api/WorkService";
 import { GLOBAL_COLORS } from "global";
 import { useQuery } from "@tanstack/react-query";
@@ -315,6 +316,11 @@ export const stackScreens = {
       name: "VlogScreen",
       component: VlogScreen,
       options: { headerShown: false },
+    },
+    {
+      name: "VIPScreen",
+      component: VIPScreen,
+      options: basicHeader,
     },
   ],
 };

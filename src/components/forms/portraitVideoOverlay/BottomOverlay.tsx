@@ -41,7 +41,11 @@ const BottomOverlay = (props: Props) => {
         ))}
       </View>
       {!isVip && (
-        <Pressable onPress={() => navigation.navigate("SharingPromotion")}>
+        <Pressable
+          onPress={() =>
+            navigation.navigate("VIPScreen", { postTitle: "会员中心" })
+          }
+        >
           <View>
             <Text style={styles.subscribe}>
               Subscription needed or gold coin

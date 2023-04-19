@@ -22,6 +22,9 @@ import BottomMessage from "components/BottomMessage";
 import { messageList } from "data/messageList";
 import { useNavigation } from "@react-navigation/native";
 import { translationStore } from "../../../zustand/translationStore";
+import ChatService from "services/api/ChatService";
+import { useQuery } from "@tanstack/react-query";
+import { userStore } from "../../../zustand/userStore";
 
 const windowWidth = Dimensions.get("window").width;
 
@@ -122,6 +125,19 @@ const MessageItemSkeleton = () => {
 const Information = (props: Props) => {
   const translations = translationStore((state) => state.translations);
   const navigation = useNavigation<any>();
+
+  const token = userStore((state) => state.api_token);
+  const { getChats } = ChatService();
+  const {} = useQuery({
+    queryKey: ["getChats"],
+    queryFn: () => getChats(token),
+    onSuccess: (data) => {
+      console.log("Success getChats", data);
+    },
+    onError: (error) => {
+      console.log("Error getChats", error);
+    },
+  });
 
   const [messageListIsLoaded, setmessageListIsLoaded] = useState(false);
 

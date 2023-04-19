@@ -39,11 +39,13 @@ const InitialLoad = () => {
     countStart: 3,
   });
 
+  /*
   useEffect(() => {
     if (count === 0) {
       Linking.openURL(apkData.download_link);
     }
   }, [count]);
+  */
 
   const generateCustomerData = async () => {
     const customerDevice = {
@@ -70,14 +72,18 @@ const InitialLoad = () => {
     queryKey: ["apkVersion"],
     queryFn: () => getLatestVersion(),
     onSuccess: (data) => {
-      const { version } = data;
-      if (version === getCurrentVersion()) {
-        processUserCacheData();
-        setIsQueryEnable(true);
-      } else {
-        setIsLatestVersion(false);
-        startCountdown();
-      }
+      processUserCacheData();
+      setIsQueryEnable(true);
+
+      // Disable checking of version initially
+      // const { version } = data;
+      // if (version === getCurrentVersion()) {
+      //   processUserCacheData();
+      //   setIsQueryEnable(true);
+      // } else {
+      //   setIsLatestVersion(false);
+      //   startCountdown();
+      // }
     },
     onError: (error) => {
       console.log("getLatestVersion Error", error);
@@ -267,16 +273,16 @@ const InitialLoad = () => {
             <Text color="white" fontSize="md">
               Current version: {getCurrentVersion()}
             </Text>
-            <Text color="white" fontSize="md">
+            {/* <Text color="white" fontSize="md">
               Latest version: {apkData.version}
-            </Text>
+            </Text> */}
 
-            <Pressable
+            {/* <Pressable
               style={styles.downloadBtn}
               onPress={() => Linking.openURL(apkData.download_link)}
             >
               <Text style={styles.downloadTxt}>{translations.download}</Text>
-            </Pressable>
+            </Pressable> */}
 
             {count ? (
               <Text style={styles.downloadTxt}>Redirecting in {count}</Text>

@@ -82,6 +82,7 @@ const HeaderTitle = ({ data }) => {
 };
 
 const SingleVideoScreen = () => {
+  const navigation = useNavigation<any>();
   const [token, isVip] = userStore((state) => [state.api_token, state.is_Vip]);
   const translations = translationStore((state) => state.translations);
   const { getWorkById } = WorkService();
@@ -106,6 +107,10 @@ const SingleVideoScreen = () => {
     },
   });
 
+  const navigateVIPScreen = () => {
+    navigation.navigate("VIPScreen", { postTitle: "会员中心" });
+  };
+
   if (isLoading || isFetching) {
     return (
       <>
@@ -120,7 +125,10 @@ const SingleVideoScreen = () => {
       <HeaderTitle data={data} />
       <View style={styles.videoContent}>
         {!isVip && (
-          <Pressable style={styles.watermarkContainer}>
+          <Pressable
+            style={styles.watermarkContainer}
+            onPress={navigateVIPScreen}
+          >
             <Text style={styles.watermarkText}>{translations.buyTheVideo}</Text>
           </Pressable>
         )}

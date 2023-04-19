@@ -12,18 +12,28 @@ import { Box, HStack, ScrollView, Stack, VStack } from "native-base";
 
 import Container from "components/Container";
 import Download from "assets/images/download.png";
+import DownloadWhite from "assets/images/download_white.png";
 import ForeverVIP from "assets/images/foreverVIP.png";
+import ForeverVIPWhite from "assets/images/foreverVIP_white.png";
 import Live from "assets/images/live.png";
+import LiveWhite from "assets/images/live_white.png";
 import LiveChat from "assets/images/liveChat.png";
+import LiveChatWhite from "assets/images/liveChat_white.png";
 import Photos from "assets/images/photos.png";
+import PhotosWhite from "assets/images/photos_white.png";
 import Profile from "assets/images/profilePhoto.jpg";
 import VideoCall from "assets/images/vidoecall.png";
+import VideoCallWhite from "assets/images/videocall_white.png";
 import Videos from "assets/images/videos.png";
+import VideosWhite from "assets/images/videocall_white.png";
 import WalletBanner from "assets/images/wallet_banner.png";
 import WatchTicket from "assets/images/watchTicket.png";
+import WatchTicketWhite from "assets/images/watchTicket_white.png";
 import { GLOBAL_COLORS } from "global";
 import { LinearGradient } from "expo-linear-gradient";
 import { createMaterialTopTabNavigator } from "@react-navigation/material-top-tabs";
+import { log } from "react-native-reanimated";
+import { userStore } from "../../zustand/userStore";
 
 const Tab = createMaterialTopTabNavigator();
 
@@ -346,6 +356,9 @@ const VIPMenu = () => {
 };
 
 const index = () => {
+  const id = userStore((store) => store._id);
+  console.log("###", id);
+
   return (
     <Container>
       <Header />

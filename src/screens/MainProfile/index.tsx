@@ -36,6 +36,7 @@ import VipBanner from "assets/images/vip_banner.png";
 import { GLOBAL_COLORS } from "global";
 import { translationStore } from "../../zustand/translationStore";
 import { useNavigation } from "@react-navigation/native";
+import { userStore } from "../../zustand/userStore";
 
 const { height, width } = Dimensions.get("window");
 
@@ -124,18 +125,20 @@ const Header = () => {
 };
 
 const User = () => {
+  const { alias, photo } = userStore((store) => store);
+
   return (
     <Box m={2} style={styles.mainContainer}>
       <LinearGradient colors={["#280B2B", "#280B2B", "#070307"]}>
         <VStack p={3}>
           <HStack>
             <Box mx={2} position="relative">
-              <Image source={Profile} style={styles.profileImg} />
+              <Image source={{ uri: photo }} style={styles.profileImg} />
               <Text style={styles.vipText}>VIP</Text>
             </Box>
             <VStack justifyContent="space-evenly">
               <HStack w="72" justifyContent="space-between">
-                <Text style={styles.usernameText}>犹豫的香气</Text>
+                <Text style={styles.usernameText}>{alias}</Text>
                 {/* <HStack alignItems="center" space={1}>
                   <Text style={styles.bottomText}>轮廓</Text>
                   <Entypo
@@ -218,12 +221,12 @@ const DeviceID = ({ scannedID, setScanned }) => {
               <Input
                 value={scannedID}
                 size="md"
-                placeholder="Please enter device ID"
+                placeholder="Details"
                 style={styles.referralInput}
               />
             </Stack>
             <Pressable style={styles.deviceIDBtn} onPress={handlePress}>
-              <Text style={styles.deviceIDBtnText}>提交</Text>
+              <Text style={styles.deviceIDBtnText}>扫码</Text>
             </Pressable>
           </HStack>
         </VStack>
@@ -480,7 +483,7 @@ const styles = StyleSheet.create({
     borderRadius: 10,
   },
   deviceIDBtnText: {
-    color: "#4A0075",
+    color: GLOBAL_COLORS.primaryTextColor,
     fontWeight: "bold",
   },
   // LINK LIST

@@ -150,6 +150,7 @@ const InitialLoad = () => {
         api_token: data.api_token,
         alias: data.alias,
         is_Vip: data.is_Vip,
+        photo: data.photo,
       };
 
       // set user global store
@@ -179,6 +180,7 @@ const InitialLoad = () => {
         api_token: data.api_token,
         alias: data.alias,
         is_Vip: data.is_Vip,
+        photo: data.photo,
       };
 
       // set user global store

@@ -26,12 +26,12 @@ import {
 import { BarCodeScanner } from "expo-barcode-scanner";
 import { storeDataObject } from "lib/asyncStorage";
 
+import ButterflyLogo from "assets/images/butterflyLogo.png";
 import Container from "components/Container";
 import DeviceIDBg from "assets/images/deviceIDBg.png";
 import FlagUSA from "assets/images/Flag-USA.png";
 import FlagChina from "assets/images/Flag-China.webp";
 import localizations from "i18n/localizations";
-import Profile from "assets/images/profilePhoto.jpg";
 import ReferralBackground from "assets/images/referralBg.png";
 import VipBanner from "assets/images/vip_banner.png";
 import { GLOBAL_COLORS } from "global";
@@ -321,14 +321,13 @@ const index = () => {
 
   const { mutate } = useMutation(bindDevice, {
     onSuccess: (data) => {
-      const { desired_account } = data.data;
       const userData = {
-        _id: desired_account._id,
-        site_id: desired_account.site_id,
-        api_token: desired_account.api_token,
-        alias: desired_account.alias,
-        is_Vip: desired_account.is_Vip,
-        photo: desired_account.photo,
+        _id: data.desired_account._id,
+        site_id: data.desired_account.site_id,
+        api_token: data.desired_account.api_token,
+        alias: data.desired_account.alias,
+        is_Vip: data.desired_account.is_Vip,
+        photo: data.desired_account.photo,
       };
 
       // set user global store
@@ -363,40 +362,26 @@ const index = () => {
       </Container>
 
       {scanned ? (
-        <View
-          style={{
-            height,
-            width,
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "flex-end",
-            backgroundColor: GLOBAL_COLORS.primaryColor,
-          }}
+        <VStack
+          alignItems="center"
+          height={height}
+          width={width}
+          backgroundColor={GLOBAL_COLORS.primaryColor}
         >
-          <BarCodeScanner
-            onBarCodeScanned={handleBarCodeScanned}
-            style={{
-              position: "absolute",
-              height: height,
-              width: width,
-              zIndex: 10,
-              top: -50,
-            }}
-          />
-          <Pressable
-            style={{
-              marginBottom: 120,
-              backgroundColor: GLOBAL_COLORS.secondaryColor,
-              paddingVertical: 10,
-              paddingHorizontal: 20,
-              borderRadius: 10,
-              zIndex: 15,
-            }}
-            onPress={() => setScanned(false)}
-          >
-            <Text style={{ color: "#FFF", fontSize: 20 }}>Cancel</Text>
+          <Text style={styles.mainHeader}>二维码扫描</Text>
+          <Text style={styles.title}>The Butterfly Project</Text>
+          <Text style={styles.subtitle}>蝴蝶计划</Text>
+          <Box alignItems="center" mt={20} style={styles.scannerContent}>
+            <Image source={ButterflyLogo} style={styles.butterflyLogo} />
+            <BarCodeScanner
+              onBarCodeScanned={handleBarCodeScanned}
+              style={{ height: 300, width: 300 }}
+            />
+          </Box>
+          <Pressable style={styles.button} onPress={() => setScanned(false)}>
+            <Text style={styles.buttonText}>停止扫描</Text>
           </Pressable>
-        </View>
+        </VStack>
       ) : null}
     </>
   );
@@ -537,4 +522,50 @@ const styles = StyleSheet.create({
   emailTextBtn: {
     color: GLOBAL_COLORS.primaryTextColor,
   },
+  // SCANNER
+  mainHeader: {
+    width: "100%",
+    textAlign: "center",
+    padding: 10,
+    fontSize: 18,
+    fontWeight: "bold",
+    borderWidth: 1,
+    borderBottomColor: "#EF44BF",
+    color: GLOBAL_COLORS.primaryTextColor,
+  },
+  title: {
+    fontSize: 20,
+    fontWeight: "bold",
+    marginTop: 10,
+    color: GLOBAL_COLORS.primaryTextColor,
+  },
+  subtitle: {
+    fontWeight: "bold",
+    color: GLOBAL_COLORS.primaryTextColor,
+    marginBottom: 30,
+  },
+  scannerContent: {
+    width: 300,
+    borderWidth: 1,
+    borderColor: GLOBAL_COLORS.primaryTextColor,
+    paddingVertical: 25,
+    borderRadius: 20,
+  },
+  butterflyLogo: {
+    position: "absolute",
+    height: 94,
+    width: 94,
+    top: -80,
+  },
+  button: {
+    marginBottom: 120,
+    backgroundColor: GLOBAL_COLORS.secondaryColor,
+    paddingVertical: 10,
+    paddingHorizontal: 20,
+    borderRadius: 10,
+    zIndex: 15,
+    marginTop: 20,
+    width: 200,
+  },
+  buttonText: { color: "#FFF", fontSize: 20, textAlign: "center" },
 });

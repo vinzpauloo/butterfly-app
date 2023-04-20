@@ -1,4 +1,11 @@
-import { ImageBackground, Pressable, StyleSheet, Text } from "react-native";
+import {
+  Dimensions,
+  ImageBackground,
+  Pressable,
+  StyleSheet,
+  Text,
+  View,
+} from "react-native";
 import React, { useState } from "react";
 
 import Entypo from "react-native-vector-icons/Entypo";
@@ -16,6 +23,7 @@ import {
   Stack,
   VStack,
 } from "native-base";
+import { BarCodeScanner } from "expo-barcode-scanner";
 
 import Container from "components/Container";
 import DeviceIDBg from "assets/images/deviceIDBg.png";
@@ -28,6 +36,8 @@ import VipBanner from "assets/images/vip_banner.png";
 import { GLOBAL_COLORS } from "global";
 import { translationStore } from "../../zustand/translationStore";
 import { useNavigation } from "@react-navigation/native";
+
+const { height, width } = Dimensions.get("window");
 
 // Change Language
 const Intl = () => {
@@ -194,21 +204,25 @@ const Referral = () => {
   );
 };
 
-const DeviceID = () => {
+const DeviceID = ({ scannedID, setScanned }) => {
+  const handlePress = () => {
+    setScanned(true);
+  };
   return (
-    <Box m={2} style={styles.mainContainer}>
+    <Box m={2} style={styles.mainContainer} position="relative">
       <ImageBackground source={DeviceIDBg} resizeMode="cover">
         <VStack alignItems="center">
           <Text style={styles.referralTitle}>链接设备ID</Text>
           <HStack mb={3} alignItems="center" space={2}>
             <Stack w="75%">
               <Input
+                value={scannedID}
                 size="md"
                 placeholder="Please enter device ID"
                 style={styles.referralInput}
               />
             </Stack>
-            <Pressable style={styles.deviceIDBtn}>
+            <Pressable style={styles.deviceIDBtn} onPress={handlePress}>
               <Text style={styles.deviceIDBtnText}>提交</Text>
             </Pressable>
           </HStack>
@@ -293,18 +307,64 @@ const Email = () => {
 };
 
 const index = () => {
+  const [scanned, setScanned] = useState(false);
+  const [scannedID, setScannedID] = useState("");
+
+  const handleBarCodeScanned = ({ type, data }) => {
+    setScannedID(data);
+    setScanned(false);
+  };
   return (
-    <Container>
-      <Header />
-      <ScrollView>
-        <User />
-        <VIP />
-        <Referral />
-        <DeviceID />
-        <LinkList />
-        <Email />
-      </ScrollView>
-    </Container>
+    <>
+      <Container>
+        <Header />
+        <ScrollView>
+          <User />
+          <VIP />
+          <Referral />
+          <DeviceID scannedID={scannedID} setScanned={setScanned} />
+          <LinkList />
+          <Email />
+        </ScrollView>
+      </Container>
+
+      {scanned ? (
+        <View
+          style={{
+            height,
+            width,
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "flex-end",
+            backgroundColor: GLOBAL_COLORS.primaryColor,
+          }}
+        >
+          <BarCodeScanner
+            onBarCodeScanned={handleBarCodeScanned}
+            style={{
+              position: "absolute",
+              height: height,
+              width: width,
+              zIndex: 10,
+              top: -50,
+            }}
+          />
+          <Pressable
+            style={{
+              marginBottom: 120,
+              backgroundColor: GLOBAL_COLORS.secondaryColor,
+              paddingVertical: 10,
+              paddingHorizontal: 20,
+              borderRadius: 10,
+              zIndex: 15,
+            }}
+            onPress={() => setScanned(false)}
+          >
+            <Text style={{ color: "#FFF", fontSize: 20 }}>Cancel</Text>
+          </Pressable>
+        </View>
+      ) : null}
+    </>
   );
 };
 

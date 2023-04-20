@@ -24,6 +24,7 @@ import {
   VStack,
 } from "native-base";
 import { BarCodeScanner } from "expo-barcode-scanner";
+import { storeDataObject } from "lib/asyncStorage";
 
 import Container from "components/Container";
 import DeviceIDBg from "assets/images/deviceIDBg.png";
@@ -37,6 +38,8 @@ import { GLOBAL_COLORS } from "global";
 import { translationStore } from "../../zustand/translationStore";
 import { useNavigation } from "@react-navigation/native";
 import { userStore } from "../../zustand/userStore";
+import CustomerService from "services/api/CustomerService";
+import { useMutation } from "@tanstack/react-query";
 
 const { height, width } = Dimensions.get("window");
 
@@ -312,11 +315,39 @@ const Email = () => {
 const index = () => {
   const [scanned, setScanned] = useState(false);
   const [scannedID, setScannedID] = useState("");
+  const { bindDevice } = CustomerService();
+  const token = userStore((store) => store.api_token);
+  const setUserStore = userStore((state) => state.setUserData);
+
+  const { mutate } = useMutation(bindDevice, {
+    onSuccess: (data) => {
+      const { desired_account } = data.data;
+      const userData = {
+        _id: desired_account._id,
+        site_id: desired_account.site_id,
+        api_token: desired_account.api_token,
+        alias: desired_account.alias,
+        is_Vip: desired_account.is_Vip,
+        photo: desired_account.photo,
+      };
+
+      // set user global store
+      setUserStore(userData);
+
+      // store user to device storage
+      storeDataObject("UserCacheData", userData);
+    },
+    onError: (error) => {
+      console.log("Bind Device", error);
+    },
+  });
 
   const handleBarCodeScanned = ({ type, data }) => {
     setScannedID(data);
     setScanned(false);
+    mutate({ data: { id: data }, token });
   };
+
   return (
     <>
       <Container>

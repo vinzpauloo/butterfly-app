@@ -149,6 +149,15 @@ const CustomerService = () => {
     });
   };
 
+  const bindDevice = (params) => {
+    return request({
+      headers: { ...getHeaders(), Authorization: `Bearer ${params.token}` },
+      url: "/customers/bind",
+      method: "POST",
+      params: params.data,
+    });
+  };
+
   return {
     getCustomerById,
     postLoginCustomer,
@@ -162,6 +171,7 @@ const CustomerService = () => {
     favoriteVideo,
     unfavoriteVideo,
     subscribeToVIP,
+    bindDevice,
   };
 };
 

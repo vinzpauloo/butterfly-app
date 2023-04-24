@@ -62,7 +62,7 @@ const Header = () => {
 
 // START OF MEMBER TAB CODES
 
-const VIPChoices = ({ active, setActive }) => {
+const VIPChoices = ({ active, setActive, bundle }) => {
   const activeColorScheme = {
     gradient: ["#9747FF", "#C74FFF"],
     border: "#EF44BF",
@@ -77,60 +77,26 @@ const VIPChoices = ({ active, setActive }) => {
     secondaryText: "#666F80",
   };
 
-  const choices = [
-    {
-      id: "five",
-      title: "遥控女友卡",
-      amount: "¥500",
-      amountDesc: "永久使用",
-      subtitle: "金币免费",
-      text: "超值礼包 裸聊照片和视频",
-    },
-    {
-      id: "four",
-      title: "遥控女友卡",
-      amount: "¥400",
-      amountDesc: "永久使用",
-      subtitle: "金币免费",
-      text: "最强权益，选择我!",
-    },
-    {
-      id: "three",
-      title: "遥控女友卡",
-      amount: "¥300",
-      amountDesc: "永久使用",
-      subtitle: "金币免费",
-      text: "会员当月选择",
-    },
-    {
-      id: "one",
-      title: "遥控女友卡",
-      amount: "¥100",
-      amountDesc: "永久使用",
-      subtitle: "金币免费",
-      text: "短期访问，买我!",
-    },
-  ];
   const handlePress = (id) => {
     setActive(id);
   };
   return (
     <HStack>
-      {choices.map((item, index) => (
+      {bundle?.map((item, index) => (
         <Box
           key={index}
           borderWidth={3}
           borderColor={
-            item.id === active
+            index === active
               ? activeColorScheme.border
               : inactiveColorScheme.border
           }
           w="25%"
         >
-          <Pressable onPress={() => handlePress(item.id)}>
+          <Pressable onPress={() => handlePress(index)}>
             <LinearGradient
               colors={
-                item.id === active
+                index === active
                   ? activeColorScheme.gradient
                   : inactiveColorScheme.gradient
               }
@@ -144,7 +110,7 @@ const VIPChoices = ({ active, setActive }) => {
                     },
                   ]}
                 >
-                  {item.title}
+                  {item.name}
                 </Text>
                 <VStack
                   position="relative"
@@ -159,26 +125,26 @@ const VIPChoices = ({ active, setActive }) => {
                       styles.boxPriceTag,
                       {
                         color:
-                          item.id === active
+                          index === active
                             ? activeColorScheme.secondaryText
                             : inactiveColorScheme.secondaryText,
                       },
                     ]}
                   >
-                    {item.amount}
+                    {item.price}
                   </Text>
                   <Text
                     style={[
                       styles.boxPriceTagText,
                       {
                         color:
-                          item.id === active
+                          index === active
                             ? activeColorScheme.secondaryText
                             : inactiveColorScheme.secondaryText,
                       },
                     ]}
                   >
-                    {item.amountDesc}
+                    永久使用
                   </Text>
                 </VStack>
                 <Text
@@ -189,7 +155,7 @@ const VIPChoices = ({ active, setActive }) => {
                     },
                   ]}
                 >
-                  {item.subtitle}
+                  金币免费
                 </Text>
                 <Text
                   style={[
@@ -200,7 +166,7 @@ const VIPChoices = ({ active, setActive }) => {
                   ]}
                   numberOfLines={2}
                 >
-                  {item.text}
+                  短期访问，买我!
                 </Text>
               </VStack>
             </LinearGradient>
@@ -212,6 +178,8 @@ const VIPChoices = ({ active, setActive }) => {
 };
 
 const PromotionalPackage = ({ isLoading, perks }) => {
+  console.log("###", perks);
+
   const lists = [
     {
       active_image: Videos,
@@ -337,57 +305,22 @@ const Button = () => {
 };
 
 const Member = () => {
-  const [active, setActive] = useState("five");
-  const [bundle, setBundle] = useState({
-    five: {},
-    four: {},
-    three: {},
-    two: {},
-    one: {},
-  });
+  const [active, setActive] = useState(0);
+  const [bundle, setBundle] = useState([]);
 
   const { api_token } = userStore((store) => store);
   const { getAllSubscriptionBundle } = SubscriptionsBundle();
-
-  const bundleSetter = (price, item) => {
-    switch (price) {
-      case 500:
-        setBundle((prev) => {
-          return { ...prev, five: item };
-        });
-        break;
-      case 400:
-        setBundle((prev) => {
-          return { ...prev, four: item };
-        });
-        break;
-      case 300:
-        setBundle((prev) => {
-          return { ...prev, three: item };
-        });
-        break;
-      case 200:
-        setBundle((prev) => {
-          return { ...prev, two: item };
-        });
-        break;
-      case 100:
-        setBundle((prev) => {
-          return { ...prev, one: item };
-        });
-        break;
-      default:
-        break;
-    }
-  };
 
   const { isLoading, isFetching } = useQuery({
     queryKey: ["subscription bundle"],
     queryFn: () => getAllSubscriptionBundle({ token: api_token }),
     onSuccess: (data) => {
-      data.data.map((item) => {
-        bundleSetter(item.price, item);
-      });
+      console.log("####", data);
+
+      const sortedData = data.data.sort(
+        (firstItem, secondItem) => secondItem.price - firstItem.price
+      );
+      setBundle(sortedData);
     },
     onError: (error) => {
       console.log("Subscription Bundle: ", error);
@@ -396,14 +329,14 @@ const Member = () => {
 
   return (
     <Container>
-      <VIPChoices active={active} setActive={setActive} />
+      <VIPChoices active={active} setActive={setActive} bundle={bundle} />
       <PromotionalPackage
         isLoading={isLoading || isFetching}
-        perks={bundle[active].perks}
+        perks={bundle[active]?.perks}
       />
       <Description
         isLoading={isLoading || isFetching}
-        description={bundle[active].description}
+        description={bundle[active]?.description}
       />
       <Button />
     </Container>

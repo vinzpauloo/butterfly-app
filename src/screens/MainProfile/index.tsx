@@ -4,7 +4,6 @@ import {
   Pressable,
   StyleSheet,
   Text,
-  View,
 } from "react-native";
 import React, { useState } from "react";
 
@@ -28,6 +27,7 @@ import { storeDataObject } from "lib/asyncStorage";
 
 import ButterflyLogo from "assets/images/butterflyLogo.png";
 import Container from "components/Container";
+import CustomerService from "services/api/CustomerService";
 import DeviceIDBg from "assets/images/deviceIDBg.png";
 import FlagUSA from "assets/images/Flag-USA.png";
 import FlagChina from "assets/images/Flag-China.webp";
@@ -38,7 +38,6 @@ import { GLOBAL_COLORS } from "global";
 import { translationStore } from "../../zustand/translationStore";
 import { useNavigation } from "@react-navigation/native";
 import { userStore } from "../../zustand/userStore";
-import CustomerService from "services/api/CustomerService";
 import { useMutation } from "@tanstack/react-query";
 
 const { height, width } = Dimensions.get("window");
@@ -218,8 +217,8 @@ const DeviceID = ({ scannedID, setScanned }) => {
     <Box m={2} style={styles.mainContainer} position="relative">
       <ImageBackground source={DeviceIDBg} resizeMode="cover">
         <VStack alignItems="center">
-          <Text style={styles.referralTitle}>链接设备ID</Text>
-          <HStack mb={3} alignItems="center" space={2}>
+          {/* <Text style={styles.referralTitle}>链接设备ID</Text> */}
+          <HStack my={3} alignItems="center" space={2}>
             <Stack w="75%">
               <Input
                 value={scannedID}

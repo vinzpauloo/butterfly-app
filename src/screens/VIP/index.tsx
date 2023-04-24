@@ -34,6 +34,8 @@ import { LinearGradient } from "expo-linear-gradient";
 import { createMaterialTopTabNavigator } from "@react-navigation/material-top-tabs";
 import { log } from "react-native-reanimated";
 import { userStore } from "../../zustand/userStore";
+import SubscriptionsBundle from "services/api/SubscriptionBundle";
+import { useQuery } from "@tanstack/react-query";
 
 const Tab = createMaterialTopTabNavigator();
 
@@ -61,8 +63,7 @@ const Header = () => {
 
 // START OF MEMBER TAB CODES
 
-const VIPChoices = () => {
-  const [active, setActive] = useState("five");
+const VIPChoices = ({ active, setActive }) => {
   const activeColorScheme = {
     //Y500
     five: {
@@ -224,39 +225,55 @@ const VIPChoices = () => {
   );
 };
 
-const PromotionalPackage = () => {
+const PromotionalPackage = ({ isLoading, perks }) => {
   const lists = [
     {
-      image: Videos,
+      active_image: Videos,
+      inactive_image: VideosWhite,
       title: "videos",
+      isActive: isLoading || perks["videos"],
     },
     {
-      image: Photos,
+      active_image: Photos,
+      inactive_image: PhotosWhite,
       title: "photos",
+      isActive: isLoading || perks["photos"],
     },
     {
-      image: Live,
+      active_image: Live,
+      inactive_image: LiveWhite,
       title: "live",
+      isActive: isLoading || perks["live_streaming"],
     },
     {
-      image: VideoCall,
+      active_image: VideoCall,
+      inactive_image: VideoCallWhite,
       title: "video call",
+      isActive: isLoading || perks["video_call"],
     },
     {
-      image: LiveChat,
+      active_image: LiveChat,
+      inactive_image: LiveChatWhite,
       title: "live chat",
+      isActive: isLoading || perks["live_chat"],
     },
     {
-      image: ForeverVIP,
+      active_image: ForeverVIP,
+      inactive_image: ForeverVIPWhite,
       title: "forever vip",
+      isActive: isLoading || perks["forever_vip"],
     },
     {
-      image: Download,
+      active_image: Download,
+      inactive_image: DownloadWhite,
       title: "download",
+      isActive: isLoading || perks["download"],
     },
     {
-      image: WatchTicket,
+      active_image: WatchTicket,
+      inactive_image: WatchTicketWhite,
       title: "watch ticket",
+      isActive: isLoading || perks["watch_ticket"],
     },
   ];
   return (
@@ -266,7 +283,10 @@ const PromotionalPackage = () => {
         {lists.map((item, index) => (
           <Box key={index} width="25%" alignItems="center" mt={2}>
             <Box alignItems="center">
-              <Image source={item.image} style={styles.images} />
+              <Image
+                source={item.isActive ? item.active_image : item.inactive_image}
+                style={styles.images}
+              />
               <Text style={styles.imagesText}>{item.title}</Text>
             </Box>
           </Box>
@@ -276,18 +296,10 @@ const PromotionalPackage = () => {
   );
 };
 
-const Comment = () => {
+const Description = ({ isLoading, description }) => {
   return (
     <Box style={styles.commentContainer}>
-      <Text style={styles.commentText}>
-        Lorem ipsum dolor sit amet consectetur. Enim vel elit venenatis ultrices
-        vel feugiat varius aenean. Pellentesque nisl dolor et magna neque
-        pharetra in porttitor. Sit id rhoncus viverra et. Pharetra nulla sit
-        facilisis scelerisque et ultricies eu aliquet. Eu habitasse tincidunt
-        sed id id malesuada interdum. psum dolor sit amet consectetur. Enim vel
-        elit venenatis ultrices vel feugiat varius aenean. Pellentesque nisl
-        dolor
-      </Text>
+      <Text style={styles.commentText}>{isLoading ? "..." : description}</Text>
     </Box>
   );
 };
@@ -303,11 +315,71 @@ const Button = () => {
 };
 
 const Member = () => {
+  const [active, setActive] = useState("five");
+  const [bundle, setBundle] = useState({
+    five: {},
+    four: {},
+    three: {},
+    two: {},
+    one: {},
+  });
+
+  const { api_token } = userStore((store) => store);
+  const { getAllSubscriptionBundle } = SubscriptionsBundle();
+
+  const bundleSetter = (price, item) => {
+    switch (price) {
+      case 500:
+        setBundle((prev) => {
+          return { ...prev, five: item };
+        });
+        break;
+      case 400:
+        setBundle((prev) => {
+          return { ...prev, four: item };
+        });
+        break;
+      case 300:
+        setBundle((prev) => {
+          return { ...prev, three: item };
+        });
+        break;
+      case 200:
+        setBundle((prev) => {
+          return { ...prev, two: item };
+        });
+        break;
+      case 100:
+        setBundle((prev) => {
+          return { ...prev, one: item };
+        });
+        break;
+      default:
+        break;
+    }
+  };
+
+  const { isLoading } = useQuery({
+    queryKey: ["subscription bundle"],
+    queryFn: () => getAllSubscriptionBundle({ token: api_token }),
+    onSuccess: (data) => {
+      data.data.map((item) => {
+        bundleSetter(item.price, item);
+      });
+    },
+    onError: (error) => {
+      console.log("Subscription Bundle: ", error);
+    },
+  });
+
   return (
     <Container>
-      <VIPChoices />
-      <PromotionalPackage />
-      <Comment />
+      <VIPChoices active={active} setActive={setActive} />
+      <PromotionalPackage isLoading={isLoading} perks={bundle[active].perks} />
+      <Description
+        isLoading={isLoading}
+        description={bundle[active].description}
+      />
       <Button />
     </Container>
   );

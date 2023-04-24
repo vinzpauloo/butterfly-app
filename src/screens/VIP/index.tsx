@@ -64,31 +64,17 @@ const Header = () => {
 
 const VIPChoices = ({ active, setActive }) => {
   const activeColorScheme = {
-    //Y500
-    five: {
-      color: "#3C4B64",
-      gradient: ["#F1F0ED", "#E5E4E2", "#D9D8D6", "#FFFFFF", "#5C6C7B"],
-    },
-    //Y400
-    four: {
-      color: "#B87D0F",
-      gradient: ["#FFDAA8", "#FAECD9", "#DEAD1B", "#B87D0F"],
-    },
-    //Y300
-    three: {
-      color: "#777 ",
-      gradient: ["#AEB2B8", "#E8EEF3", "#CDCDCD"],
-    },
-    //Y100
-    one: {
-      color: "#FFFFFF",
-      gradient: ["#DA8A68", "#F5B993", "#D4785C", "#CB6D51"],
-    },
+    gradient: ["#9747FF", "#C74FFF"],
+    border: "#EF44BF",
+    primaryText: "#FFFFFF",
+    secondaryText: "#3C4B64",
   };
 
   const inactiveColorScheme = {
-    color: "#FFFFFF",
     gradient: ["#666F80", "#666F80"],
+    border: "#3C4B64",
+    primaryText: "#FFFFFF",
+    secondaryText: "#666F80",
   };
 
   const choices = [
@@ -131,12 +117,21 @@ const VIPChoices = ({ active, setActive }) => {
   return (
     <HStack>
       {choices.map((item, index) => (
-        <Box key={index} borderWidth={3} borderColor="#3C4B64" w="25%">
+        <Box
+          key={index}
+          borderWidth={3}
+          borderColor={
+            item.id === active
+              ? activeColorScheme.border
+              : inactiveColorScheme.border
+          }
+          w="25%"
+        >
           <Pressable onPress={() => handlePress(item.id)}>
             <LinearGradient
               colors={
                 item.id === active
-                  ? activeColorScheme[active].gradient
+                  ? activeColorScheme.gradient
                   : inactiveColorScheme.gradient
               }
             >
@@ -145,10 +140,7 @@ const VIPChoices = ({ active, setActive }) => {
                   style={[
                     styles.boxTitle,
                     {
-                      color:
-                        item.id === active
-                          ? activeColorScheme[active].color
-                          : inactiveColorScheme.color,
+                      color: activeColorScheme.primaryText,
                     },
                   ]}
                 >
@@ -157,9 +149,10 @@ const VIPChoices = ({ active, setActive }) => {
                 <VStack
                   position="relative"
                   alignItems="center"
-                  borderWidth={1}
+                  borderWidth={0.5}
                   borderColor="#3C4B64"
-                  width="103%"
+                  width="107%"
+                  backgroundColor={"#FFFFFF"}
                 >
                   <Text
                     style={[
@@ -167,8 +160,8 @@ const VIPChoices = ({ active, setActive }) => {
                       {
                         color:
                           item.id === active
-                            ? activeColorScheme[active].color
-                            : inactiveColorScheme.color,
+                            ? activeColorScheme.secondaryText
+                            : inactiveColorScheme.secondaryText,
                       },
                     ]}
                   >
@@ -180,8 +173,8 @@ const VIPChoices = ({ active, setActive }) => {
                       {
                         color:
                           item.id === active
-                            ? activeColorScheme[active].color
-                            : inactiveColorScheme.color,
+                            ? activeColorScheme.secondaryText
+                            : inactiveColorScheme.secondaryText,
                       },
                     ]}
                   >
@@ -192,10 +185,7 @@ const VIPChoices = ({ active, setActive }) => {
                   style={[
                     styles.boxBottomTextTitle,
                     {
-                      color:
-                        item.id === active
-                          ? activeColorScheme[active].color
-                          : inactiveColorScheme.color,
+                      color: activeColorScheme.primaryText,
                     },
                   ]}
                 >
@@ -205,10 +195,7 @@ const VIPChoices = ({ active, setActive }) => {
                   style={[
                     styles.boxBottomTextSubtitle,
                     {
-                      color:
-                        item.id === active
-                          ? activeColorScheme[active].color
-                          : inactiveColorScheme.color,
+                      color: activeColorScheme.primaryText,
                     },
                   ]}
                   numberOfLines={2}

@@ -4,6 +4,7 @@ import {
   Pressable,
   StyleSheet,
   Text,
+  View,
 } from "react-native";
 import React, { useState } from "react";
 
@@ -32,8 +33,10 @@ import DeviceIDBg from "assets/images/deviceIDBg.png";
 import FlagUSA from "assets/images/Flag-USA.png";
 import FlagChina from "assets/images/Flag-China.webp";
 import localizations from "i18n/localizations";
+import NotVIPImage from "assets/images/not_vip.png";
 import ReferralBackground from "assets/images/referralBg.png";
 import VipBanner from "assets/images/vip_banner.png";
+import VIPImage from "assets/images/vip.png";
 import { GLOBAL_COLORS } from "global";
 import { translationStore } from "../../zustand/translationStore";
 import { useNavigation } from "@react-navigation/native";
@@ -165,6 +168,33 @@ const User = () => {
           </HStack>
         </VStack>
       </LinearGradient>
+    </Box>
+  );
+};
+
+const VIPStatus = () => {
+  const { is_Vip, _id } = userStore((store) => store);
+  const navigation = useNavigation<any>();
+
+  const handlePressVIP = () => {
+    navigation.navigate("VIPScreen", { postTitle: "会员中心" });
+  };
+
+  return (
+    <Box m={1} style={styles.mainContainer} position="relative">
+      <Pressable onPress={handlePressVIP}>
+        <ImageBackground
+          source={is_Vip ? VIPImage : NotVIPImage}
+          style={{ width: "100%", height: 90 }}
+        >
+          <View style={styles.textContainer}>
+            <Text style={styles.vipTitle}>
+              贵宾期 : {is_Vip ? "2023-05-19" : "NOT YET A MEMBER"}
+            </Text>
+            <Text style={styles.vipSubtitle}>用户身份 : {_id}</Text>
+          </View>
+        </ImageBackground>
+      </Pressable>
     </Box>
   );
 };
@@ -352,6 +382,7 @@ const index = () => {
         <Header />
         <ScrollView>
           <User />
+          <VIPStatus />
           <VIP />
           <Referral />
           <DeviceID scannedID={scannedID} setScanned={setScanned} />
@@ -428,6 +459,18 @@ const styles = StyleSheet.create({
     width: 30,
     height: 15,
   },
+  // VIP STATUS
+  textContainer: {
+    position: "absolute",
+    left: 90,
+    top: 30,
+  },
+  vipTitle: {
+    fontSize: 20,
+    color: GLOBAL_COLORS.primaryTextColor,
+    fontWeight: "bold",
+  },
+  vipSubtitle: { color: GLOBAL_COLORS.primaryTextColor },
   // USER
   mainContainer: {
     borderRadius: 10,

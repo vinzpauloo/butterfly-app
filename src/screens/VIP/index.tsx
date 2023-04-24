@@ -4,13 +4,13 @@ import {
   Pressable,
   StyleSheet,
   Text,
-  View,
 } from "react-native";
 import React, { useState } from "react";
 
-import { Box, HStack, ScrollView, Stack, VStack } from "native-base";
+import { Box, HStack, ScrollView, VStack } from "native-base";
 
 import Container from "components/Container";
+import CustomerService from "services/api/CustomerService";
 import Download from "assets/images/download.png";
 import DownloadWhite from "assets/images/download_white.png";
 import ForeverVIP from "assets/images/foreverVIP.png";
@@ -22,6 +22,7 @@ import LiveChatWhite from "assets/images/liveChat_white.png";
 import Photos from "assets/images/photos.png";
 import PhotosWhite from "assets/images/photos_white.png";
 import Profile from "assets/images/profilePhoto.jpg";
+import SubscriptionsBundle from "services/api/SubscriptionBundle";
 import VideoCall from "assets/images/vidoecall.png";
 import VideoCallWhite from "assets/images/videocall_white.png";
 import Videos from "assets/images/videos.png";
@@ -32,10 +33,8 @@ import WatchTicketWhite from "assets/images/watchTicket_white.png";
 import { GLOBAL_COLORS } from "global";
 import { LinearGradient } from "expo-linear-gradient";
 import { createMaterialTopTabNavigator } from "@react-navigation/material-top-tabs";
-import { log } from "react-native-reanimated";
 import { userStore } from "../../zustand/userStore";
-import SubscriptionsBundle from "services/api/SubscriptionBundle";
-import { useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery } from "@tanstack/react-query";
 
 const Tab = createMaterialTopTabNavigator();
 
@@ -305,10 +304,46 @@ const Description = ({ isLoading, description }) => {
 };
 
 const Button = () => {
+  const { is_Vip, setVip, api_token: token } = userStore((state) => state);
+  const { subscribeToVIP } = CustomerService(); // change if the "Buy Subscription Bundle API" is working
+
+  const { mutate: mutateSubscribe } = useMutation(subscribeToVIP, {
+    onSuccess: (data) => {
+      console.log("subscribeToVIP", data);
+
+      /* Update is_vip state */
+      setVip(true);
+    },
+    onError: (error) => {
+      console.log("subscribeToVIP", error);
+    },
+  });
+
+  const handlePress = () => {
+    mutateSubscribe({
+      data: { amount: 200.0, title: "Diamond Privillege Card" }, // change if the "Buy Subscription Bundle API" is working
+      token,
+    });
+  };
+
   return (
     <Box alignItems="center">
-      <Pressable style={styles.bottomBtn}>
-        <Text style={styles.bottomBtnText}>Get Offer</Text>
+      <Pressable
+        style={[
+          styles.bottomBtn,
+          { backgroundColor: is_Vip ? "#666F80" : "#02d113" },
+        ]}
+        onPress={handlePress}
+        disabled={is_Vip}
+      >
+        <Text
+          style={[
+            styles.bottomBtnText,
+            { color: is_Vip ? "#333333" : GLOBAL_COLORS.primaryTextColor },
+          ]}
+        >
+          Get Offer
+        </Text>
       </Pressable>
     </Box>
   );
@@ -359,7 +394,7 @@ const Member = () => {
     }
   };
 
-  const { isLoading } = useQuery({
+  const { isLoading, isFetching } = useQuery({
     queryKey: ["subscription bundle"],
     queryFn: () => getAllSubscriptionBundle({ token: api_token }),
     onSuccess: (data) => {
@@ -375,9 +410,12 @@ const Member = () => {
   return (
     <Container>
       <VIPChoices active={active} setActive={setActive} />
-      <PromotionalPackage isLoading={isLoading} perks={bundle[active].perks} />
+      <PromotionalPackage
+        isLoading={isLoading || isFetching}
+        perks={bundle[active].perks}
+      />
       <Description
-        isLoading={isLoading}
+        isLoading={isLoading || isFetching}
         description={bundle[active].description}
       />
       <Button />
@@ -530,14 +568,14 @@ const styles = StyleSheet.create({
   },
   // Button
   bottomBtn: {
-    backgroundColor: "#02d113",
+    // backgroundColor: "#02d113",
     paddingHorizontal: 20,
     paddingVertical: 5,
     borderRadius: 15,
     marginVertical: 15,
   },
   bottomBtnText: {
-    color: GLOBAL_COLORS.primaryTextColor,
+    // color: GLOBAL_COLORS.primaryTextColor,
     textTransform: "uppercase",
     fontSize: 16,
     fontWeight: "bold",

@@ -5,6 +5,8 @@ import Entypo from "react-native-vector-icons/Entypo";
 import { HStack, Image, Input, Pressable, VStack } from "native-base";
 
 import AccountIcon from "assets/images/account_icon.png";
+import ActiveFemaleIcon from "assets/images/active_female_icon.png";
+import ActiveMaleIcon from "assets/images/active_male_icon.png";
 import CertificateIcon from "assets/images/certificate.png";
 import ChainIcon from "assets/images/chain_icon.png";
 import Container from "components/Container";
@@ -61,7 +63,9 @@ const FirstContainer = () => {
       <LayoutContent>
         <Text style={styles.textLabel}>性别</Text>
         <HStack>
+          {/* ActiveFemaleIcon */}
           <Image source={FemaleIcon} style={styles.femaleIcon} />
+          {/* ActiveMaleIcon */}
           <Image source={MaleIcon} style={styles.maleIcon} />
         </HStack>
       </LayoutContent>
@@ -169,7 +173,7 @@ const ThirdContainer = () => {
       </LayoutContent>
       <LayoutContent>
         <TextIconContent>
-          <Image source={FemaleIcon} style={styles.textIcon} />
+          <Image source={FileIcon} style={styles.textIcon} />
           <Text style={styles.textLabel}>服务条款</Text>
         </TextIconContent>
         <Entypo

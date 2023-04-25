@@ -26,15 +26,22 @@ import {
 import { BarCodeScanner } from "expo-barcode-scanner";
 import { storeDataObject } from "lib/asyncStorage";
 
+import AccountIcon from "assets/images/account_icon.png";
+import ApplicationIcon from "assets/images/application_icon.png";
 import ButterflyLogo from "assets/images/butterflyLogo.png";
 import Container from "components/Container";
 import CustomerService from "services/api/CustomerService";
 import DeviceIDBg from "assets/images/deviceIDBg.png";
+import DownloadIcon from "assets/images/download_icon.png";
 import FlagUSA from "assets/images/Flag-USA.png";
 import FlagChina from "assets/images/Flag-China.webp";
+import HistoryIcon from "assets/images/history_icon.png";
 import localizations from "i18n/localizations";
 import NotVIPImage from "assets/images/not_vip.png";
+import OfficialIcon from "assets/images/official_icon.png";
 import ReferralBackground from "assets/images/referralBg.png";
+import ServiceIcon from "assets/images/service_icon.png";
+import ShareIcon from "assets/images/share_icon.png";
 import VipBanner from "assets/images/vip_banner.png";
 import VIPImage from "assets/images/vip.png";
 import { GLOBAL_COLORS } from "global";
@@ -273,32 +280,39 @@ const LinkList = () => {
   const lists = [
     {
       title: "历史记录",
+      icon: HistoryIcon,
       navigate: () => {},
     },
     {
       title: "离线缓存",
+      icon: DownloadIcon,
       navigate: () => {},
     },
     {
       title: "分享推广",
+      icon: ShareIcon,
       navigate: () => {},
     },
     {
       title: "账户凭证",
+      icon: AccountIcon,
       navigate: () => {
         navigation.navigate("AccountCredentials", { postTitle: "账户凭证" });
       },
     },
     {
       title: "在线服务",
+      icon: ServiceIcon,
       navigate: () => {},
     },
     {
       title: "精品应用",
+      icon: ApplicationIcon,
       navigate: () => {},
     },
     {
       title: "官方组",
+      icon: OfficialIcon,
       navigate: () => {},
     },
   ];
@@ -316,7 +330,10 @@ const LinkList = () => {
               justifyContent="space-between"
               alignItems="center"
             >
-              <Text style={styles.listText}>{item.title}</Text>
+              <HStack alignItems="center">
+                <Image source={item.icon} style={styles.linkIcon} />
+                <Text style={styles.listText}>{item.title}</Text>
+              </HStack>
               <Entypo
                 name="chevron-right"
                 color={GLOBAL_COLORS.primaryTextColor}
@@ -574,6 +591,12 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderBottomColor: "#EF44BF",
     color: GLOBAL_COLORS.primaryTextColor,
+  },
+  linkIcon: {
+    height: 25,
+    width: 25,
+    resizeMode: "contain",
+    marginRight: 25,
   },
   title: {
     fontSize: 20,

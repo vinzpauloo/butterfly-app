@@ -4,10 +4,11 @@ import {
   Pressable,
   StyleSheet,
   Text,
+  View,
 } from "react-native";
 import React, { useState } from "react";
 
-import { Box, HStack, ScrollView, VStack } from "native-base";
+import { Box, FlatList, HStack, ScrollView, VStack } from "native-base";
 
 import Container from "components/Container";
 import CustomerService from "services/api/CustomerService";
@@ -81,105 +82,109 @@ const VIPChoices = ({ active, setActive, bundle }) => {
     setActive(id);
   };
   return (
-    <HStack>
-      {bundle?.map((item, index) => (
-        <Box
-          key={index}
-          borderWidth={3}
-          borderColor={
-            index === active
-              ? activeColorScheme.border
-              : inactiveColorScheme.border
-          }
-          w="25%"
-        >
-          <Pressable onPress={() => handlePress(index)}>
-            <LinearGradient
-              colors={
-                index === active
-                  ? activeColorScheme.gradient
-                  : inactiveColorScheme.gradient
-              }
-            >
-              <VStack alignItems="center" height={150}>
-                <Text
-                  style={[
-                    styles.boxTitle,
-                    {
-                      color: activeColorScheme.primaryText,
-                    },
-                  ]}
-                >
-                  {item.name}
-                </Text>
-                <VStack
-                  position="relative"
-                  alignItems="center"
-                  borderWidth={0.5}
-                  borderColor="#3C4B64"
-                  width="107%"
-                  backgroundColor={"#FFFFFF"}
-                >
+    <View>
+      <FlatList
+        horizontal
+        showsHorizontalScrollIndicator={false}
+        data={bundle}
+        keyExtractor={(_, index) => "" + index}
+        renderItem={({ item, index }: any) => (
+          <Box
+            key={index}
+            borderWidth={3}
+            borderColor={
+              index === active
+                ? activeColorScheme.border
+                : inactiveColorScheme.border
+            }
+            height={172}
+          >
+            <Pressable onPress={() => handlePress(index)}>
+              <LinearGradient
+                colors={
+                  index === active
+                    ? activeColorScheme.gradient
+                    : inactiveColorScheme.gradient
+                }
+              >
+                <VStack alignItems="center" height={150} m={2}>
                   <Text
                     style={[
-                      styles.boxPriceTag,
+                      styles.boxTitle,
                       {
-                        color:
-                          index === active
-                            ? activeColorScheme.secondaryText
-                            : inactiveColorScheme.secondaryText,
+                        color: activeColorScheme.primaryText,
                       },
                     ]}
                   >
-                    {item.price}
+                    {item.name}
+                  </Text>
+                  <VStack
+                    position="relative"
+                    alignItems="center"
+                    borderWidth={0.5}
+                    borderColor="#3C4B64"
+                    width="127%"
+                    backgroundColor={"#FFFFFF"}
+                  >
+                    <Text
+                      style={[
+                        styles.boxPriceTag,
+                        {
+                          color:
+                            index === active
+                              ? activeColorScheme.secondaryText
+                              : inactiveColorScheme.secondaryText,
+                        },
+                      ]}
+                    >
+                      {item.price}
+                    </Text>
+                    <Text
+                      style={[
+                        styles.boxPriceTagText,
+                        {
+                          color:
+                            index === active
+                              ? activeColorScheme.secondaryText
+                              : inactiveColorScheme.secondaryText,
+                        },
+                      ]}
+                    >
+                      永久使用
+                    </Text>
+                  </VStack>
+                  <Text
+                    style={[
+                      styles.boxBottomTextTitle,
+                      {
+                        color: activeColorScheme.primaryText,
+                      },
+                    ]}
+                  >
+                    金币免费
                   </Text>
                   <Text
                     style={[
-                      styles.boxPriceTagText,
+                      styles.boxBottomTextSubtitle,
                       {
-                        color:
-                          index === active
-                            ? activeColorScheme.secondaryText
-                            : inactiveColorScheme.secondaryText,
+                        color: activeColorScheme.primaryText,
                       },
                     ]}
+                    numberOfLines={2}
                   >
-                    永久使用
+                    短期访问，买我!
                   </Text>
                 </VStack>
-                <Text
-                  style={[
-                    styles.boxBottomTextTitle,
-                    {
-                      color: activeColorScheme.primaryText,
-                    },
-                  ]}
-                >
-                  金币免费
-                </Text>
-                <Text
-                  style={[
-                    styles.boxBottomTextSubtitle,
-                    {
-                      color: activeColorScheme.primaryText,
-                    },
-                  ]}
-                  numberOfLines={2}
-                >
-                  短期访问，买我!
-                </Text>
-              </VStack>
-            </LinearGradient>
-          </Pressable>
-        </Box>
-      ))}
-    </HStack>
+              </LinearGradient>
+            </Pressable>
+          </Box>
+        )}
+      />
+    </View>
   );
 };
 
 const PromotionalPackage = ({ isLoading, perks }) => {
-  console.log("###", perks);
-
   const lists = [
     {
       active_image: Videos,

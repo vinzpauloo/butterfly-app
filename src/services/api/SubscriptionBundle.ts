@@ -2,6 +2,9 @@ import { getHeaders } from "lib/cryptoJs";
 import request from "lib/request";
 
 interface IAllSubscriptionBundle {
+  data: {
+    active: boolean;
+  };
   token: string;
 }
 
@@ -11,6 +14,7 @@ const SubscriptionsBundle = () => {
       headers: { ...getHeaders(), Authorization: `Bearer ${params.token}` },
       url: "/subcriptions",
       method: "GET",
+      params: params.data,
     });
   };
 

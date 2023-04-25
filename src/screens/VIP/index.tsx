@@ -318,7 +318,8 @@ const Member = () => {
 
   const { isLoading, isFetching } = useQuery({
     queryKey: ["subscription bundle"],
-    queryFn: () => getAllSubscriptionBundle({ token: api_token }),
+    queryFn: () =>
+      getAllSubscriptionBundle({ data: { active: true }, token: api_token }),
     onSuccess: (data) => {
       console.log("####", data);
 

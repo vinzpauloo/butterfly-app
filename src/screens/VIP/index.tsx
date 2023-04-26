@@ -1,15 +1,9 @@
-import {
-  Image,
-  ImageBackground,
-  Pressable,
-  StyleSheet,
-  Text,
-  View,
-} from "react-native";
+import { Image, Pressable, StyleSheet, Text, View } from "react-native";
 import React, { useState } from "react";
 
 import { Box, FlatList, HStack, ScrollView, VStack } from "native-base";
 
+import CoinsBundle from "services/api/CoinBundle";
 import Container from "components/Container";
 import CustomerService from "services/api/CustomerService";
 import Download from "assets/images/download.png";
@@ -20,6 +14,7 @@ import Live from "assets/images/live.png";
 import LiveWhite from "assets/images/live_white.png";
 import LiveChat from "assets/images/liveChat.png";
 import LiveChatWhite from "assets/images/liveChat_white.png";
+import LoadingSpinner from "components/LoadingSpinner";
 import Photos from "assets/images/photos.png";
 import PhotosWhite from "assets/images/photos_white.png";
 import Profile from "assets/images/profilePhoto.jpg";
@@ -28,7 +23,6 @@ import VideoCall from "assets/images/vidoecall.png";
 import VideoCallWhite from "assets/images/videocall_white.png";
 import Videos from "assets/images/videos.png";
 import VideosWhite from "assets/images/videocall_white.png";
-import WalletBanner from "assets/images/wallet_banner.png";
 import WatchTicket from "assets/images/watchTicket.png";
 import WatchTicketWhite from "assets/images/watchTicket_white.png";
 import { GLOBAL_COLORS } from "global";
@@ -36,6 +30,7 @@ import { LinearGradient } from "expo-linear-gradient";
 import { createMaterialTopTabNavigator } from "@react-navigation/material-top-tabs";
 import { userStore } from "../../zustand/userStore";
 import { useMutation, useQuery } from "@tanstack/react-query";
+import { useIsFocused } from "@react-navigation/native";
 
 const Tab = createMaterialTopTabNavigator();
 
@@ -184,55 +179,55 @@ const VIPChoices = ({ active, setActive, bundle }) => {
   );
 };
 
-const PromotionalPackage = ({ isLoading, perks }) => {
+const PromotionalPackage = ({ perks }) => {
   const lists = [
     {
       active_image: Videos,
       inactive_image: VideosWhite,
       title: "videos",
-      isActive: isLoading || perks["videos"],
+      isActive: perks["videos"],
     },
     {
       active_image: Photos,
       inactive_image: PhotosWhite,
       title: "photos",
-      isActive: isLoading || perks["photos"],
+      isActive: perks["photos"],
     },
     {
       active_image: Live,
       inactive_image: LiveWhite,
       title: "live",
-      isActive: isLoading || perks["live_streaming"],
+      isActive: perks["live_streaming"],
     },
     {
       active_image: VideoCall,
       inactive_image: VideoCallWhite,
       title: "video call",
-      isActive: isLoading || perks["video_call"],
+      isActive: perks["video_call"],
     },
     {
       active_image: LiveChat,
       inactive_image: LiveChatWhite,
       title: "live chat",
-      isActive: isLoading || perks["live_chat"],
+      isActive: perks["live_chat"],
     },
     {
       active_image: ForeverVIP,
       inactive_image: ForeverVIPWhite,
       title: "forever vip",
-      isActive: isLoading || perks["forever_vip"],
+      isActive: perks["forever_vip"],
     },
     {
       active_image: Download,
       inactive_image: DownloadWhite,
       title: "download",
-      isActive: isLoading || perks["download"],
+      isActive: perks["download"],
     },
     {
       active_image: WatchTicket,
       inactive_image: WatchTicketWhite,
       title: "watch ticket",
-      isActive: isLoading || perks["watch_ticket"],
+      isActive: perks["watch_ticket"],
     },
   ];
   return (
@@ -255,10 +250,10 @@ const PromotionalPackage = ({ isLoading, perks }) => {
   );
 };
 
-const Description = ({ isLoading, description }) => {
+const Description = ({ description }) => {
   return (
     <Box style={styles.commentContainer}>
-      <Text style={styles.commentText}>{isLoading ? "..." : description}</Text>
+      <Text style={styles.commentText}> {description}</Text>
     </Box>
   );
 };
@@ -314,15 +309,14 @@ const Member = () => {
   const [bundle, setBundle] = useState([]);
 
   const { api_token } = userStore((store) => store);
+  const isFocused = useIsFocused();
   const { getAllSubscriptionBundle } = SubscriptionsBundle();
 
-  const { isLoading, isFetching } = useQuery({
+  const { isLoading, isRefetching } = useQuery({
     queryKey: ["subscription bundle"],
     queryFn: () =>
       getAllSubscriptionBundle({ data: { active: true }, token: api_token }),
     onSuccess: (data) => {
-      console.log("####", data);
-
       const sortedData = data.data.sort(
         (firstItem, secondItem) => secondItem.price - firstItem.price
       );
@@ -331,19 +325,22 @@ const Member = () => {
     onError: (error) => {
       console.log("Subscription Bundle: ", error);
     },
+    enabled: isFocused,
   });
+
+  if (isLoading || isRefetching) {
+    return (
+      <Container>
+        <LoadingSpinner />
+      </Container>
+    );
+  }
 
   return (
     <Container>
       <VIPChoices active={active} setActive={setActive} bundle={bundle} />
-      <PromotionalPackage
-        isLoading={isLoading || isFetching}
-        perks={bundle[active]?.perks}
-      />
-      <Description
-        isLoading={isLoading || isFetching}
-        description={bundle[active]?.description}
-      />
+      <PromotionalPackage perks={bundle[active]?.perks} />
+      <Description description={bundle[active]?.description} />
       <Button />
     </Container>
   );
@@ -354,18 +351,92 @@ const Member = () => {
 // START OF WALLET TAB CODES
 
 const Wallet = () => {
-  const coinList = [500, 400, 300, 100];
+  const { api_token } = userStore((store) => store);
+  const { getAllCoinBundle } = CoinsBundle();
+  const isFocused = useIsFocused();
+  const { isLoading, isRefetching, data } = useQuery({
+    queryKey: ["Coins Bundle"],
+    queryFn: () =>
+      getAllCoinBundle({ data: { with: "sites" }, token: api_token }),
+    enabled: isFocused,
+  });
+
+  if (isLoading || isRefetching) {
+    return (
+      <Container>
+        <LoadingSpinner />
+      </Container>
+    );
+  }
+
   return (
     <Container>
-      <ScrollView>
-        {coinList.map((item, index) => (
-          <VStack key={index} alignItems="center" space={2} position="relative">
-            <ImageBackground source={WalletBanner} style={styles.walletImg} />
-            <Box style={styles.coins}>
-              <Text style={styles.coinText}>{item} Gold Coins</Text>
-            </Box>
+      <LinearGradient colors={["#9747FF", "#C74FFF"]}>
+        <HStack width="full" style={styles.header} height="16">
+          <VStack
+            style={styles.leftHeader}
+            alignItems="center"
+            justifyContent="center"
+            height="full"
+            width="1/2"
+          >
+            <Text style={styles.smallText}>当前余额</Text>
+            <Text style={styles.largeText}>0元</Text>
+            <Text style={styles.smallText}>余额明细</Text>
           </VStack>
-        ))}
+          <VStack
+            style={styles.rightHeader}
+            alignItems="center"
+            justifyContent="center"
+            height="full"
+            width="1/2"
+          >
+            <Text style={styles.smallText}>累计收入</Text>
+            <Text style={styles.largeText}>0元</Text>
+            <Text style={styles.smallText}>提取的收益</Text>
+          </VStack>
+        </HStack>
+      </LinearGradient>
+      <ScrollView>
+        <VStack alignItems="center" p={3}>
+          {data.data.map((item, index) => (
+            <HStack
+              key={index}
+              alignItems="center"
+              style={styles.boxContent}
+              my={5}
+              h="24"
+            >
+              <Box
+                alignItems="center"
+                justifyContent="center"
+                height="full"
+                style={styles.leftBox}
+              >
+                <Text style={styles.leftText}>{item.amount}元</Text>
+              </Box>
+              <VStack style={styles.rightBox} height="full">
+                <Box
+                  px={1}
+                  alignItems="center"
+                  justifyContent="center"
+                  style={styles.rightTopBox}
+                  height="1/2"
+                >
+                  <Text style={styles.rightText}>{item.description}</Text>
+                </Box>
+                <Box
+                  px={1}
+                  alignItems="center"
+                  justifyContent="center"
+                  height="1/2"
+                >
+                  <Text style={styles.rightText}>{item.name}</Text>
+                </Box>
+              </VStack>
+            </HStack>
+          ))}
+        </VStack>
       </ScrollView>
     </Container>
   );
@@ -507,28 +578,55 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
   },
   // **** WALLET **** //
-  walletImg: {
+  header: {
+    borderTopWidth: 2,
+    borderTopColor: "#EF44BF",
+    borderBottomWidth: 2,
+    borderBottomColor: "#EF44BF",
+  },
+  leftHeader: {
+    borderRightWidth: 1,
+    borderRightColor: "#EF44BF",
+  },
+  rightHeader: { borderLeftWidth: 1, borderLeftColor: "#EF44BF" },
+  smallText: {
+    color: GLOBAL_COLORS.primaryTextColor,
+    fontWeight: "bold",
+  },
+  largeText: {
+    color: GLOBAL_COLORS.primaryTextColor,
+    fontWeight: "bold",
+    fontSize: 20,
+  },
+  boxContent: {
+    borderWidth: 2,
+    borderColor: GLOBAL_COLORS.primaryTextColor,
+    borderRadius: 5,
     width: "100%",
-    height: 140,
   },
-  coins: {
-    position: "absolute",
-    left: 30,
-    bottom: 30,
-    fontSize: 20,
-    color: GLOBAL_COLORS.primaryTextColor,
-    fontWeight: "bold",
-    backgroundColor: "#646464",
-    opacity: 0.75,
-    paddingHorizontal: 10,
-    paddingVertical: 2,
-    borderRadius: 10,
-    borderWidth: 1,
-    borderColor: "#FFFFFF",
+  leftBox: {
+    borderRightWidth: 2,
+    borderRightColor: GLOBAL_COLORS.primaryTextColor,
+    width: "50%",
   },
-  coinText: {
-    fontSize: 20,
+  leftText: {
     color: GLOBAL_COLORS.primaryTextColor,
+    fontSize: 45,
+    lineHeight: 48,
     fontWeight: "bold",
+    textAlign: "center",
+  },
+  rightBox: {
+    width: "50%",
+  },
+  rightTopBox: {
+    borderBottomWidth: 2,
+    borderBottomColor: GLOBAL_COLORS.primaryTextColor,
+  },
+  rightText: {
+    color: GLOBAL_COLORS.primaryTextColor,
+    fontSize: 20,
+    fontWeight: "bold",
+    textAlign: "center",
   },
 });

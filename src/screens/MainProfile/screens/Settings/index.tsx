@@ -1,5 +1,5 @@
 import { Image, StyleSheet, Text } from "react-native";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 
 import Entypo from "react-native-vector-icons/Entypo";
 import { HStack, Input, Pressable, VStack } from "native-base";
@@ -19,6 +19,7 @@ import InfoIcon from "assets/images/info_icon.png";
 import LoadingSpinner from "components/LoadingSpinner";
 import MaleIcon from "assets/images/male_icon.png";
 import SecurityIcon from "assets/images/security_icon.png";
+import useDebounce from "hooks/useDebounce";
 import { GLOBAL_COLORS } from "global";
 import { userStore } from "../../../../zustand/userStore";
 import { useNavigation } from "@react-navigation/native";
@@ -41,23 +42,45 @@ const TextIconContent = ({ children }) => {
 };
 
 const FirstContainer = ({ gender, setGender }) => {
-  const { photo, api_token } = userStore((store) => store);
-  const { putCustomerGender } = CustomerService();
+  const { alias, api_token, _id, photo } = userStore((store) => store);
+  const { putCustomerProfile } = CustomerService();
+  const [nickname, setNickname] = useState(alias);
+  const [aliasHasChange, setAliasHasChange] = useState(false);
 
-  const { mutate } = useMutation(putCustomerGender, {
+  const { mutate: mutateGender } = useMutation(putCustomerProfile, {
     onSuccess: (data) => {
       setGender(data.gender);
     },
   });
 
+  const { mutate: mutateAlias } = useMutation(putCustomerProfile);
+
   const handlePress = (value) => {
-    mutate({
+    mutateGender({
       data: {
         gender: value,
       },
       token: api_token,
     });
   };
+
+  const handleAliasChange = (text) => {
+    setNickname(text);
+    setAliasHasChange(true);
+  };
+
+  const newAlias = useDebounce(nickname, 500);
+
+  useEffect(() => {
+    if (aliasHasChange) {
+      mutateAlias({
+        data: {
+          alias: newAlias,
+        },
+        token: api_token,
+      });
+    }
+  }, [newAlias]);
 
   return (
     <VStack mb={10}>
@@ -77,6 +100,8 @@ const FirstContainer = ({ gender, setGender }) => {
         <Input
           width="64"
           placeholder="犹豫的香气"
+          value={nickname}
+          onChangeText={handleAliasChange}
           placeholderTextColor="#000000"
           style={[styles.textInput, { backgroundColor: "#7f7b7c" }]}
         />
@@ -118,6 +143,7 @@ const FirstContainer = ({ gender, setGender }) => {
 };
 
 const SecondContainer = () => {
+  const { _id } = userStore((store) => store);
   const navigation = useNavigation<any>();
 
   const handlePress = () => {
@@ -136,8 +162,12 @@ const SecondContainer = () => {
           space={5}
           backgroundColor="#787879"
           style={styles.accountContainer}
+          maxWidth="64"
+          paddingRight="20"
         >
-          <Text style={styles.accountText}>CDDZCB</Text>
+          <Text style={styles.accountText} numberOfLines={1}>
+            {_id}
+          </Text>
           <Pressable>
             <Text style={styles.redBtn}>复制</Text>
           </Pressable>

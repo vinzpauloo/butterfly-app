@@ -35,9 +35,10 @@ interface INewCustomer {
   };
 }
 
-interface ICustomerGender {
+interface ICustomerProfile {
   data: {
-    gender: string;
+    gender?: string;
+    alias?: string;
   };
   token: string;
 }
@@ -179,10 +180,10 @@ const CustomerService = () => {
     });
   };
 
-  const putCustomerGender = (params: ICustomerGender) => {
+  const putCustomerProfile = (params: ICustomerProfile) => {
     return request({
       headers: { ...getHeaders(), Authorization: `Bearer ${params.token}` },
-      url: "/customers/gender",
+      url: "/customers",
       method: "PUT",
       params: params.data,
     });
@@ -212,7 +213,7 @@ const CustomerService = () => {
     subscribeToVIP,
     bindDevice,
     getCustomerProfile,
-    putCustomerGender,
+    putCustomerProfile,
     getCertificate,
   };
 };

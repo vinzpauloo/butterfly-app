@@ -1,8 +1,8 @@
-import { StyleSheet, Text, View } from "react-native";
-import React from "react";
+import { Image, StyleSheet, Text } from "react-native";
+import React, { useState } from "react";
 
 import Entypo from "react-native-vector-icons/Entypo";
-import { HStack, Image, Input, Pressable, VStack } from "native-base";
+import { HStack, Input, Pressable, VStack } from "native-base";
 
 import AccountIcon from "assets/images/account_icon.png";
 import ActiveFemaleIcon from "assets/images/active_female_icon.png";
@@ -10,15 +10,19 @@ import ActiveMaleIcon from "assets/images/active_male_icon.png";
 import CertificateIcon from "assets/images/certificate.png";
 import ChainIcon from "assets/images/chain_icon.png";
 import Container from "components/Container";
+import CustomerService from "services/api/CustomerService";
 import FileIcon from "assets/images/file_icon.png";
 import FemaleIcon from "assets/images/female_icon.png";
 import GlassIcon from "assets/images/glass_icon.png";
 import HeadphoneIcon from "assets/images/headphone_icon.png";
 import InfoIcon from "assets/images/info_icon.png";
+import LoadingSpinner from "components/LoadingSpinner";
 import MaleIcon from "assets/images/male_icon.png";
 import SecurityIcon from "assets/images/security_icon.png";
 import { GLOBAL_COLORS } from "global";
 import { userStore } from "../../../../zustand/userStore";
+import { useNavigation } from "@react-navigation/native";
+import { useMutation, useQuery } from "@tanstack/react-query";
 
 const LayoutContent = ({ children }) => {
   return (
@@ -36,8 +40,25 @@ const TextIconContent = ({ children }) => {
   );
 };
 
-const FirstContainer = () => {
-  const { photo } = userStore((store) => store);
+const FirstContainer = ({ gender, setGender }) => {
+  const { photo, api_token } = userStore((store) => store);
+  const { putCustomerGender } = CustomerService();
+
+  const { mutate } = useMutation(putCustomerGender, {
+    onSuccess: (data) => {
+      setGender(data.gender);
+    },
+  });
+
+  const handlePress = (value) => {
+    mutate({
+      data: {
+        gender: value,
+      },
+      token: api_token,
+    });
+  };
+
   return (
     <VStack mb={10}>
       <LayoutContent>
@@ -63,10 +84,18 @@ const FirstContainer = () => {
       <LayoutContent>
         <Text style={styles.textLabel}>性别</Text>
         <HStack>
-          {/* ActiveFemaleIcon */}
-          <Image source={FemaleIcon} style={styles.femaleIcon} />
-          {/* ActiveMaleIcon */}
-          <Image source={MaleIcon} style={styles.maleIcon} />
+          <Pressable onPress={() => handlePress("Female")}>
+            <Image
+              source={gender === "Female" ? ActiveFemaleIcon : FemaleIcon}
+              style={styles.femaleIcon}
+            />
+          </Pressable>
+          <Pressable onPress={() => handlePress("Male")}>
+            <Image
+              source={gender === "Male" ? ActiveMaleIcon : MaleIcon}
+              style={styles.maleIcon}
+            />
+          </Pressable>
         </HStack>
       </LayoutContent>
       <LayoutContent>
@@ -75,7 +104,7 @@ const FirstContainer = () => {
           <Text style={styles.button}>去绑定</Text>
         </Pressable>
       </LayoutContent>
-      <LayoutContent>
+      {/* <LayoutContent>
         <Text style={styles.textLabel}>个人简介</Text>
         <Input
           width="64"
@@ -83,12 +112,18 @@ const FirstContainer = () => {
           placeholderTextColor="#000000"
           style={[styles.textInput, { backgroundColor: "#EAEAEA" }]}
         />
-      </LayoutContent>
+      </LayoutContent> */}
     </VStack>
   );
 };
 
 const SecondContainer = () => {
+  const navigation = useNavigation<any>();
+
+  const handlePress = () => {
+    navigation.navigate("Certificate", { postTitle: "" });
+  };
+
   return (
     <VStack mb={10}>
       <LayoutContent>
@@ -108,6 +143,7 @@ const SecondContainer = () => {
           </Pressable>
         </HStack>
       </LayoutContent>
+
       <LayoutContent>
         <TextIconContent>
           <Image source={CertificateIcon} style={styles.textIcon} />
@@ -119,6 +155,7 @@ const SecondContainer = () => {
           size={25}
         />
       </LayoutContent>
+
       <LayoutContent>
         <TextIconContent>
           <Image source={GlassIcon} style={styles.textIcon} />
@@ -147,6 +184,12 @@ const SecondContainer = () => {
 };
 
 const ThirdContainer = () => {
+  const navigation = useNavigation<any>();
+
+  const handlePress = (title, api_params) => {
+    navigation.navigate("Certificate", { postTitle: title, api_params });
+  };
+
   return (
     <VStack>
       <LayoutContent>
@@ -160,28 +203,32 @@ const ThirdContainer = () => {
           size={25}
         />
       </LayoutContent>
-      <LayoutContent>
-        <TextIconContent>
-          <Image source={SecurityIcon} style={styles.textIcon} />
-          <Text style={styles.textLabel}>隐私政策</Text>
-        </TextIconContent>
-        <Entypo
-          name="chevron-right"
-          color={GLOBAL_COLORS.primaryTextColor}
-          size={25}
-        />
-      </LayoutContent>
-      <LayoutContent>
-        <TextIconContent>
-          <Image source={FileIcon} style={styles.textIcon} />
-          <Text style={styles.textLabel}>服务条款</Text>
-        </TextIconContent>
-        <Entypo
-          name="chevron-right"
-          color={GLOBAL_COLORS.primaryTextColor}
-          size={25}
-        />
-      </LayoutContent>
+      <Pressable onPress={() => handlePress("隐私政策", "policy")}>
+        <LayoutContent>
+          <TextIconContent>
+            <Image source={SecurityIcon} style={styles.textIcon} />
+            <Text style={styles.textLabel}>隐私政策</Text>
+          </TextIconContent>
+          <Entypo
+            name="chevron-right"
+            color={GLOBAL_COLORS.primaryTextColor}
+            size={25}
+          />
+        </LayoutContent>
+      </Pressable>
+      <Pressable onPress={() => handlePress("服务条款", "provisions")}>
+        <LayoutContent>
+          <TextIconContent>
+            <Image source={FileIcon} style={styles.textIcon} />
+            <Text style={styles.textLabel}>服务条款</Text>
+          </TextIconContent>
+          <Entypo
+            name="chevron-right"
+            color={GLOBAL_COLORS.primaryTextColor}
+            size={25}
+          />
+        </LayoutContent>
+      </Pressable>
       <LayoutContent>
         <TextIconContent>
           <Image source={InfoIcon} style={styles.textIcon} />
@@ -198,9 +245,28 @@ const ThirdContainer = () => {
 };
 
 const index = () => {
+  const { api_token } = userStore();
+  const { getCustomerProfile } = CustomerService();
+  const [gender, setGender] = useState("");
+
+  const { isLoading, isRefetching } = useQuery({
+    queryKey: ["MainProfileSettings"],
+    queryFn: () => getCustomerProfile({ token: api_token }),
+    onError: (error) => {
+      console.log("Setting: ", error);
+    },
+    onSuccess: (data) => {
+      setGender(data.gender);
+    },
+  });
+
+  if (isLoading || isRefetching) {
+    return <LoadingSpinner />;
+  }
+
   return (
     <Container>
-      <FirstContainer />
+      <FirstContainer gender={gender} setGender={setGender} />
       <SecondContainer />
       <ThirdContainer />
     </Container>

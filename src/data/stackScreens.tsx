@@ -10,6 +10,7 @@ import AccountVerification from "screens/Account/tabs/AccountVerification";
 import BestApps from "screens/Account/tabs/BestApps";
 import BottomNav from "./bottomNav";
 import CameraInit from "screens/Settings/AccountRetrievalTabs/CameraInit";
+import Certificate from "screens/MainProfile/screens/Certificate";
 import Container from "components/Container";
 import CustomerService from "screens/Settings/AccountRetrievalTabs/CustomerService";
 import DownloadScreen from "screens/Download";
@@ -168,6 +169,11 @@ export const stackScreens = {
       name: "CameraInit",
       component: CameraInit,
       options: { headerShown: false },
+    },
+    {
+      name: "Certificate",
+      component: Certificate,
+      options: basicHeader,
     },
     {
       name: "CustomerService",

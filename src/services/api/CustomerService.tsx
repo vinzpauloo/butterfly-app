@@ -35,6 +35,19 @@ interface INewCustomer {
   };
 }
 
+interface ICustomerGender {
+  data: {
+    gender: string;
+  };
+  token: string;
+}
+interface ICertificate {
+  data: {
+    details: string;
+  };
+  token: string;
+}
+
 interface IExistingCustomer extends INewCustomer {
   token: string;
 }
@@ -158,6 +171,32 @@ const CustomerService = () => {
     });
   };
 
+  const getCustomerProfile = (params) => {
+    return request({
+      headers: { ...getHeaders(), Authorization: `Bearer ${params.token}` },
+      url: "/customers/profile",
+      method: "GET",
+    });
+  };
+
+  const putCustomerGender = (params: ICustomerGender) => {
+    return request({
+      headers: { ...getHeaders(), Authorization: `Bearer ${params.token}` },
+      url: "/customers/gender",
+      method: "PUT",
+      params: params.data,
+    });
+  };
+
+  const getCertificate = (params: ICertificate) => {
+    return request({
+      headers: { ...getHeaders(), Authorization: `Bearer ${params.token}` },
+      url: "/sites/others",
+      method: "GET",
+      params: params.data,
+    });
+  };
+
   return {
     getCustomerById,
     postLoginCustomer,
@@ -172,6 +211,9 @@ const CustomerService = () => {
     unfavoriteVideo,
     subscribeToVIP,
     bindDevice,
+    getCustomerProfile,
+    putCustomerGender,
+    getCertificate,
   };
 };
 

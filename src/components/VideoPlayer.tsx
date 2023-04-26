@@ -2,6 +2,7 @@ import { Dimensions, StyleSheet } from "react-native";
 import React, { memo } from "react";
 
 import * as ScreenOrientation from "expo-screen-orientation";
+import { BASE_URL_STREAMING_SERVER } from "react-native-dotenv";
 import { Video, AVPlaybackStatus, ResizeMode } from "expo-av";
 
 const { width, height } = Dimensions.get("window");
@@ -21,7 +22,7 @@ const VideoPlayer = ({ url, isFocus }) => {
     <Video
       style={styles.video}
       source={{
-        uri: url,
+        uri: BASE_URL_STREAMING_SERVER + url,
       }}
       shouldPlay={isFocus}
       useNativeControls

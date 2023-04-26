@@ -5,7 +5,10 @@ import Animated, { ZoomIn, ZoomOut } from "react-native-reanimated";
 import Ionicons from "react-native-vector-icons/Ionicons";
 import { Progress } from "native-base";
 import { GLOBAL_COLORS } from "global";
-import { BASE_URL_FILE_SERVER } from "react-native-dotenv";
+import {
+  BASE_URL_FILE_SERVER,
+  BASE_URL_STREAMING_SERVER,
+} from "react-native-dotenv";
 
 type Props = {
   isActive: boolean;
@@ -39,7 +42,7 @@ const VideoOverlay = (props: Props) => {
     <>
       <Pressable style={styles.videoContainer} onPress={pausePlayVideo}>
         <Video
-          source={{ uri: BASE_URL_FILE_SERVER + props.videoURL }}
+          source={{ uri: BASE_URL_STREAMING_SERVER + props.videoURL }}
           style={styles.video}
           resizeMode={
             videoOrientation === "portrait"

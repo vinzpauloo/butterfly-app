@@ -2,6 +2,7 @@ import React from "react";
 import { StyleSheet, Image, TouchableWithoutFeedback } from "react-native";
 import * as Linking from "expo-linking";
 import { adsGlobalStore } from "../../../zustand/adsGlobalStore";
+import { BASE_URL_FILE_SERVER } from "react-native-dotenv";
 
 type Props = {};
 
@@ -16,7 +17,7 @@ const BannerAds = (props: Props) => {
     <TouchableWithoutFeedback onPress={() => Linking.openURL(adsURL)}>
       <Image
         style={styles.bannerAds}
-        source={{ uri: imgURL, cache: "only-if-cached" }}
+        source={{ uri: BASE_URL_FILE_SERVER + imgURL, cache: "only-if-cached" }}
         resizeMode={"cover"}
       />
     </TouchableWithoutFeedback>

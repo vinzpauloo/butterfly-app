@@ -18,6 +18,7 @@ import { GLOBAL_COLORS } from "global";
 import { translationStore } from "../../zustand/translationStore";
 import { useNavigation } from "@react-navigation/native";
 import FeedContentLikeBtn from "./FeedContentLikeBtn";
+import { BASE_URL_FILE_SERVER } from "react-native-dotenv";
 
 const { height, width } = Dimensions.get("window");
 
@@ -35,7 +36,10 @@ const Header = ({ user, userId, setOpen }) => {
   return (
     <View style={styles.headerContainer}>
       <Pressable style={styles.profileContent} onPress={navigateSingleUser}>
-        <Image source={{ uri: user.photo }} style={styles.profilePhoto} />
+        <Image
+          source={{ uri: BASE_URL_FILE_SERVER + user.photo }}
+          style={styles.profilePhoto}
+        />
         <Text style={styles.username}>{user.username}</Text>
       </Pressable>
       <Pressable style={styles.privateBtn} onPress={openVIPModal}>
@@ -109,7 +113,7 @@ const Images = ({ images }) => {
         >
           <Image
             key={index}
-            source={{ uri: item.url }}
+            source={{ uri: BASE_URL_FILE_SERVER + item.url }}
             style={[styles.image, columnImageWidth(images.length)]}
           />
         </Pressable>

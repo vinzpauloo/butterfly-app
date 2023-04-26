@@ -33,6 +33,7 @@ import {
 } from "features/sectionList/components/GridVideos";
 import { userStore } from "../../../zustand/userStore";
 import { translationStore } from "../../../zustand/translationStore";
+import { BASE_URL_FILE_SERVER } from "react-native-dotenv";
 
 const { width, height } = Dimensions.get("window");
 
@@ -78,7 +79,7 @@ const Video = ({
       <View style={styles.thumbnailContainer}>
         <VIPTag isAbsolute={true} />
         <Image
-          source={{ uri: item.thumbnail_url }}
+          source={{ uri: BASE_URL_FILE_SERVER + item.thumbnail_url }}
           style={(styles.video, { height: videoHeight })}
         />
       </View>
@@ -198,7 +199,10 @@ const SectionContent = ({ index, info, onOpen, setId, data }) => {
             style={{ flexDirection: "row", alignItems: "center" }}
             onPress={() => navigateSingleUser(info.id)}
           >
-            <Image source={{ uri: info.photo }} style={styles.modelImg} />
+            <Image
+              source={{ uri: BASE_URL_FILE_SERVER + info.photo }}
+              style={styles.modelImg}
+            />
             <Text style={styles.modelName}>{info.username}</Text>
           </Pressable>
           {isFollow ? null : (

@@ -12,6 +12,7 @@ import React from "react";
 import { useNavigation } from "@react-navigation/native";
 import VideoComponent from "components/VideoComponent";
 import { GLOBAL_COLORS } from "global";
+import { BASE_URL_FILE_SERVER } from "react-native-dotenv";
 
 const { width } = Dimensions.get("window");
 
@@ -35,7 +36,10 @@ const Video = ({ index, data, item }: any) => {
     >
       <View style={styles.thumbnailContainer}>
         <VideoComponent item={video} />
-        <Image source={{ uri: video.thumbnail_url }} style={styles.image} />
+        <Image
+          source={{ uri: BASE_URL_FILE_SERVER + video.thumbnail_url }}
+          style={styles.image}
+        />
       </View>
       <View style={styles.content}>
         <Pressable
@@ -43,7 +47,10 @@ const Video = ({ index, data, item }: any) => {
             navigation.navigate("SingleUser", { userID: video.user_id })
           }
         >
-          <Image source={{ uri: video.user.photo }} style={styles.modelImg} />
+          <Image
+            source={{ uri: BASE_URL_FILE_SERVER + video.user.photo }}
+            style={styles.modelImg}
+          />
         </Pressable>
         <View style={styles.texts}>
           <Text style={styles.text} numberOfLines={1}>

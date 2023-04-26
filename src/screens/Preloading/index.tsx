@@ -13,6 +13,7 @@ import { GLOBAL_COLORS } from "global";
 import { adsGlobalStore } from "../../zustand/adsGlobalStore";
 import { useState } from "react";
 import * as Updates from "expo-updates";
+import { BASE_URL_FILE_SERVER } from "react-native-dotenv";
 
 const { height } = Dimensions.get("window");
 const Preloading = () => {
@@ -56,7 +57,7 @@ const Preloading = () => {
   return (
     <Pressable onPress={() => Linking.openURL(adsURL)}>
       <ImageBackground
-        source={{ uri: imgURL }}
+        source={{ uri: BASE_URL_FILE_SERVER + imgURL }}
         resizeMode="cover"
         style={styles.image}
       >

@@ -18,6 +18,7 @@ import { GLOBAL_COLORS } from "global";
 import AlbumsService from "services/api/AlbumsService";
 import { userStore } from "../../zustand/userStore";
 import { Text } from "native-base";
+import { BASE_URL_FILE_SERVER } from "react-native-dotenv";
 
 const { width } = Dimensions.get("window");
 
@@ -83,7 +84,10 @@ const PhotoGallery = () => {
             <View key={index} style={styles.imageContainer}>
               <Image
                 style={styles.postImage}
-                source={{ uri: item.url, cache: "only-if-cached" }}
+                source={{
+                  uri: BASE_URL_FILE_SERVER + item.url,
+                  cache: "only-if-cached",
+                }}
               />
             </View>
           )}
@@ -105,7 +109,10 @@ const PhotoGallery = () => {
             <View style={styles.imageContainer}>
               <Image
                 style={{ aspectRatio: item.width / item.height }}
-                source={{ uri: item.photo, cache: "only-if-cached" }}
+                source={{
+                  uri: BASE_URL_FILE_SERVER + item.photo,
+                  cache: "only-if-cached",
+                }}
               />
             </View>
           )}

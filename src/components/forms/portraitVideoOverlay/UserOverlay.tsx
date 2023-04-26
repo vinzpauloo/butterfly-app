@@ -6,6 +6,7 @@ import { userStore } from "../../../zustand/userStore";
 
 import CustomerService from "services/api/CustomerService";
 import Feather from "react-native-vector-icons/Feather";
+import { BASE_URL_FILE_SERVER } from "react-native-dotenv";
 
 type Props = {
   customerID: string;
@@ -63,7 +64,10 @@ const UserOverlay = (props: Props) => {
           });
         }}
       >
-        <Image style={styles.userLogo} source={{ uri: props.userImage }} />
+        <Image
+          style={styles.userLogo}
+          source={{ uri: BASE_URL_FILE_SERVER + props.userImage }}
+        />
       </Pressable>
       <Pressable
         style={styles.followButton}

@@ -25,6 +25,7 @@ import { translationStore } from "../../../zustand/translationStore";
 import ChatService from "services/api/ChatService";
 import { useQuery } from "@tanstack/react-query";
 import { userStore } from "../../../zustand/userStore";
+import { BASE_URL_FILE_SERVER } from "react-native-dotenv";
 
 const windowWidth = Dimensions.get("window").width;
 
@@ -58,7 +59,7 @@ const MessageItem = (props: MessageItemProps) => {
             <Avatar
               color="white"
               size={42}
-              source={{ uri: props.senderImgURL }}
+              source={{ uri: BASE_URL_FILE_SERVER + props.senderImgURL }}
             />
           </Pressable>
           <VStack space={1}>

@@ -4,6 +4,7 @@ import React from "react";
 import VideoComponent from "components/VideoComponent";
 import { GLOBAL_COLORS } from "global";
 import { useNavigation } from "@react-navigation/native";
+import { BASE_URL_FILE_SERVER } from "react-native-dotenv";
 
 const SingleVideo = ({ data, isSingleVideoMultiple = false }) => {
   const item = isSingleVideoMultiple ? data : data[0];
@@ -20,10 +21,16 @@ const SingleVideo = ({ data, isSingleVideoMultiple = false }) => {
     <Pressable style={styles.container} onPress={handlePress}>
       <View style={styles.thumbnailContainer}>
         <VideoComponent item={item} />
-        <Image source={{ uri: item.thumbnail_url }} style={styles.image} />
+        <Image
+          source={{ uri: BASE_URL_FILE_SERVER + item.thumbnail_url }}
+          style={styles.image}
+        />
       </View>
       <View style={styles.content}>
-        <Image source={{ uri: item.user.photo }} style={styles.modelImg} />
+        <Image
+          source={{ uri: BASE_URL_FILE_SERVER + item.user.photo }}
+          style={styles.modelImg}
+        />
         <View style={styles.texts}>
           <Text style={styles.text} numberOfLines={1}>
             {item.title}

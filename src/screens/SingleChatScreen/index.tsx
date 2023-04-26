@@ -22,6 +22,7 @@ import Container from "components/Container";
 import { GLOBAL_COLORS } from "global";
 import formatDate from "../../utils/formatDate";
 import { singleChatMessageList } from "data/singleChatMessageList";
+import { BASE_URL_FILE_SERVER } from "react-native-dotenv";
 
 type Props = {};
 
@@ -50,7 +51,10 @@ const SenderMessage = (props: SenderMessageProps) => {
     <View style={styles.senderMessagesContainer}>
       <Image
         style={styles.userImage}
-        source={{ uri: props.senderImgURL, cache: "only-if-cached" }}
+        source={{
+          uri: BASE_URL_FILE_SERVER + props.senderImgURL,
+          cache: "only-if-cached",
+        }}
       />
       <VStack style={styles.senderMessageAndTimeStampContainer}>
         <>
@@ -63,7 +67,7 @@ const SenderMessage = (props: SenderMessageProps) => {
           >
             <Text style={styles.senderMessageText}>{props.message}</Text>
             {/* SENDER SENT IMAGES */}
-            {/* {message.image && <Image source={{ uri: message.image }} style={styles.yourSentImage} />} */}
+            {/* {message.image && <Image source={{ uri: BASE_URL_FILE_SERVER + message.image }} style={styles.yourSentImage} />} */}
           </View>
         </>
         <Text style={styles.messageTimeStamp}>{props.timeStamp}</Text>
@@ -85,7 +89,10 @@ const YourMessage = (props: YourMessageProps) => {
     <View style={styles.yourMessagesContainer}>
       <Image
         style={styles.userImage}
-        source={{ uri: props.yourImgUrl, cache: "only-if-cached" }}
+        source={{
+          uri: BASE_URL_FILE_SERVER + props.yourImgUrl,
+          cache: "only-if-cached",
+        }}
       />
       <VStack style={styles.yourMessageAndTimeStampContainer}>
         <>
@@ -93,7 +100,10 @@ const YourMessage = (props: YourMessageProps) => {
             <Text style={styles.yourOwnMessageText}>{props.message}</Text>
             {props.messageImage && (
               <Image
-                source={{ uri: props.messageImage, cache: "only-if-cached" }}
+                source={{
+                  uri: BASE_URL_FILE_SERVER + props.messageImage,
+                  cache: "only-if-cached",
+                }}
                 style={styles.yourSentImage}
               />
             )}

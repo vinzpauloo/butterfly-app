@@ -21,6 +21,7 @@ import VIPModalContent from "components/VIPModalContent";
 import { GLOBAL_COLORS } from "global";
 import { translationStore } from "../../zustand/translationStore";
 import { userStore } from "../../zustand/userStore";
+import { BASE_URL_FILE_SERVER } from "react-native-dotenv";
 
 type Props = {};
 
@@ -107,7 +108,7 @@ const SingleUserHeader = (props: Props) => {
       ) : (
         <>
           <ImageBackground
-            source={{ uri: creatorData?.cover_photo }}
+            source={{ uri: BASE_URL_FILE_SERVER + creatorData?.cover_photo }}
             resizeMode="cover"
           >
             <View style={styles.bannerContent} pointerEvents="box-none">
@@ -126,7 +127,7 @@ const SingleUserHeader = (props: Props) => {
                 onPress={() => setVIPModalOpen(true)}
               />
               <Image
-                source={{ uri: creatorData?.photo }}
+                source={{ uri: BASE_URL_FILE_SERVER + creatorData?.photo }}
                 style={styles.profileImg}
               />
               <View style={styles.usernameContainer} pointerEvents="box-none">
@@ -189,7 +190,7 @@ const SingleUserHeader = (props: Props) => {
             <View style={styles.profilesImagesContent}>
               {creatorData?.donator_list?.map((item, index) => (
                 <Image
-                  source={{ uri: item?.photo }}
+                  source={{ uri: BASE_URL_FILE_SERVER + item?.photo }}
                   style={[
                     styles.profileImgs,
                     { zIndex: index, left: index * 20 },

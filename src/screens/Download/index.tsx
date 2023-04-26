@@ -10,6 +10,7 @@ import { downloadStore } from "../../zustand/downloadStore";
 import { GLOBAL_COLORS } from "global";
 import { readAsString } from "lib/expoFileSystem";
 import { useNavigation } from "@react-navigation/native";
+import { BASE_URL_FILE_SERVER } from "react-native-dotenv";
 
 const DEFAULT_DIRECTORY = FileSystem.documentDirectory + "downloads/";
 
@@ -28,10 +29,16 @@ const SingleVideo = ({ item, fullPathURl }) => {
     <Pressable style={styles.container} onPress={navigatoToWatchDownloadVideo}>
       <View style={styles.thumbnailContainer}>
         <VideoComponent item={item} />
-        <Image source={{ uri: item.thumbnail_url }} style={styles.image} />
+        <Image
+          source={{ uri: BASE_URL_FILE_SERVER + item.thumbnail_url }}
+          style={styles.image}
+        />
       </View>
       <View style={styles.content}>
-        <Image source={{ uri: item.user.photo }} style={styles.modelImg} />
+        <Image
+          source={{ uri: BASE_URL_FILE_SERVER + item.user.photo }}
+          style={styles.modelImg}
+        />
         <View style={styles.texts}>
           <Text style={styles.text} numberOfLines={1}>
             {item.title}

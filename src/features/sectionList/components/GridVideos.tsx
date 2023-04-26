@@ -18,6 +18,7 @@ import { useDisclose } from "native-base";
 import { GLOBAL_COLORS } from "global";
 import Modal from "components/BottomModal";
 import VIPTag from "components/VIPTag";
+import { BASE_URL_FILE_SERVER } from "react-native-dotenv";
 
 const { width } = Dimensions.get("window");
 
@@ -25,7 +26,10 @@ export const FollowingBottomContent = ({ item }) => {
   return (
     <View style={styles.textContent}>
       <View style={{ flexDirection: "row", alignItems: "center" }}>
-        <Image source={{ uri: item.user.photo }} style={styles.modelImg} />
+        <Image
+          source={{ uri: BASE_URL_FILE_SERVER + item.user.photo }}
+          style={styles.modelImg}
+        />
         <Text style={styles.modelText}>{item.user.username}</Text>
       </View>
       <View style={{ flexDirection: "row", alignItems: "center" }}>
@@ -77,7 +81,7 @@ const AdsContainer = ({ item, isFollowingScreen, onOpen, setId }: any) => {
       <View style={styles.thumbnailContainer}>
         <VIPTag isAbsolute={true} />
         <Image
-          source={{ uri: item.photo_url }}
+          source={{ uri: BASE_URL_FILE_SERVER + item.photo_url }}
           style={[styles.video, { height: width * 0.3 }]}
         />
       </View>
@@ -136,7 +140,7 @@ export const Video = ({ item, isFollowingScreen, onOpen, setId }: any) => {
       <View style={styles.thumbnailContainer}>
         <VIPTag isAbsolute={true} />
         <Image
-          source={{ uri: item.thumbnail_url }}
+          source={{ uri: BASE_URL_FILE_SERVER + item.thumbnail_url }}
           style={[styles.video, { height: videoHeight }]}
         />
       </View>

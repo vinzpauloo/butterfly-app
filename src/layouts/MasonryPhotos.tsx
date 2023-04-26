@@ -26,6 +26,7 @@ import VIPModalContent from "components/VIPModalContent";
 import AlbumsService from "services/api/AlbumsService";
 import { captureSuccess, captureError } from "services/sentry";
 import { userStore } from "../zustand/userStore";
+import { BASE_URL_FILE_SERVER } from "react-native-dotenv";
 
 type SingleImageProp = {
   idx: number;
@@ -55,7 +56,10 @@ const SingleImage = (props: SingleImageProp) => {
   return (
     <Pressable onPress={!isVip ? openVIPModal : handlePress}>
       <ImageBackground
-        source={{ uri: props.url, cache: "only-if-cached" }}
+        source={{
+          uri: BASE_URL_FILE_SERVER + props.url,
+          cache: "only-if-cached",
+        }}
         style={[styles.singleImage, { height: props.height }]}
         resizeMode="cover"
       >

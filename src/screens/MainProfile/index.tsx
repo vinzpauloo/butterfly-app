@@ -49,6 +49,7 @@ import { translationStore } from "../../zustand/translationStore";
 import { useNavigation } from "@react-navigation/native";
 import { userStore } from "../../zustand/userStore";
 import { useMutation } from "@tanstack/react-query";
+import { BASE_URL_FILE_SERVER } from "react-native-dotenv";
 
 const { height, width } = Dimensions.get("window");
 
@@ -145,7 +146,10 @@ const User = () => {
         <VStack p={3}>
           <HStack>
             <Box mx={2} position="relative">
-              <Image source={{ uri: photo }} style={styles.profileImg} />
+              <Image
+                source={{ uri: BASE_URL_FILE_SERVER + photo }}
+                style={styles.profileImg}
+              />
               <Text style={styles.vipText}>VIP</Text>
             </Box>
             <VStack justifyContent="space-evenly">

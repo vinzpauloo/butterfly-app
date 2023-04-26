@@ -11,6 +11,7 @@ import React from "react";
 
 import { GLOBAL_COLORS } from "global";
 import { useNavigation } from "@react-navigation/native";
+import { BASE_URL_FILE_SERVER } from "react-native-dotenv";
 
 const { width } = Dimensions.get("window");
 
@@ -38,8 +39,14 @@ const Video = ({ item, index, data, all }: any) => {
       ]}
       activeOpacity={1}
     >
-      <Image source={{ uri: video.thumbnail_url }} style={styles.image} />
-      <Image source={{ uri: video.user.photo }} style={styles.modelImg} />
+      <Image
+        source={{ uri: BASE_URL_FILE_SERVER + video.thumbnail_url }}
+        style={styles.image}
+      />
+      <Image
+        source={{ uri: BASE_URL_FILE_SERVER + video.user.photo }}
+        style={styles.modelImg}
+      />
       <View style={styles.textContent}>
         <Text style={styles.text} numberOfLines={2}>
           {video.title}

@@ -18,6 +18,7 @@ import WorkService from "services/api/WorkService";
 import { GLOBAL_COLORS } from "global";
 import { translationStore } from "../../zustand/translationStore";
 import { userStore } from "../../zustand/userStore";
+import { BASE_URL_FILE_SERVER } from "react-native-dotenv";
 
 const HeaderTitle = ({ data }) => {
   const token = userStore((store) => store.api_token);
@@ -65,7 +66,10 @@ const HeaderTitle = ({ data }) => {
             navigation.navigate("SingleUser", { userID: data?.user.id })
           }
         >
-          <Image source={{ uri: data?.user?.photo }} style={styles.image} />
+          <Image
+            source={{ uri: BASE_URL_FILE_SERVER + data?.user?.photo }}
+            style={styles.image}
+          />
         </Pressable>
         <View>
           <Text style={styles.title}>{data?.user?.username}</Text>

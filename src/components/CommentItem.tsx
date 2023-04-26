@@ -3,6 +3,7 @@ import { Pressable, StyleSheet, Text } from "react-native";
 import { HStack, Avatar, VStack } from "native-base";
 import { GLOBAL_COLORS } from "global";
 
+import { BASE_URL_FILE_SERVER } from "react-native-dotenv";
 import { commentGlobalStore } from "../zustand/commentGlobalStore";
 import Fontisto from "react-native-vector-icons/Fontisto";
 import { FlashList } from "@shopify/flash-list";
@@ -50,7 +51,7 @@ const CommentItem = (props: commentItemProps) => {
 
   return (
     <HStack space={2}>
-      <Avatar size={42} source={{ uri: props.photo }} />
+      <Avatar size={42} source={{ uri: BASE_URL_FILE_SERVER + props.photo }} />
       <VStack space={1} flex={1} px={2}>
         <Text style={styles.whiteText}>{props.username}</Text>
         <Text style={styles.whiteText}>{props.comment}</Text>
@@ -85,7 +86,10 @@ const CommentItem = (props: commentItemProps) => {
               removeClippedSubviews={true}
               renderItem={({ item }: any) => (
                 <HStack space={2} my={2}>
-                  <Avatar size={42} source={{ uri: item.photo }} />
+                  <Avatar
+                    size={42}
+                    source={{ uri: BASE_URL_FILE_SERVER + item.photo }}
+                  />
                   <VStack space={1} px={2} flex={1}>
                     <Text style={styles.whiteText}>{item.username}</Text>
                     <Text style={styles.whiteText}>{item.comment}</Text>

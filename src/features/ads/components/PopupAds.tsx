@@ -7,6 +7,7 @@ import { Modal } from "native-base";
 
 import CustomModal from "components/CustomModal";
 import { adsGlobalStore } from "../../../zustand/adsGlobalStore";
+import { BASE_URL_FILE_SERVER } from "react-native-dotenv";
 
 const { width } = Dimensions.get("window");
 
@@ -27,7 +28,10 @@ const Content = ({ setOpen }) => {
     >
       <Modal.Body alignItems="center">
         <Pressable onPress={() => Linking.openURL(adsURL)}>
-          <Image source={{ uri: imgURL }} style={styles.ads} />
+          <Image
+            source={{ uri: BASE_URL_FILE_SERVER + imgURL }}
+            style={styles.ads}
+          />
         </Pressable>
       </Modal.Body>
     </Modal.Content>

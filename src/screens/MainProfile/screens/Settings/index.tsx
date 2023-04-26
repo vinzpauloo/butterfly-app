@@ -24,6 +24,7 @@ import { GLOBAL_COLORS } from "global";
 import { userStore } from "../../../../zustand/userStore";
 import { useNavigation } from "@react-navigation/native";
 import { useMutation, useQuery } from "@tanstack/react-query";
+import { BASE_URL_FILE_SERVER } from "react-native-dotenv";
 
 const LayoutContent = ({ children }) => {
   return (
@@ -87,7 +88,10 @@ const FirstContainer = ({ gender, setGender }) => {
       <LayoutContent>
         <Text style={styles.textLabel}>设置</Text>
         <HStack alignItems="center">
-          <Image source={{ uri: photo }} style={styles.profileImg} />
+          <Image
+            source={{ uri: BASE_URL_FILE_SERVER + photo }}
+            style={styles.profileImg}
+          />
           <Entypo
             name="chevron-right"
             color={GLOBAL_COLORS.primaryTextColor}

@@ -25,6 +25,7 @@ import { userStore } from "../../../zustand/userStore";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { useIsFocused, useNavigation } from "@react-navigation/native";
 import { translationStore } from "../../../zustand/translationStore";
+import { BASE_URL_FILE_SERVER } from "react-native-dotenv";
 
 const { width } = Dimensions.get("window");
 
@@ -59,7 +60,10 @@ const HeaderComponent = ({ data }) => {
   return (
     <View style={styles.headerContainer}>
       <Pressable style={styles.headerLeft} onPress={navigateToSingleUser}>
-        <Image source={{ uri: data.photo }} style={styles.modelImg} />
+        <Image
+          source={{ uri: BASE_URL_FILE_SERVER + data.photo }}
+          style={styles.modelImg}
+        />
         <View>
           <Text style={styles.headerTitle}>{data.username}</Text>
           <Text style={styles.headerSubTitle}>
@@ -97,7 +101,10 @@ const VideoContainer = ({ data, user }) => {
       <View style={styles.videoContent}>
         <View style={styles.thumbnailContainer}>
           <VIPTag isAbsolute={true} />
-          <Image source={{ uri: data.thumbnail_url }} style={styles.video} />
+          <Image
+            source={{ uri: BASE_URL_FILE_SERVER + data.thumbnail_url }}
+            style={styles.video}
+          />
         </View>
         <View style={styles.watchCount}>
           <Octicons name="video" size={15} color="#fff" />

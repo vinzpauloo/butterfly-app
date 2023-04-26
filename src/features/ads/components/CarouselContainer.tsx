@@ -9,6 +9,7 @@ import * as Linking from "expo-linking";
 
 import { GLOBAL_COLORS } from "global";
 import { adsGlobalStore } from "../../../zustand/adsGlobalStore";
+import { BASE_URL_FILE_SERVER } from "react-native-dotenv";
 
 const windowWidth = Dimensions.get("window").width;
 
@@ -26,16 +27,21 @@ const CarouselContainer = () => {
   };
 
   // subscribe to ads global store
-  const [carouselArray] = adsGlobalStore(
-    (state) => [state.carousel_banner],
-  )
+  const [carouselArray] = adsGlobalStore((state) => [state.carousel_banner]);
 
-  const carouselAds = carouselArray.map(item => item)
+  const carouselAds = carouselArray.map((item) => item);
 
   const BannerItem = ({ item, index }: any) => {
     return (
-      <Pressable onPress={() => Linking.openURL(item.url)} style={styles.bannerItem} key={index}>
-        <Image source={{ uri: item.photo_url }} style={styles.image} />
+      <Pressable
+        onPress={() => Linking.openURL(item.url)}
+        style={styles.bannerItem}
+        key={index}
+      >
+        <Image
+          source={{ uri: BASE_URL_FILE_SERVER + item.photo_url }}
+          style={styles.image}
+        />
       </Pressable>
     );
   };

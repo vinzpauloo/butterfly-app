@@ -25,9 +25,10 @@ import Videos from "assets/images/videos.png";
 import VideosWhite from "assets/images/videocall_white.png";
 import WatchTicket from "assets/images/watchTicket.png";
 import WatchTicketWhite from "assets/images/watchTicket_white.png";
+import { createMaterialTopTabNavigator } from "@react-navigation/material-top-tabs";
 import { GLOBAL_COLORS } from "global";
 import { LinearGradient } from "expo-linear-gradient";
-import { createMaterialTopTabNavigator } from "@react-navigation/material-top-tabs";
+import { translationStore } from "../../zustand/translationStore";
 import { userStore } from "../../zustand/userStore";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { useIsFocused } from "@react-navigation/native";
@@ -35,6 +36,8 @@ import { useIsFocused } from "@react-navigation/native";
 const Tab = createMaterialTopTabNavigator();
 
 const Header = () => {
+  const { alias } = userStore((state) => state);
+  const { translations } = translationStore((store) => store);
   return (
     <LinearGradient
       colors={["#280B2B", "#280B2B", "#070307"]}
@@ -44,12 +47,14 @@ const Header = () => {
         <HStack space={2} alignItems="center">
           <Image source={Profile} style={styles.profileImg} />
           <VStack>
-            <Text style={styles.headerTitle}>犹豫的香气</Text>
-            <Text style={styles.headerSubtitle}>您目前不是会员</Text>
+            <Text style={styles.headerTitle}>{alias}</Text>
+            {/* <Text style={styles.headerSubtitle}>您目前不是会员</Text> */}
           </VStack>
         </HStack>
         <Pressable style={styles.headerBtn}>
-          <Text style={styles.headerBtnText}>使用兑换码</Text>
+          <Text style={styles.headerBtnText}>
+            {translations.useRedemptionCode}
+          </Text>
         </Pressable>
       </HStack>
     </LinearGradient>
@@ -59,6 +64,8 @@ const Header = () => {
 // START OF MEMBER TAB CODES
 
 const VIPChoices = ({ active, setActive, bundle }) => {
+  const { translations } = translationStore((store) => store);
+
   const activeColorScheme = {
     gradient: ["#9747FF", "#C74FFF"],
     border: "#EF44BF",
@@ -145,7 +152,7 @@ const VIPChoices = ({ active, setActive, bundle }) => {
                         },
                       ]}
                     >
-                      永久使用
+                      {translations.permanentUse}
                     </Text>
                   </VStack>
                   <Text
@@ -156,7 +163,7 @@ const VIPChoices = ({ active, setActive, bundle }) => {
                       },
                     ]}
                   >
-                    金币免费
+                    {translations.goldCoinsFree}
                   </Text>
                   <Text
                     style={[
@@ -167,7 +174,7 @@ const VIPChoices = ({ active, setActive, bundle }) => {
                     ]}
                     numberOfLines={2}
                   >
-                    短期访问，买我!
+                    {translations.shortVisit}
                   </Text>
                 </VStack>
               </LinearGradient>
@@ -180,59 +187,60 @@ const VIPChoices = ({ active, setActive, bundle }) => {
 };
 
 const PromotionalPackage = ({ perks }) => {
+  const { translations } = translationStore((store) => store);
   const lists = [
     {
       active_image: Videos,
       inactive_image: VideosWhite,
-      title: "videos",
+      title: translations.videos,
       isActive: perks["videos"],
     },
     {
       active_image: Photos,
       inactive_image: PhotosWhite,
-      title: "photos",
+      title: translations.photo,
       isActive: perks["photos"],
     },
     {
       active_image: Live,
       inactive_image: LiveWhite,
-      title: "live",
+      title: translations.live,
       isActive: perks["live_streaming"],
     },
     {
       active_image: VideoCall,
       inactive_image: VideoCallWhite,
-      title: "video call",
+      title: translations.videoCall,
       isActive: perks["video_call"],
     },
     {
       active_image: LiveChat,
       inactive_image: LiveChatWhite,
-      title: "live chat",
+      title: translations.liveChat,
       isActive: perks["live_chat"],
     },
     {
       active_image: ForeverVIP,
       inactive_image: ForeverVIPWhite,
-      title: "forever vip",
+      title: translations.foreverVIP,
       isActive: perks["forever_vip"],
     },
     {
       active_image: Download,
       inactive_image: DownloadWhite,
-      title: "download",
+      title: translations.download,
       isActive: perks["download"],
     },
     {
       active_image: WatchTicket,
       inactive_image: WatchTicketWhite,
-      title: "watch ticket",
+      title: translations.watchTicket,
       isActive: perks["watch_ticket"],
     },
   ];
   return (
     <Box style={styles.imagesContainer}>
-      <Text style={styles.imagesTitle}>促销包</Text>
+      <Text style={styles.imagesTitle}>{translations.promotionPackage}</Text>
       <Box display="flex" flexDirection="row" flexWrap="wrap">
         {lists.map((item, index) => (
           <Box key={index} width="25%" alignItems="center" mt={2}>
@@ -260,6 +268,7 @@ const Description = ({ description }) => {
 
 const Button = () => {
   const { is_Vip, setVip, api_token: token } = userStore((state) => state);
+  const { translations } = translationStore((store) => store);
   const { subscribeToVIP } = CustomerService(); // change if the "Buy Subscription Bundle API" is working
 
   const { mutate: mutateSubscribe } = useMutation(subscribeToVIP, {
@@ -297,7 +306,7 @@ const Button = () => {
             { color: is_Vip ? "#333333" : GLOBAL_COLORS.primaryTextColor },
           ]}
         >
-          Get Offer
+          {translations.getOffer}
         </Text>
       </Pressable>
     </Box>
@@ -352,6 +361,7 @@ const Member = () => {
 
 const Wallet = () => {
   const { api_token } = userStore((store) => store);
+  const { translations } = translationStore((store) => store);
   const { getAllCoinBundle } = CoinsBundle();
   const isFocused = useIsFocused();
   const { isLoading, isRefetching, data } = useQuery({
@@ -380,9 +390,9 @@ const Wallet = () => {
             height="full"
             width="1/2"
           >
-            <Text style={styles.smallText}>当前余额</Text>
+            <Text style={styles.smallText}>{translations.currentBalance}</Text>
             <Text style={styles.largeText}>0元</Text>
-            <Text style={styles.smallText}>余额明细</Text>
+            <Text style={styles.smallText}>{translations.balanceDetails}</Text>
           </VStack>
           <VStack
             style={styles.rightHeader}
@@ -391,9 +401,13 @@ const Wallet = () => {
             height="full"
             width="1/2"
           >
-            <Text style={styles.smallText}>累计收入</Text>
+            <Text style={styles.smallText}>
+              {translations.cumulativeIncome}
+            </Text>
             <Text style={styles.largeText}>0元</Text>
-            <Text style={styles.smallText}>提取的收益</Text>
+            <Text style={styles.smallText}>
+              {translations.withdrawnProceeds}
+            </Text>
           </VStack>
         </HStack>
       </LinearGradient>
@@ -447,6 +461,7 @@ const Wallet = () => {
 // Menu Tab
 
 const VIPMenu = () => {
+  const { translations } = translationStore((store) => store);
   return (
     <Tab.Navigator
       screenOptions={{
@@ -456,8 +471,8 @@ const VIPMenu = () => {
         tabBarLabelStyle: { fontSize: 20, fontWeight: "bold" },
       }}
     >
-      <Tab.Screen name="VIP会员" component={Member} />
-      <Tab.Screen name="钱包" component={Wallet} />
+      <Tab.Screen name={translations.vipMember} component={Member} />
+      <Tab.Screen name={translations.wallet} component={Wallet} />
     </Tab.Navigator>
   );
 };

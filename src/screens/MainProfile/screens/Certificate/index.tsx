@@ -19,17 +19,17 @@ const index = () => {
   const [data, setData] = useState("");
 
   const { isLoading, isRefetching } = useQuery({
-    queryKey: ["Certificate"],
+    queryKey: ["Certificate", params.api_params],
     queryFn: () =>
       getCertificate({
         data: { details: params.api_params },
         token: api_token,
       }),
     onSuccess: (data) => {
-      setData(JSON.parse(data));
+      setData(data);
     },
     onError: (error) => {
-      console.log(`1Certificate ${params.api_params}: `, error);
+      console.log(`Certificate ${params.api_params}: `, error);
     },
   });
 

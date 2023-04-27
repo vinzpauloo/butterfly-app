@@ -20,11 +20,12 @@ import LoadingSpinner from "components/LoadingSpinner";
 import MaleIcon from "assets/images/male_icon.png";
 import SecurityIcon from "assets/images/security_icon.png";
 import useDebounce from "hooks/useDebounce";
+import { BASE_URL_FILE_SERVER } from "react-native-dotenv";
 import { GLOBAL_COLORS } from "global";
+import { translationStore } from "../../../../zustand/translationStore";
 import { userStore } from "../../../../zustand/userStore";
 import { useNavigation } from "@react-navigation/native";
 import { useMutation, useQuery } from "@tanstack/react-query";
-import { BASE_URL_FILE_SERVER } from "react-native-dotenv";
 
 const LayoutContent = ({ children }) => {
   return (
@@ -44,6 +45,7 @@ const TextIconContent = ({ children }) => {
 
 const FirstContainer = ({ gender, setGender }) => {
   const { alias, api_token, _id, photo } = userStore((store) => store);
+  const { translations } = translationStore((store) => store);
   const { putCustomerProfile } = CustomerService();
   const [nickname, setNickname] = useState(alias);
   const [aliasHasChange, setAliasHasChange] = useState(false);
@@ -86,7 +88,7 @@ const FirstContainer = ({ gender, setGender }) => {
   return (
     <VStack mb={10}>
       <LayoutContent>
-        <Text style={styles.textLabel}>设置</Text>
+        <Text style={styles.textLabel}>{translations.setup}</Text>
         <HStack alignItems="center">
           <Image
             source={{ uri: BASE_URL_FILE_SERVER + photo }}
@@ -100,10 +102,10 @@ const FirstContainer = ({ gender, setGender }) => {
         </HStack>
       </LayoutContent>
       <LayoutContent>
-        <Text style={styles.textLabel}>昵称</Text>
+        <Text style={styles.textLabel}>{translations.nickname}</Text>
         <Input
-          width="64"
-          placeholder="犹豫的香气"
+          width="56"
+          placeholder={translations.nickname}
           value={nickname}
           onChangeText={handleAliasChange}
           placeholderTextColor="#000000"
@@ -111,7 +113,7 @@ const FirstContainer = ({ gender, setGender }) => {
         />
       </LayoutContent>
       <LayoutContent>
-        <Text style={styles.textLabel}>性别</Text>
+        <Text style={styles.textLabel}>{translations.gender}</Text>
         <HStack>
           <Pressable onPress={() => handlePress("Female")}>
             <Image
@@ -128,9 +130,11 @@ const FirstContainer = ({ gender, setGender }) => {
         </HStack>
       </LayoutContent>
       <LayoutContent>
-        <Text style={styles.textLabel}>手机号码</Text>
+        <Text style={styles.textLabel}>
+          {translations.pleaseEnterPhoneNumber}
+        </Text>
         <Pressable>
-          <Text style={styles.button}>去绑定</Text>
+          <Text style={styles.button}>{translations.toBind}</Text>
         </Pressable>
       </LayoutContent>
       {/* <LayoutContent>
@@ -147,8 +151,9 @@ const FirstContainer = ({ gender, setGender }) => {
 };
 
 const SecondContainer = () => {
-  const { _id } = userStore((store) => store);
   const navigation = useNavigation<any>();
+  const { _id } = userStore((store) => store);
+  const { translations } = translationStore((store) => store);
 
   const handlePress = () => {
     navigation.navigate("Certificate", { postTitle: "" });
@@ -159,21 +164,21 @@ const SecondContainer = () => {
       <LayoutContent>
         <TextIconContent>
           <Image source={AccountIcon} style={styles.textIcon} />
-          <Text style={styles.textLabel}>帐户ID</Text>
+          <Text style={styles.textLabel}>{translations.accountID}</Text>
         </TextIconContent>
         <HStack
           alignItems="center"
           space={5}
           backgroundColor="#787879"
           style={styles.accountContainer}
-          maxWidth="64"
+          maxWidth="56"
           paddingRight="20"
         >
           <Text style={styles.accountText} numberOfLines={1}>
             {_id}
           </Text>
           <Pressable>
-            <Text style={styles.redBtn}>复制</Text>
+            <Text style={styles.redBtn}>{translations.copy}</Text>
           </Pressable>
         </HStack>
       </LayoutContent>
@@ -181,7 +186,9 @@ const SecondContainer = () => {
       <LayoutContent>
         <TextIconContent>
           <Image source={CertificateIcon} style={styles.textIcon} />
-          <Text style={styles.textLabel}>账户证书</Text>
+          <Text style={styles.textLabel}>
+            {translations.accountCertificate}
+          </Text>
         </TextIconContent>
         <Entypo
           name="chevron-right"
@@ -193,10 +200,12 @@ const SecondContainer = () => {
       <LayoutContent>
         <TextIconContent>
           <Image source={GlassIcon} style={styles.textIcon} />
-          <Text style={styles.textLabel}>帐户检索</Text>
+          <Text style={styles.textLabel}>{translations.accountRetrieval}</Text>
         </TextIconContent>
         <HStack alignItems="center">
-          <Text style={styles.textLabel}>丢失的帐户快速找回</Text>
+          <Text style={styles.textLabel}>
+            {translations.lostAccountRecovered}
+          </Text>
           <Entypo
             name="chevron-right"
             color={GLOBAL_COLORS.primaryTextColor}
@@ -207,10 +216,12 @@ const SecondContainer = () => {
       <LayoutContent>
         <TextIconContent>
           <Image source={ChainIcon} style={styles.textIcon} />
-          <Text style={styles.textLabel}>绑定邀请码</Text>
+          <Text style={styles.textLabel}>
+            {translations.bindInvitationCode}
+          </Text>
         </TextIconContent>
         <Pressable>
-          <Text style={styles.button}>绑定</Text>
+          <Text style={styles.button}>{translations.toBind}</Text>
         </Pressable>
       </LayoutContent>
     </VStack>
@@ -219,6 +230,7 @@ const SecondContainer = () => {
 
 const ThirdContainer = () => {
   const navigation = useNavigation<any>();
+  const { translations } = translationStore((store) => store);
 
   const handlePress = (title, api_params) => {
     navigation.navigate("Certificate", { postTitle: title, api_params });
@@ -229,7 +241,7 @@ const ThirdContainer = () => {
       <LayoutContent>
         <TextIconContent>
           <Image source={HeadphoneIcon} style={styles.textIcon} />
-          <Text style={styles.textLabel}>客户服务</Text>
+          <Text style={styles.textLabel}>{translations.customerService}</Text>
         </TextIconContent>
         <Entypo
           name="chevron-right"
@@ -237,11 +249,13 @@ const ThirdContainer = () => {
           size={25}
         />
       </LayoutContent>
-      <Pressable onPress={() => handlePress("隐私政策", "policy")}>
+      <Pressable
+        onPress={() => handlePress(translations.privacyPolicy, "policy")}
+      >
         <LayoutContent>
           <TextIconContent>
             <Image source={SecurityIcon} style={styles.textIcon} />
-            <Text style={styles.textLabel}>隐私政策</Text>
+            <Text style={styles.textLabel}>{translations.privacyPolicy}</Text>
           </TextIconContent>
           <Entypo
             name="chevron-right"
@@ -250,11 +264,13 @@ const ThirdContainer = () => {
           />
         </LayoutContent>
       </Pressable>
-      <Pressable onPress={() => handlePress("服务条款", "provisions")}>
+      <Pressable
+        onPress={() => handlePress(translations.termOfService, "provisions")}
+      >
         <LayoutContent>
           <TextIconContent>
             <Image source={FileIcon} style={styles.textIcon} />
-            <Text style={styles.textLabel}>服务条款</Text>
+            <Text style={styles.textLabel}>{translations.termOfService}</Text>
           </TextIconContent>
           <Entypo
             name="chevron-right"
@@ -263,17 +279,23 @@ const ThirdContainer = () => {
           />
         </LayoutContent>
       </Pressable>
-      <LayoutContent>
-        <TextIconContent>
-          <Image source={InfoIcon} style={styles.textIcon} />
-          <Text style={styles.textLabel}>关于申请</Text>
-        </TextIconContent>
-        <Entypo
-          name="chevron-right"
-          color={GLOBAL_COLORS.primaryTextColor}
-          size={25}
-        />
-      </LayoutContent>
+      <Pressable
+        onPress={() => handlePress(translations.aboutApplication, "about")}
+      >
+        <LayoutContent>
+          <TextIconContent>
+            <Image source={InfoIcon} style={styles.textIcon} />
+            <Text style={styles.textLabel}>
+              {translations.aboutApplication}
+            </Text>
+          </TextIconContent>
+          <Entypo
+            name="chevron-right"
+            color={GLOBAL_COLORS.primaryTextColor}
+            size={25}
+          />
+        </LayoutContent>
+      </Pressable>
     </VStack>
   );
 };

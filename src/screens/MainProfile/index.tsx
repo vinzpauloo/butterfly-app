@@ -139,6 +139,7 @@ const Header = () => {
 
 const User = () => {
   const { alias, photo } = userStore((store) => store);
+  const { translations } = translationStore((store) => store);
 
   return (
     <Box m={2} style={styles.mainContainer}>
@@ -165,17 +166,21 @@ const User = () => {
                 </HStack> */}
               </HStack>
               <HStack space={5}>
-                <Text style={styles.middleText}>金币 : 0</Text>
-                <Text style={styles.middleText}>电影票 : 0 </Text>
-                <Text style={styles.middleText}>免费观看 : 0/0</Text>
+                <Text style={styles.middleText}>{translations.coin} : 0</Text>
+                <Text style={styles.middleText}>
+                  {translations.movieTicket} : 0
+                </Text>
+                <Text style={styles.middleText}>
+                  {translations.watchForFree} : 0/0
+                </Text>
               </HStack>
             </VStack>
           </HStack>
           <Divider bg="#7D0680" thickness="1" my={2} />
           <HStack justifyContent="space-evenly">
-            <Text style={styles.bottomText}>说说 0</Text>
-            <Text style={styles.bottomText}>跟随 0</Text>
-            <Text style={styles.bottomText}>粉丝 0</Text>
+            <Text style={styles.bottomText}>{translations.talkAbout} : 0</Text>
+            <Text style={styles.bottomText}>{translations.follow} : 0</Text>
+            <Text style={styles.bottomText}>{translations.fan} : 0</Text>
           </HStack>
         </VStack>
       </LinearGradient>
@@ -185,10 +190,11 @@ const User = () => {
 
 const VIPStatus = () => {
   const { is_Vip, _id } = userStore((store) => store);
+  const { translations } = translationStore((store) => store);
   const navigation = useNavigation<any>();
 
   const handlePressVIP = () => {
-    navigation.navigate("VIPScreen", { postTitle: "会员中心" });
+    navigation.navigate("VIPScreen", { postTitle: translations.memberCentre });
   };
 
   return (
@@ -200,9 +206,12 @@ const VIPStatus = () => {
         >
           <View style={styles.textContainer}>
             <Text style={styles.vipTitle}>
-              贵宾期 : {is_Vip ? "2023-05-19" : "NOT YET A MEMBER"}
+              {translations.vipPeriod} :{" "}
+              {is_Vip ? "2023-05-19" : translations.notYetMember}
             </Text>
-            <Text style={styles.vipSubtitle}>用户身份 : {_id}</Text>
+            <Text style={styles.vipSubtitle}>
+              {translations.userID} : {_id}
+            </Text>
           </View>
         </ImageBackground>
       </Pressable>
@@ -212,9 +221,10 @@ const VIPStatus = () => {
 
 const VIP = () => {
   const navigation = useNavigation<any>();
+  const { translations } = translationStore((store) => store);
 
   const handlePressVIP = () => {
-    navigation.navigate("VIPScreen", { postTitle: "会员中心" });
+    navigation.navigate("VIPScreen", { postTitle: translations.memberCentre });
   };
 
   return (
@@ -226,52 +236,37 @@ const VIP = () => {
   );
 };
 
-const Referral = () => {
-  return (
-    <Box m={2} style={styles.mainContainer}>
-      <ImageBackground source={ReferralBackground} resizeMode="cover">
-        <VStack alignItems="center">
-          <Text style={styles.referralTitle}>输入推荐码</Text>
-          <HStack mb={3} alignItems="center" space={2}>
-            <Stack w="75%">
-              <Input
-                size="md"
-                placeholder="Please enter referral code"
-                style={styles.referralInput}
-              />
-            </Stack>
-            <Pressable style={styles.referralBtn}>
-              <Text style={styles.referralBtnText}>提交</Text>
-            </Pressable>
-          </HStack>
-        </VStack>
-      </ImageBackground>
-    </Box>
-  );
-};
-
 const DeviceID = ({ scannedID, setScanned }) => {
+  const { translations } = translationStore((store) => store);
   const handlePress = () => {
     setScanned(true);
   };
   return (
     <Box m={2} style={styles.mainContainer} position="relative">
       <ImageBackground source={DeviceIDBg} resizeMode="cover">
-        <VStack alignItems="center">
-          {/* <Text style={styles.referralTitle}>链接设备ID</Text> */}
-          <HStack my={3} alignItems="center" space={2}>
-            <Stack w="75%">
-              <Input
-                value={scannedID}
-                size="md"
-                placeholder="Details"
-                style={styles.referralInput}
-              />
-            </Stack>
-            <Pressable style={styles.deviceIDBtn} onPress={handlePress}>
-              <Text style={styles.deviceIDBtnText}>扫码</Text>
-            </Pressable>
-          </HStack>
+        <VStack alignItems="center" py={2}>
+          <Text style={styles.referralTitle}>
+            {translations.bindingInformation}
+          </Text>
+          <Stack w="90%" mb={2}>
+            <Input
+              value={scannedID}
+              size="md"
+              placeholder={translations.agentAccount}
+              style={styles.referralInput}
+            />
+          </Stack>
+          <Stack w="90%" mb={2}>
+            <Input
+              value={scannedID}
+              size="md"
+              placeholder={translations.pleaseEnterPhoneNumber}
+              style={styles.referralInput}
+            />
+          </Stack>
+          <Pressable style={styles.deviceIDBtn} onPress={handlePress}>
+            <Text style={styles.deviceIDBtnText}>{translations.submit}</Text>
+          </Pressable>
         </VStack>
       </ImageBackground>
     </Box>
@@ -280,42 +275,45 @@ const DeviceID = ({ scannedID, setScanned }) => {
 
 const LinkList = () => {
   const navigation = useNavigation<any>();
+  const { translations } = translationStore((store) => store);
 
   const lists = [
     {
-      title: "历史记录",
+      title: translations.recordingHistory,
       icon: HistoryIcon,
       navigate: () => {},
     },
     {
-      title: "离线缓存",
+      title: translations.offlineCache,
       icon: DownloadIcon,
       navigate: () => {},
     },
     {
-      title: "分享推广",
+      title: translations.sharingPromotion,
       icon: ShareIcon,
       navigate: () => {},
     },
     {
-      title: "账户凭证",
+      title: translations.accountCredentials,
       icon: AccountIcon,
       navigate: () => {
-        navigation.navigate("AccountCredentials", { postTitle: "账户凭证" });
+        navigation.navigate("AccountCredentials", {
+          postTitle: translations.accountCredentials,
+        });
       },
     },
     {
-      title: "在线服务",
+      title: translations.onlineService,
       icon: ServiceIcon,
       navigate: () => {},
     },
     {
-      title: "精品应用",
+      title: translations.bestApps,
       icon: ApplicationIcon,
       navigate: () => {},
     },
     {
-      title: "官方组",
+      title: translations.officialGroup,
       icon: OfficialIcon,
       navigate: () => {},
     },
@@ -352,11 +350,14 @@ const LinkList = () => {
 };
 
 const Email = () => {
+  const { translations } = translationStore((store) => store);
   return (
     <HStack my={1} mb={3} alignItems="center" justifyContent="center" space={5}>
-      <Text style={styles.emailText}>官方邮箱butterflyproject@gmail.com</Text>
+      <Text style={styles.emailText}>
+        {translations.officialEmail}: butterflyproject@gmail.com
+      </Text>
       <Pressable style={styles.emailBtn}>
-        <Text style={styles.emailTextBtn}>复制</Text>
+        <Text style={styles.emailTextBtn}>{translations.copy}</Text>
       </Pressable>
     </HStack>
   );
@@ -405,7 +406,7 @@ const index = () => {
           <User />
           <VIPStatus />
           <VIP />
-          <Referral />
+          {/* <Referral /> */}
           <DeviceID scannedID={scannedID} setScanned={setScanned} />
           <LinkList />
           <Email />
@@ -554,10 +555,10 @@ const styles = StyleSheet.create({
   deviceIDBtn: {
     alignItems: "center",
     justifyContent: "center",
-    backgroundColor: "#c6f348",
+    backgroundColor: "#72E6FF",
     borderWidth: 1,
     borderColor: GLOBAL_COLORS.primaryTextColor,
-    height: 45,
+    height: 30,
     paddingHorizontal: 25,
     borderRadius: 10,
   },

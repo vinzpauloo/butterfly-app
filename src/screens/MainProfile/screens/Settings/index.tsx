@@ -43,11 +43,10 @@ const TextIconContent = ({ children }) => {
   );
 };
 
-const FirstContainer = ({ gender, setGender }) => {
+const FirstContainer = ({ gender, setGender, nickname, setNickname }) => {
   const { alias, api_token, _id, photo } = userStore((store) => store);
   const { translations } = translationStore((store) => store);
   const { putCustomerProfile } = CustomerService();
-  const [nickname, setNickname] = useState(alias);
   const [aliasHasChange, setAliasHasChange] = useState(false);
 
   const { mutate: mutateGender } = useMutation(putCustomerProfile, {
@@ -304,6 +303,7 @@ const index = () => {
   const { api_token } = userStore();
   const { getCustomerProfile } = CustomerService();
   const [gender, setGender] = useState("");
+  const [nickname, setNickname] = useState("");
 
   const { isLoading, isRefetching } = useQuery({
     queryKey: ["MainProfileSettings"],
@@ -313,6 +313,7 @@ const index = () => {
     },
     onSuccess: (data) => {
       setGender(data.gender);
+      setNickname(data.alias);
     },
   });
 
@@ -322,7 +323,12 @@ const index = () => {
 
   return (
     <Container>
-      <FirstContainer gender={gender} setGender={setGender} />
+      <FirstContainer
+        gender={gender}
+        setGender={setGender}
+        nickname={nickname}
+        setNickname={setNickname}
+      />
       <SecondContainer />
       <ThirdContainer />
     </Container>

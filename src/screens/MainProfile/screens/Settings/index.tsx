@@ -44,7 +44,8 @@ const TextIconContent = ({ children }) => {
 };
 
 const FirstContainer = ({ gender, setGender, nickname, setNickname }) => {
-  const { alias, api_token, _id, photo } = userStore((store) => store);
+  const userStoreData = userStore((store) => store);
+  const setUserStore = userStore((state) => state.setUserData);
   const { translations } = translationStore((store) => store);
   const { putCustomerProfile } = CustomerService();
   const [aliasHasChange, setAliasHasChange] = useState(false);
@@ -55,14 +56,18 @@ const FirstContainer = ({ gender, setGender, nickname, setNickname }) => {
     },
   });
 
-  const { mutate: mutateAlias } = useMutation(putCustomerProfile);
+  const { mutate: mutateAlias } = useMutation(putCustomerProfile, {
+    onSuccess: (data) => {
+      setUserStore({ ...userStoreData, alias: data.alias });
+    },
+  });
 
   const handlePress = (value) => {
     mutateGender({
       data: {
         gender: value,
       },
-      token: api_token,
+      token: userStoreData.api_token,
     });
   };
 
@@ -79,7 +84,7 @@ const FirstContainer = ({ gender, setGender, nickname, setNickname }) => {
         data: {
           alias: newAlias,
         },
-        token: api_token,
+        token: userStoreData.api_token,
       });
     }
   }, [newAlias]);
@@ -90,7 +95,7 @@ const FirstContainer = ({ gender, setGender, nickname, setNickname }) => {
         <Text style={styles.textLabel}>{translations.setup}</Text>
         <HStack alignItems="center">
           <Image
-            source={{ uri: BASE_URL_FILE_SERVER + photo }}
+            source={{ uri: BASE_URL_FILE_SERVER + userStoreData.photo }}
             style={styles.profileImg}
           />
           <Entypo

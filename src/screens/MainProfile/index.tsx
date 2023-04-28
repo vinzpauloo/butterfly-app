@@ -138,7 +138,7 @@ const Header = () => {
 };
 
 const User = () => {
-  const { alias, photo } = userStore((store) => store);
+  const { alias, photo, is_Vip } = userStore((store) => store);
   const { translations } = translationStore((store) => store);
 
   return (
@@ -151,7 +151,7 @@ const User = () => {
                 source={{ uri: BASE_URL_FILE_SERVER + photo }}
                 style={styles.profileImg}
               />
-              <Text style={styles.vipText}>VIP</Text>
+              {is_Vip ? <Text style={styles.vipText}>VIP</Text> : null}
             </Box>
             <VStack justifyContent="space-evenly">
               <HStack w="72" justifyContent="space-between">

@@ -12,7 +12,7 @@ const SubscriptionsBundle = () => {
   const getAllSubscriptionBundle = (params: IAllSubscriptionBundle) => {
     return request({
       headers: { ...getHeaders(), Authorization: `Bearer ${params.token}` },
-      url: "/subcriptions",
+      url: "/subscriptions",
       method: "GET",
       params: params.data,
     });

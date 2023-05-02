@@ -1,8 +1,20 @@
 import { Image, Pressable, StyleSheet, Text, View } from "react-native";
 import React, { useState } from "react";
 
-import { Box, FlatList, HStack, ScrollView, VStack } from "native-base";
+import {
+  Actionsheet,
+  Box,
+  Center,
+  Checkbox,
+  Divider,
+  FlatList,
+  HStack,
+  ScrollView,
+  VStack,
+  useDisclose,
+} from "native-base";
 
+import AlipayImg from "assets/images/alipay.png";
 import CoinsBundle from "services/api/CoinBundle";
 import Container from "components/Container";
 import CustomerService from "services/api/CustomerService";
@@ -19,12 +31,15 @@ import Photos from "assets/images/photos.png";
 import PhotosWhite from "assets/images/photos_white.png";
 import Profile from "assets/images/profilePhoto.jpg";
 import SubscriptionsBundle from "services/api/SubscriptionBundle";
+import TenpayImg from "assets/images/tenpay.png";
+import UnionpayImg from "assets/images/unionpay.png";
 import VideoCall from "assets/images/vidoecall.png";
 import VideoCallWhite from "assets/images/videocall_white.png";
 import Videos from "assets/images/videos.png";
 import VideosWhite from "assets/images/videocall_white.png";
 import WatchTicket from "assets/images/watchTicket.png";
 import WatchTicketWhite from "assets/images/watchTicket_white.png";
+import WepayImg from "assets/images/wepay.png";
 import { createMaterialTopTabNavigator } from "@react-navigation/material-top-tabs";
 import { GLOBAL_COLORS } from "global";
 import { LinearGradient } from "expo-linear-gradient";
@@ -62,7 +77,6 @@ const Header = () => {
 };
 
 // START OF MEMBER TAB CODES
-
 const VIPChoices = ({ active, setActive, bundle }) => {
   const { translations } = translationStore((store) => store);
 
@@ -193,49 +207,49 @@ const PromotionalPackage = ({ perks }) => {
       active_image: Videos,
       inactive_image: VideosWhite,
       title: translations.videos,
-      isActive: perks["videos"],
+      isActive: !!perks && perks["videos"],
     },
     {
       active_image: Photos,
       inactive_image: PhotosWhite,
       title: translations.photo,
-      isActive: perks["photos"],
+      isActive: !!perks && perks["photos"],
     },
     {
       active_image: Live,
       inactive_image: LiveWhite,
       title: translations.live,
-      isActive: perks["live_streaming"],
+      isActive: !!perks && perks["live_streaming"],
     },
     {
       active_image: VideoCall,
       inactive_image: VideoCallWhite,
       title: translations.videoCall,
-      isActive: perks["video_call"],
+      isActive: !!perks && perks["video_call"],
     },
     {
       active_image: LiveChat,
       inactive_image: LiveChatWhite,
       title: translations.liveChat,
-      isActive: perks["live_chat"],
+      isActive: !!perks && perks["live_chat"],
     },
     {
       active_image: ForeverVIP,
       inactive_image: ForeverVIPWhite,
       title: translations.foreverVIP,
-      isActive: perks["forever_vip"],
+      isActive: !!perks && perks["forever_vip"],
     },
     {
       active_image: Download,
       inactive_image: DownloadWhite,
       title: translations.download,
-      isActive: perks["download"],
+      isActive: !!perks && perks["download"],
     },
     {
       active_image: WatchTicket,
       inactive_image: WatchTicketWhite,
       title: translations.watchTicket,
-      isActive: perks["watch_ticket"],
+      isActive: !!perks && perks["watch_ticket"],
     },
   ];
   return (
@@ -266,28 +280,12 @@ const Description = ({ description }) => {
   );
 };
 
-const Button = () => {
-  const { is_Vip, setVip, api_token: token } = userStore((state) => state);
+const Button = ({ onOpen }) => {
+  const { is_Vip } = userStore((state) => state);
   const { translations } = translationStore((store) => store);
-  const { subscribeToVIP } = CustomerService(); // change if the "Buy Subscription Bundle API" is working
 
-  const { mutate: mutateSubscribe } = useMutation(subscribeToVIP, {
-    onSuccess: (data) => {
-      console.log("subscribeToVIP", data);
-
-      /* Update is_vip state */
-      setVip(true);
-    },
-    onError: (error) => {
-      console.log("subscribeToVIP", error);
-    },
-  });
-
-  const handlePress = () => {
-    mutateSubscribe({
-      data: { amount: 200.0, title: "Diamond Privillege Card" }, // change if the "Buy Subscription Bundle API" is working
-      token,
-    });
+  const handlePress = (event) => {
+    onOpen({ onOpen });
   };
 
   return (
@@ -313,7 +311,7 @@ const Button = () => {
   );
 };
 
-const Member = () => {
+const Member = ({ onOpen }) => {
   const [active, setActive] = useState(0);
   const [bundle, setBundle] = useState([]);
 
@@ -350,16 +348,14 @@ const Member = () => {
       <VIPChoices active={active} setActive={setActive} bundle={bundle} />
       <PromotionalPackage perks={bundle[active]?.perks} />
       <Description description={bundle[active]?.description} />
-      <Button />
+      <Button onOpen={onOpen} />
     </Container>
   );
 };
-
 // END OF MEMBER TAB CODES
 
 // START OF WALLET TAB CODES
-
-const Wallet = () => {
+const Wallet = ({ onOpen }) => {
   const { api_token } = userStore((store) => store);
   const { translations } = translationStore((store) => store);
   const { getAllCoinBundle } = CoinsBundle();
@@ -370,6 +366,10 @@ const Wallet = () => {
       getAllCoinBundle({ data: { with: "sites" }, token: api_token }),
     enabled: isFocused,
   });
+
+  const handlePayment = (event) => {
+    onOpen(event);
+  };
 
   if (isLoading || isRefetching) {
     return (
@@ -413,7 +413,7 @@ const Wallet = () => {
       </LinearGradient>
       <ScrollView>
         <VStack alignItems="center" p={3}>
-          {data.data.map((item, index) => (
+          {data?.data.map((item, index) => (
             <HStack
               key={index}
               alignItems="center"
@@ -452,15 +452,101 @@ const Wallet = () => {
           ))}
         </VStack>
       </ScrollView>
+      <VStack w="full">
+        <Pressable onPress={handlePayment}>
+          <Text style={styles.paymentBtn}>购买黄金包</Text>
+        </Pressable>
+      </VStack>
     </Container>
   );
 };
-
 // END OF WALLET TAB CODES
 
-// Menu Tab
+// Payment Modal
+const PaymentModal = ({ isOpen, onClose }) => {
+  const { setVip, api_token } = userStore((state) => state);
+  const { subscribeToVIP } = CustomerService(); // change if the "Buy Subscription Bundle API" is working
 
-const VIPMenu = () => {
+  const { mutate: mutateSubscribe } = useMutation(subscribeToVIP, {
+    onSuccess: (data) => {
+      console.log("subscribeToVIP", data);
+
+      /* Update is_vip state */
+      setVip(true);
+    },
+    onError: (error) => {
+      console.log("subscribeToVIP", error);
+    },
+  });
+  const handlePay = (event) => {
+    mutateSubscribe({
+      data: { amount: 200.0, title: "Diamond Privillege Card" }, // change if the "Buy Subscription Bundle API" is working
+      token: api_token,
+    });
+    onClose(event);
+  };
+  return (
+    <Center>
+      <Actionsheet isOpen={isOpen} onClose={onClose} hideDragIndicator>
+        <Actionsheet.Content
+          borderTopRadius="0"
+          backgroundColor="#420044"
+          borderColor="#C74FFF"
+          borderWidth={1}
+        >
+          <VStack width="full" alignItems="center">
+            <Text style={styles.modalHeader}>请选择付款方式</Text>
+            <Divider color="#EF44BF" />
+            <VStack p={5} width="full">
+              <HStack alignItems="center" justifyContent="space-between">
+                <Image source={AlipayImg} style={styles.paymentImg} />
+                <Checkbox colorScheme="green" value={""} size="md" />
+              </HStack>
+              <HStack alignItems="center" justifyContent="space-between">
+                <Image source={WepayImg} style={styles.paymentImg} />
+                <Checkbox colorScheme="green" value={""} size="md" />
+              </HStack>
+              <HStack alignItems="center" justifyContent="space-between">
+                <Image source={UnionpayImg} style={styles.paymentImg} />
+                <Checkbox colorScheme="green" value={""} size="md" />
+              </HStack>
+              <HStack alignItems="center" justifyContent="space-between">
+                <Image source={TenpayImg} style={styles.paymentImg} />
+                <Checkbox colorScheme="green" value={""} size="md" />
+              </HStack>
+            </VStack>
+            <VStack alignItems="flex-start">
+              <Text style={styles.warningText}>付款提示</Text>
+              <VStack my={3}>
+                <Text style={styles.descriptionText}>
+                  1. 请跳转后支付i时间，超时支付收不到，必须重新发起
+                </Text>
+                <Text style={styles.descriptionText}>
+                  2. 每天发起支付的次数不能超过 5 次。如果连续发起付款而未付款,
+                  该账户可能会被加入黑名单
+                </Text>
+                <Text style={styles.descriptionText}>
+                  3.
+                  支付通道在夜间繁忙。为了保证您的观看体验，您可以选择白天付费，晚上观看。谢谢你的理解`
+                </Text>
+              </VStack>
+            </VStack>
+            <VStack w="full">
+              <Pressable onPress={handlePay}>
+                <Text style={styles.paymentBtn}>
+                  立即付款并享受独家性爱视频
+                </Text>
+              </Pressable>
+            </VStack>
+          </VStack>
+        </Actionsheet.Content>
+      </Actionsheet>
+    </Center>
+  );
+};
+
+// Menu Tab
+const VIPMenu = ({ onOpen }) => {
   const { translations } = translationStore((store) => store);
   return (
     <Tab.Navigator
@@ -471,17 +557,25 @@ const VIPMenu = () => {
         tabBarLabelStyle: { fontSize: 20, fontWeight: "bold" },
       }}
     >
-      <Tab.Screen name={translations.vipMember} component={Member} />
-      <Tab.Screen name={translations.wallet} component={Wallet} />
+      <Tab.Screen
+        name={translations.vipMember}
+        component={() => <Member onOpen={onOpen} />}
+      />
+      <Tab.Screen
+        name={translations.wallet}
+        component={() => <Wallet onOpen={onOpen} />}
+      />
     </Tab.Navigator>
   );
 };
 
 const index = () => {
+  const { isOpen, onOpen, onClose } = useDisclose();
   return (
     <Container>
       <Header />
-      <VIPMenu />
+      <VIPMenu onOpen={onOpen} />
+      <PaymentModal isOpen={isOpen} onClose={onClose} />
     </Container>
   );
 };
@@ -643,5 +737,40 @@ const styles = StyleSheet.create({
     fontSize: 20,
     fontWeight: "bold",
     textAlign: "center",
+  },
+  // **** PAYMENT MODAL **** //
+  modalHeader: {
+    fontSize: 18,
+    fontWeight: "bold",
+    color: GLOBAL_COLORS.primaryTextColor,
+    paddingVertical: 5,
+  },
+  paymentImg: {
+    width: 100,
+    height: 40,
+    resizeMode: "contain",
+    marginVertical: 5,
+  },
+  warningText: {
+    color: GLOBAL_COLORS.primaryTextColor,
+    backgroundColor: "#FF0000",
+    borderColor: GLOBAL_COLORS.primaryTextColor,
+    borderWidth: 0.5,
+    paddingVertical: 4,
+    paddingHorizontal: 10,
+    borderRadius: 5,
+  },
+  descriptionText: {
+    color: GLOBAL_COLORS.primaryTextColor,
+  },
+  paymentBtn: {
+    backgroundColor: "#FF0000",
+    width: "100%",
+    textAlign: "center",
+    paddingVertical: 15,
+    borderRadius: 5,
+    color: GLOBAL_COLORS.primaryTextColor,
+    fontSize: 16,
+    fontWeight: "bold",
   },
 });

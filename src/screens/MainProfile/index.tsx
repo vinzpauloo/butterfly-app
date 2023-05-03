@@ -119,7 +119,7 @@ const User = () => {
           </VStack>
         </HStack>
         <Divider bg="#565656" thickness="1" my={2} />
-        <HStack justifyContent="space-evenly">
+        <HStack justifyContent="space-evenly" ml="9">
           <Text style={styles.bottomText}>{translations.talkAbout} : 0</Text>
           <Text style={styles.bottomText}>{translations.follow} : 0</Text>
           <Text style={styles.bottomText}>{translations.fan} : 0</Text>
@@ -183,7 +183,7 @@ const LanguageTranlation = ({ onOpen, language }) => {
       <HStack
         py={3}
         pl={6}
-        pr={3}
+        pr={4}
         alignItems="center"
         justifyContent="space-between"
       >
@@ -259,7 +259,7 @@ const LinkList = () => {
           <HStack
             py={3}
             pl={6}
-            pr={3}
+            pr={4}
             alignItems="center"
             justifyContent="space-between"
           >
@@ -285,26 +285,33 @@ const LinkList = () => {
 // **** DOWNLOAD COMPONENT START CODE **** //
 const Download = () => {
   const { translations } = translationStore((store) => store);
+  const navigation = useNavigation<any>();
   return (
-    <HStack
-      py={3}
-      pl={6}
-      pr={3}
-      alignItems="center"
-      justifyContent="space-between"
+    <Pressable
+      onPress={() =>
+        navigation.navigate("Downloads", { postTitle: translations.download })
+      }
     >
-      <HStack alignItems="center" space="xl">
-        <Image source={SaveIcon} style={styles.langImg} />
-        <Text style={styles.langText}>{translations.recordingHistory}</Text>
+      <HStack
+        py={3}
+        pl={6}
+        pr={4}
+        alignItems="center"
+        justifyContent="space-between"
+      >
+        <HStack alignItems="center" space="xl">
+          <Image source={SaveIcon} style={styles.langImg} />
+          <Text style={styles.langText}>{translations.recordingHistory}</Text>
+        </HStack>
+        <HStack alignItems="center">
+          <Entypo
+            name="chevron-right"
+            color={GLOBAL_COLORS.primaryTextColor}
+            size={28}
+          />
+        </HStack>
       </HStack>
-      <HStack alignItems="center">
-        <Entypo
-          name="chevron-right"
-          color={GLOBAL_COLORS.primaryTextColor}
-          size={28}
-        />
-      </HStack>
-    </HStack>
+    </Pressable>
   );
 };
 // **** DOWNLOAD COMPONENT END CODE **** //
@@ -519,6 +526,7 @@ const styles = StyleSheet.create({
   },
   bottomText: {
     color: GLOBAL_COLORS.primaryTextColor,
+    paddingLeft: 3,
   },
   // **** VIP STATUS **** //
   diamondImg: {
@@ -529,14 +537,16 @@ const styles = StyleSheet.create({
   },
   subscribeContainer: {
     position: "absolute",
-    right: 30,
+    right: 3,
     top: 0,
+    width: 160,
   },
   subscribe: {
     textTransform: "uppercase",
     fontWeight: "bold",
     color: GLOBAL_COLORS.primaryTextColor,
     fontSize: 16,
+    textAlign: "center",
   },
   textContainer: {
     position: "absolute",

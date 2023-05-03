@@ -1,119 +1,61 @@
 import {
-  Dimensions,
+  Image,
   ImageBackground,
   Pressable,
+  ScrollView,
   StyleSheet,
   Text,
   View,
 } from "react-native";
 import React, { useState } from "react";
 
-import Entypo from "react-native-vector-icons/Entypo";
-import Fontisto from "react-native-vector-icons/Fontisto";
-import Ionicons from "react-native-vector-icons/Ionicons";
-import { LinearGradient } from "expo-linear-gradient";
-import { SelectCountry } from "react-native-element-dropdown";
+import { BASE_URL_FILE_SERVER } from "react-native-dotenv";
 import {
+  Actionsheet,
   Box,
+  Center,
   Divider,
   HStack,
-  Image,
-  Input,
-  ScrollView,
-  Stack,
   VStack,
+  useDisclose,
 } from "native-base";
-import { BarCodeScanner } from "expo-barcode-scanner";
-import { storeDataObject } from "lib/asyncStorage";
 
 import AccountIcon from "assets/images/account_icon.png";
 import ApplicationIcon from "assets/images/application_icon.png";
-import ButterflyLogo from "assets/images/butterflyLogo.png";
 import Container from "components/Container";
-import CustomerService from "services/api/CustomerService";
-import DeviceIDBg from "assets/images/deviceIDBg.png";
 import DownloadIcon from "assets/images/download_icon.png";
+import Entypo from "react-native-vector-icons/Entypo";
 import FlagUSA from "assets/images/Flag-USA.png";
 import FlagChina from "assets/images/Flag-China.webp";
+import Fontisto from "react-native-vector-icons/Fontisto";
 import HistoryIcon from "assets/images/history_icon.png";
+import Ionicons from "react-native-vector-icons/Ionicons";
+import LanguageImg from "assets/images/language.png";
 import localizations from "i18n/localizations";
 import NotVIPImage from "assets/images/not_vip.png";
+import NotVIPDiamondImage from "assets/images/not_vip_diamond.png";
 import OfficialIcon from "assets/images/official_icon.png";
-import ReferralBackground from "assets/images/referralBg.png";
+import SaveIcon from "assets/images/save_icon.png";
 import ServiceIcon from "assets/images/service_icon.png";
 import ShareIcon from "assets/images/share_icon.png";
-import VipBanner from "assets/images/vip_banner.png";
 import VIPImage from "assets/images/vip.png";
+import VIPDiamondImage from "assets/images/vip_diamond.png";
 import { GLOBAL_COLORS } from "global";
 import { translationStore } from "../../zustand/translationStore";
-import { useNavigation } from "@react-navigation/native";
 import { userStore } from "../../zustand/userStore";
-import { useMutation } from "@tanstack/react-query";
-import { BASE_URL_FILE_SERVER } from "react-native-dotenv";
+import { useNavigation } from "@react-navigation/native";
 
-const { height, width } = Dimensions.get("window");
-
-// Change Language
-const Intl = () => {
-  const local_data = [
-    {
-      value: "1",
-      label: "English - US",
-      image: FlagUSA,
-    },
-    {
-      value: "2",
-      label: "Chinese - China",
-      image: FlagChina,
-    },
-  ];
-  const [country, setCountry] = useState("1");
-  const [setLang, setTranslations] = translationStore((state) => [
-    state.setLang,
-    state.setTranslations,
-  ]);
-
-  const changeLanguage = (value) => {
-    switch (value) {
-      case "1":
-        return "en_us";
-      case "2":
-        return "zh_cn";
-      default:
-        return "en_us";
-    }
-  };
-
-  const toggleSwitch = (event) => {
-    setCountry(event.value);
-
-    let newLang = changeLanguage(event.value);
-    setLang(newLang);
-    setTranslations(localizations[newLang]);
-  };
-
+// **** COMPONENTS START **** //
+const Layout = (props) => {
   return (
-    <SelectCountry
-      style={styles.dropdown}
-      activeColor={GLOBAL_COLORS.inactiveTextColor}
-      selectedTextStyle={styles.selectedTextStyle}
-      placeholderStyle={styles.placeholderStyle}
-      containerStyle={styles.container}
-      imageStyle={styles.imageStyle}
-      iconStyle={styles.iconStyle}
-      maxHeight={200}
-      value={country}
-      data={local_data}
-      valueField="value"
-      labelField="label"
-      imageField="image"
-      onChange={(event) => {
-        toggleSwitch(event);
-      }}
-    />
+    <VStack backgroundColor="#202833" borderRadius={5} {...props}>
+      {props.children}
+    </VStack>
   );
 };
+// **** COMPONENTS END **** //
 
+// **** HEADER COMPONENT START CODE **** //
 const Header = () => {
   const navigation = useNavigation<any>();
 
@@ -122,8 +64,7 @@ const Header = () => {
   };
 
   return (
-    <HStack justifyContent={"flex-end"} pr={2} alignItems="center">
-      <Intl />
+    <HStack py={2} justifyContent={"flex-end"} pr={2} alignItems="center">
       <Fontisto name="bell" color="#fff" size={25} style={styles.icon} />
       <Pressable onPress={handlePressSettings}>
         <Ionicons
@@ -136,27 +77,28 @@ const Header = () => {
     </HStack>
   );
 };
+// **** HEADER COMPONENT END CODE **** //
 
+// **** USER COMPONENT START CODE **** //
 const User = () => {
   const { alias, photo, is_Vip } = userStore((store) => store);
   const { translations } = translationStore((store) => store);
 
   return (
-    <Box m={2} style={styles.mainContainer}>
-      <LinearGradient colors={["#280B2B", "#280B2B", "#070307"]}>
-        <VStack p={3}>
-          <HStack>
-            <Box mx={2} position="relative">
-              <Image
-                source={{ uri: BASE_URL_FILE_SERVER + photo }}
-                style={styles.profileImg}
-              />
-              {is_Vip ? <Text style={styles.vipText}>VIP</Text> : null}
-            </Box>
-            <VStack justifyContent="space-evenly">
-              <HStack w="72" justifyContent="space-between">
-                <Text style={styles.usernameText}>{alias}</Text>
-                {/* <HStack alignItems="center" space={1}>
+    <Box style={styles.mainContainer}>
+      <VStack p={3}>
+        <HStack>
+          <Box ml="3" mr="2.5" position="relative">
+            <Image
+              source={{ uri: BASE_URL_FILE_SERVER + photo }}
+              style={styles.profileImg}
+            />
+            {is_Vip ? <Text style={styles.vipText}>VIP</Text> : null}
+          </Box>
+          <VStack justifyContent="space-evenly">
+            <HStack w="72" justifyContent="space-between">
+              <Text style={styles.usernameText}>{alias}</Text>
+              {/* <HStack alignItems="center" space={1}>
                   <Text style={styles.bottomText}>轮廓</Text>
                   <Entypo
                     name="chevron-right"
@@ -164,30 +106,31 @@ const User = () => {
                     size={18}
                   />
                 </HStack> */}
-              </HStack>
-              <HStack space={5}>
-                <Text style={styles.middleText}>{translations.coin} : 0</Text>
-                <Text style={styles.middleText}>
-                  {translations.movieTicket} : 0
-                </Text>
-                <Text style={styles.middleText}>
-                  {translations.watchForFree} : 0/0
-                </Text>
-              </HStack>
-            </VStack>
-          </HStack>
-          <Divider bg="#7D0680" thickness="1" my={2} />
-          <HStack justifyContent="space-evenly">
-            <Text style={styles.bottomText}>{translations.talkAbout} : 0</Text>
-            <Text style={styles.bottomText}>{translations.follow} : 0</Text>
-            <Text style={styles.bottomText}>{translations.fan} : 0</Text>
-          </HStack>
-        </VStack>
-      </LinearGradient>
+            </HStack>
+            <HStack space={5}>
+              <Text style={styles.middleText}>{translations.coin} : 0</Text>
+              <Text style={styles.middleText}>
+                {translations.movieTicket} : 0
+              </Text>
+              <Text style={styles.middleText}>
+                {translations.watchForFree} : 0/0
+              </Text>
+            </HStack>
+          </VStack>
+        </HStack>
+        <Divider bg="#565656" thickness="1" my={2} />
+        <HStack justifyContent="space-evenly">
+          <Text style={styles.bottomText}>{translations.talkAbout} : 0</Text>
+          <Text style={styles.bottomText}>{translations.follow} : 0</Text>
+          <Text style={styles.bottomText}>{translations.fan} : 0</Text>
+        </HStack>
+      </VStack>
     </Box>
   );
 };
+// **** USER COMPONENT END CODE **** //
 
+// **** VIP COMPONENT START CODE **** //
 const VIPStatus = () => {
   const { is_Vip, _id } = userStore((store) => store);
   const { translations } = translationStore((store) => store);
@@ -198,12 +141,21 @@ const VIPStatus = () => {
   };
 
   return (
-    <Box m={1} style={styles.mainContainer} position="relative">
+    <Box p={1} style={styles.mainContainer} position="relative">
       <Pressable onPress={handlePressVIP}>
+        <Image
+          source={is_Vip ? VIPDiamondImage : NotVIPDiamondImage}
+          style={styles.diamondImg}
+        />
         <ImageBackground
           source={is_Vip ? VIPImage : NotVIPImage}
           style={{ width: "100%", height: 90 }}
         >
+          <View style={styles.subscribeContainer}>
+            <Text style={styles.subscribe}>
+              {is_Vip ? translations.renewVIP : translations.subscribeToVIP}
+            </Text>
+          </View>
           <View style={styles.textContainer}>
             <Text style={styles.vipTitle}>
               {translations.vipPeriod} :{" "}
@@ -218,61 +170,43 @@ const VIPStatus = () => {
     </Box>
   );
 };
+// **** VIP COMPONENT END CODE **** //
 
-const VIP = () => {
-  const navigation = useNavigation<any>();
+// **** LANGUAGE TRANSLATION COMPONENT START CODE **** //
+const LanguageTranlation = ({ onOpen, language }) => {
   const { translations } = translationStore((store) => store);
-
-  const handlePressVIP = () => {
-    navigation.navigate("VIPScreen", { postTitle: translations.memberCentre });
-  };
-
-  return (
-    <Box m={1} style={styles.mainContainer}>
-      <Pressable onPress={handlePressVIP}>
-        <Image source={VipBanner} style={{ width: "100%", height: 90 }} />
-      </Pressable>
-    </Box>
-  );
-};
-
-const DeviceID = ({ scannedID, setScanned }) => {
-  const { translations } = translationStore((store) => store);
-  const handlePress = () => {
-    setScanned(true);
+  const handlePress = (event) => {
+    onOpen(event);
   };
   return (
-    <Box m={2} style={styles.mainContainer} position="relative">
-      <ImageBackground source={DeviceIDBg} resizeMode="cover">
-        <VStack alignItems="center" py={2}>
-          <Text style={styles.referralTitle}>
-            {translations.bindingInformation}
-          </Text>
-          <Stack w="90%" mb={2}>
-            <Input
-              value={scannedID}
-              size="md"
-              placeholder={translations.agentAccount}
-              style={styles.referralInput}
-            />
-          </Stack>
-          <Stack w="90%" mb={2}>
-            <Input
-              value={scannedID}
-              size="md"
-              placeholder={translations.pleaseEnterPhoneNumber}
-              style={styles.referralInput}
-            />
-          </Stack>
-          <Pressable style={styles.deviceIDBtn} onPress={handlePress}>
-            <Text style={styles.deviceIDBtnText}>{translations.submit}</Text>
-          </Pressable>
-        </VStack>
-      </ImageBackground>
-    </Box>
+    <Pressable onPress={handlePress}>
+      <HStack
+        py={3}
+        pl={6}
+        pr={3}
+        alignItems="center"
+        justifyContent="space-between"
+      >
+        <HStack alignItems="center" space="xl">
+          <Image source={LanguageImg} style={styles.langImg} />
+          <Text style={styles.langText}>{translations.language}</Text>
+        </HStack>
+        <HStack alignItems="center" space={3}>
+          <Image source={language.flag} style={styles.flagImg} />
+          <Text style={styles.langText}>{language.title}</Text>
+          <Entypo
+            name="chevron-right"
+            color={GLOBAL_COLORS.primaryTextColor}
+            size={28}
+          />
+        </HStack>
+      </HStack>
+    </Pressable>
   );
 };
+// **** LANGUAGE TRANSLATION COMPONENT END CODE **** //
 
+// **** SECTION LIST COMPONENT START CODE **** //
 const LinkList = () => {
   const navigation = useNavigation<any>();
   const { translations } = translationStore((store) => store);
@@ -318,41 +252,68 @@ const LinkList = () => {
       navigate: () => {},
     },
   ];
-
   return (
-    <Box m={2} style={styles.mainContainer}>
-      <VStack style={styles.linkListContainer}>
-        {lists.map((item, index) => (
-          <Pressable onPress={item.navigate}>
-            <HStack
-              py={1}
-              key={index}
-              pl={5}
-              pr={2}
-              justifyContent="space-between"
-              alignItems="center"
-            >
-              <HStack alignItems="center">
-                <Image source={item.icon} style={styles.linkIcon} />
-                <Text style={styles.listText}>{item.title}</Text>
-              </HStack>
+    <>
+      {lists.map((item, index) => (
+        <Pressable onPress={item.navigate}>
+          <HStack
+            py={3}
+            pl={6}
+            pr={3}
+            alignItems="center"
+            justifyContent="space-between"
+          >
+            <HStack alignItems="center" space="xl">
+              <Image source={item.icon} style={styles.langImg} />
+              <Text style={styles.langText}>{item.title}</Text>
+            </HStack>
+            <HStack alignItems="center">
               <Entypo
                 name="chevron-right"
                 color={GLOBAL_COLORS.primaryTextColor}
-                size={30}
+                size={28}
               />
             </HStack>
-          </Pressable>
-        ))}
-      </VStack>
-    </Box>
+          </HStack>
+        </Pressable>
+      ))}
+    </>
   );
 };
+// **** SECTION LIST COMPONENT END CODE **** //
 
+// **** DOWNLOAD COMPONENT START CODE **** //
+const Download = () => {
+  const { translations } = translationStore((store) => store);
+  return (
+    <HStack
+      py={3}
+      pl={6}
+      pr={3}
+      alignItems="center"
+      justifyContent="space-between"
+    >
+      <HStack alignItems="center" space="xl">
+        <Image source={SaveIcon} style={styles.langImg} />
+        <Text style={styles.langText}>{translations.recordingHistory}</Text>
+      </HStack>
+      <HStack alignItems="center">
+        <Entypo
+          name="chevron-right"
+          color={GLOBAL_COLORS.primaryTextColor}
+          size={28}
+        />
+      </HStack>
+    </HStack>
+  );
+};
+// **** DOWNLOAD COMPONENT END CODE **** //
+
+// **** EMAIL COMPONENT START CODE **** //
 const Email = () => {
   const { translations } = translationStore((store) => store);
   return (
-    <HStack my={1} mb={3} alignItems="center" justifyContent="center" space={5}>
+    <HStack mb={3} alignItems="center" justifyContent="center" space={5}>
       <Text style={styles.emailText}>
         {translations.officialEmail}: butterflyproject@gmail.com
       </Text>
@@ -362,91 +323,135 @@ const Email = () => {
     </HStack>
   );
 };
+// **** EMAIL COMPONENT END CODE **** //
 
-const index = () => {
-  const [scanned, setScanned] = useState(false);
-  const [scannedID, setScannedID] = useState("");
-  const { bindDevice } = CustomerService();
-  const token = userStore((store) => store.api_token);
-  const setUserStore = userStore((state) => state.setUserData);
+// **** MODAL COMPONENT START CODE **** //
+const LanguageModal = ({ isOpen, onClose, setLanguage }) => {
+  const { translations } = translationStore((store) => store);
+  const [country, setCountry] = useState("en_us");
+  const [flag, setFlag] = useState("");
+  const [title, setTitle] = useState("");
+  const [setLang, setTranslations] = translationStore((state) => [
+    state.setLang,
+    state.setTranslations,
+  ]);
 
-  const { mutate } = useMutation(bindDevice, {
-    onSuccess: (data) => {
-      const userData = {
-        _id: data.desired_account._id,
-        site_id: data.desired_account.site_id,
-        api_token: data.desired_account.api_token,
-        alias: data.desired_account.alias,
-        is_Vip: data.desired_account.is_Vip,
-        photo: data.desired_account.photo,
-      };
-
-      // set user global store
-      setUserStore(userData);
-
-      // store user to device storage
-      storeDataObject("UserCacheData", userData);
+  const data = [
+    {
+      id: "en_us",
+      title: "English - US",
+      image: FlagUSA,
     },
-    onError: (error) => {
-      console.log("Bind Device", error);
+    {
+      id: "zh_cn",
+      title: "Chinese - China",
+      image: FlagChina,
     },
-  });
+  ];
 
-  const handleBarCodeScanned = ({ type, data }) => {
-    setScannedID(data);
-    setScanned(false);
-    mutate({ data: { id: data }, token });
+  const handleChangeLang = (item) => {
+    setCountry(item.id);
+    setFlag(item.image);
+    setTitle(item.title);
+  };
+
+  const handleSave = (event) => {
+    setLang(country);
+    setTranslations(localizations[country]);
+    setLanguage({ title, flag });
+    onClose(event);
   };
 
   return (
-    <>
-      <Container>
-        <Header />
-        <ScrollView>
+    <Center>
+      <Actionsheet isOpen={isOpen} onClose={onClose} hideDragIndicator>
+        <Actionsheet.Content backgroundColor="#202833">
+          <VStack width="full">
+            <Text style={styles.modalTitle}>{translations.chooseLanguage}</Text>
+            <Divider color="#202833" />
+            <Box mx={2} flexDirection="row" flexWrap="wrap" py={2}>
+              {data.map((item, index) => (
+                <Pressable onPress={() => handleChangeLang(item)}>
+                  <HStack
+                    key={index}
+                    width="40"
+                    alignItems="center"
+                    space="3"
+                    m={2}
+                    background="#272e39"
+                    py="1.5"
+                    px="3"
+                    borderRadius="5"
+                  >
+                    <Image source={item.image} style={styles.modalFlag} />
+                    <Text
+                      style={{
+                        color:
+                          country === item.id
+                            ? GLOBAL_COLORS.secondaryColor
+                            : GLOBAL_COLORS.primaryTextColor,
+                      }}
+                    >
+                      {item.title}
+                    </Text>
+                  </HStack>
+                </Pressable>
+              ))}
+            </Box>
+            <Pressable onPress={handleSave}>
+              <Text style={styles.buttonText}>{translations.choose}</Text>
+            </Pressable>
+          </VStack>
+        </Actionsheet.Content>
+      </Actionsheet>
+    </Center>
+  );
+};
+// **** MODAL COMPONENT END CODE **** //
+
+const index = () => {
+  const { isOpen, onOpen, onClose } = useDisclose();
+  const [language, setLanguage] = useState({
+    flag: FlagUSA,
+    title: "English - US",
+  });
+
+  return (
+    <Container>
+      <ScrollView>
+        <Layout>
+          <Header />
           <User />
           <VIPStatus />
-          <VIP />
-          {/* <Referral /> */}
-          <DeviceID scannedID={scannedID} setScanned={setScanned} />
+        </Layout>
+        <Layout my={5}>
+          <LanguageTranlation onOpen={onOpen} language={language} />
+        </Layout>
+        <Layout>
           <LinkList />
-          <Email />
-        </ScrollView>
-      </Container>
-
-      {scanned ? (
-        <VStack
-          alignItems="center"
-          height={height}
-          width={width}
-          backgroundColor={GLOBAL_COLORS.primaryColor}
-        >
-          <Text style={styles.mainHeader}>二维码扫描</Text>
-          <Text style={styles.title}>The Butterfly Project</Text>
-          <Text style={styles.subtitle}>蝴蝶计划</Text>
-          <Box alignItems="center" mt={20} style={styles.scannerContent}>
-            <Image source={ButterflyLogo} style={styles.butterflyLogo} />
-            <BarCodeScanner
-              onBarCodeScanned={handleBarCodeScanned}
-              style={{ height: 300, width: 300 }}
-            />
-          </Box>
-          <Pressable style={styles.button} onPress={() => setScanned(false)}>
-            <Text style={styles.buttonText}>停止扫描</Text>
-          </Pressable>
-        </VStack>
-      ) : null}
-    </>
+        </Layout>
+        <Layout my={5}>
+          <Download />
+        </Layout>
+        <Email />
+      </ScrollView>
+      <LanguageModal
+        isOpen={isOpen}
+        onClose={onClose}
+        setLanguage={setLanguage}
+      />
+    </Container>
   );
 };
 
 export default index;
 
 const styles = StyleSheet.create({
-  // HEADER
+  // **** HEADER **** //
   icon: {
     marginHorizontal: 10,
   },
-  // COUNTRY SELECT
+  // **** COUNTRY SELECT **** //
   container: {
     backgroundColor: GLOBAL_COLORS.primaryColor,
     borderWidth: 1,
@@ -481,25 +486,13 @@ const styles = StyleSheet.create({
     width: 30,
     height: 15,
   },
-  // VIP STATUS
-  textContainer: {
-    position: "absolute",
-    left: 90,
-    top: 30,
-  },
-  vipTitle: {
-    fontSize: 20,
-    color: GLOBAL_COLORS.primaryTextColor,
-    fontWeight: "bold",
-  },
-  vipSubtitle: { color: GLOBAL_COLORS.primaryTextColor },
-  // USER
+  // **** USER **** //
   mainContainer: {
     borderRadius: 10,
   },
   profileImg: {
-    height: 50,
-    width: 50,
+    height: 45,
+    width: 45,
     borderRadius: 25,
     borderWidth: 2,
     borderColor: GLOBAL_COLORS.primaryTextColor,
@@ -527,53 +520,52 @@ const styles = StyleSheet.create({
   bottomText: {
     color: GLOBAL_COLORS.primaryTextColor,
   },
-  //REFERRAL
-  referralTitle: {
+  // **** VIP STATUS **** //
+  diamondImg: {
+    position: "absolute",
+    zIndex: 10,
+    left: 18,
+    top: 30,
+  },
+  subscribeContainer: {
+    position: "absolute",
+    right: 30,
+    top: 0,
+  },
+  subscribe: {
+    textTransform: "uppercase",
+    fontWeight: "bold",
+    color: GLOBAL_COLORS.primaryTextColor,
+    fontSize: 16,
+  },
+  textContainer: {
+    position: "absolute",
+    left: 76,
+    top: 30,
+  },
+  vipTitle: {
     fontSize: 20,
     color: GLOBAL_COLORS.primaryTextColor,
     fontWeight: "bold",
-    marginVertical: 5,
   },
-  referralInput: {
-    backgroundColor: GLOBAL_COLORS.primaryTextColor,
+  vipSubtitle: { color: GLOBAL_COLORS.primaryTextColor },
+  // **** LANGUAGE TRANSLATION **** //
+  langImg: {
+    height: 28,
+    width: 28,
+    resizeMode: "contain",
   },
-  referralBtn: {
-    alignItems: "center",
-    justifyContent: "center",
-    backgroundColor: "#00b7e6",
-    borderWidth: 1,
-    borderColor: GLOBAL_COLORS.primaryTextColor,
-    height: 45,
-    paddingHorizontal: 25,
-    borderRadius: 10,
-  },
-  referralBtnText: {
-    color: GLOBAL_COLORS.primaryTextColor,
-    fontWeight: "bold",
-  },
-  // DEVICE ID
-  deviceIDBtn: {
-    alignItems: "center",
-    justifyContent: "center",
-    backgroundColor: "#72E6FF",
-    borderWidth: 1,
-    borderColor: GLOBAL_COLORS.primaryTextColor,
-    height: 30,
-    paddingHorizontal: 25,
-    borderRadius: 10,
-  },
-  deviceIDBtnText: {
-    color: GLOBAL_COLORS.primaryTextColor,
-    fontWeight: "bold",
-  },
-  // LINK LIST
-  linkListContainer: {
-    backgroundColor: "#220a24",
-  },
-  listText: {
+  langText: {
+    fontWeight: "500",
+    fontSize: 14,
     color: GLOBAL_COLORS.primaryTextColor,
   },
-  // EMAIL
+  flagImg: {
+    height: 28,
+    width: 28,
+    borderRadius: 14,
+  },
+  // **** EMAIL **** //
   emailBtn: {
     backgroundColor: GLOBAL_COLORS.secondaryColor,
     paddingHorizontal: 10,
@@ -586,56 +578,26 @@ const styles = StyleSheet.create({
   emailTextBtn: {
     color: GLOBAL_COLORS.primaryTextColor,
   },
-  // SCANNER
-  mainHeader: {
-    width: "100%",
+  // **** MODAL **** //
+  modalTitle: {
     textAlign: "center",
-    padding: 10,
-    fontSize: 18,
-    fontWeight: "bold",
-    borderWidth: 1,
-    borderBottomColor: "#EF44BF",
-    color: GLOBAL_COLORS.primaryTextColor,
-  },
-  linkIcon: {
-    height: 25,
-    width: 25,
-    resizeMode: "contain",
-    marginRight: 25,
-  },
-  title: {
     fontSize: 20,
     fontWeight: "bold",
-    marginTop: 10,
     color: GLOBAL_COLORS.primaryTextColor,
+    paddingBottom: 10,
   },
-  subtitle: {
-    fontWeight: "bold",
-    color: GLOBAL_COLORS.primaryTextColor,
-    marginBottom: 30,
-  },
-  scannerContent: {
-    width: 300,
-    borderWidth: 1,
-    borderColor: GLOBAL_COLORS.primaryTextColor,
-    paddingVertical: 25,
+  modalFlag: {
+    height: 30,
+    width: 30,
     borderRadius: 20,
   },
-  butterflyLogo: {
-    position: "absolute",
-    height: 94,
-    width: 94,
-    top: -80,
+  buttonText: {
+    color: GLOBAL_COLORS.primaryTextColor,
+    backgroundColor: "#c60000",
+    padding: 15,
+    textAlign: "center",
+    fontSize: 18,
+    fontWeight: "bold",
+    borderRadius: 5,
   },
-  button: {
-    marginBottom: 120,
-    backgroundColor: GLOBAL_COLORS.secondaryColor,
-    paddingVertical: 10,
-    paddingHorizontal: 20,
-    borderRadius: 10,
-    zIndex: 15,
-    marginTop: 20,
-    width: 200,
-  },
-  buttonText: { color: "#FFF", fontSize: 20, textAlign: "center" },
 });

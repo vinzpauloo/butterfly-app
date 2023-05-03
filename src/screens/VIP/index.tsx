@@ -50,46 +50,49 @@ import { useIsFocused } from "@react-navigation/native";
 
 const Tab = createMaterialTopTabNavigator();
 
+// **** HEADER COMPONENT START CODE **** //
 const Header = () => {
   const { alias } = userStore((state) => state);
   const { translations } = translationStore((store) => store);
   return (
-    <LinearGradient
-      colors={["#280B2B", "#280B2B", "#070307"]}
-      locations={[0.25, 1, 0.25]}
+    <HStack
+      alignItems="center"
+      justifyContent="space-between"
+      px={6}
+      py={4}
+      backgroundColor="#06090e"
     >
-      <HStack alignItems="center" justifyContent="space-between" px={6} py={4}>
-        <HStack space={2} alignItems="center">
-          <Image source={Profile} style={styles.profileImg} />
-          <VStack>
-            <Text style={styles.headerTitle}>{alias}</Text>
-            {/* <Text style={styles.headerSubtitle}>您目前不是会员</Text> */}
-          </VStack>
-        </HStack>
-        <Pressable style={styles.headerBtn}>
-          <Text style={styles.headerBtnText}>
-            {translations.useRedemptionCode}
-          </Text>
-        </Pressable>
+      <HStack space={2} alignItems="center">
+        <Image source={Profile} style={styles.profileImg} />
+        <VStack>
+          <Text style={styles.headerTitle}>{alias}</Text>
+          {/* <Text style={styles.headerSubtitle}>您目前不是会员</Text> */}
+        </VStack>
       </HStack>
-    </LinearGradient>
+      <Pressable style={styles.headerBtn}>
+        <Text style={styles.headerBtnText}>
+          {translations.useRedemptionCode}
+        </Text>
+      </Pressable>
+    </HStack>
   );
 };
+// **** HEADER COMPONENT END CODE **** //
 
-// START OF MEMBER TAB CODES
+// **** VIP CHOICES COMPONENT START CODE **** //
 const VIPChoices = ({ active, setActive, bundle }) => {
   const { translations } = translationStore((store) => store);
 
   const activeColorScheme = {
-    gradient: ["#9747FF", "#C74FFF"],
-    border: "#EF44BF",
+    gradient: "#5b5b5b",
+    border: "#FFFFFF",
     primaryText: "#FFFFFF",
     secondaryText: "#3C4B64",
   };
 
   const inactiveColorScheme = {
-    gradient: ["#666F80", "#666F80"],
-    border: "#3C4B64",
+    gradient: GLOBAL_COLORS.primaryColor,
+    border: GLOBAL_COLORS.primaryColor,
     primaryText: "#FFFFFF",
     secondaryText: "#666F80",
   };
@@ -114,84 +117,81 @@ const VIPChoices = ({ active, setActive, bundle }) => {
                 : inactiveColorScheme.border
             }
             height={172}
+            backgroundColor={
+              index === active
+                ? activeColorScheme.gradient
+                : inactiveColorScheme.gradient
+            }
           >
             <Pressable onPress={() => handlePress(index)}>
-              <LinearGradient
-                colors={
-                  index === active
-                    ? activeColorScheme.gradient
-                    : inactiveColorScheme.gradient
-                }
-              >
-                <VStack alignItems="center" height={150} m={2}>
+              <VStack alignItems="center" height={150} m={2}>
+                <Text
+                  style={[
+                    styles.boxTitle,
+                    {
+                      color: activeColorScheme.primaryText,
+                    },
+                  ]}
+                >
+                  {item.name}
+                </Text>
+                <VStack
+                  position="relative"
+                  alignItems="center"
+                  borderWidth={0.5}
+                  borderColor="#3C4B64"
+                  width="127%"
+                  backgroundColor={"#FFFFFF"}
+                >
                   <Text
                     style={[
-                      styles.boxTitle,
+                      styles.boxPriceTag,
                       {
-                        color: activeColorScheme.primaryText,
+                        color:
+                          index === active
+                            ? activeColorScheme.secondaryText
+                            : inactiveColorScheme.secondaryText,
                       },
                     ]}
                   >
-                    {item.name}
-                  </Text>
-                  <VStack
-                    position="relative"
-                    alignItems="center"
-                    borderWidth={0.5}
-                    borderColor="#3C4B64"
-                    width="127%"
-                    backgroundColor={"#FFFFFF"}
-                  >
-                    <Text
-                      style={[
-                        styles.boxPriceTag,
-                        {
-                          color:
-                            index === active
-                              ? activeColorScheme.secondaryText
-                              : inactiveColorScheme.secondaryText,
-                        },
-                      ]}
-                    >
-                      {item.price}
-                    </Text>
-                    <Text
-                      style={[
-                        styles.boxPriceTagText,
-                        {
-                          color:
-                            index === active
-                              ? activeColorScheme.secondaryText
-                              : inactiveColorScheme.secondaryText,
-                        },
-                      ]}
-                    >
-                      {translations.permanentUse}
-                    </Text>
-                  </VStack>
-                  <Text
-                    style={[
-                      styles.boxBottomTextTitle,
-                      {
-                        color: activeColorScheme.primaryText,
-                      },
-                    ]}
-                  >
-                    {translations.goldCoinsFree}
+                    {item.price}
                   </Text>
                   <Text
                     style={[
-                      styles.boxBottomTextSubtitle,
+                      styles.boxPriceTagText,
                       {
-                        color: activeColorScheme.primaryText,
+                        color:
+                          index === active
+                            ? activeColorScheme.secondaryText
+                            : inactiveColorScheme.secondaryText,
                       },
                     ]}
-                    numberOfLines={2}
                   >
-                    {translations.shortVisit}
+                    {translations.permanentUse}
                   </Text>
                 </VStack>
-              </LinearGradient>
+                <Text
+                  style={[
+                    styles.boxBottomTextTitle,
+                    {
+                      color: activeColorScheme.primaryText,
+                    },
+                  ]}
+                >
+                  {translations.goldCoinsFree}
+                </Text>
+                <Text
+                  style={[
+                    styles.boxBottomTextSubtitle,
+                    {
+                      color: activeColorScheme.primaryText,
+                    },
+                  ]}
+                  numberOfLines={2}
+                >
+                  {translations.shortVisit}
+                </Text>
+              </VStack>
             </Pressable>
           </Box>
         )}
@@ -199,7 +199,9 @@ const VIPChoices = ({ active, setActive, bundle }) => {
     </View>
   );
 };
+// **** VIP CHOICES COMPONENT END CODE **** //
 
+// **** PROMOTIONAL PACKAGE COMPONENT START CODE **** //
 const PromotionalPackage = ({ perks }) => {
   const { translations } = translationStore((store) => store);
   const lists = [
@@ -271,7 +273,9 @@ const PromotionalPackage = ({ perks }) => {
     </Box>
   );
 };
+// **** PROMOTIONAL PACKAGE COMPONENT END CODE **** //
 
+// **** DESCRIPTION COMPONENT START CODE **** //
 const Description = ({ description }) => {
   return (
     <Box style={styles.commentContainer}>
@@ -310,7 +314,9 @@ const Button = ({ onOpen }) => {
     </Box>
   );
 };
+// **** DESCRIPTION COMPONENT END CODE **** //
 
+// **** MEMBER COMPONENT START CODE **** //
 const Member = ({ onOpen }) => {
   const [active, setActive] = useState(0);
   const [bundle, setBundle] = useState([]);
@@ -352,9 +358,9 @@ const Member = ({ onOpen }) => {
     </Container>
   );
 };
-// END OF MEMBER TAB CODES
+// **** MEMBER COMPONENT END CODE **** //
 
-// START OF WALLET TAB CODES
+// **** WALLET COMPONENT START CODE **** //
 const Wallet = ({ onOpen }) => {
   const { api_token } = userStore((store) => store);
   const { translations } = translationStore((store) => store);
@@ -381,36 +387,30 @@ const Wallet = ({ onOpen }) => {
 
   return (
     <Container>
-      <LinearGradient colors={["#9747FF", "#C74FFF"]}>
-        <HStack width="full" style={styles.header} height="16">
-          <VStack
-            style={styles.leftHeader}
-            alignItems="center"
-            justifyContent="center"
-            height="full"
-            width="1/2"
-          >
-            <Text style={styles.smallText}>{translations.currentBalance}</Text>
-            <Text style={styles.largeText}>0元</Text>
-            <Text style={styles.smallText}>{translations.balanceDetails}</Text>
-          </VStack>
-          <VStack
-            style={styles.rightHeader}
-            alignItems="center"
-            justifyContent="center"
-            height="full"
-            width="1/2"
-          >
-            <Text style={styles.smallText}>
-              {translations.cumulativeIncome}
-            </Text>
-            <Text style={styles.largeText}>0元</Text>
-            <Text style={styles.smallText}>
-              {translations.withdrawnProceeds}
-            </Text>
-          </VStack>
-        </HStack>
-      </LinearGradient>
+      <HStack width="full" height="16" backgroundColor="#000711">
+        <VStack
+          style={styles.leftHeader}
+          alignItems="center"
+          justifyContent="center"
+          height="full"
+          width="1/2"
+        >
+          <Text style={styles.smallText}>{translations.currentBalance}</Text>
+          <Text style={styles.largeText}>0元</Text>
+          <Text style={styles.smallText}>{translations.balanceDetails}</Text>
+        </VStack>
+        <VStack
+          style={styles.rightHeader}
+          alignItems="center"
+          justifyContent="center"
+          height="full"
+          width="1/2"
+        >
+          <Text style={styles.smallText}>{translations.cumulativeIncome}</Text>
+          <Text style={styles.largeText}>0元</Text>
+          <Text style={styles.smallText}>{translations.withdrawnProceeds}</Text>
+        </VStack>
+      </HStack>
       <ScrollView>
         <VStack alignItems="center" p={3}>
           {data?.data.map((item, index) => (
@@ -460,9 +460,9 @@ const Wallet = ({ onOpen }) => {
     </Container>
   );
 };
-// END OF WALLET TAB CODES
+// **** WALLET COMPONENT END CODE **** //
 
-// Payment Modal
+// **** PAYMENT MODAL COMPONENT START CODE **** //
 const PaymentModal = ({ isOpen, onClose }) => {
   const { setVip, api_token } = userStore((state) => state);
   const { subscribeToVIP } = CustomerService(); // change if the "Buy Subscription Bundle API" is working
@@ -490,8 +490,7 @@ const PaymentModal = ({ isOpen, onClose }) => {
       <Actionsheet isOpen={isOpen} onClose={onClose} hideDragIndicator>
         <Actionsheet.Content
           borderTopRadius="0"
-          backgroundColor="#420044"
-          borderColor="#C74FFF"
+          backgroundColor="#202833"
           borderWidth={1}
         >
           <VStack width="full" alignItems="center">
@@ -544,15 +543,16 @@ const PaymentModal = ({ isOpen, onClose }) => {
     </Center>
   );
 };
+// **** PAYMENT MODAL COMPONENT END CODE **** //
 
-// Menu Tab
+// **** MENU TAB COMPONENT START CODE **** //
 const VIPMenu = ({ onOpen }) => {
   const { translations } = translationStore((store) => store);
   return (
     <Tab.Navigator
       screenOptions={{
         tabBarStyle: { backgroundColor: GLOBAL_COLORS.primaryColor },
-        tabBarActiveTintColor: "#FF35F0",
+        tabBarActiveTintColor: "#FFFFFF",
         tabBarInactiveTintColor: "#C6C1C1",
         tabBarLabelStyle: { fontSize: 20, fontWeight: "bold" },
       }}
@@ -568,6 +568,7 @@ const VIPMenu = ({ onOpen }) => {
     </Tab.Navigator>
   );
 };
+// **** MENU TAB COMPONENT END CODE **** //
 
 const index = () => {
   const { isOpen, onOpen, onClose } = useDisclose();
@@ -637,7 +638,7 @@ const styles = StyleSheet.create({
   },
   // PromotionalPackage
   imagesContainer: {
-    backgroundColor: "#b9b8b8",
+    backgroundColor: "#323A44",
     marginHorizontal: 15,
     marginVertical: 20,
     padding: 15,
@@ -687,17 +688,11 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
   },
   // **** WALLET **** //
-  header: {
-    borderTopWidth: 2,
-    borderTopColor: "#EF44BF",
-    borderBottomWidth: 2,
-    borderBottomColor: "#EF44BF",
-  },
   leftHeader: {
     borderRightWidth: 1,
-    borderRightColor: "#EF44BF",
+    borderRightColor: "#FFFFFF",
   },
-  rightHeader: { borderLeftWidth: 1, borderLeftColor: "#EF44BF" },
+  rightHeader: { borderLeftWidth: 1, borderLeftColor: "#FFFFFF" },
   smallText: {
     color: GLOBAL_COLORS.primaryTextColor,
     fontWeight: "bold",

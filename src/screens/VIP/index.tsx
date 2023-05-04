@@ -13,6 +13,7 @@ import {
   Box,
   Center,
   Checkbox,
+  Radio,
   Divider,
   FlatList,
   HStack,
@@ -56,6 +57,8 @@ import { translationStore } from "../../zustand/translationStore";
 import { userStore } from "../../zustand/userStore";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { useIsFocused } from "@react-navigation/native";
+import PaymentService from "services/api/PaymentService";
+import { BASE_URL_FILE_SERVER } from "react-native-dotenv";
 
 const Tab = createMaterialTopTabNavigator();
 
@@ -540,7 +543,20 @@ const BindAccount = ({ open, setOpen }) => {
 // **** PAYMENT MODAL COMPONENT START CODE **** //
 const PaymentModal = ({ isOpen, onClose }) => {
   const { setVip, api_token } = userStore((state) => state);
+  const [bankCode, setBankCode] = useState("1");
   const { subscribeToVIP } = CustomerService(); // change if the "Buy Subscription Bundle API" is working
+
+  const { getPaymentMethods } = PaymentService(api_token);
+  const { data: paymentMethodsData, isLoading } = useQuery({
+    queryKey: ["paymentMethod"],
+    queryFn: () => getPaymentMethods(),
+    onSuccess: (data) => {
+      console.log("onSuccess paymentMethod", data);
+    },
+    onError: (error) => {
+      console.log("onError paymentMethod: ", error);
+    },
+  });
 
   const { mutate: mutateSubscribe } = useMutation(subscribeToVIP, {
     onSuccess: (data) => {
@@ -553,6 +569,7 @@ const PaymentModal = ({ isOpen, onClose }) => {
       console.log("subscribeToVIP", error);
     },
   });
+
   const handlePay = (event) => {
     mutateSubscribe({
       data: { amount: 200.0, title: "Diamond Privillege Card" }, // change if the "Buy Subscription Bundle API" is working
@@ -560,6 +577,7 @@ const PaymentModal = ({ isOpen, onClose }) => {
     });
     onClose(event);
   };
+
   return (
     <Center>
       <Actionsheet isOpen={isOpen} onClose={onClose} hideDragIndicator>
@@ -568,51 +586,72 @@ const PaymentModal = ({ isOpen, onClose }) => {
           backgroundColor="#202833"
           borderWidth={1}
         >
-          <VStack width="full" alignItems="center">
-            <Text style={styles.modalHeader}>请选择付款方式</Text>
-            <Divider color="#EF44BF" />
-            <VStack p={5} width="full">
-              <HStack alignItems="center" justifyContent="space-between">
-                <Image source={AlipayImg} style={styles.paymentImg} />
-                <Checkbox colorScheme="green" value={""} size="md" />
-              </HStack>
-              <HStack alignItems="center" justifyContent="space-between">
-                <Image source={WepayImg} style={styles.paymentImg} />
-                <Checkbox colorScheme="green" value={""} size="md" />
-              </HStack>
-              <HStack alignItems="center" justifyContent="space-between">
-                <Image source={UnionpayImg} style={styles.paymentImg} />
-                <Checkbox colorScheme="green" value={""} size="md" />
-              </HStack>
-              <HStack alignItems="center" justifyContent="space-between">
-                <Image source={TenpayImg} style={styles.paymentImg} />
-                <Checkbox colorScheme="green" value={""} size="md" />
-              </HStack>
-            </VStack>
-            <VStack alignItems="flex-start">
-              <Text style={styles.warningText}>付款提示</Text>
-              <VStack my={3}>
-                <Text style={styles.descriptionText}>
-                  1. 请跳转后支付i时间，超时支付收不到，必须重新发起
-                </Text>
-                <Text style={styles.descriptionText}>
-                  2. 每天发起支付的次数不能超过 5 次。如果连续发起付款而未付款,
-                  该账户可能会被加入黑名单
-                </Text>
-                <Text style={styles.descriptionText}>
-                  3.
-                  支付通道在夜间繁忙。为了保证您的观看体验，您可以选择白天付费，晚上观看。谢谢你的理解`
-                </Text>
+          {isLoading ? (
+            <LoadingSpinner />
+          ) : (
+            <Radio.Group
+              name="myRadioGroup"
+              accessibilityLabel="favorite number"
+              value={bankCode}
+              onChange={(nextValue) => {
+                console.log("bank code:", nextValue);
+                setBankCode(nextValue);
+              }}
+              width="100%"
+            >
+              <VStack width="full" alignItems="center">
+                <Text style={styles.modalHeader}>请选择付款方式</Text>
+                <Divider color="#EF44BF" />
+                <VStack p={5} width="100%">
+                  {/***** START: Payment methods *****/}
+                  {paymentMethodsData.map((item, index) => {
+                    return (
+                      <HStack
+                        alignItems="center"
+                        justifyContent="space-between"
+                      >
+                        <Image
+                          source={{
+                            uri: BASE_URL_FILE_SERVER + item.logo_path,
+                          }}
+                          style={styles.paymentImg}
+                        />
+                        <Radio
+                          colorScheme="green"
+                          value={item.bank_code}
+                          size="md"
+                        />
+                      </HStack>
+                    );
+                  })}
+                  {/***** END: Payment methods *****/}
+                </VStack>
+                <VStack alignItems="flex-start">
+                  <Text style={styles.warningText}>付款提示</Text>
+                  <VStack my={3}>
+                    <Text style={styles.descriptionText}>
+                      1. 请跳转后支付i时间，超时支付收不到，必须重新发起
+                    </Text>
+                    <Text style={styles.descriptionText}>
+                      2. 每天发起支付的次数不能超过 5
+                      次。如果连续发起付款而未付款, 该账户可能会被加入黑名单
+                    </Text>
+                    <Text style={styles.descriptionText}>
+                      3.
+                      支付通道在夜间繁忙。为了保证您的观看体验，您可以选择白天付费，晚上观看。谢谢你的理解`
+                    </Text>
+                  </VStack>
+                </VStack>
+                <VStack w="full">
+                  <Pressable onPress={handlePay}>
+                    <Text style={styles.paymentBtn}>
+                      立即付款并享受独家性爱视频
+                    </Text>
+                  </Pressable>
+                </VStack>
               </VStack>
-            </VStack>
-            <VStack w="full">
-              <Pressable onPress={handlePay}>
-                <Text style={styles.paymentBtn}>
-                  立即付款并享受独家性爱视频
-                </Text>
-              </Pressable>
-            </VStack>
-          </VStack>
+            </Radio.Group>
+          )}
         </Actionsheet.Content>
       </Actionsheet>
     </Center>

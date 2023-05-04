@@ -1,4 +1,11 @@
-import { Image, Pressable, StyleSheet, Text, View } from "react-native";
+import {
+  Image,
+  ImageBackground,
+  Pressable,
+  StyleSheet,
+  Text,
+  View,
+} from "react-native";
 import React, { useState } from "react";
 
 import {
@@ -9,6 +16,8 @@ import {
   Divider,
   FlatList,
   HStack,
+  Input,
+  Modal,
   ScrollView,
   VStack,
   useDisclose,
@@ -18,6 +27,7 @@ import AlipayImg from "assets/images/alipay.png";
 import CoinsBundle from "services/api/CoinBundle";
 import Container from "components/Container";
 import CustomerService from "services/api/CustomerService";
+import DeviceBindBg from "assets/images/deviceBindBg.png";
 import Download from "assets/images/download.png";
 import DownloadWhite from "assets/images/download_white.png";
 import ForeverVIP from "assets/images/foreverVIP.png";
@@ -42,7 +52,6 @@ import WatchTicketWhite from "assets/images/watchTicket_white.png";
 import WepayImg from "assets/images/wepay.png";
 import { createMaterialTopTabNavigator } from "@react-navigation/material-top-tabs";
 import { GLOBAL_COLORS } from "global";
-import { LinearGradient } from "expo-linear-gradient";
 import { translationStore } from "../../zustand/translationStore";
 import { userStore } from "../../zustand/userStore";
 import { useMutation, useQuery } from "@tanstack/react-query";
@@ -289,7 +298,7 @@ const Button = ({ onOpen }) => {
   const { translations } = translationStore((store) => store);
 
   const handlePress = (event) => {
-    onOpen({ onOpen });
+    onOpen(event);
   };
 
   return (
@@ -462,6 +471,72 @@ const Wallet = ({ onOpen }) => {
 };
 // **** WALLET COMPONENT END CODE **** //
 
+// **** BIND ACCOUNT COMPONENT START CODE **** //
+const BindAccount = ({ open, setOpen }) => {
+  const handleSkip = () => {
+    setOpen(false);
+  };
+  return (
+    <Modal
+      mt="auto"
+      mb="auto"
+      minH={400}
+      closeOnOverlayClick
+      isOpen={open}
+      onClose={() => setOpen(false)}
+      safeAreaTop={true}
+      backdropVisible
+      backgroundColor="#00000090"
+    >
+      <VStack
+        width="full"
+        alignItems="center"
+        backgroundColor="#202833"
+        pt={3}
+        px={1}
+      >
+        <Text style={styles.modalTitle}>绑定账号</Text>
+        <Divider color="#202833" />
+        <VStack my={3} mx={2} alignItems="center" py={3} width="full">
+          <ImageBackground source={DeviceBindBg} style={styles.modalBg}>
+            <VStack alignItems="center" p={3} space={4}>
+              <Text style={styles.inputTitle}>绑定账号</Text>
+              <Input
+                placeholder="代理帐号"
+                variant="filled"
+                backgroundColor="#FFFFFF"
+              />
+              <Input
+                placeholder="请输入手机号码"
+                variant="filled"
+                backgroundColor="#FFFFFF"
+              />
+            </VStack>
+          </ImageBackground>
+          <Box alignItems="center" w="1/2" mt={4}>
+            <Text style={styles.modalTitle}>
+              绑定手机号和代理码 即可获得7天免费VIP权限
+            </Text>
+          </Box>
+        </VStack>
+        <HStack>
+          <Box width="1/2">
+            <Pressable onPress={handleSkip}>
+              <Text style={styles.buttonTextSkip}>暂时跳过</Text>
+            </Pressable>
+          </Box>
+          <Box width="1/2">
+            <Pressable onPress={handleSkip}>
+              <Text style={styles.buttonText}>继续</Text>
+            </Pressable>
+          </Box>
+        </HStack>
+      </VStack>
+    </Modal>
+  );
+};
+// **** BIND ACCOUNT COMPONENT END CODE **** //
+
 // **** PAYMENT MODAL COMPONENT START CODE **** //
 const PaymentModal = ({ isOpen, onClose }) => {
   const { setVip, api_token } = userStore((state) => state);
@@ -571,12 +646,19 @@ const VIPMenu = ({ onOpen }) => {
 // **** MENU TAB COMPONENT END CODE **** //
 
 const index = () => {
-  const { isOpen, onOpen, onClose } = useDisclose();
+  const [open, setOpen] = useState(true);
+  const {
+    isOpen: paymentIsOpen,
+    onOpen: paymentOnOpen,
+    onClose: paymentOnClose,
+  } = useDisclose();
+
   return (
     <Container>
       <Header />
-      <VIPMenu onOpen={onOpen} />
-      <PaymentModal isOpen={isOpen} onClose={onClose} />
+      <VIPMenu onOpen={paymentOnOpen} />
+      <PaymentModal isOpen={paymentIsOpen} onClose={paymentOnClose} />
+      <BindAccount open={open} setOpen={setOpen} />
     </Container>
   );
 };
@@ -767,5 +849,43 @@ const styles = StyleSheet.create({
     color: GLOBAL_COLORS.primaryTextColor,
     fontSize: 16,
     fontWeight: "bold",
+  },
+  // **** ACCOUNT BIND MODAL **** //
+  modalTitle: {
+    textAlign: "center",
+    fontSize: 20,
+    fontWeight: "bold",
+    color: GLOBAL_COLORS.primaryTextColor,
+    paddingBottom: 10,
+  },
+  modalBg: {
+    width: "100%",
+  },
+  inputTitle: {
+    fontSize: 18,
+    color: GLOBAL_COLORS.primaryTextColor,
+    fontWeight: "bold",
+  },
+  modalFlag: {
+    height: 30,
+    width: 30,
+    borderRadius: 20,
+  },
+  buttonText: {
+    color: GLOBAL_COLORS.primaryTextColor,
+    backgroundColor: "#c60000",
+    padding: 15,
+    textAlign: "center",
+    fontSize: 18,
+    fontWeight: "bold",
+    borderRadius: 5,
+  },
+  buttonTextSkip: {
+    color: GLOBAL_COLORS.primaryTextColor,
+    padding: 15,
+    textAlign: "center",
+    fontSize: 18,
+    fontWeight: "bold",
+    borderRadius: 5,
   },
 });

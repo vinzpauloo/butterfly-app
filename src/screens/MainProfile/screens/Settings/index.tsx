@@ -61,6 +61,7 @@ const TextIconContent = ({ children }) => {
   );
 };
 
+// **** FIRST CONTAINER COMPONENT START CODE **** //
 const FirstContainer = ({
   gender,
   setGender,
@@ -177,7 +178,9 @@ const FirstContainer = ({
     </VStack>
   );
 };
+// **** FIRST CONTAINER COMPONENT END CODE **** //
 
+// **** SECOND CONTAINER COMPONENT START CODE **** //
 const SecondContainer = ({ setOpen }) => {
   const { _id } = userStore((store) => store);
   const { translations } = translationStore((store) => store);
@@ -255,7 +258,9 @@ const SecondContainer = ({ setOpen }) => {
     </VStack>
   );
 };
+// **** SECOND CONTAINER COMPONENT END CODE **** //
 
+// **** THIRD CONTAINER COMPONENT START CODE **** //
 const ThirdContainer = () => {
   const navigation = useNavigation<any>();
   const { translations } = translationStore((store) => store);
@@ -327,12 +332,31 @@ const ThirdContainer = () => {
     </VStack>
   );
 };
+// **** THIRD CONTAINER COMPONENT END CODE **** //
 
 // **** BIND MOBILE MODAL COMPONENT START CODE **** //
 const BindMobileModal = ({ open, setOpen }) => {
+  const userStoreData = userStore((store) => store);
+  const { putCustomerProfile } = CustomerService();
+  const [mobileNumber, setMobileNumber] = useState("");
+
+  const { mutate: mutateBindMobile } = useMutation(putCustomerProfile, {
+    onSuccess: () => {
+      setOpen(false);
+    },
+  });
+
   const handlePress = () => {
-    setOpen(false);
+    if (mobileNumber.length !== 0) {
+      mutateBindMobile({
+        data: {
+          mobile: mobileNumber,
+        },
+        token: userStoreData.api_token,
+      });
+    }
   };
+
   return (
     <ModalContent open={open} setOpen={setOpen}>
       <VStack
@@ -348,6 +372,8 @@ const BindMobileModal = ({ open, setOpen }) => {
             placeholder="请输入需要绑定的手机号码"
             variant="filled"
             backgroundColor="#FFFFFF"
+            value={mobileNumber}
+            onChangeText={setMobileNumber}
           />
           <HStack space={2} alignItems="center" mt={2}>
             <Input
@@ -362,7 +388,16 @@ const BindMobileModal = ({ open, setOpen }) => {
           </HStack>
         </VStack>
         <Pressable onPress={handlePress}>
-          <Text style={styles.bindMobileConfirmBtn}>绑定手机号</Text>
+          <Text
+            style={[
+              styles.bindMobileConfirmBtn,
+              {
+                backgroundColor: mobileNumber.length !== 0 ? "#ac1f99" : "#777",
+              },
+            ]}
+          >
+            绑定手机号
+          </Text>
         </Pressable>
       </VStack>
     </ModalContent>
@@ -372,9 +407,31 @@ const BindMobileModal = ({ open, setOpen }) => {
 
 // **** BIND ACCOUNT MODAL COMPONENT START CODE **** //
 const BindAccountModal = ({ open, setOpen }) => {
+  const userStoreData = userStore((store) => store);
+  const { putCustomerProfile } = CustomerService();
+  const [agentReferral, setAgentReferral] = useState("");
+  const [errorMessage, setErrorMessage] = useState("");
+
+  const { mutate: mutateBindMobile } = useMutation(putCustomerProfile, {
+    onSuccess: () => {
+      setOpen(false);
+    },
+    onError: ({ data }) => {
+      setErrorMessage(data.error.message);
+    },
+  });
+
   const handlePress = () => {
-    setOpen(false);
+    if (agentReferral.length !== 0) {
+      mutateBindMobile({
+        data: {
+          agent_referral: agentReferral,
+        },
+        token: userStoreData.api_token,
+      });
+    }
   };
+
   return (
     <ModalContent open={open} setOpen={setOpen}>
       <VStack
@@ -390,10 +447,25 @@ const BindAccountModal = ({ open, setOpen }) => {
             placeholder="请输入需要绑定的手机号码"
             variant="filled"
             backgroundColor="#FFFFFF"
+            value={agentReferral}
+            onChangeText={setAgentReferral}
           />
+          {errorMessage.length !== 0 ? (
+            <Text style={styles.error}>{errorMessage}</Text>
+          ) : null}
         </VStack>
         <Pressable onPress={handlePress}>
-          <Text style={styles.bindMobileConfirmBtn}>绑定手机号</Text>
+          <Text
+            style={[
+              styles.bindMobileConfirmBtn,
+              {
+                backgroundColor:
+                  agentReferral.length !== 0 ? "#ac1f99" : "#777",
+              },
+            ]}
+          >
+            绑定手机号
+          </Text>
         </Pressable>
       </VStack>
     </ModalContent>
@@ -531,9 +603,15 @@ const styles = StyleSheet.create({
   bindMobileConfirmBtn: {
     textAlign: "center",
     color: GLOBAL_COLORS.primaryTextColor,
-    backgroundColor: "#ac1f99",
     paddingVertical: 10,
     borderRadius: 5,
     paddingHorizontal: 15,
+  },
+  error: {
+    color: "#FF0000",
+    fontSize: 16,
+    fontWeight: "bold",
+    textTransform: "capitalize",
+    paddingHorizontal: 5,
   },
 });

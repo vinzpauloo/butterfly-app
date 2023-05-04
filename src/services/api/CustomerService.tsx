@@ -39,6 +39,8 @@ interface ICustomerProfile {
   data: {
     gender?: string;
     alias?: string;
+    mobile?: string;
+    agent_referral?: string;
   };
   token: string;
 }

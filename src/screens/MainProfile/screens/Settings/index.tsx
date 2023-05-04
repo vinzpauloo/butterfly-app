@@ -2,7 +2,7 @@ import { Image, StyleSheet, Text } from "react-native";
 import React, { useEffect, useState } from "react";
 
 import Entypo from "react-native-vector-icons/Entypo";
-import { HStack, Input, Pressable, VStack } from "native-base";
+import { HStack, Input, Modal, Pressable, VStack } from "native-base";
 
 import AccountIcon from "assets/images/account_icon.png";
 import ActiveFemaleIcon from "assets/images/active_female_icon.png";
@@ -35,6 +35,24 @@ const LayoutContent = ({ children }) => {
   );
 };
 
+const ModalContent = ({ open, setOpen, children }) => {
+  return (
+    <Modal
+      mt="auto"
+      mb="auto"
+      minH={400}
+      closeOnOverlayClick
+      isOpen={open}
+      onClose={() => setOpen(false)}
+      safeAreaTop={true}
+      backdropVisible
+      backgroundColor="#00000090"
+    >
+      {children}
+    </Modal>
+  );
+};
+
 const TextIconContent = ({ children }) => {
   return (
     <HStack alignItems="center" space={5}>
@@ -43,7 +61,13 @@ const TextIconContent = ({ children }) => {
   );
 };
 
-const FirstContainer = ({ gender, setGender, nickname, setNickname }) => {
+const FirstContainer = ({
+  gender,
+  setGender,
+  nickname,
+  setNickname,
+  setOpen,
+}) => {
   const userStoreData = userStore((store) => store);
   const setUserStore = userStore((state) => state.setUserData);
   const { translations } = translationStore((store) => store);
@@ -137,7 +161,7 @@ const FirstContainer = ({ gender, setGender, nickname, setNickname }) => {
         <Text style={styles.textLabel}>
           {translations.pleaseEnterPhoneNumber}
         </Text>
-        <Pressable>
+        <Pressable onPress={() => setOpen(true)}>
           <Text style={styles.button}>{translations.toBind}</Text>
         </Pressable>
       </LayoutContent>
@@ -154,13 +178,12 @@ const FirstContainer = ({ gender, setGender, nickname, setNickname }) => {
   );
 };
 
-const SecondContainer = () => {
-  const navigation = useNavigation<any>();
+const SecondContainer = ({ setOpen }) => {
   const { _id } = userStore((store) => store);
   const { translations } = translationStore((store) => store);
 
   const handlePress = () => {
-    navigation.navigate("Certificate", { postTitle: "" });
+    setOpen(true);
   };
 
   return (
@@ -217,6 +240,7 @@ const SecondContainer = () => {
           />
         </HStack>
       </LayoutContent>
+
       <LayoutContent>
         <TextIconContent>
           <Image source={ChainIcon} style={styles.textIcon} />
@@ -224,7 +248,7 @@ const SecondContainer = () => {
             {translations.bindInvitationCode}
           </Text>
         </TextIconContent>
-        <Pressable>
+        <Pressable onPress={handlePress}>
           <Text style={styles.button}>{translations.toBind}</Text>
         </Pressable>
       </LayoutContent>
@@ -304,11 +328,86 @@ const ThirdContainer = () => {
   );
 };
 
+// **** BIND MOBILE MODAL COMPONENT START CODE **** //
+const BindMobileModal = ({ open, setOpen }) => {
+  const handlePress = () => {
+    setOpen(false);
+  };
+  return (
+    <ModalContent open={open} setOpen={setOpen}>
+      <VStack
+        width="full"
+        backgroundColor="#202833"
+        p={4}
+        alignItems="center"
+        borderRadius={5}
+      >
+        <Text style={styles.bindMobileTitle}>绑定手机号</Text>
+        <VStack width="full" my={3}>
+          <Input
+            placeholder="请输入需要绑定的手机号码"
+            variant="filled"
+            backgroundColor="#FFFFFF"
+          />
+          <HStack space={2} alignItems="center" mt={2}>
+            <Input
+              placeholder="请输入短信验证码"
+              variant="filled"
+              backgroundColor="#FFFFFF"
+              width="2/3"
+            />
+            <Pressable>
+              <Text style={styles.bindMobileBtn}>获取短信验证码</Text>
+            </Pressable>
+          </HStack>
+        </VStack>
+        <Pressable onPress={handlePress}>
+          <Text style={styles.bindMobileConfirmBtn}>绑定手机号</Text>
+        </Pressable>
+      </VStack>
+    </ModalContent>
+  );
+};
+// **** BIND MOBILE MODAL COMPONENT END CODE **** //
+
+// **** BIND ACCOUNT MODAL COMPONENT START CODE **** //
+const BindAccountModal = ({ open, setOpen }) => {
+  const handlePress = () => {
+    setOpen(false);
+  };
+  return (
+    <ModalContent open={open} setOpen={setOpen}>
+      <VStack
+        width="full"
+        backgroundColor="#202833"
+        p={4}
+        alignItems="center"
+        borderRadius={5}
+      >
+        <Text style={styles.bindMobileTitle}>绑定手机号</Text>
+        <VStack width="full" my={3}>
+          <Input
+            placeholder="请输入需要绑定的手机号码"
+            variant="filled"
+            backgroundColor="#FFFFFF"
+          />
+        </VStack>
+        <Pressable onPress={handlePress}>
+          <Text style={styles.bindMobileConfirmBtn}>绑定手机号</Text>
+        </Pressable>
+      </VStack>
+    </ModalContent>
+  );
+};
+// **** BIND ACCOUNT MODAL COMPONENT END CODE **** //
+
 const index = () => {
   const { api_token } = userStore();
   const { getCustomerProfile } = CustomerService();
   const [gender, setGender] = useState("");
   const [nickname, setNickname] = useState("");
+  const [openBindMobileModal, setOpenBindMobileModal] = useState(false);
+  const [openBindAccountModal, setOpenBindAccountModal] = useState(false);
 
   const { isLoading, isRefetching } = useQuery({
     queryKey: ["MainProfileSettings"],
@@ -333,9 +432,18 @@ const index = () => {
         setGender={setGender}
         nickname={nickname}
         setNickname={setNickname}
+        setOpen={setOpenBindMobileModal}
       />
-      <SecondContainer />
+      <SecondContainer setOpen={setOpenBindAccountModal} />
       <ThirdContainer />
+      <BindMobileModal
+        open={openBindMobileModal}
+        setOpen={setOpenBindMobileModal}
+      />
+      <BindAccountModal
+        open={openBindAccountModal}
+        setOpen={setOpenBindAccountModal}
+      />
     </Container>
   );
 };
@@ -405,5 +513,27 @@ const styles = StyleSheet.create({
     borderColor: GLOBAL_COLORS.primaryTextColor,
     color: GLOBAL_COLORS.primaryTextColor,
     backgroundColor: "#9C001C",
+  },
+  // ***** MODAL CONTAINER ***** //
+  bindMobileTitle: {
+    color: GLOBAL_COLORS.primaryTextColor,
+    fontSize: 20,
+    fontWeight: "bold",
+  },
+  bindMobileBtn: {
+    textAlign: "center",
+    color: GLOBAL_COLORS.primaryTextColor,
+    backgroundColor: "#00bce6",
+    paddingVertical: 15,
+    borderRadius: 5,
+    paddingHorizontal: 15,
+  },
+  bindMobileConfirmBtn: {
+    textAlign: "center",
+    color: GLOBAL_COLORS.primaryTextColor,
+    backgroundColor: "#ac1f99",
+    paddingVertical: 10,
+    borderRadius: 5,
+    paddingHorizontal: 15,
   },
 });

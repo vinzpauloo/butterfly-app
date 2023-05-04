@@ -8,6 +8,7 @@ import {
 } from "react-native";
 import React, { useState } from "react";
 
+import Feather from "react-native-vector-icons/Feather";
 import {
   Actionsheet,
   Box,
@@ -26,7 +27,6 @@ import {
 import CoinsBundle from "services/api/CoinBundle";
 import Container from "components/Container";
 import CustomerService from "services/api/CustomerService";
-import DeviceBindBg from "assets/images/deviceBindBg.png";
 import Download from "assets/images/download.png";
 import DownloadWhite from "assets/images/download_white.png";
 import ForeverVIP from "assets/images/foreverVIP.png";
@@ -36,6 +36,7 @@ import LiveWhite from "assets/images/live_white.png";
 import LiveChat from "assets/images/liveChat.png";
 import LiveChatWhite from "assets/images/liveChat_white.png";
 import LoadingSpinner from "components/LoadingSpinner";
+import PaymentService from "services/api/PaymentService";
 import Photos from "assets/images/photos.png";
 import PhotosWhite from "assets/images/photos_white.png";
 import Profile from "assets/images/profilePhoto.jpg";
@@ -51,7 +52,6 @@ import { GLOBAL_COLORS } from "global";
 import { translationStore } from "../../zustand/translationStore";
 import { userStore } from "../../zustand/userStore";
 import { useMutation, useQuery } from "@tanstack/react-query";
-import PaymentService from "services/api/PaymentService";
 import { BASE_URL_FILE_SERVER } from "react-native-dotenv";
 
 const Tab = createMaterialTopTabNavigator();
@@ -491,21 +491,28 @@ const BindAccount = ({ open, setOpen }) => {
         <Text style={styles.modalTitle}>绑定账号</Text>
         <Divider color="#202833" />
         <VStack my={3} mx={2} alignItems="center" py={3} width="full">
-          <ImageBackground source={DeviceBindBg} style={styles.modalBg}>
-            <VStack alignItems="center" p={3} space={4}>
-              <Text style={styles.inputTitle}>绑定账号</Text>
-              <Input
-                placeholder="代理帐号"
-                variant="filled"
-                backgroundColor="#FFFFFF"
-              />
-              <Input
-                placeholder="请输入手机号码"
-                variant="filled"
-                backgroundColor="#FFFFFF"
-              />
-            </VStack>
-          </ImageBackground>
+          <VStack
+            mx={2}
+            alignItems="center"
+            p={3}
+            space={4}
+            backgroundColor="#BFBFBF"
+            borderRadius={5}
+          >
+            <Text style={styles.inputTitle}>绑定账号</Text>
+            <Input
+              placeholder="代理帐号"
+              variant="outline"
+              backgroundColor="#FFFFFF"
+              placeholderTextColor="#000000"
+            />
+            <Input
+              placeholder="请输入手机号码"
+              variant="outline"
+              backgroundColor="#FFFFFF"
+              placeholderTextColor="#000000"
+            />
+          </VStack>
           <Box alignItems="center" w="1/2" mt={4}>
             <Text style={styles.modalTitle}>
               绑定手机号和代理码 即可获得7天免费VIP权限
@@ -515,7 +522,10 @@ const BindAccount = ({ open, setOpen }) => {
         <HStack>
           <Box width="1/2">
             <Pressable onPress={handleSkip}>
-              <Text style={styles.buttonTextSkip}>暂时跳过</Text>
+              <Text style={styles.buttonTextSkip}>
+                暂时跳过
+                <Feather name="chevrons-right" size={20} />
+              </Text>
             </Pressable>
           </Box>
           <Box width="1/2">
@@ -894,7 +904,6 @@ const styles = StyleSheet.create({
   },
   inputTitle: {
     fontSize: 18,
-    color: GLOBAL_COLORS.primaryTextColor,
     fontWeight: "bold",
   },
   modalFlag: {

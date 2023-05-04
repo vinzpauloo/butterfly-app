@@ -59,6 +59,7 @@ import { useMutation, useQuery } from "@tanstack/react-query";
 import { useIsFocused } from "@react-navigation/native";
 import PaymentService from "services/api/PaymentService";
 import { BASE_URL_FILE_SERVER } from "react-native-dotenv";
+import * as Linking from "expo-linking";
 
 const Tab = createMaterialTopTabNavigator();
 
@@ -92,7 +93,7 @@ const Header = () => {
 // **** HEADER COMPONENT END CODE **** //
 
 // **** VIP CHOICES COMPONENT START CODE **** //
-const VIPChoices = ({ active, setActive, bundle }) => {
+const VIPChoices = ({ active, setActive, bundle, setActiveBundleId }) => {
   const { translations } = translationStore((store) => store);
 
   const activeColorScheme = {
@@ -109,8 +110,12 @@ const VIPChoices = ({ active, setActive, bundle }) => {
     secondaryText: "#666F80",
   };
 
-  const handlePress = (id) => {
-    setActive(id);
+  const handlePress = (index, bundleId) => {
+    console.log("handlePress");
+    console.log("index", index);
+    console.log("bundleId", bundleId);
+    setActive(index);
+    setActiveBundleId(bundleId);
   };
   return (
     <View>
@@ -135,7 +140,7 @@ const VIPChoices = ({ active, setActive, bundle }) => {
                 : inactiveColorScheme.gradient
             }
           >
-            <Pressable onPress={() => handlePress(index)}>
+            <Pressable onPress={() => handlePress(index, item._id)}>
               <VStack alignItems="center" height={150} m={2}>
                 <Text
                   style={[
@@ -329,7 +334,7 @@ const Button = ({ onOpen }) => {
 // **** DESCRIPTION COMPONENT END CODE **** //
 
 // **** MEMBER COMPONENT START CODE **** //
-const Member = ({ onOpen }) => {
+const Member = ({ onOpen, setActiveBundleId }) => {
   const [active, setActive] = useState(0);
   const [bundle, setBundle] = useState([]);
 
@@ -338,7 +343,7 @@ const Member = ({ onOpen }) => {
   const { getAllSubscriptionBundle } = SubscriptionsBundle();
 
   const { isLoading, isRefetching } = useQuery({
-    queryKey: ["subscription bundle"],
+    queryKey: ["vipBundles"],
     queryFn: () =>
       getAllSubscriptionBundle({ data: { active: true }, token: api_token }),
     onSuccess: (data) => {
@@ -346,6 +351,7 @@ const Member = ({ onOpen }) => {
         (firstItem, secondItem) => secondItem.price - firstItem.price
       );
       setBundle(sortedData);
+      setActiveBundleId(sortedData[0]._id);
     },
     onError: (error) => {
       console.log("Subscription Bundle: ", error);
@@ -363,7 +369,12 @@ const Member = ({ onOpen }) => {
 
   return (
     <Container>
-      <VIPChoices active={active} setActive={setActive} bundle={bundle} />
+      <VIPChoices
+        active={active}
+        setActive={setActive}
+        bundle={bundle}
+        setActiveBundleId={setActiveBundleId}
+      />
       <PromotionalPackage perks={bundle[active]?.perks} />
       <Description description={bundle[active]?.description} />
       <Button onOpen={onOpen} />
@@ -541,12 +552,12 @@ const BindAccount = ({ open, setOpen }) => {
 // **** BIND ACCOUNT COMPONENT END CODE **** //
 
 // **** PAYMENT MODAL COMPONENT START CODE **** //
-const PaymentModal = ({ isOpen, onClose }) => {
+const PaymentModal = ({ isOpen, onClose, activeBundleId }) => {
   const { setVip, api_token } = userStore((state) => state);
   const [bankCode, setBankCode] = useState("1");
   const { subscribeToVIP } = CustomerService(); // change if the "Buy Subscription Bundle API" is working
 
-  const { getPaymentMethods } = PaymentService(api_token);
+  const { getPaymentMethods, postBuyBundle } = PaymentService(api_token);
   const { data: paymentMethodsData, isLoading } = useQuery({
     queryKey: ["paymentMethod"],
     queryFn: () => getPaymentMethods(),
@@ -570,12 +581,37 @@ const PaymentModal = ({ isOpen, onClose }) => {
     },
   });
 
+  const { mutate: mutateBuyBundle } = useMutation(postBuyBundle, {
+    onSuccess: (data) => {
+      console.log("mutateBuyBundle onSuccess", data);
+
+      // Open payment link on browser
+      const url = data.redirect_url;
+      Linking.openURL(url);
+    },
+    onError: (error) => {
+      console.log("mutateBuyBundle onError", error);
+    },
+  });
+
   const handlePay = (event) => {
-    mutateSubscribe({
-      data: { amount: 200.0, title: "Diamond Privillege Card" }, // change if the "Buy Subscription Bundle API" is working
+    // mutateSubscribe({
+    //   data: { amount: 200.0, title: "Diamond Privillege Card" }, // change if the "Buy Subscription Bundle API" is working
+    //   token: api_token,
+    // });
+    // onClose(event);
+
+    console.log("processing payment ...", activeBundleId);
+
+    // FIXED data for testing. MUST update on production
+    mutateBuyBundle({
+      data: {
+        callbackURL: "http://13.228.143.9:8000/test",
+        bankcode: "testzfbsc",
+      },
       token: api_token,
+      bundleId: activeBundleId,
     });
-    onClose(event);
   };
 
   return (
@@ -660,7 +696,7 @@ const PaymentModal = ({ isOpen, onClose }) => {
 // **** PAYMENT MODAL COMPONENT END CODE **** //
 
 // **** MENU TAB COMPONENT START CODE **** //
-const VIPMenu = ({ onOpen }) => {
+const VIPMenu = ({ onOpen, setActiveBundleId }) => {
   const { translations } = translationStore((store) => store);
   return (
     <Tab.Navigator
@@ -673,7 +709,9 @@ const VIPMenu = ({ onOpen }) => {
     >
       <Tab.Screen
         name={translations.vipMember}
-        component={() => <Member onOpen={onOpen} />}
+        component={() => (
+          <Member onOpen={onOpen} setActiveBundleId={setActiveBundleId} />
+        )}
       />
       <Tab.Screen
         name={translations.wallet}
@@ -686,6 +724,7 @@ const VIPMenu = ({ onOpen }) => {
 
 const index = () => {
   const [open, setOpen] = useState(true);
+  const [activeBundleId, setActiveBundleId] = useState("");
   const {
     isOpen: paymentIsOpen,
     onOpen: paymentOnOpen,
@@ -695,8 +734,12 @@ const index = () => {
   return (
     <Container>
       <Header />
-      <VIPMenu onOpen={paymentOnOpen} />
-      <PaymentModal isOpen={paymentIsOpen} onClose={paymentOnClose} />
+      <VIPMenu onOpen={paymentOnOpen} setActiveBundleId={setActiveBundleId} />
+      <PaymentModal
+        isOpen={paymentIsOpen}
+        onClose={paymentOnClose}
+        activeBundleId={activeBundleId}
+      />
       <BindAccount open={open} setOpen={setOpen} />
     </Container>
   );

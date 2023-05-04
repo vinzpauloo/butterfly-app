@@ -141,31 +141,41 @@ const VIPStatus = () => {
   };
 
   return (
-    <Box p={1} style={styles.mainContainer} position="relative">
+    <Box p={1} style={styles.mainContainer}>
       <Pressable onPress={handlePressVIP}>
-        <Image
-          source={is_Vip ? VIPDiamondImage : NotVIPDiamondImage}
-          style={styles.diamondImg}
-        />
-        <ImageBackground
-          source={is_Vip ? VIPImage : NotVIPImage}
-          style={{ width: "100%", height: 90 }}
-        >
-          <View style={styles.subscribeContainer}>
+        <VStack m={1}>
+          <Box
+            alignSelf="flex-end"
+            backgroundColor="#EF9535"
+            py=".5"
+            px="4"
+            borderTopRightRadius={5}
+            borderTopLeftRadius={20}
+          >
             <Text style={styles.subscribe}>
               {is_Vip ? translations.renewVIP : translations.subscribeToVIP}
             </Text>
-          </View>
-          <View style={styles.textContainer}>
-            <Text style={styles.vipTitle}>
-              {translations.vipPeriod} :{" "}
-              {is_Vip ? "2023-05-19" : translations.notYetMember}
-            </Text>
-            <Text style={styles.vipSubtitle}>
-              {translations.userID} : {_id}
-            </Text>
-          </View>
-        </ImageBackground>
+          </Box>
+          <HStack
+            backgroundColor={is_Vip ? "#694C2A" : "#373E48"}
+            py={3}
+            px="2.5"
+            alignItems="center"
+            borderLeftRadius={5}
+            borderBottomRightRadius={5}
+          >
+            <Image source={is_Vip ? VIPDiamondImage : NotVIPDiamondImage} />
+            <VStack pl={2.5}>
+              <Text style={styles.vipTitle}>
+                {translations.vipPeriod} :{" "}
+                {is_Vip ? "2023-05-19" : translations.notYetMember}
+              </Text>
+              <Text style={styles.vipSubtitle}>
+                {translations.userID} : {_id}
+              </Text>
+            </VStack>
+          </HStack>
+        </VStack>
       </Pressable>
     </Box>
   );
@@ -267,13 +277,11 @@ const LinkList = () => {
               <Image source={item.icon} style={styles.langImg} />
               <Text style={styles.langText}>{item.title}</Text>
             </HStack>
-            <HStack alignItems="center">
-              <Entypo
-                name="chevron-right"
-                color={GLOBAL_COLORS.primaryTextColor}
-                size={28}
-              />
-            </HStack>
+            <Entypo
+              name="chevron-right"
+              color={GLOBAL_COLORS.primaryTextColor}
+              size={28}
+            />
           </HStack>
         </Pressable>
       ))}
@@ -529,18 +537,6 @@ const styles = StyleSheet.create({
     paddingLeft: 3,
   },
   // **** VIP STATUS **** //
-  diamondImg: {
-    position: "absolute",
-    zIndex: 10,
-    left: 18,
-    top: 30,
-  },
-  subscribeContainer: {
-    position: "absolute",
-    right: 3,
-    top: 0,
-    width: 160,
-  },
   subscribe: {
     textTransform: "uppercase",
     fontWeight: "bold",

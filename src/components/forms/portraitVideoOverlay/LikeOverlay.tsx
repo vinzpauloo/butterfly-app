@@ -24,7 +24,7 @@ const LikeOverlay = (props: Props) => {
   const { likeWork, unlikeWork } = LikeService();
   const { mutate: mutateLikeVideo } = useMutation(likeWork, {
     onSuccess: (data) => {
-      if (data?.isLike) {
+      if (data) {
         props.setLikeCount((prev) => prev + 1);
         props.setIsLiked(true);
       }
@@ -36,7 +36,7 @@ const LikeOverlay = (props: Props) => {
 
   const { mutate: mutateUnlikeVideo } = useMutation(unlikeWork, {
     onSuccess: (data) => {
-      if (data?.unLike) {
+      if (data) {
         props.setLikeCount((prev) => prev - 1);
         props.setIsLiked(false);
       }

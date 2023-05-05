@@ -36,7 +36,7 @@ const LikeButton = ({ data, id }) => {
   // for like
   const { mutate: mutateLike } = useMutation(likeWork, {
     onSuccess: (data) => {
-      if (data.isLike) {
+      if (data) {
         setIsAlreadyLike(true);
         setLikeCount((prev) => prev + 1);
       }
@@ -49,7 +49,7 @@ const LikeButton = ({ data, id }) => {
   // for unlike
   const { mutate: mutateUnLike } = useMutation(unlikeWork, {
     onSuccess: (data) => {
-      if (data.unLike) {
+      if (data) {
         setIsAlreadyLike(false);
         setLikeCount((prev) => prev - 1);
       }
@@ -73,6 +73,7 @@ const LikeButton = ({ data, id }) => {
       mutateUnLike({
         data: {
           foreign_id: id,
+          type: "feed",
         },
         token: token,
       });

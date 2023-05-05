@@ -23,7 +23,7 @@ const FeedContentLikeBtn = ({ id, like, setLike }) => {
   // for like
   const { mutate: mutateLike } = useMutation(likeWork, {
     onSuccess: (data) => {
-      if (data.isLike) {
+      if (data) {
         setIsAlreadyLike(true);
         setLikeCount((prev) => prev + 1);
         setLike((prev) => {
@@ -39,7 +39,7 @@ const FeedContentLikeBtn = ({ id, like, setLike }) => {
   // for unlike
   const { mutate: mutateUnLike } = useMutation(unlikeWork, {
     onSuccess: (data) => {
-      if (data.unLike) {
+      if (data) {
         setIsAlreadyLike(false);
         setLikeCount((prev) => prev - 1);
         setLike((prev) => {
@@ -66,6 +66,7 @@ const FeedContentLikeBtn = ({ id, like, setLike }) => {
       mutateUnLike({
         data: {
           foreign_id: id,
+          type: "feed",
         },
         token: token,
       });

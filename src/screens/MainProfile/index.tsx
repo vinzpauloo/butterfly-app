@@ -1,6 +1,5 @@
 import {
   Image,
-  ImageBackground,
   Pressable,
   ScrollView,
   StyleSheet,
@@ -11,11 +10,11 @@ import React, { useState } from "react";
 
 import { BASE_URL_FILE_SERVER } from "react-native-dotenv";
 import {
-  Actionsheet,
   Box,
-  Center,
   Divider,
+  FlatList,
   HStack,
+  Modal,
   VStack,
   useDisclose,
 } from "native-base";
@@ -32,13 +31,11 @@ import HistoryIcon from "assets/images/history_icon.png";
 import Ionicons from "react-native-vector-icons/Ionicons";
 import LanguageImg from "assets/images/language.png";
 import localizations from "i18n/localizations";
-import NotVIPImage from "assets/images/not_vip.png";
 import NotVIPDiamondImage from "assets/images/not_vip_diamond.png";
 import OfficialIcon from "assets/images/official_icon.png";
 import SaveIcon from "assets/images/save_icon.png";
 import ServiceIcon from "assets/images/service_icon.png";
 import ShareIcon from "assets/images/share_icon.png";
-import VIPImage from "assets/images/vip.png";
 import VIPDiamondImage from "assets/images/vip_diamond.png";
 import { GLOBAL_COLORS } from "global";
 import { translationStore } from "../../zustand/translationStore";
@@ -183,10 +180,10 @@ const VIPStatus = () => {
 // **** VIP COMPONENT END CODE **** //
 
 // **** LANGUAGE TRANSLATION COMPONENT START CODE **** //
-const LanguageTranlation = ({ onOpen, language }) => {
+const LanguageTranlation = ({ setOpen, language }) => {
   const { translations } = translationStore((store) => store);
   const handlePress = (event) => {
-    onOpen(event);
+    setOpen(true);
   };
   return (
     <Pressable onPress={handlePress}>
@@ -341,11 +338,9 @@ const Email = () => {
 // **** EMAIL COMPONENT END CODE **** //
 
 // **** MODAL COMPONENT START CODE **** //
-const LanguageModal = ({ isOpen, onClose, setLanguage }) => {
+const LanguageModal = ({ open, setOpen, setLanguage }) => {
   const { translations } = translationStore((store) => store);
   const [country, setCountry] = useState("en_us");
-  const [flag, setFlag] = useState("");
-  const [title, setTitle] = useState("");
   const [setLang, setTranslations] = translationStore((state) => [
     state.setLang,
     state.setTranslations,
@@ -365,67 +360,73 @@ const LanguageModal = ({ isOpen, onClose, setLanguage }) => {
   ];
 
   const handleChangeLang = (item) => {
+    setLang(item.id);
+    setTranslations(localizations[item.id]);
+    setLanguage({ title: item.title, flag: item.image });
     setCountry(item.id);
-    setFlag(item.image);
-    setTitle(item.title);
-  };
-
-  const handleSave = (event) => {
-    setLang(country);
-    setTranslations(localizations[country]);
-    setLanguage({ title, flag });
-    onClose(event);
+    setOpen(false);
   };
 
   return (
-    <Center>
-      <Actionsheet isOpen={isOpen} onClose={onClose} hideDragIndicator>
-        <Actionsheet.Content backgroundColor="#202833">
-          <VStack width="full">
-            <Text style={styles.modalTitle}>{translations.chooseLanguage}</Text>
-            <Divider color="#202833" />
-            <Box mx={2} flexDirection="row" flexWrap="wrap" py={2}>
-              {data.map((item, index) => (
-                <Pressable onPress={() => handleChangeLang(item)}>
-                  <HStack
-                    key={index}
-                    width="40"
-                    alignItems="center"
-                    space="3"
-                    m={2}
-                    background="#272e39"
-                    py="1.5"
-                    px="3"
-                    borderRadius="5"
+    <Modal
+      mt="auto"
+      mb="auto"
+      closeOnOverlayClick
+      isOpen={open}
+      onClose={() => setOpen(false)}
+      safeAreaTop={true}
+      backdropVisible
+      backgroundColor="#00000090"
+    >
+      <VStack
+        py={2}
+        width="2/3"
+        backgroundColor="#202833"
+        borderRadius={5}
+        maxHeight="1/2"
+      >
+        <Text style={styles.modalTitle}>{translations.chooseLanguage}</Text>
+        <Divider color="#202833" />
+        <VStack mx={2} py={2} alignItems="center" maxHeight="96">
+          <FlatList
+            width="100%"
+            data={data}
+            keyExtractor={(_, index) => "" + index}
+            renderItem={({ item, index }) => (
+              <Pressable onPress={() => handleChangeLang(item)}>
+                <HStack
+                  key={index}
+                  alignItems="center"
+                  justifyContent="center"
+                  space="3"
+                  m={2}
+                  py="1.5"
+                  px="3"
+                >
+                  <Image source={item.image} style={styles.modalFlag} />
+                  <Text
+                    style={{
+                      color:
+                        country === item.id
+                          ? GLOBAL_COLORS.secondaryColor
+                          : GLOBAL_COLORS.primaryTextColor,
+                    }}
                   >
-                    <Image source={item.image} style={styles.modalFlag} />
-                    <Text
-                      style={{
-                        color:
-                          country === item.id
-                            ? GLOBAL_COLORS.secondaryColor
-                            : GLOBAL_COLORS.primaryTextColor,
-                      }}
-                    >
-                      {item.title}
-                    </Text>
-                  </HStack>
-                </Pressable>
-              ))}
-            </Box>
-            <Pressable onPress={handleSave}>
-              <Text style={styles.buttonText}>{translations.choose}</Text>
-            </Pressable>
-          </VStack>
-        </Actionsheet.Content>
-      </Actionsheet>
-    </Center>
+                    {item.title}
+                  </Text>
+                </HStack>
+              </Pressable>
+            )}
+          />
+        </VStack>
+      </VStack>
+    </Modal>
   );
 };
 // **** MODAL COMPONENT END CODE **** //
 
 const index = () => {
-  const { isOpen, onOpen, onClose } = useDisclose();
+  const [open, setOpen] = useState(false);
   const [language, setLanguage] = useState({
     flag: FlagUSA,
     title: "English - US",
@@ -440,7 +441,7 @@ const index = () => {
           <VIPStatus />
         </Layout>
         <Layout my={5}>
-          <LanguageTranlation onOpen={onOpen} language={language} />
+          <LanguageTranlation setOpen={setOpen} language={language} />
         </Layout>
         <Layout>
           <LinkList />
@@ -450,11 +451,7 @@ const index = () => {
         </Layout>
         <Email />
       </ScrollView>
-      <LanguageModal
-        isOpen={isOpen}
-        onClose={onClose}
-        setLanguage={setLanguage}
-      />
+      <LanguageModal open={open} setOpen={setOpen} setLanguage={setLanguage} />
     </Container>
   );
 };
@@ -596,14 +593,5 @@ const styles = StyleSheet.create({
     height: 30,
     width: 30,
     borderRadius: 20,
-  },
-  buttonText: {
-    color: GLOBAL_COLORS.primaryTextColor,
-    backgroundColor: "#c60000",
-    padding: 15,
-    textAlign: "center",
-    fontSize: 18,
-    fontWeight: "bold",
-    borderRadius: 5,
   },
 });

@@ -1,8 +1,9 @@
-import { Image, StyleSheet, Text } from "react-native";
+import { Image, StyleSheet, Text, View } from "react-native";
 import React, { useEffect, useState } from "react";
 
 import Entypo from "react-native-vector-icons/Entypo";
-import { HStack, Input, Modal, Pressable, VStack } from "native-base";
+import LottieView from "lottie-react-native";
+import { HStack, Input, Modal, Pressable, Stack, VStack } from "native-base";
 
 import AccountIcon from "assets/images/account_icon.png";
 import ActiveFemaleIcon from "assets/images/active_female_icon.png";
@@ -19,6 +20,7 @@ import InfoIcon from "assets/images/info_icon.png";
 import LoadingSpinner from "components/LoadingSpinner";
 import MaleIcon from "assets/images/male_icon.png";
 import SecurityIcon from "assets/images/security_icon.png";
+import Succesful from "assets/succesful.json";
 import useDebounce from "hooks/useDebounce";
 import { BASE_URL_FILE_SERVER } from "react-native-dotenv";
 import { GLOBAL_COLORS } from "global";
@@ -27,6 +29,7 @@ import { userStore } from "../../../../zustand/userStore";
 import { useNavigation } from "@react-navigation/native";
 import { useMutation, useQuery } from "@tanstack/react-query";
 
+// **** START: FILE COMPONENTS **** //
 const LayoutContent = ({ children }) => {
   return (
     <HStack px={5} py={2} alignItems="center" justifyContent="space-between">
@@ -61,7 +64,27 @@ const TextIconContent = ({ children }) => {
   );
 };
 
-// **** FIRST CONTAINER COMPONENT START CODE **** //
+const SuccessNotification = () => {
+  const { translations } = translationStore((store) => store);
+  return (
+    <Stack
+      width="full"
+      height="full"
+      position="absolute"
+      alignItems="center"
+      justifyContent="center"
+      backgroundColor="#00000090"
+    >
+      <View style={styles.success}>
+        <Text style={styles.successText}>{translations.boundSuccessfully}</Text>
+        <LottieView autoPlay source={Succesful} />
+      </View>
+    </Stack>
+  );
+};
+// **** END: FILE COMPONENTS **** //
+
+// **** START: FIRST CONTAINER **** //
 const FirstContainer = ({
   gender,
   setGender,
@@ -178,9 +201,9 @@ const FirstContainer = ({
     </VStack>
   );
 };
-// **** FIRST CONTAINER COMPONENT END CODE **** //
+// **** END: FIRST CONTAINER **** //
 
-// **** SECOND CONTAINER COMPONENT START CODE **** //
+// **** START: SECOND CONTAINER **** //
 const SecondContainer = ({ setOpen }) => {
   const { _id } = userStore((store) => store);
   const { translations } = translationStore((store) => store);
@@ -258,9 +281,9 @@ const SecondContainer = ({ setOpen }) => {
     </VStack>
   );
 };
-// **** SECOND CONTAINER COMPONENT END CODE **** //
+// **** END: SECOND CONTAINER **** //
 
-// **** THIRD CONTAINER COMPONENT START CODE **** //
+// **** START: THIRD CONTAINER **** //
 const ThirdContainer = () => {
   const navigation = useNavigation<any>();
   const { translations } = translationStore((store) => store);
@@ -332,17 +355,28 @@ const ThirdContainer = () => {
     </VStack>
   );
 };
-// **** THIRD CONTAINER COMPONENT END CODE **** //
+// **** END: THIRD CONTAINER **** //
 
-// **** BIND MOBILE MODAL COMPONENT START CODE **** //
-const BindMobileModal = ({ open, setOpen }) => {
+// **** START: BIND MOBILE MODAL **** //
+const BindMobileModal = ({ open, setOpen, setSuccessfulNotification }) => {
+  // ** GLOBAL STORE
   const userStoreData = userStore((store) => store);
-  const { putCustomerProfile } = CustomerService();
+  const { translations } = translationStore((store) => store);
+  // ** STORE
   const [mobileNumber, setMobileNumber] = useState("");
+  // ** API
+  const { putCustomerProfile } = CustomerService();
 
   const { mutate: mutateBindMobile } = useMutation(putCustomerProfile, {
     onSuccess: () => {
       setOpen(false);
+      setMobileNumber("");
+      // ** show the success lottie
+      setSuccessfulNotification(true);
+      // ** auto close the success lottie after 2 seconds
+      setTimeout(() => {
+        setSuccessfulNotification(false);
+      }, 2000);
     },
   });
 
@@ -366,10 +400,12 @@ const BindMobileModal = ({ open, setOpen }) => {
         alignItems="center"
         borderRadius={5}
       >
-        <Text style={styles.bindMobileTitle}>绑定手机号</Text>
+        <Text style={styles.bindMobileTitle}>
+          {translations.bindMobilePhone}
+        </Text>
         <VStack width="full" my={3}>
           <Input
-            placeholder="请输入需要绑定的手机号码"
+            placeholder={translations.enterTheMobilePhoneNumber}
             variant="filled"
             backgroundColor="#FFFFFF"
             value={mobileNumber}
@@ -377,13 +413,15 @@ const BindMobileModal = ({ open, setOpen }) => {
           />
           <HStack space={2} alignItems="center" mt={2}>
             <Input
-              placeholder="请输入短信验证码"
+              placeholder={translations.pleaseEnterSMSCode}
               variant="filled"
               backgroundColor="#FFFFFF"
               width="2/3"
             />
             <Pressable>
-              <Text style={styles.bindMobileBtn}>获取短信验证码</Text>
+              <Text style={styles.bindMobileBtn}>
+                {translations.obtainSMSVerification}
+              </Text>
             </Pressable>
           </HStack>
         </VStack>
@@ -396,25 +434,36 @@ const BindMobileModal = ({ open, setOpen }) => {
               },
             ]}
           >
-            绑定手机号
+            {translations.bindMobilePhone}
           </Text>
         </Pressable>
       </VStack>
     </ModalContent>
   );
 };
-// **** BIND MOBILE MODAL COMPONENT END CODE **** //
+// **** END: BIND MOBILE MODAL **** //
 
-// **** BIND ACCOUNT MODAL COMPONENT START CODE **** //
-const BindAccountModal = ({ open, setOpen }) => {
+// **** START: BIND ACCOUNT MODAL **** //
+const BindAccountModal = ({ open, setOpen, setSuccessfulNotification }) => {
+  // ** GLOBAL STORE
   const userStoreData = userStore((store) => store);
-  const { putCustomerProfile } = CustomerService();
+  const { translations } = translationStore((store) => store);
+  // ** STATE
   const [agentReferral, setAgentReferral] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
+  // ** API
+  const { putCustomerProfile } = CustomerService();
 
   const { mutate: mutateBindMobile } = useMutation(putCustomerProfile, {
     onSuccess: () => {
       setOpen(false);
+      setAgentReferral("");
+      // ** show the success lottie
+      setSuccessfulNotification(true);
+      // ** auto close the success lottie after 2 seconds
+      setTimeout(() => {
+        setSuccessfulNotification(false);
+      }, 2000);
     },
     onError: ({ data }) => {
       setErrorMessage(data.error.message);
@@ -441,10 +490,12 @@ const BindAccountModal = ({ open, setOpen }) => {
         alignItems="center"
         borderRadius={5}
       >
-        <Text style={styles.bindMobileTitle}>绑定手机号</Text>
+        <Text style={styles.bindMobileTitle}>
+          {translations.fillInInvitation}
+        </Text>
         <VStack width="full" my={3}>
           <Input
-            placeholder="请输入需要绑定的手机号码"
+            placeholder={translations.pleaseFillInvitationCode}
             variant="filled"
             backgroundColor="#FFFFFF"
             value={agentReferral}
@@ -464,14 +515,14 @@ const BindAccountModal = ({ open, setOpen }) => {
               },
             ]}
           >
-            绑定手机号
+            {translations.submit}
           </Text>
         </Pressable>
       </VStack>
     </ModalContent>
   );
 };
-// **** BIND ACCOUNT MODAL COMPONENT END CODE **** //
+// **** END: BIND ACCOUNT MODAL **** //
 
 const index = () => {
   const { api_token } = userStore();
@@ -480,6 +531,7 @@ const index = () => {
   const [nickname, setNickname] = useState("");
   const [openBindMobileModal, setOpenBindMobileModal] = useState(false);
   const [openBindAccountModal, setOpenBindAccountModal] = useState(false);
+  const [succesfulNotification, setSuccessfulNotification] = useState(false);
 
   const { isLoading, isRefetching } = useQuery({
     queryKey: ["MainProfileSettings"],
@@ -498,25 +550,30 @@ const index = () => {
   }
 
   return (
-    <Container>
-      <FirstContainer
-        gender={gender}
-        setGender={setGender}
-        nickname={nickname}
-        setNickname={setNickname}
-        setOpen={setOpenBindMobileModal}
-      />
-      <SecondContainer setOpen={setOpenBindAccountModal} />
-      <ThirdContainer />
-      <BindMobileModal
-        open={openBindMobileModal}
-        setOpen={setOpenBindMobileModal}
-      />
-      <BindAccountModal
-        open={openBindAccountModal}
-        setOpen={setOpenBindAccountModal}
-      />
-    </Container>
+    <>
+      <Container>
+        <FirstContainer
+          gender={gender}
+          setGender={setGender}
+          nickname={nickname}
+          setNickname={setNickname}
+          setOpen={setOpenBindMobileModal}
+        />
+        <SecondContainer setOpen={setOpenBindAccountModal} />
+        <ThirdContainer />
+        <BindMobileModal
+          open={openBindMobileModal}
+          setOpen={setOpenBindMobileModal}
+          setSuccessfulNotification={setSuccessfulNotification}
+        />
+        <BindAccountModal
+          open={openBindAccountModal}
+          setOpen={setOpenBindAccountModal}
+          setSuccessfulNotification={setSuccessfulNotification}
+        />
+      </Container>
+      {succesfulNotification ? <SuccessNotification /> : null}
+    </>
   );
 };
 
@@ -599,6 +656,7 @@ const styles = StyleSheet.create({
     paddingVertical: 15,
     borderRadius: 5,
     paddingHorizontal: 15,
+    width: 112,
   },
   bindMobileConfirmBtn: {
     textAlign: "center",
@@ -613,5 +671,22 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
     textTransform: "capitalize",
     paddingHorizontal: 5,
+  },
+  // ***** SUCCESS NOTIFICATION ***** //
+  success: {
+    alignItems: "center",
+    padding: 5,
+    width: 380,
+    height: 270,
+    backgroundColor: "#171e24",
+    borderColor: GLOBAL_COLORS.primaryTextColor,
+    borderWidth: 2,
+    borderRadius: 10,
+  },
+  successText: {
+    color: GLOBAL_COLORS.primaryTextColor,
+    fontSize: 20,
+    fontWeight: "bold",
+    marginTop: 10,
   },
 });

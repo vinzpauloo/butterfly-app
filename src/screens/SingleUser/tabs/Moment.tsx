@@ -10,35 +10,36 @@ import { Tabs } from "react-native-collapsible-tab-view";
 type Props = {};
 
 const Moment = (props: Props) => {
-	const route = useRoute<any>();
-	const userID = route?.params?.userID
-	const token = userStore((store) => store.api_token);
+  const route = useRoute<any>();
+  const userID = route?.params?.userID;
+  const token = userStore((store) => store.api_token);
 
-	const [page, setPage] = useState(1);
-	const [data, setData] = useState([]);
+  const [page, setPage] = useState(1);
+  const [data, setData] = useState([]);
   const [lastPage, setLastPage] = useState(1);
   const [refreshing, setRefreshing] = useState(false);
   const [refreshingId, setRefreshingId] = useState(0);
-	const { getFeeds } = FeedService();
-	const { isLoading } = useQuery({
+  const { getFeeds } = FeedService();
+  const { isLoading } = useQuery({
     queryKey: ["specificContentCreatorFeeds", userID, page, refreshingId],
-		queryFn: () =>
-			getFeeds({
-				data: {
-					user_id: userID,
-					with: [`user`, `comment`, `like`].toString(),
-					page: page,
-				},
-				token: token
-			}),
-		onSuccess: (data) => {
-			setLastPage(data?.last_page);
-			setData((prev) => [...prev].concat(data?.data))
-		},
-		onError: (error) => {
-			console.log(`Error`, error);
-		}
-	})
+    queryFn: () =>
+      getFeeds({
+        data: {
+          user_id: userID,
+          with: [`user`, `comment`, `like`].toString(),
+          page: page,
+          approval: "Approved",
+        },
+        token: token,
+      }),
+    onSuccess: (data) => {
+      setLastPage(data?.last_page);
+      setData((prev) => [...prev].concat(data?.data));
+    },
+    onError: (error) => {
+      console.log(`Error`, error);
+    },
+  });
 
   return (
     <Tabs.FlatList
@@ -58,7 +59,7 @@ const Moment = (props: Props) => {
         />
       }
     />
-	)
+  );
 };
 
 export default Moment;

@@ -36,6 +36,7 @@ const StickyTabFeeds = ({
           [category]: true,
           with: "user,comment,like",
           page: page,
+          approval: "Approved",
         },
         token,
       }),

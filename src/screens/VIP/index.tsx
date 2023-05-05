@@ -1,11 +1,4 @@
-import {
-  Image,
-  ImageBackground,
-  Pressable,
-  StyleSheet,
-  Text,
-  View,
-} from "react-native";
+import { Image, Pressable, StyleSheet, Text, View } from "react-native";
 import React, { useState } from "react";
 
 import Feather from "react-native-vector-icons/Feather";
@@ -366,8 +359,12 @@ const Member = ({ route }) => {
 
 // **** WALLET COMPONENT START CODE **** //
 const Wallet = ({ route }) => {
+  // ** GLOBAL STORE
   const { api_token } = userStore((store) => store);
   const { translations } = translationStore((store) => store);
+  // ** STATE
+  const [bundleID, setBundleID] = useState("");
+  // ** API
   const { getAllCoinBundle } = CoinsBundle();
   const { isLoading, data } = useQuery({
     queryKey: ["Coins Bundle"],
@@ -377,6 +374,11 @@ const Wallet = ({ route }) => {
 
   const handlePayment = (event) => {
     route.params.onOpen(event);
+  };
+
+  // ** Choose the bundle
+  const handlePress = (item) => {
+    setBundleID(item._id);
   };
 
   if (isLoading) {
@@ -416,41 +418,44 @@ const Wallet = ({ route }) => {
       <ScrollView>
         <VStack alignItems="center" p={3}>
           {data?.data.map((item, index) => (
-            <HStack
-              key={index}
-              alignItems="center"
-              style={styles.boxContent}
-              my={5}
-              h="24"
-            >
-              <Box
+            <Pressable onPress={() => handlePress(item)}>
+              <HStack
+                key={index}
                 alignItems="center"
-                justifyContent="center"
-                height="full"
-                style={styles.leftBox}
+                style={styles.boxContent}
+                my={5}
+                h="24"
+                backgroundColor={bundleID === item._id ? "#0696cd" : null}
               >
-                <Text style={styles.leftText}>{item.amount}元</Text>
-              </Box>
-              <VStack style={styles.rightBox} height="full">
                 <Box
-                  px={1}
                   alignItems="center"
                   justifyContent="center"
-                  style={styles.rightTopBox}
-                  height="1/2"
+                  height="full"
+                  style={styles.leftBox}
                 >
-                  <Text style={styles.rightText}>{item.description}</Text>
+                  <Text style={styles.leftText}>{item.amount}元</Text>
                 </Box>
-                <Box
-                  px={1}
-                  alignItems="center"
-                  justifyContent="center"
-                  height="1/2"
-                >
-                  <Text style={styles.rightText}>{item.name}</Text>
-                </Box>
-              </VStack>
-            </HStack>
+                <VStack style={styles.rightBox} height="full">
+                  <Box
+                    px={1}
+                    alignItems="center"
+                    justifyContent="center"
+                    style={styles.rightTopBox}
+                    height="1/2"
+                  >
+                    <Text style={styles.rightText}>{item.description}</Text>
+                  </Box>
+                  <Box
+                    px={1}
+                    alignItems="center"
+                    justifyContent="center"
+                    height="1/2"
+                  >
+                    <Text style={styles.rightText}>{item.name}</Text>
+                  </Box>
+                </VStack>
+              </HStack>
+            </Pressable>
           ))}
         </VStack>
       </ScrollView>
@@ -827,13 +832,13 @@ const styles = StyleSheet.create({
   },
   boxContent: {
     borderWidth: 2,
-    borderColor: GLOBAL_COLORS.primaryTextColor,
+    borderColor: "#D9D9D9",
     borderRadius: 5,
     width: "100%",
   },
   leftBox: {
     borderRightWidth: 2,
-    borderRightColor: GLOBAL_COLORS.primaryTextColor,
+    borderRightColor: "#D9D9D9",
     width: "50%",
   },
   leftText: {
@@ -848,7 +853,7 @@ const styles = StyleSheet.create({
   },
   rightTopBox: {
     borderBottomWidth: 2,
-    borderBottomColor: GLOBAL_COLORS.primaryTextColor,
+    borderBottomColor: "#D9D9D9",
   },
   rightText: {
     color: GLOBAL_COLORS.primaryTextColor,

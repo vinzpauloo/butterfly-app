@@ -1,5 +1,5 @@
 import { Image, Pressable, StyleSheet, Text, View } from "react-native";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 
 import Feather from "react-native-vector-icons/Feather";
 import {
@@ -776,6 +776,8 @@ const VIPMenu = ({ onOpen, setActiveBundleId, setApiType }) => {
 // **** MENU TAB COMPONENT END CODE **** //
 
 const index = () => {
+  // ** GLOBAL STORE
+  const { recline } = userStore();
   // ** state
   const [open, setOpen] = useState(true);
   const [activeBundleId, setActiveBundleId] = useState("");
@@ -786,6 +788,15 @@ const index = () => {
     onOpen: paymentOnOpen,
     onClose: paymentOnClose,
   } = useDisclose();
+
+  useEffect(() => {
+    if (!!recline) {
+      const reclineArray = recline.split("|");
+      if (reclineArray.length >= 2) {
+        setOpen(false);
+      }
+    }
+  }, []);
 
   return (
     <Container>

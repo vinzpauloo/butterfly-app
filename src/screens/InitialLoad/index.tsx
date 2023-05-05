@@ -151,6 +151,9 @@ const InitialLoad = () => {
         alias: data.alias,
         is_Vip: data.is_Vip,
         photo: data.photo,
+        mobile: data.mobile,
+        referral_code: data.referral_code,
+        recline: data?.recline || null,
       };
 
       // set user global store
@@ -181,6 +184,9 @@ const InitialLoad = () => {
         alias: data.alias,
         is_Vip: data.is_Vip,
         photo: data.photo,
+        mobile: data.mobile,
+        referral_code: data.referral_code,
+        recline: data?.recline || null,
       };
 
       // set user global store

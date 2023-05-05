@@ -9,6 +9,8 @@ interface IUser {
   mobile?: string;
   photo?: string;
   is_Vip?: boolean;
+  referral_code?: string | null;
+  recline?: string | null;
 }
 
 interface IUserStore extends IUser {
@@ -25,6 +27,8 @@ export const userStore = create<IUserStore>((set) => ({
   mobile: "",
   photo: "",
   is_Vip: false,
+  referral_code: "",
+  recline: "",
   setUserData: (user_object) => set(() => user_object),
   setVip: (vip) => set(() => ({ is_Vip: vip })),
 }));

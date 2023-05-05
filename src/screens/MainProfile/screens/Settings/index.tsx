@@ -182,12 +182,21 @@ const FirstContainer = ({
         </HStack>
       </LayoutContent>
       <LayoutContent>
-        <Text style={styles.textLabel}>
-          {translations.pleaseEnterPhoneNumber}
-        </Text>
-        <Pressable onPress={() => setOpen(true)}>
-          <Text style={styles.button}>{translations.toBind}</Text>
-        </Pressable>
+        {!!userStoreData.mobile ? (
+          <>
+            <Text style={styles.textLabel}>{translations.mobileNumber}</Text>
+            <Text style={styles.textLabel}>{userStoreData.mobile}</Text>
+          </>
+        ) : (
+          <>
+            <Text style={styles.textLabel}>
+              {translations.pleaseEnterPhoneNumber}
+            </Text>
+            <Pressable onPress={() => setOpen(true)}>
+              <Text style={styles.button}>{translations.toBind}</Text>
+            </Pressable>
+          </>
+        )}
       </LayoutContent>
       {/* <LayoutContent>
         <Text style={styles.textLabel}>个人简介</Text>
@@ -205,7 +214,8 @@ const FirstContainer = ({
 
 // **** START: SECOND CONTAINER **** //
 const SecondContainer = ({ setOpen }) => {
-  const { _id } = userStore((store) => store);
+  // ** GLOBAL STORE
+  const { _id, referral_code } = userStore((store) => store);
   const { translations } = translationStore((store) => store);
 
   const handlePress = () => {
@@ -266,17 +276,30 @@ const SecondContainer = ({ setOpen }) => {
           />
         </HStack>
       </LayoutContent>
-
       <LayoutContent>
-        <TextIconContent>
-          <Image source={ChainIcon} style={styles.textIcon} />
-          <Text style={styles.textLabel}>
-            {translations.bindInvitationCode}
-          </Text>
-        </TextIconContent>
-        <Pressable onPress={handlePress}>
-          <Text style={styles.button}>{translations.toBind}</Text>
-        </Pressable>
+        {!!referral_code ? (
+          <>
+            <TextIconContent>
+              <Image source={ChainIcon} style={styles.textIcon} />
+              <Text style={styles.textLabel}>
+                {translations.invitationCode}
+              </Text>
+            </TextIconContent>
+            <Text style={styles.textLabel}>{referral_code}</Text>
+          </>
+        ) : (
+          <>
+            <TextIconContent>
+              <Image source={ChainIcon} style={styles.textIcon} />
+              <Text style={styles.textLabel}>
+                {translations.bindInvitationCode}
+              </Text>
+            </TextIconContent>
+            <Pressable onPress={handlePress}>
+              <Text style={styles.button}>{translations.toBind}</Text>
+            </Pressable>
+          </>
+        )}
       </LayoutContent>
     </VStack>
   );
@@ -361,6 +384,7 @@ const ThirdContainer = () => {
 const BindMobileModal = ({ open, setOpen, setSuccessfulNotification }) => {
   // ** GLOBAL STORE
   const userStoreData = userStore((store) => store);
+  const setUserStore = userStore((state) => state.setUserData);
   const { translations } = translationStore((store) => store);
   // ** STORE
   const [mobileNumber, setMobileNumber] = useState("");
@@ -368,7 +392,8 @@ const BindMobileModal = ({ open, setOpen, setSuccessfulNotification }) => {
   const { putCustomerProfile } = CustomerService();
 
   const { mutate: mutateBindMobile } = useMutation(putCustomerProfile, {
-    onSuccess: () => {
+    onSuccess: (data) => {
+      setUserStore({ ...userStoreData, mobile: data.mobile });
       setOpen(false);
       setMobileNumber("");
       // ** show the success lottie
@@ -447,6 +472,7 @@ const BindMobileModal = ({ open, setOpen, setSuccessfulNotification }) => {
 const BindAccountModal = ({ open, setOpen, setSuccessfulNotification }) => {
   // ** GLOBAL STORE
   const userStoreData = userStore((store) => store);
+  const setUserStore = userStore((state) => state.setUserData);
   const { translations } = translationStore((store) => store);
   // ** STATE
   const [agentReferral, setAgentReferral] = useState("");
@@ -455,7 +481,8 @@ const BindAccountModal = ({ open, setOpen, setSuccessfulNotification }) => {
   const { putCustomerProfile } = CustomerService();
 
   const { mutate: mutateBindMobile } = useMutation(putCustomerProfile, {
-    onSuccess: () => {
+    onSuccess: (data) => {
+      setUserStore({ ...userStoreData, referral_code: data.referral_code });
       setOpen(false);
       setAgentReferral("");
       // ** show the success lottie
@@ -525,13 +552,16 @@ const BindAccountModal = ({ open, setOpen, setSuccessfulNotification }) => {
 // **** END: BIND ACCOUNT MODAL **** //
 
 const index = () => {
+  // ** GLOBAL STORE
   const { api_token } = userStore();
-  const { getCustomerProfile } = CustomerService();
+  // ** STATE
   const [gender, setGender] = useState("");
   const [nickname, setNickname] = useState("");
   const [openBindMobileModal, setOpenBindMobileModal] = useState(false);
   const [openBindAccountModal, setOpenBindAccountModal] = useState(false);
   const [succesfulNotification, setSuccessfulNotification] = useState(false);
+  // ** API
+  const { getCustomerProfile } = CustomerService();
 
   const { isLoading, isRefetching } = useQuery({
     queryKey: ["MainProfileSettings"],

@@ -8,6 +8,7 @@ interface IBuyBundle {
   };
   token: string;
   bundleId: string;
+  apiType: "subscriptions" | "coins";
 }
 
 const PaymentService = (token: string) => {
@@ -22,7 +23,7 @@ const PaymentService = (token: string) => {
   const postBuyBundle = (params: IBuyBundle) => {
     return request({
       headers: { ...getHeaders(), Authorization: `Bearer ${params.token}` },
-      url: `/buy/subscriptions/bundle/${params.bundleId}`,
+      url: `/buy/${params.apiType}/bundle/${params.bundleId}`,
       method: "POST",
       body: params.data,
     });

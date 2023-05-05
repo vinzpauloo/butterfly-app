@@ -164,7 +164,7 @@ const SingleUserHeader = (props: Props) => {
                   )}
                 </TouchableWithoutFeedback>
               </View>
-              <Text style={styles.description}>{creatorData?.note}</Text>
+              <Text style={styles.description}>{creatorData?.biography}</Text>
               <View style={styles.summaryContainer}>
                 <TouchableWithoutFeedback onPress={goToFansScreen}>
                   <View

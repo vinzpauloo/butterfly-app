@@ -27,6 +27,7 @@ const Moment = ({ userId, tag }) => {
           tag: tag,
           with: "user,comment,like",
           page: page,
+          approval: "Approved",
         },
         token: token,
       }),

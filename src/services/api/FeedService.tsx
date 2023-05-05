@@ -14,6 +14,7 @@ interface IFeeds {
     video_only?: boolean;
     images_only?: boolean;
     services_only?: boolean;
+    approval?: string;
   };
   token: string;
 }

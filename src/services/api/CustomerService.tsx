@@ -187,7 +187,7 @@ const CustomerService = () => {
       headers: { ...getHeaders(), Authorization: `Bearer ${params.token}` },
       url: "/customers",
       method: "PUT",
-      params: params.data,
+      data: params.data,
     });
   };
 

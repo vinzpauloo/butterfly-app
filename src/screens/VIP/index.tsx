@@ -15,6 +15,7 @@ import {
   ScrollView,
   VStack,
   useDisclose,
+  Spinner,
 } from "native-base";
 
 import CoinsBundle from "services/api/CoinBundle";
@@ -46,6 +47,7 @@ import { translationStore } from "../../zustand/translationStore";
 import { userStore } from "../../zustand/userStore";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { BASE_URL_FILE_SERVER } from "react-native-dotenv";
+import * as Linking from "expo-linking";
 
 const Tab = createMaterialTopTabNavigator();
 
@@ -79,7 +81,7 @@ const Header = () => {
 // **** HEADER COMPONENT END CODE **** //
 
 // **** VIP CHOICES COMPONENT START CODE **** //
-const VIPChoices = ({ active, setActive, bundle }) => {
+const VIPChoices = ({ active, setActive, bundle, setActiveBundleId }) => {
   const { translations } = translationStore((store) => store);
 
   const activeColorScheme = {
@@ -96,9 +98,14 @@ const VIPChoices = ({ active, setActive, bundle }) => {
     secondaryText: "#666F80",
   };
 
-  const handlePress = (id) => {
-    setActive(id);
+  const handlePress = (index, bundleId) => {
+    console.log("handlePress");
+    console.log("index", index);
+    console.log("bundleId", bundleId);
+    setActive(index);
+    setActiveBundleId(bundleId);
   };
+
   return (
     <View>
       <FlatList
@@ -122,7 +129,7 @@ const VIPChoices = ({ active, setActive, bundle }) => {
                 : inactiveColorScheme.gradient
             }
           >
-            <Pressable onPress={() => handlePress(index)}>
+            <Pressable onPress={() => handlePress(index, item._id)}>
               <VStack alignItems="center" height={150} m={2}>
                 <Text
                   style={[
@@ -324,7 +331,7 @@ const Member = ({ route }) => {
   const { getAllSubscriptionBundle } = SubscriptionsBundle();
 
   const { isLoading } = useQuery({
-    queryKey: ["subscription bundle"],
+    queryKey: ["vipBundles"],
     queryFn: () =>
       getAllSubscriptionBundle({ data: { active: true }, token: api_token }),
     onSuccess: (data) => {
@@ -332,6 +339,7 @@ const Member = ({ route }) => {
         (firstItem, secondItem) => secondItem.price - firstItem.price
       );
       setBundle(sortedData);
+      route.params.setActiveBundleId(sortedData[0]._id);
     },
     onError: (error) => {
       console.log("Subscription Bundle: ", error);
@@ -348,7 +356,12 @@ const Member = ({ route }) => {
 
   return (
     <Container>
-      <VIPChoices active={active} setActive={setActive} bundle={bundle} />
+      <VIPChoices
+        active={active}
+        setActive={setActive}
+        bundle={bundle}
+        setActiveBundleId={route.params.setActiveBundleId}
+      />
       <PromotionalPackage perks={bundle[active]?.perks} />
       <Description description={bundle[active]?.description} />
       <Button onOpen={route.params.onOpen} />
@@ -546,12 +559,12 @@ const BindAccount = ({ open, setOpen }) => {
 // **** BIND ACCOUNT COMPONENT END CODE **** //
 
 // **** PAYMENT MODAL COMPONENT START CODE **** //
-const PaymentModal = ({ isOpen, onClose }) => {
+const PaymentModal = ({ isOpen, onClose, activeBundleId }) => {
   const { setVip, api_token } = userStore((state) => state);
   const [bankCode, setBankCode] = useState("1");
   const { subscribeToVIP } = CustomerService(); // change if the "Buy Subscription Bundle API" is working
 
-  const { getPaymentMethods } = PaymentService(api_token);
+  const { getPaymentMethods, postBuyBundle } = PaymentService(api_token);
   const { data: paymentMethodsData, isLoading } = useQuery({
     queryKey: ["paymentMethod"],
     queryFn: () => getPaymentMethods(),
@@ -575,12 +588,41 @@ const PaymentModal = ({ isOpen, onClose }) => {
     },
   });
 
+  const {
+    mutate: mutateBuyBundle,
+    isLoading: isLoadingBuyBundle,
+    isSuccess: isSuccessBuyBundle,
+  } = useMutation(postBuyBundle, {
+    onSuccess: (data) => {
+      console.log("mutateBuyBundle onSuccess", data);
+
+      // Open payment link on browser
+      const url = data.redirect_url;
+      Linking.openURL(url);
+    },
+    onError: (error) => {
+      console.log("mutateBuyBundle onError", error);
+    },
+  });
+
   const handlePay = (event) => {
-    mutateSubscribe({
-      data: { amount: 200.0, title: "Diamond Privillege Card" }, // change if the "Buy Subscription Bundle API" is working
+    // mutateSubscribe({
+    //   data: { amount: 200.0, title: "Diamond Privillege Card" }, // change if the "Buy Subscription Bundle API" is working
+    //   token: api_token,
+    // });
+    // onClose(event);
+
+    console.log("processing payment ...", activeBundleId);
+
+    // FIXED data for testing. MUST update on production
+    mutateBuyBundle({
+      data: {
+        callbackURL: "http://13.228.143.9:8000/test",
+        bankcode: "testzfbsc",
+      },
       token: api_token,
+      bundleId: activeBundleId,
     });
-    onClose(event);
   };
 
   return (
@@ -591,72 +633,88 @@ const PaymentModal = ({ isOpen, onClose }) => {
           backgroundColor="#202833"
           borderWidth={1}
         >
-          {isLoading ? (
-            <LoadingSpinner />
-          ) : (
-            <Radio.Group
-              name="myRadioGroup"
-              accessibilityLabel="favorite number"
-              value={bankCode}
-              onChange={(nextValue) => {
-                console.log("bank code:", nextValue);
-                setBankCode(nextValue);
-              }}
-              width="100%"
-            >
-              <VStack width="full" alignItems="center">
-                <Text style={styles.modalHeader}>请选择付款方式</Text>
-                <Divider color="#EF44BF" />
+          <Radio.Group
+            name="myRadioGroup"
+            value={bankCode}
+            onChange={(nextValue) => {
+              console.log("bank code:", nextValue);
+              setBankCode(nextValue);
+            }}
+            width="100%"
+          >
+            <VStack width="full" alignItems="center">
+              <Text style={styles.modalHeader}>请选择付款方式</Text>
+              <Divider color="#EF44BF" />
+
+              {isSuccessBuyBundle && (
+                <HStack p={5}>
+                  <Text style={styles.descriptionText}>
+                    Payment processing ...
+                  </Text>
+                  <Spinner size="sm" />
+                </HStack>
+              )}
+
+              {(isLoading || isLoadingBuyBundle) && (
+                <HStack p={5}>
+                  <Spinner size="lg" />
+                </HStack>
+              )}
+
+              {!isLoading && !isLoadingBuyBundle && !isSuccessBuyBundle && (
                 <VStack p={5} width="100%">
                   {/***** START: Payment methods *****/}
-                  {paymentMethodsData.map((item, index) => {
-                    return (
-                      <HStack
-                        alignItems="center"
-                        justifyContent="space-between"
-                      >
-                        <Image
-                          source={{
-                            uri: BASE_URL_FILE_SERVER + item.logo_path,
-                          }}
-                          style={styles.paymentImg}
-                        />
-                        <Radio
-                          colorScheme="green"
-                          value={item.bank_code}
-                          size="md"
-                        />
-                      </HStack>
-                    );
-                  })}
+                  {/* @ts-ignore */}
+                  {paymentMethodsData &&
+                    paymentMethodsData.map((item, index) => {
+                      return (
+                        <HStack
+                          alignItems="center"
+                          justifyContent="space-between"
+                        >
+                          <Image
+                            source={{
+                              uri: BASE_URL_FILE_SERVER + item.logo_path,
+                            }}
+                            style={styles.paymentImg}
+                          />
+                          <Radio
+                            colorScheme="green"
+                            value={item.bank_code}
+                            size="md"
+                          />
+                        </HStack>
+                      );
+                    })}
                   {/***** END: Payment methods *****/}
                 </VStack>
-                <VStack alignItems="flex-start">
-                  <Text style={styles.warningText}>付款提示</Text>
-                  <VStack my={3}>
-                    <Text style={styles.descriptionText}>
-                      1. 请跳转后支付i时间，超时支付收不到，必须重新发起
-                    </Text>
-                    <Text style={styles.descriptionText}>
-                      2. 每天发起支付的次数不能超过 5
-                      次。如果连续发起付款而未付款, 该账户可能会被加入黑名单
-                    </Text>
-                    <Text style={styles.descriptionText}>
-                      3.
-                      支付通道在夜间繁忙。为了保证您的观看体验，您可以选择白天付费，晚上观看。谢谢你的理解`
-                    </Text>
-                  </VStack>
-                </VStack>
-                <VStack w="full">
-                  <Pressable onPress={handlePay}>
-                    <Text style={styles.paymentBtn}>
-                      立即付款并享受独家性爱视频
-                    </Text>
-                  </Pressable>
+              )}
+
+              <VStack alignItems="flex-start">
+                <Text style={styles.warningText}>付款提示</Text>
+                <VStack my={3}>
+                  <Text style={styles.descriptionText}>
+                    1. 请跳转后支付i时间，超时支付收不到，必须重新发起
+                  </Text>
+                  <Text style={styles.descriptionText}>
+                    2. 每天发起支付的次数不能超过 5
+                    次。如果连续发起付款而未付款, 该账户可能会被加入黑名单
+                  </Text>
+                  <Text style={styles.descriptionText}>
+                    3.
+                    支付通道在夜间繁忙。为了保证您的观看体验，您可以选择白天付费，晚上观看。谢谢你的理解`
+                  </Text>
                 </VStack>
               </VStack>
-            </Radio.Group>
-          )}
+              <VStack w="full">
+                <Pressable onPress={handlePay}>
+                  <Text style={styles.paymentBtn}>
+                    立即付款并享受独家性爱视频
+                  </Text>
+                </Pressable>
+              </VStack>
+            </VStack>
+          </Radio.Group>
         </Actionsheet.Content>
       </Actionsheet>
     </Center>
@@ -665,7 +723,7 @@ const PaymentModal = ({ isOpen, onClose }) => {
 // **** PAYMENT MODAL COMPONENT END CODE **** //
 
 // **** MENU TAB COMPONENT START CODE **** //
-const VIPMenu = ({ onOpen }) => {
+const VIPMenu = ({ onOpen, setActiveBundleId }) => {
   const { translations } = translationStore((store) => store);
   return (
     <Tab.Navigator
@@ -679,7 +737,7 @@ const VIPMenu = ({ onOpen }) => {
       <Tab.Screen
         name={translations.vipMember}
         component={Member}
-        initialParams={{ onOpen }}
+        initialParams={{ onOpen, setActiveBundleId }}
       />
       <Tab.Screen
         name={translations.wallet}
@@ -693,6 +751,7 @@ const VIPMenu = ({ onOpen }) => {
 
 const index = () => {
   const [open, setOpen] = useState(true);
+  const [activeBundleId, setActiveBundleId] = useState("");
   const {
     isOpen: paymentIsOpen,
     onOpen: paymentOnOpen,
@@ -702,8 +761,12 @@ const index = () => {
   return (
     <Container>
       <Header />
-      <VIPMenu onOpen={paymentOnOpen} />
-      <PaymentModal isOpen={paymentIsOpen} onClose={paymentOnClose} />
+      <VIPMenu onOpen={paymentOnOpen} setActiveBundleId={setActiveBundleId} />
+      <PaymentModal
+        isOpen={paymentIsOpen}
+        onClose={paymentOnClose}
+        activeBundleId={activeBundleId}
+      />
       <BindAccount open={open} setOpen={setOpen} />
     </Container>
   );

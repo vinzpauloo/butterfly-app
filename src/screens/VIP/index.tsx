@@ -605,6 +605,7 @@ const PaymentModal = ({ isOpen, onClose, activeBundleId, apiType }) => {
     mutate: mutateBuyBundle,
     isLoading: isLoadingBuyBundle,
     isSuccess: isSuccessBuyBundle,
+    reset: resetBuyBundle,
   } = useMutation(postBuyBundle, {
     onSuccess: (data) => {
       console.log("mutateBuyBundle onSuccess", data);
@@ -639,6 +640,11 @@ const PaymentModal = ({ isOpen, onClose, activeBundleId, apiType }) => {
     });
   };
 
+  const handlePayReset = (event) => {
+    console.log("resetting buy bundle ...");
+    resetBuyBundle();
+  };
+
   return (
     <Center>
       <Actionsheet isOpen={isOpen} onClose={onClose} hideDragIndicator>
@@ -664,10 +670,12 @@ const PaymentModal = ({ isOpen, onClose, activeBundleId, apiType }) => {
 
               {isSuccessBuyBundle && (
                 <VStack p={5} space={2}>
-                  <Spinner size="sm" />
                   <Text style={styles.processingText}>
-                    Payment processing ...
+                    Waiting for previous transaction ...
                   </Text>
+                  <Pressable onPress={handlePayReset}>
+                    <Text style={styles.paymentBtn}>Pay Again</Text>
+                  </Pressable>
                 </VStack>
               )}
 

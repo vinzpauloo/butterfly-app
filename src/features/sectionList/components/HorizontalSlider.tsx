@@ -7,23 +7,33 @@ import {
   View,
   VirtualizedList,
 } from "react-native";
-import React from "react";
+import React, { useState } from "react";
 
 import { useNavigation } from "@react-navigation/native";
 
 import VideoComponent from "components/VideoComponent";
 import { GLOBAL_COLORS } from "global";
 import { BASE_URL_FILE_SERVER } from "react-native-dotenv";
+import { HStack, useDisclose } from "native-base";
+import Entypo from "react-native-vector-icons/Entypo";
+import Modal from "components/BottomModal";
 
 const { width } = Dimensions.get("window");
 
-const Video = ({ index, data, item }: any) => {
+const Video = ({ index, data, item, setId, onOpen }: any) => {
   const { video } = item;
   const navigation = useNavigation<any>();
+  console.log("@@@", video);
+
   const handlePress = () => {
     navigation.navigate("SingleVideo", {
       id: video._id,
     });
+  };
+
+  const handlePressDots = (event) => {
+    setId(video._id);
+    onOpen(event);
   };
 
   return (
@@ -57,9 +67,17 @@ const Video = ({ index, data, item }: any) => {
           <Text style={styles.text} numberOfLines={1}>
             {video.title}
           </Text>
-          <Text style={styles.username} numberOfLines={1}>
-            {video.user.username}
-          </Text>
+          <HStack alignItems="center" justifyContent="space-between">
+            <Text style={styles.username} numberOfLines={1}>
+              {video.user.username}
+            </Text>
+            <Pressable onPress={handlePressDots}>
+              <Entypo
+                name="dots-three-vertical"
+                color={GLOBAL_COLORS.inactiveTextColor}
+              />
+            </Pressable>
+          </HStack>
         </View>
       </View>
     </Pressable>
@@ -67,21 +85,32 @@ const Video = ({ index, data, item }: any) => {
 };
 
 const HorizontalSlider = ({ data }) => {
+  const { isOpen, onOpen, onClose } = useDisclose();
+  const [id, setId] = useState<String | null>(null);
   return (
-    <VirtualizedList
-      horizontal
-      showsHorizontalScrollIndicator={false}
-      initialNumToRender={data.length}
-      getItem={(_data: unknown, index: number) => ({
-        id: index,
-        video: data[index],
-      })}
-      getItemCount={() => data.length}
-      keyExtractor={(item: any) => item.id}
-      renderItem={({ item, index }) => (
-        <Video index={index} data={data} item={item} />
-      )}
-    />
+    <>
+      <VirtualizedList
+        horizontal
+        showsHorizontalScrollIndicator={false}
+        initialNumToRender={data.length}
+        getItem={(_data: unknown, index: number) => ({
+          id: index,
+          video: data[index],
+        })}
+        getItemCount={() => data.length}
+        keyExtractor={(item: any) => item.id}
+        renderItem={({ item, index }) => (
+          <Video
+            index={index}
+            data={data}
+            item={item}
+            setId={setId}
+            onOpen={onOpen}
+          />
+        )}
+      />
+      <Modal isOpen={isOpen} onOpen={onOpen} onClose={onClose} id={id} />
+    </>
   );
 };
 
@@ -105,7 +134,8 @@ const styles = StyleSheet.create({
   content: {
     flexDirection: "row",
     alignItems: "center",
-    padding: 5,
+    paddingVertical: 10,
+    paddingHorizontal: 5,
     backgroundColor: GLOBAL_COLORS.videoContentBG,
     borderBottomLeftRadius: 4,
     borderBottomRightRadius: 4,

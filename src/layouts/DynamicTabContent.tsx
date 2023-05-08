@@ -57,7 +57,6 @@ const SectionContent = ({
     singleVideoWithGrid: (
       <>
         <SingleVideo data={single} />
-        <DividerContainer />
         <GridVideos data={multiple} />
       </>
     ),

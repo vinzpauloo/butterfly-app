@@ -85,7 +85,6 @@ const AdsContainer = ({ item, isFollowingScreen, onOpen, setId }: any) => {
           style={[styles.video, { height: width * 0.3 }]}
         />
       </View>
-
       <View style={styles.titleContent}>
         <Text style={[styles.text, styles.title]} numberOfLines={2}>
           {item?.title}
@@ -144,22 +143,23 @@ export const Video = ({ item, isFollowingScreen, onOpen, setId }: any) => {
           style={[styles.video, { height: videoHeight }]}
         />
       </View>
-
-      <View style={styles.titleContent}>
-        <Text style={[styles.text, styles.title]} numberOfLines={2}>
-          {item?.title}
-        </Text>
+      <View style={styles.bottomContent}>
+        <View style={styles.titleContent}>
+          <Text style={[styles.text, styles.title]} numberOfLines={2}>
+            {item?.title}
+          </Text>
+        </View>
+        {isFollowingScreen ? (
+          <FollowingBottomContent item={item} />
+        ) : (
+          <GridVideosBottomContent
+            username={item?.user?.username}
+            onOpen={onOpen}
+            setId={setId}
+            id={item._id}
+          />
+        )}
       </View>
-      {isFollowingScreen ? (
-        <FollowingBottomContent item={item} />
-      ) : (
-        <GridVideosBottomContent
-          username={item?.user?.username}
-          onOpen={onOpen}
-          setId={setId}
-          id={item._id}
-        />
-      )}
     </TouchableOpacity>
   );
 };
@@ -203,17 +203,24 @@ const styles = StyleSheet.create({
   },
   videoContainer: {
     margin: 5,
-    borderWidth: 1,
-    borderColor: GLOBAL_COLORS.primaryTextColor,
   },
   video: {
     width: "100%",
+    borderTopLeftRadius: 4,
+    borderTopRightRadius: 4,
   },
   textContent: {
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "space-between",
     padding: 5,
+  },
+  bottomContent: {
+    backgroundColor: GLOBAL_COLORS.videoContentBG,
+    borderBottomLeftRadius: 4,
+    borderBottomRightRadius: 4,
+    paddingHorizontal: 5,
+    paddingVertical: 5,
   },
   titleContent: {
     height: 35,

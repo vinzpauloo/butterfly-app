@@ -211,7 +211,7 @@ const SectionContent = ({ index, info, onOpen, setId, data }) => {
           <VStack>
             <Text style={styles.modelName}>{info.username}</Text>
             <Text style={styles.workCount}>
-              {translations.numberOfWorks}: {info.username}
+              {translations.numberOfWorks}: {info.total_works}
             </Text>
           </VStack>
         </Pressable>

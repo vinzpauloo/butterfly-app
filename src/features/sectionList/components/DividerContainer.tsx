@@ -1,16 +1,17 @@
+import { GLOBAL_COLORS } from "global";
 import { Divider } from "native-base";
-import { StyleSheet } from "react-native";
+import { StyleSheet, View } from "react-native";
 
 const DividerContainer = () => {
-  return <Divider color="#fff" style={styles.divider} />;
+  return <View style={styles.divider}></View>;
 };
 
 export default DividerContainer;
 
 const styles = StyleSheet.create({
   divider: {
-    marginVertical: 15,
-    marginHorizontal: 15,
+    marginVertical: 10,
+    marginHorizontal: 10,
     width: "auto",
   },
 });

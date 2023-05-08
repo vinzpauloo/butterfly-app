@@ -29,12 +29,12 @@ const styles = StyleSheet.create({
   container: {
     marginLeft: "auto",
     paddingHorizontal: 10,
-    borderRadius: 4,
-    backgroundColor: "red",
-    margin: 4,
+    backgroundColor: "#F7D3A5",
+    borderTopRightRadius: 4,
+    borderBottomLeftRadius: 4,
   },
   text: {
-    color: "white",
+    color: "#000000",
     fontSize: 10,
     fontWeight: "bold",
   },

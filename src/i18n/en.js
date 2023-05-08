@@ -81,6 +81,7 @@ export default en_us = {
   mwah: "MWAH",
   nickname: "Nick Name",
   notYetMember: "Not Yet Member",
+  numberOfWorks: "Number of Works",
   obtainSMSVerification: "SMS Code",
   officialEmail: "Official Email",
   officialGroup: "Official Group",

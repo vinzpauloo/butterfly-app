@@ -10,6 +10,7 @@ import {
 import React from "react";
 
 import { useNavigation } from "@react-navigation/native";
+
 import VideoComponent from "components/VideoComponent";
 import { GLOBAL_COLORS } from "global";
 import { BASE_URL_FILE_SERVER } from "react-native-dotenv";
@@ -91,20 +92,23 @@ const styles = StyleSheet.create({
     position: "relative",
   },
   container: {
-    borderColor: "#fff",
-    borderWidth: 1,
     width: width * 0.7,
-    height: 205,
     marginHorizontal: 5,
+    borderRadius: 4,
   },
   image: {
     height: 160,
     width: "100%",
+    borderTopLeftRadius: 4,
+    borderTopRightRadius: 4,
   },
   content: {
     flexDirection: "row",
     alignItems: "center",
-    paddingVertical: 5,
+    padding: 5,
+    backgroundColor: GLOBAL_COLORS.videoContentBG,
+    borderBottomLeftRadius: 4,
+    borderBottomRightRadius: 4,
   },
   modelImg: {
     height: 34,

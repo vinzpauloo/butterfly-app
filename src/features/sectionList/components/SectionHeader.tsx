@@ -1,10 +1,10 @@
 import { Pressable, StyleSheet, Text, View } from "react-native";
 import React from "react";
 
+import Feather from "react-native-vector-icons/Feather";
 import { useNavigation } from "@react-navigation/native";
 
 import { GLOBAL_COLORS } from "global";
-import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons";
 
 const SectionHeader = ({ id, title }) => {
   const navigation = useNavigation<any>();
@@ -19,9 +19,9 @@ const SectionHeader = ({ id, title }) => {
         {title}
       </Text>
       <Pressable onPress={() => handlePress(title)}>
-        <MaterialCommunityIcons
-          name="chevron-triple-right"
-          color={GLOBAL_COLORS.secondaryColor}
+        <Feather
+          name="chevron-right"
+          color={GLOBAL_COLORS.primaryTextColor}
           size={20}
         />
       </Pressable>

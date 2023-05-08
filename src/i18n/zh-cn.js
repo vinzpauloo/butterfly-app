@@ -79,6 +79,7 @@ export default zh_cn = {
   mwah: "哇哦",
   nickname: "昵称",
   notYetMember: "还不是会员",
+  numberOfWorks: "作品数量",
   obtainSMSVerification: "获取短信验证码",
   officialEmail: "官方邮箱",
   officialGroup: "官方群组",

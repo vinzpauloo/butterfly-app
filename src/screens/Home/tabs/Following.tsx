@@ -10,7 +10,7 @@ import {
 } from "react-native";
 import React, { useCallback, useState } from "react";
 
-import { Center, useDisclose } from "native-base";
+import { Center, HStack, VStack, useDisclose } from "native-base";
 import MasonryList from "@react-native-seoul/masonry-list";
 import { ScrollView } from "react-native-gesture-handler";
 import { useNavigation } from "@react-navigation/native";
@@ -34,6 +34,8 @@ import {
 import { userStore } from "../../../zustand/userStore";
 import { translationStore } from "../../../zustand/translationStore";
 import { BASE_URL_FILE_SERVER } from "react-native-dotenv";
+import VideoComponent from "components/VideoComponent";
+import Entypo from "react-native-vector-icons/Entypo";
 
 const { width, height } = Dimensions.get("window");
 
@@ -62,43 +64,46 @@ const Video = ({
     }
   };
 
+  console.log("@@", item);
+
   const handleThreeDots = (e) => {
     onOpen(e);
     setId(item._id);
   };
 
   return (
-    <TouchableOpacity
-      activeOpacity={1}
+    <Pressable
       style={[
         styles.videoContainer,
-        index % 2 === 0 ? { marginRight: 5 } : { marginLeft: 5 },
+        index % 2 === 0 ? { marginRight: 8 } : { marginLeft: 8 },
       ]}
       onPress={handlePress}
     >
       <View style={styles.thumbnailContainer}>
-        <VIPTag isAbsolute={true} />
+        <VideoComponent item={item} />
         <Image
           source={{ uri: BASE_URL_FILE_SERVER + item.thumbnail_url }}
-          style={(styles.video, { height: videoHeight })}
+          style={[styles.video, { height: videoHeight }]}
         />
       </View>
-      <View style={styles.titleContent}>
-        <Text style={[styles.text, styles.title]} numberOfLines={2}>
-          {item.title}
-        </Text>
+      <View style={styles.bottomContent}>
+        <View style={styles.titleContent}>
+          <Text style={[styles.text, styles.title]} numberOfLines={2}>
+            {item.title}
+          </Text>
+        </View>
+        {isFollowingScreen ? (
+          <FollowingBottomContent item={item} />
+        ) : (
+          <GridVideosBottomContent
+            username={username}
+            onOpen={onOpen}
+            setId={setId}
+            id={item._id}
+          />
+        )}
       </View>
-      {isFollowingScreen ? (
-        <FollowingBottomContent item={item} />
-      ) : (
-        <GridVideosBottomContent
-          username={username}
-          onOpen={onOpen}
-          setId={setId}
-          id={item._id}
-        />
-      )}
-    </TouchableOpacity>
+    </Pressable>
   );
 };
 
@@ -140,28 +145,28 @@ const NoFollowing = ({
         />
       }
     >
-      <Container>
-        <Image source={NoFollowingImg} style={styles.image} />
-        <Text style={styles.popular}>{translations.popularUsers}</Text>
-        {data.map((info, index) => (
-          <>
-            <SectionContent
-              key={index}
-              index={index}
-              info={info}
-              onOpen={onOpen}
-              setId={setId}
-              data={data}
-            />
-            {data.length - 1 === index && <BottomMessage />}
-          </>
-        ))}
-      </Container>
+      <Image source={NoFollowingImg} style={styles.image} />
+      <Text style={styles.popular}>{translations.popularUsers}</Text>
+      {data.map((info, index) => (
+        <>
+          <SectionContent
+            key={index}
+            index={index}
+            info={info}
+            onOpen={onOpen}
+            setId={setId}
+            data={data}
+          />
+          {data.length - 1 === index && <BottomMessage />}
+        </>
+      ))}
     </ScrollView>
   );
 };
 
 const SectionContent = ({ index, info, onOpen, setId, data }) => {
+  console.log("@@", info);
+
   const translations = translationStore((state) => state.translations);
   const navigation = useNavigation<any>();
   const { followCreator } = CustomerService();
@@ -192,49 +197,61 @@ const SectionContent = ({ index, info, onOpen, setId, data }) => {
     setIsFollow(true);
   };
   return (
-    <>
-      <View style={styles.usersCategoryContainer}>
-        <View style={styles.headerContent}>
-          <Pressable
-            style={{ flexDirection: "row", alignItems: "center" }}
-            onPress={() => navigateSingleUser(info.id)}
-          >
-            <Image
-              source={{ uri: BASE_URL_FILE_SERVER + info.photo }}
-              style={styles.modelImg}
-            />
+    // <>
+    <View style={styles.usersCategoryContainer}>
+      <View style={styles.headerContent}>
+        <Pressable
+          style={{ flexDirection: "row", alignItems: "center" }}
+          onPress={() => navigateSingleUser(info.id)}
+        >
+          <Image
+            source={{ uri: BASE_URL_FILE_SERVER + info.photo }}
+            style={styles.modelImg}
+          />
+          <VStack>
             <Text style={styles.modelName}>{info.username}</Text>
-          </Pressable>
-          {isFollow ? null : (
-            <Pressable
-              style={styles.followBtn}
-              onPress={() => handleFollow(info.id)}
-            >
+            <Text style={styles.workCount}>
+              {translations.numberOfWorks}: {info.username}
+            </Text>
+          </VStack>
+        </Pressable>
+        {isFollow ? null : (
+          <Pressable
+            style={styles.followBtn}
+            onPress={() => handleFollow(info.id)}
+          >
+            <HStack alignItems="center">
+              <Entypo
+                name="plus"
+                size={12}
+                color={GLOBAL_COLORS.primaryTextColor}
+              />
               <Text style={styles.followText}>{translations.follow}</Text>
-            </Pressable>
-          )}
-        </View>
-        <MasonryList
-          numColumns={2}
-          data={info.work}
-          renderItem={({ item, index }: any) => (
-            <Video
-              userId={info.id}
-              username={info.username}
-              photo={info.photo}
-              item={item}
-              index={index}
-              onOpen={onOpen}
-              setId={setId}
-            />
-          )}
-          keyExtractor={(_, index) => "" + index}
-          /* BFLYAPP-281 - Adjusted estimatedSize to avoid flickering of container */
-          // estimatedItemSize={202}
-        />
+            </HStack>
+          </Pressable>
+        )}
       </View>
-      {data.length - 1 !== index ? <DividerContainer /> : null}
-    </>
+      <MasonryList
+        numColumns={2}
+        data={info.work}
+        renderItem={({ item, index }: any) => (
+          <Video
+            userId={info.id}
+            username={info.username}
+            photo={info.photo}
+            item={item}
+            index={index}
+            onOpen={onOpen}
+            setId={setId}
+          />
+        )}
+        keyExtractor={(_, index) => "" + index}
+        /* BFLYAPP-281 - Adjusted estimatedSize to avoid flickering of container */
+        // estimatedItemSize={202}
+      />
+    </View>
+    //    {data.length - 1 !== index ? <DividerContainer /> : null}
+    // </>
   );
 };
 
@@ -410,6 +427,7 @@ const styles = StyleSheet.create({
   },
   thumbnailContainer: {
     position: "relative",
+    borderRadius: 4,
   },
   image: {
     width: width,
@@ -427,30 +445,36 @@ const styles = StyleSheet.create({
   usersCategoryContainer: {
     flex: 1,
     minHeight: 100,
-    marginHorizontal: 15,
-    marginVertical: 5,
+    marginHorizontal: 5,
+    marginVertical: 10,
   },
   headerContent: {
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "space-between",
+    paddingLeft: 10,
   },
   modelImg: {
-    height: 26,
-    width: 26,
-    borderRadius: 13,
+    height: 30,
+    width: 30,
+    borderRadius: 15,
   },
   modelName: {
     color: "#fff",
+    marginHorizontal: 5,
+    fontSize: 16,
+  },
+  workCount: {
+    color: GLOBAL_COLORS.inactiveTextColor,
     marginHorizontal: 5,
   },
   followBtn: {
     backgroundColor: GLOBAL_COLORS.secondaryColor,
     alignItems: "center",
     justifyContent: "center",
-    paddingHorizontal: 7,
-    paddingVertical: 2,
-    borderRadius: 2,
+    paddingHorizontal: 10,
+    paddingVertical: 5,
+    borderRadius: 16,
   },
   followText: {
     color: "#fff",
@@ -458,11 +482,17 @@ const styles = StyleSheet.create({
   },
   videoContainer: {
     marginTop: 15,
-    borderWidth: 1,
-    borderColor: "#fff",
+    borderRadius: 4,
   },
   video: {
     width: "100%",
+    borderTopLeftRadius: 4,
+    borderTopRightRadius: 4,
+  },
+  bottomContent: {
+    backgroundColor: GLOBAL_COLORS.videoContentBG,
+    borderBottomLeftRadius: 4,
+    borderBottomRightRadius: 4,
   },
   textContent: {
     flexDirection: "row",

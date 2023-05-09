@@ -136,13 +136,20 @@ const Images = ({ images, video, id, like, setLike }) => {
       {data.map((item, index) => (
         <Pressable
           onPress={
-            !!video && index === 0
-              ? navigateSingleFeed
+            !!video
+              ? index === 0
+                ? navigateSingleFeed
+                : () =>
+                    navigation.navigate("PhotoGallery", {
+                      imageList: images,
+                      fromFeedItem: true,
+                      index: index - 1,
+                    })
               : () =>
                   navigation.navigate("PhotoGallery", {
                     imageList: images,
                     fromFeedItem: true,
-                    index: index - 1,
+                    index: index,
                   })
           }
         >

@@ -55,7 +55,7 @@ const basicHeader = ({ navigation, route }: any) => ({
   headerTitle: route?.params.postTitle,
   headerTitleAlign: "center",
   headerStyle: {
-    backgroundColor: GLOBAL_COLORS.headerBasicBg,
+    backgroundColor: GLOBAL_COLORS.videoContentBG,
   },
   headerTitleStyle: {
     color: "#fff",

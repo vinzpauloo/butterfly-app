@@ -409,6 +409,11 @@ const Search = () => {
           />
         ) : (
           <ScrollView>
+            <PopularSearches
+              data={data.top_search}
+              setSearch={setSearch}
+              setHasSearch={setHasSearch}
+            />
             {history.length !== 0 ? (
               <SearchHistory
                 history={history}
@@ -417,11 +422,6 @@ const Search = () => {
                 setHistory={setHistory}
               />
             ) : null}
-            <PopularSearches
-              data={data.top_search}
-              setSearch={setSearch}
-              setHasSearch={setHasSearch}
-            />
             <VideoList data={data.recommended} />
           </ScrollView>
         )}

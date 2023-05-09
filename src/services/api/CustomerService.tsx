@@ -174,9 +174,9 @@ const CustomerService = () => {
     });
   };
 
-  const getCustomerProfile = (params) => {
+  const getCustomerProfile = (token: string) => {
     return request({
-      headers: { ...getHeaders(), Authorization: `Bearer ${params.token}` },
+      headers: { ...getHeaders(), Authorization: `Bearer ${token}` },
       url: "/customers/profile",
       method: "GET",
     });

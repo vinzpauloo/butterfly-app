@@ -5,6 +5,7 @@ interface IUser {
   site_id: string;
   api_token: string;
   alias?: string;
+  coins?: number;
   gender?: string;
   mobile?: string;
   photo?: string;

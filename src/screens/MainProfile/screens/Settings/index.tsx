@@ -565,7 +565,7 @@ const index = () => {
 
   const { isLoading, isRefetching } = useQuery({
     queryKey: ["MainProfileSettings"],
-    queryFn: () => getCustomerProfile({ token: api_token }),
+    queryFn: () => getCustomerProfile(api_token),
     onError: (error) => {
       console.log("Setting: ", error);
     },

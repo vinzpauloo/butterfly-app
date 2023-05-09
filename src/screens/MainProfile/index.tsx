@@ -1,12 +1,13 @@
 import {
   Image,
   Pressable,
+  RefreshControl,
   ScrollView,
   StyleSheet,
   Text,
   View,
 } from "react-native";
-import React, { useState } from "react";
+import React, { useCallback, useState } from "react";
 
 import { BASE_URL_FILE_SERVER } from "react-native-dotenv";
 import {
@@ -41,6 +42,9 @@ import { GLOBAL_COLORS } from "global";
 import { translationStore } from "../../zustand/translationStore";
 import { userStore } from "../../zustand/userStore";
 import { useNavigation } from "@react-navigation/native";
+import UserService from "services/api/UserService";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
+import CustomerService from "services/api/CustomerService";
 
 // **** COMPONENTS START **** //
 const Layout = (props) => {
@@ -425,16 +429,60 @@ const LanguageModal = ({ open, setOpen, setLanguage }) => {
 };
 // **** MODAL COMPONENT END CODE **** //
 
-const index = () => {
+const MainProfile = () => {
+  // ** GLOBAL STORE
+  const { api_token } = userStore();
+  const userStoreData = userStore((store) => store);
+  const setUserStore = userStore((state) => state.setUserData);
+
+  // ** STATES
   const [open, setOpen] = useState(false);
   const [language, setLanguage] = useState({
     flag: FlagUSA,
     title: "English - US",
   });
 
+  // ** HOOKS
+  const queryClient = useQueryClient();
+
+  // ** API
+  const { getCustomerProfile } = CustomerService();
+  const { isRefetching } = useQuery({
+    queryKey: ["customerProfile"],
+    queryFn: () => getCustomerProfile(api_token),
+    onSuccess: (data) => {
+      console.log("onSuccess customerProfile", data);
+
+      // Update userStore data here
+      setUserStore({
+        ...userStoreData,
+        coins: data.coins,
+        is_Vip: data.is_Vip,
+      });
+    },
+    onError: (error) => {
+      console.log("onError customerProfile", error);
+    },
+  });
+
+  // ** EVENTS
+  const onRefresh = useCallback(() => {
+    queryClient.invalidateQueries({
+      queryKey: ["customerProfile"],
+    });
+  }, []);
+
   return (
     <Container>
-      <ScrollView>
+      <ScrollView
+        refreshControl={
+          <RefreshControl
+            colors={[GLOBAL_COLORS.secondaryColor]}
+            refreshing={isRefetching}
+            onRefresh={onRefresh}
+          />
+        }
+      >
         <Layout>
           <Header />
           <User />
@@ -456,7 +504,7 @@ const index = () => {
   );
 };
 
-export default index;
+export default MainProfile;
 
 const styles = StyleSheet.create({
   // **** HEADER **** //

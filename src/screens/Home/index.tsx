@@ -1,4 +1,4 @@
-import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import { Pressable, StyleSheet, Text } from "react-native";
 import React, { useEffect } from "react";
 
 import Ionicons from "react-native-vector-icons/Ionicons";
@@ -14,6 +14,7 @@ import PopupAds from "features/ads/components/PopupAds";
 import { downloadStore } from "../../zustand/downloadStore";
 import { readFileDirectory } from "lib/expoFileSystem";
 import { translationStore } from "../../zustand/translationStore";
+import { GLOBAL_COLORS } from "global";
 
 // Search Icon
 const Search = () => {
@@ -24,14 +25,10 @@ const Search = () => {
   };
 
   return (
-    <TouchableOpacity
-      activeOpacity={1}
-      onPress={handlePress}
-      style={styles.searchContainer}
-    >
+    <Pressable onPress={handlePress} style={styles.searchContainer}>
       <Ionicons name="search" size={20} color="#fff" />
       <Text style={styles.searchText}>{translations.search}</Text>
-    </TouchableOpacity>
+    </Pressable>
   );
 };
 
@@ -84,14 +81,19 @@ const styles = StyleSheet.create({
     position: "absolute",
     top: 0,
     right: 0,
-    height: 40,
+    height: 30,
+    marginVertical: 5,
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "center",
     marginRight: 10,
+    borderWidth: 1,
+    borderColor: GLOBAL_COLORS.primaryTextColor,
+    borderRadius: 16,
+    paddingHorizontal: 10,
   },
   searchText: {
-    color: "#fff",
+    color: GLOBAL_COLORS.primaryTextColor,
     fontSize: 12,
     marginHorizontal: 5,
   },

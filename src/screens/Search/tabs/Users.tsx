@@ -2,16 +2,18 @@ import {
   Dimensions,
   Image,
   Pressable,
-  RefreshControl,
   StyleSheet,
   Text,
   View,
 } from "react-native";
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 
 import Octicons from "react-native-vector-icons/Octicons";
 import Feather from "react-native-vector-icons/Feather";
 import { FlashList } from "@shopify/flash-list";
+import { useMutation, useQuery } from "@tanstack/react-query";
+import { useIsFocused, useNavigation } from "@react-navigation/native";
+import { BASE_URL_FILE_SERVER } from "react-native-dotenv";
 
 import BottomMessage from "components/BottomMessage";
 import Container from "components/Container";
@@ -22,10 +24,7 @@ import VideoListSkeleton from "components/skeletons/VideoListSkeleton";
 import VIPTag from "components/VIPTag";
 import { GLOBAL_COLORS } from "global";
 import { userStore } from "../../../zustand/userStore";
-import { useMutation, useQuery } from "@tanstack/react-query";
-import { useIsFocused, useNavigation } from "@react-navigation/native";
 import { translationStore } from "../../../zustand/translationStore";
-import { BASE_URL_FILE_SERVER } from "react-native-dotenv";
 
 const { width } = Dimensions.get("window");
 
@@ -75,7 +74,7 @@ const HeaderComponent = ({ data }) => {
       </Pressable>
       {isFollowed ? null : (
         <Pressable style={styles.followBtn} onPress={followBtn}>
-          <Feather name="plus" color="#fff" />
+          <Feather name="plus" color={GLOBAL_COLORS.primaryTextColor} />
           <Text style={styles.followText}>{translations.follow}</Text>
         </Pressable>
       )}
@@ -281,14 +280,13 @@ const styles = StyleSheet.create({
   followBtn: {
     flexDirection: "row",
     alignItems: "center",
-    borderRadius: 5,
+    borderRadius: 16,
     paddingVertical: 5,
     paddingHorizontal: 10,
     backgroundColor: GLOBAL_COLORS.secondaryColor,
   },
   followText: {
-    color: "#fff",
-    marginHorizontal: 5,
+    color: GLOBAL_COLORS.primaryTextColor,
   },
   //Video Container
   videoContainer: {

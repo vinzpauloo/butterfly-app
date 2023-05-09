@@ -71,7 +71,7 @@ const Feeds = ({
           getItemCount={() => data.length}
           keyExtractor={(item: any) => item.id}
           renderItem={({ item, index }) => (
-            <FeedContent key={index} data={item} singleFeedPadding={10} />
+            <FeedContent key={index} data={item} />
           )}
           ListFooterComponent={() => (
             <>

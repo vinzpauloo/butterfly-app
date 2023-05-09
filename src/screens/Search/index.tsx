@@ -1,6 +1,5 @@
 import {
   Dimensions,
-  FlatList,
   Pressable,
   StyleSheet,
   Text,
@@ -78,6 +77,7 @@ const SearchBar = ({ search, setSearch, hasSearch, setHasSearch, refetch }) => {
           value={text}
           onChangeText={(text: string) => setText(text)}
           placeholder={translations.search}
+          placeholderTextColor={GLOBAL_COLORS.primaryTextColor}
           style={styles.inputField}
           onSubmitEditing={searchWords}
         />
@@ -440,19 +440,22 @@ const styles = StyleSheet.create({
     justifyContent: "space-evenly",
     height: 50,
     width: width,
-    backgroundColor: "#262632",
+    backgroundColor: GLOBAL_COLORS.videoContentBG,
     paddingHorizontal: 10,
   },
   inputFieldContainer: {
     position: "relative",
     flexDirection: "row",
     alignItems: "center",
-    backgroundColor: GLOBAL_COLORS.primaryTextColor,
+    backgroundColor: "#171E26",
     margin: 10,
     flexGrow: 1,
     // paddingHorizontal: 40,
     overflow: "hidden",
     width: width / 2,
+    borderWidth: 1,
+    borderColor: "#FFFFFF50",
+    borderRadius: 16,
   },
   textInputIcon: {
     position: "absolute",
@@ -462,6 +465,7 @@ const styles = StyleSheet.create({
     width: "100%",
     paddingLeft: 40,
     paddingRight: 35,
+    color: GLOBAL_COLORS.primaryTextColor,
   },
   searchBtn: {
     backgroundColor: GLOBAL_COLORS.secondaryColor,

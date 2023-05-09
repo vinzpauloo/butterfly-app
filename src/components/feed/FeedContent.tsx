@@ -346,8 +346,7 @@ const styles = StyleSheet.create({
     justifyContent: "space-evenly",
   },
   image: {
-    borderWidth: 1,
-    borderColor: "#fff",
+    borderRadius: 4,
   },
   videoWithImagesCont: {
     position: "relative",

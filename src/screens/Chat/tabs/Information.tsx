@@ -158,27 +158,26 @@ const Information = (props: Props) => {
         <Pressable
           onPress={() => {
             navigation.navigate("InformationScreen", {
-              postTitle: translations.fan,
+              postTitle: translations.liked,
             });
           }}
         >
           <VStack space={1} style={styles.boxContainer}>
             <Image source={FansIcon} style={styles.icons} />
-
-            <Text style={styles.centerText}>{translations.fan}</Text>
+            <Text style={styles.centerText}>{translations.liked}</Text>
           </VStack>
         </Pressable>
         <Pressable
           onPress={() => {
             navigation.navigate("InformationScreen", {
-              postTitle: translations.liked,
+              postTitle: translations.fan,
             });
           }}
         >
           <VStack space={1.5} style={styles.boxContainer}>
             <Image source={LikeIcon} style={styles.icons} />
 
-            <Text style={styles.centerText}>{translations.liked}</Text>
+            <Text style={styles.centerText}>{translations.fan}</Text>
           </VStack>
         </Pressable>
         <Pressable

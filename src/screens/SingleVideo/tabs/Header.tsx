@@ -1,10 +1,4 @@
-import {
-  Pressable,
-  StyleSheet,
-  Text,
-  TouchableWithoutFeedback,
-  View,
-} from "react-native";
+import { Image, Pressable, StyleSheet, Text, View } from "react-native";
 import { useState } from "react";
 
 import AntDesign from "react-native-vector-icons/AntDesign";
@@ -15,10 +9,15 @@ import Zocial from "react-native-vector-icons/Zocial";
 import { useNavigation, useRoute } from "@react-navigation/native";
 
 import BannerAds from "features/ads/components/BannerAds";
+import CoinIcon from "assets/images/coinIcon.png";
 import CustomModal from "components/CustomModal";
+import DownloadIcon from "assets/images/downloadIcon.png";
+import DownloadedIcon from "assets/images/downloadedIcon.png";
 import FavoriteButton from "components/forms/singleVideo/FavoriteButton";
 import LikeButton from "components/forms/singleVideo/LikeButton";
+import ShareIcon from "assets/images/shareIcon.png";
 import WatchVideo from "services/api/WatchVideo";
+import VideoIcon from "assets/images/videoIcon.png";
 import VIPModalContent from "components/VIPModalContent";
 import { downloadFile, writeAsString } from "lib/expoFileSystem";
 import { downloadStore } from "../../../zustand/downloadStore";
@@ -93,12 +92,13 @@ export const Header = ({
       return (
         <Pressable onPress={handleDownload}>
           <View style={styles.buttonItem} pointerEvents="box-none">
-            <MaterialCommunityIcons
+            {/* <MaterialCommunityIcons
               name="download"
               color="#999"
               size={18}
               style={styles.icon}
-            />
+            /> */}
+            <Image source={DownloadIcon} style={styles.icon} />
             <Text style={styles.text}>{translations.download}</Text>
           </View>
         </Pressable>
@@ -107,12 +107,7 @@ export const Header = ({
       // if the video is downloading
       return (
         <View style={styles.buttonItem} pointerEvents="box-none">
-          <MaterialCommunityIcons
-            name="progress-download"
-            color="#999"
-            size={18}
-            style={styles.icon}
-          />
+          <Image source={DownloadIcon} style={styles.icon} />
           <Text style={styles.text}>{translations.downloading}...</Text>
         </View>
       );
@@ -120,12 +115,7 @@ export const Header = ({
       // if the video is downloaded
       return (
         <View style={styles.buttonItem} pointerEvents="box-none">
-          <MaterialIcons
-            name="file-download-done"
-            color="#999"
-            size={18}
-            style={styles.icon}
-          />
+          <Image source={DownloadedIcon} style={styles.icon} />
           <Text style={styles.text}>{translations.downloaded}</Text>
         </View>
       );
@@ -141,12 +131,13 @@ export const Header = ({
         )}
         <View style={styles.watchContent}>
           <View style={styles.item}>
-            <MaterialCommunityIcons
+            <Image source={VideoIcon} style={styles.videoIcon} />
+            {/* <MaterialCommunityIcons
               name="play-box-outline"
               color="#999"
               size={15}
               style={styles.icon}
-            />
+            /> */}
             <Text style={styles.text}>
               {data?.statistic?.watched} | {translations.duration}:{" "}
               {data?.duration}
@@ -166,12 +157,9 @@ export const Header = ({
         </View>
         <View style={styles.tags} pointerEvents="box-none">
           {data?.tags?.map((item, index) => (
-            <TouchableWithoutFeedback
-              key={index}
-              onPress={() => handleNavigate(item)}
-            >
+            <Pressable key={index} onPress={() => handleNavigate(item)}>
               <Text style={styles.tag}>{item}</Text>
-            </TouchableWithoutFeedback>
+            </Pressable>
           ))}
         </View>
         <View style={styles.buttonsContent} pointerEvents="box-none">
@@ -181,31 +169,20 @@ export const Header = ({
             isAlreadyFavorite={isAlreadyFavorite}
             setIsAlreadyFavorite={setIsAlreadyFavorite}
           />
-          <View style={[styles.buttonItem, { flexDirection: "column" }]}>
-            <Zocial
-              name="bitcoin"
-              color="#ff9900"
-              size={18}
-              style={styles.icon}
-            />
-            <Text style={[styles.text, { marginVertical: 3 }]}>
-              22{translations.coin}
+          <View style={styles.buttonItem}>
+            <Image source={CoinIcon} style={styles.icon} />
+            <Text style={styles.text}>
+              {/* 22{translations.coin} */}
+              {translations.donate}
             </Text>
           </View>
           <DownloadStatus videoID={data._id} />
-          <TouchableWithoutFeedback
-            onPress={() => navigation.navigate("SharingPromotion")}
-          >
+          <Pressable onPress={() => navigation.navigate("SharingPromotion")}>
             <View style={styles.buttonItem} pointerEvents="box-none">
-              <Fontisto
-                name="share-a"
-                color="#999"
-                size={15}
-                style={styles.icon}
-              />
+              <Image source={ShareIcon} style={styles.icon} />
               <Text style={styles.text}>{translations.share}</Text>
             </View>
-          </TouchableWithoutFeedback>
+          </Pressable>
         </View>
       </View>
       <BannerAds />
@@ -219,6 +196,7 @@ export const Header = ({
 const styles = StyleSheet.create({
   container: {
     backgroundColor: GLOBAL_COLORS.primaryColor,
+    paddingBottom: 5,
   },
   title: {
     color: "#fff",
@@ -248,7 +226,21 @@ const styles = StyleSheet.create({
     color: "#999",
     fontSize: 12,
   },
+  // icon: {
+  //   marginHorizontal: 3,
+  //   height: 20,
+  //   width: 20,
+  //   resizeMode: "contain",
+  // },
   icon: {
+    marginHorizontal: 3,
+    height: 20,
+    width: 20,
+    resizeMode: "contain",
+  },
+  videoIcon: {
+    width: 12,
+    height: 12,
     marginHorizontal: 3,
   },
 
@@ -263,11 +255,12 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
     fontSize: 12,
-    color: "#999",
-    paddingTop: 2,
-    paddingHorizontal: 5,
-    borderColor: "#999",
-    borderWidth: 2,
+    color: GLOBAL_COLORS.secondaryColor,
+    paddingTop: 5,
+    paddingVertical: 4,
+    paddingHorizontal: 10,
+    borderColor: GLOBAL_COLORS.secondaryColor,
+    borderWidth: 1,
     borderRadius: 20,
     textAlign: "center",
     marginHorizontal: 3,

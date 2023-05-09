@@ -184,7 +184,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 15,
     paddingVertical: 16,
     zIndex: 2,
-    backgroundColor: GLOBAL_COLORS.primaryColor,
+    backgroundColor: GLOBAL_COLORS.videoContentBG,
   },
   image: {
     height: 30,
@@ -215,10 +215,8 @@ const styles = StyleSheet.create({
   followBtn: {
     backgroundColor: GLOBAL_COLORS.secondaryColor,
     paddingVertical: 5,
-    paddingHorizontal: 10,
+    paddingHorizontal: 15,
     borderRadius: 15,
-    borderWidth: 1,
-    borderColor: "crimson",
   },
   followText: {
     color: "#fff",

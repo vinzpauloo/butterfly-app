@@ -1,9 +1,17 @@
-import { StyleSheet, Text, TouchableWithoutFeedback, View } from "react-native";
+import {
+  Image,
+  StyleSheet,
+  Text,
+  TouchableWithoutFeedback,
+  View,
+} from "react-native";
 import React, { useEffect, useState } from "react";
 
 import AntDesign from "react-native-vector-icons/AntDesign";
 import { useMutation, useQuery } from "@tanstack/react-query";
 
+import HeartActive from "assets/images/heartActive.png";
+import HeartInactive from "assets/images/heartInactive.png";
 import { GLOBAL_COLORS } from "global";
 import LikeService from "services/api/LikeService";
 import { userStore } from "../../../zustand/userStore";
@@ -68,10 +76,8 @@ const LikeButton = ({ id, like, setLike }) => {
   return (
     <TouchableWithoutFeedback onPress={handleLike}>
       <View style={styles.buttonItem} pointerEvents="box-none">
-        <AntDesign
-          name="heart"
-          color={changeButtonColor(like.isAlreadyLike)}
-          size={15}
+        <Image
+          source={like.isAlreadyLike ? HeartActive : HeartInactive}
           style={styles.icon}
         />
         <Text
@@ -99,5 +105,8 @@ const styles = StyleSheet.create({
   },
   icon: {
     marginHorizontal: 3,
+    height: 20,
+    width: 20,
+    resizeMode: "contain",
   },
 });

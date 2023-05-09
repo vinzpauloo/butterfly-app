@@ -1,9 +1,11 @@
-import { TouchableWithoutFeedback, StyleSheet, Text, View } from "react-native";
+import { Image, StyleSheet, Text, View, Pressable } from "react-native";
 import React from "react";
 
 import MaterialIcons from "react-native-vector-icons/MaterialIcons";
 import { useMutation } from "@tanstack/react-query";
 
+import FavoriteActive from "assets/images/favoriteActive.png";
+import FavoriteInactive from "assets/images/favoriteInactive.png";
 import CustomerService from "services/api/CustomerService";
 import { GLOBAL_COLORS } from "global";
 import { userStore } from "../../../zustand/userStore";
@@ -62,12 +64,10 @@ const FavoriteButton = ({ id, isAlreadyFavorite, setIsAlreadyFavorite }) => {
   };
 
   return (
-    <TouchableWithoutFeedback onPress={handleFavorite}>
+    <Pressable onPress={handleFavorite}>
       <View style={styles.buttonItem} pointerEvents="box-none">
-        <MaterialIcons
-          name="star"
-          color={changeButtonColor(isAlreadyFavorite)}
-          size={18}
+        <Image
+          source={isAlreadyFavorite ? FavoriteActive : FavoriteInactive}
           style={styles.icon}
         />
         <Text
@@ -76,7 +76,7 @@ const FavoriteButton = ({ id, isAlreadyFavorite, setIsAlreadyFavorite }) => {
           {translations.favorite}
         </Text>
       </View>
-    </TouchableWithoutFeedback>
+    </Pressable>
   );
 };
 
@@ -92,5 +92,8 @@ const styles = StyleSheet.create({
   },
   icon: {
     marginHorizontal: 3,
+    height: 20,
+    width: 20,
+    resizeMode: "contain",
   },
 });

@@ -19,6 +19,7 @@ import { GLOBAL_COLORS } from "global";
 import Modal from "components/BottomModal";
 import VIPTag from "components/VIPTag";
 import { BASE_URL_FILE_SERVER } from "react-native-dotenv";
+import VideoComponent from "components/VideoComponent";
 
 const { width } = Dimensions.get("window");
 
@@ -137,7 +138,7 @@ export const Video = ({ item, isFollowingScreen, onOpen, setId }: any) => {
       onPress={handlePress}
     >
       <View style={styles.thumbnailContainer}>
-        <VIPTag isAbsolute={true} />
+        <VideoComponent item={item} />
         <Image
           source={{ uri: BASE_URL_FILE_SERVER + item.thumbnail_url }}
           style={[styles.video, { height: videoHeight }]}

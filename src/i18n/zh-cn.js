@@ -35,6 +35,7 @@ export default zh_cn = {
   cumulativeIncome: "累计收入",
   customerService: "客户服务",
   currentBalance: "当前余额",
+  donate: "捐赠",
   download: "下载",
   downloaded: "已下载",
   downloading: "下载中",

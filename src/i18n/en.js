@@ -36,6 +36,7 @@ export default en_us = {
   cumulativeIncome: "Cumulative Income",
   customerService: "Customer Service",
   currentBalance: "Current Balance",
+  donate: "Donate",
   download: "Download",
   downloaded: "Downloaded",
   downloading: "Downloading",

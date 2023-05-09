@@ -42,7 +42,7 @@ export default function App() {
         <NavigationContainer>
           <StatusBar
             barStyle={"light-content"}
-            backgroundColor={GLOBAL_COLORS.primaryColor}
+            backgroundColor={GLOBAL_COLORS.videoContentBG}
           />
           <StackNavigators data={stackScreens} />
         </NavigationContainer>

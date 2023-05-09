@@ -1,6 +1,7 @@
 import {
   Dimensions,
   Image,
+  ImageBackground,
   Pressable,
   StyleSheet,
   Text,
@@ -8,26 +9,32 @@ import {
 } from "react-native";
 import React, { useState } from "react";
 
-import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons";
-
 import { BASE_URL_FILE_SERVER } from "react-native-dotenv";
+
+import CommentIcon from "assets/images/commentIcon.png";
 import CustomModal from "components/CustomModal";
+import formatDate from "utils/formatDate";
 import FeedContentLikeBtn from "./FeedContentLikeBtn";
-import Fontisto from "react-native-vector-icons/Fontisto";
+import PlayIcon from "assets/images/playIcon.png";
+import ShareIcon from "assets/images/shareIcon.png";
+import VideoPlaceholder from "assets/images/videoPlaceholder.png";
 import VIPModalContent from "components/VIPModalContent";
 import { GLOBAL_COLORS } from "global";
 import { translationStore } from "../../zustand/translationStore";
 import { useNavigation } from "@react-navigation/native";
-import Foundation from "react-native-vector-icons/Foundation";
+import { HStack, VStack } from "native-base";
 
 const { height, width } = Dimensions.get("window");
 
-const Header = ({ user, userId, setOpen }) => {
+const Header = ({ item, setOpen }) => {
+  console.log("@@", item);
+
   const translations = translationStore((state) => state.translations);
+  const { dateTimeFormater } = formatDate();
   const navigation = useNavigation<any>();
   const navigateSingleUser = () => {
     navigation.navigate(`SingleUser`, {
-      userID: userId,
+      userID: item.user_id,
     });
   };
   const openVIPModal = () => {
@@ -37,10 +44,20 @@ const Header = ({ user, userId, setOpen }) => {
     <View style={styles.headerContainer}>
       <Pressable style={styles.profileContent} onPress={navigateSingleUser}>
         <Image
-          source={{ uri: BASE_URL_FILE_SERVER + user.photo }}
+          source={{ uri: BASE_URL_FILE_SERVER + item.user.photo }}
           style={styles.profilePhoto}
         />
-        <Text style={styles.username}>{user.username}</Text>
+        <VStack>
+          <Text style={styles.username}>{item.user.username}</Text>
+          <HStack>
+            <Text style={styles.timeDate}>
+              {dateTimeFormater(item.created_at).time}
+            </Text>
+            <Text style={styles.timeDate}>
+              {dateTimeFormater(item.created_at).date}
+            </Text>
+          </HStack>
+        </VStack>
       </Pressable>
       <Pressable style={styles.privateBtn} onPress={openVIPModal}>
         <Text style={styles.privateText}>{translations.chat}</Text>
@@ -79,21 +96,18 @@ const Captions = ({ tags, story, id, like, setLike }) => {
   );
 };
 
-const Images = ({ images }) => {
+const Images = ({ images, video, id, like, setLike }) => {
   const navigation = useNavigation<any>();
+  const data = !!video ? [{ url: VideoPlaceholder }, ...images] : images;
 
-  const columnsCount = (picCount) => {
-    switch (picCount) {
-      case 1:
-        return 1; // column
-      case 2:
-        return 2;
-      case 4:
-        return 2;
-      default:
-        return 3;
-    }
+  const navigateSingleFeed = () => {
+    navigation.navigate("SingleFeedScreen", {
+      feedId: id,
+      like: like,
+      setLike: setLike,
+    });
   };
+
   const columnImageWidth = (picCount) => {
     switch (picCount) {
       case 1:
@@ -107,23 +121,55 @@ const Images = ({ images }) => {
     }
   };
 
+  const columnImageWidthForVid = (picCount) => {
+    switch (picCount) {
+      case 1:
+        return { width: width * 0.65, height: height * 0.5 };
+      case 2:
+        return { width: width * 0.45, height: width * 0.45 };
+      case 4:
+        return { width: width * 0.45, height: width * 0.45 };
+      default:
+        return { width: width * 0.3, height: width * 0.3 };
+    }
+  };
+
   return (
     <View style={styles.imagesContainer}>
-      {images?.map((item, index) => (
+      {data.map((item, index) => (
         <Pressable
-          onPress={() =>
-            navigation.navigate("PhotoGallery", {
-              imageList: images,
-              fromFeedItem: true,
-              index: index,
-            })
+          onPress={
+            !!video && index === 0
+              ? navigateSingleFeed
+              : () =>
+                  navigation.navigate("PhotoGallery", {
+                    imageList: images,
+                    fromFeedItem: true,
+                    index: index - 1,
+                  })
           }
         >
-          <Image
-            key={index}
-            source={{ uri: BASE_URL_FILE_SERVER + item.url }}
-            style={[styles.image, columnImageWidth(images.length)]}
-          />
+          {!!video && index === 0 ? (
+            <View
+              key={index}
+              style={[
+                styles.videoWithImagesCont,
+                columnImageWidthForVid(data.length),
+              ]}
+            >
+              <Image
+                source={item.url}
+                style={[styles.image, columnImageWidth(data.length)]}
+              />
+              <Image source={PlayIcon} style={styles.videoWithImages} />
+            </View>
+          ) : (
+            <Image
+              key={index}
+              source={{ uri: BASE_URL_FILE_SERVER + item.url }}
+              style={[styles.image, columnImageWidth(data.length)]}
+            />
+          )}
         </Pressable>
       ))}
     </View>
@@ -132,7 +178,6 @@ const Images = ({ images }) => {
 
 const Video = ({ id, like, setLike }) => {
   const navigation = useNavigation<any>();
-  const translations = translationStore((state) => state.translations);
 
   const navigateSingleFeed = () => {
     navigation.navigate("SingleFeedScreen", {
@@ -145,10 +190,10 @@ const Video = ({ id, like, setLike }) => {
   return (
     <Pressable style={styles.videoCont} onPress={navigateSingleFeed}>
       {/* <VideoPlayer url={url} isFocus={false} /> */}
-      <Foundation name="play-video" size={50} color="#fff" />
-      <Text style={[styles.contentText, { marginHorizontal: 10 }]}>
-        {translations.videoIncluded}
-      </Text>
+      <View style={styles.images}>
+        <Image style={styles.video} source={VideoPlaceholder} />
+        <Image source={PlayIcon} style={styles.playIcon} />
+      </View>
     </Pressable>
   );
 };
@@ -169,18 +214,10 @@ const BottomContent = ({ totalComments, id, like, setLike }) => {
         style={styles.bottomItem}
         onPress={() => navigation.navigate("SharingPromotion")}
       >
-        <MaterialCommunityIcons
-          name="share"
-          size={20}
-          color={GLOBAL_COLORS.inactiveTextColor}
-        />
+        <Image source={ShareIcon} style={styles.icon} />
       </Pressable>
       <Pressable style={styles.bottomItem} onPress={navigateSingleFeed}>
-        <Fontisto
-          name="commenting"
-          size={16}
-          color={GLOBAL_COLORS.inactiveTextColor}
-        />
+        <Image source={CommentIcon} style={styles.icon} />
         <Text style={styles.bottomText}>{totalComments}</Text>
       </Pressable>
       <FeedContentLikeBtn id={id} like={like} setLike={setLike} />
@@ -196,11 +233,13 @@ const FeedContent = ({ data, singleFeedPadding = 0 }) => {
     likeCount: item.like?.total_likes || 0,
   });
 
+  console.log("@@@!", item?.videos, item?.images);
+
   return (
     <View
       style={[styles.mainContainer, { paddingHorizontal: singleFeedPadding }]}
     >
-      <Header user={item.user} userId={item.user_id} setOpen={setOpen} />
+      <Header item={item} setOpen={setOpen} />
       <Captions
         tags={item.tags}
         story={item.string_story}
@@ -208,8 +247,18 @@ const FeedContent = ({ data, singleFeedPadding = 0 }) => {
         like={like}
         setLike={setLike}
       />
-      {!!item?.images && <Images images={item?.images} />}
-      {!!item?.videos && <Video like={like} setLike={setLike} id={item._id} />}
+      {!!item?.images && (
+        <Images
+          images={item?.images}
+          video={item.videos}
+          like={like}
+          setLike={setLike}
+          id={item._id}
+        />
+      )}
+      {!!item?.videos && !!!item?.images && (
+        <Video like={like} setLike={setLike} id={item._id} />
+      )}
       <BottomContent
         totalComments={item.comment?.total_comments || 0}
         like={like}
@@ -230,6 +279,7 @@ const styles = StyleSheet.create({
   mainContainer: {
     paddingVertical: 10,
     backgroundColor: GLOBAL_COLORS.primaryColor,
+    marginHorizontal: 15,
   },
   //HEADER
   headerContainer: {
@@ -251,17 +301,21 @@ const styles = StyleSheet.create({
   },
   username: {
     color: GLOBAL_COLORS.primaryTextColor,
-    fontSize: 16,
+    fontSize: 15,
+  },
+  timeDate: {
+    color: GLOBAL_COLORS.inactiveTextColor,
+    fontSize: 12,
+    marginRight: 5,
   },
   privateBtn: {
-    borderColor: GLOBAL_COLORS.inactiveTextColor,
-    borderWidth: 1,
-    borderRadius: 2,
-    paddingVertical: 3,
-    paddingHorizontal: 5,
+    backgroundColor: GLOBAL_COLORS.secondaryColor,
+    borderRadius: 16,
+    paddingVertical: 5,
+    paddingHorizontal: 15,
   },
   privateText: {
-    color: GLOBAL_COLORS.inactiveTextColor,
+    color: GLOBAL_COLORS.primaryTextColor,
   },
   //CAPTIONS
   captionContainer: {
@@ -295,11 +349,42 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: "#fff",
   },
+  videoWithImagesCont: {
+    position: "relative",
+  },
+  videoWithImages: {
+    position: "absolute",
+    height: 40,
+    width: 40,
+    top: "50%",
+    left: "50%",
+    transform: [{ translateX: -20 }, { translateY: -20 }],
+  },
   // VIDEO
   videoCont: {
+    position: "relative",
     flexDirection: "row",
     alignItems: "center",
+  },
+  images: {
+    position: "relative",
+  },
+  video: {
+    alignItems: "center",
     justifyContent: "center",
+    width: 200,
+    height: 200,
+    resizeMode: "cover",
+    borderRadius: 4,
+  },
+  playIcon: {
+    top: 100,
+    left: 100,
+    transform: [{ translateX: -30 }, { translateY: -30 }],
+    position: "absolute",
+    height: 60,
+    width: 60,
+    resizeMode: "contain",
   },
   //BOTTOMCONTENT
   bottomContentContainer: {
@@ -308,16 +393,22 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
     marginTop: 10,
     paddingBottom: 10,
-    borderBottomColor: GLOBAL_COLORS.inactiveTextColor,
-    borderBottomWidth: 2,
+    // borderBottomColor: GLOBAL_COLORS.inactiveTextColor,
+    // borderBottomWidth: 8,
   },
   bottomItem: {
     flexDirection: "row",
     alignItems: "center",
+    justifyContent: "center",
     paddingHorizontal: 20,
   },
   bottomText: {
     color: GLOBAL_COLORS.inactiveTextColor,
     marginHorizontal: 3,
+  },
+  icon: {
+    height: 20,
+    width: 20,
+    resizeMode: "contain",
   },
 });

@@ -64,7 +64,9 @@ const styles = StyleSheet.create({
   certificateContainer: {
     backgroundColor: GLOBAL_COLORS.headerBasicBg,
     padding: 12,
-    // flex: 1,
+    marginTop: 15,
+    marginHorizontal: 15,
+    borderRadius: 4,
   },
   certificateContainerSkeleton: {
     backgroundColor: GLOBAL_COLORS.headerBasicBg,

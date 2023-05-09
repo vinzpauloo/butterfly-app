@@ -28,7 +28,7 @@ const MaterialTopTabs = ({
           },
           tabBarInactiveTintColor: "#999",
           tabBarStyle: {
-            backgroundColor: tabBarColor || GLOBAL_COLORS.primaryColor,
+            backgroundColor: tabBarColor || GLOBAL_COLORS.videoContentBG,
             height: height,
           },
           tabBarAllowFontScaling: true,

@@ -157,6 +157,7 @@ const ChatScreenSkeleton = () => {
 };
 
 const SingleChatScreen = (props: Props) => {
+  const { getDate } = formatDate();
   const scrollViewRef = useRef(null);
   const [chatListIsLoaded, setChatListIsLoaded] = useState(false);
 
@@ -240,7 +241,7 @@ const SingleChatScreen = (props: Props) => {
                   yourImgUrl={localItem.profile}
                   yourUserName={localItem.user}
                   message={localItem.text}
-                  timeStamp={formatDate()}
+                  timeStamp={getDate()}
                   messageImage={localItem.image}
                 />
               ))}

@@ -85,11 +85,7 @@ const Moment = () => {
     screens: tabsData,
   };
 
-  return (
-    <Container>
-      <MaterialTopTabs data={tabItems} isEqualWidth />
-    </Container>
-  );
+  return <MaterialTopTabs data={tabItems} isEqualWidth />;
 };
 
 export default Moment;

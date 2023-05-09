@@ -1,4 +1,4 @@
-import { RefreshControl, View } from "react-native";
+import { RefreshControl, StyleSheet, View } from "react-native";
 import React, { useCallback, useState } from "react";
 
 import BottomMessage from "components/BottomMessage";
@@ -80,8 +80,9 @@ const StickyTabFeeds = ({
   }
 
   return (
-    <Container>
+    <View style={styles.container}>
       <FlashList
+        showsVerticalScrollIndicator={false}
         refreshControl={
           <RefreshControl
             colors={[GLOBAL_COLORS.secondaryColor]}
@@ -99,7 +100,8 @@ const StickyTabFeeds = ({
             {index === 0 && (
               <MomentHeader data={headerData} isLoading={headerLoading} />
             )}
-            <FeedContent key={index} data={item} singleFeedPadding={10} />
+            <FeedContent key={index} data={item} />
+            <View style={styles.divider} />
           </>
         )}
         ListFooterComponent={() => (
@@ -115,8 +117,19 @@ const StickyTabFeeds = ({
           </>
         )}
       />
-    </Container>
+    </View>
   );
 };
 
 export default StickyTabFeeds;
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: GLOBAL_COLORS.primaryColor,
+  },
+  divider: {
+    height: 8,
+    backgroundColor: GLOBAL_COLORS.videoContentBG,
+  },
+});

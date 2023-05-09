@@ -6,5 +6,5 @@ export const GLOBAL_COLORS = {
   inactiveTextColor: "#999",
   usernameTextColor: "#777",
   btnColor: "#FF474E",
-  videoContentBG: "#202833",
+  videoContentBG: "#202833", // also navigation BG
 };

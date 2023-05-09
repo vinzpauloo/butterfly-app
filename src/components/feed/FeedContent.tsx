@@ -27,8 +27,6 @@ import { HStack, VStack } from "native-base";
 const { height, width } = Dimensions.get("window");
 
 const Header = ({ item, setOpen }) => {
-  console.log("@@", item);
-
   const translations = translationStore((state) => state.translations);
   const { dateTimeFormater } = formatDate();
   const navigation = useNavigation<any>();
@@ -294,9 +292,9 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   profilePhoto: {
-    height: 30,
-    width: 30,
-    borderRadius: 15,
+    height: 34,
+    width: 34,
+    borderRadius: 17,
     marginRight: 5,
   },
   username: {

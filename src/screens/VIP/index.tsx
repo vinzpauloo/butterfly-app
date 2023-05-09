@@ -1,5 +1,12 @@
-import { Image, Pressable, StyleSheet, Text, View } from "react-native";
-import React, { useState, useEffect } from "react";
+import {
+  Image,
+  Pressable,
+  RefreshControl,
+  StyleSheet,
+  Text,
+  View,
+} from "react-native";
+import React, { useState, useEffect, useCallback } from "react";
 
 import Feather from "react-native-vector-icons/Feather";
 import {
@@ -45,7 +52,7 @@ import { createMaterialTopTabNavigator } from "@react-navigation/material-top-ta
 import { GLOBAL_COLORS } from "global";
 import { translationStore } from "../../zustand/translationStore";
 import { userStore } from "../../zustand/userStore";
-import { useMutation, useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { BASE_URL_FILE_SERVER } from "react-native-dotenv";
 import * as Linking from "expo-linking";
 
@@ -334,7 +341,7 @@ const Member = ({ route }) => {
   // ** API
   const { getAllSubscriptionBundle } = SubscriptionsBundle();
 
-  const { isLoading } = useQuery({
+  const { isLoading, isRefetching } = useQuery({
     queryKey: ["vipBundles"],
     queryFn: () =>
       getAllSubscriptionBundle({ data: { active: true }, token: api_token }),
@@ -351,7 +358,7 @@ const Member = ({ route }) => {
     },
   });
 
-  if (isLoading) {
+  if (isLoading || isRefetching) {
     return (
       <Container>
         <LoadingSpinner />
@@ -378,17 +385,29 @@ const Member = ({ route }) => {
 // **** WALLET COMPONENT START CODE **** //
 const Wallet = ({ route }) => {
   // ** GLOBAL STORE
-  const { api_token } = userStore((store) => store);
+  const { api_token, coins } = userStore((store) => store);
   const { translations } = translationStore((store) => store);
-  // ** STATE
+
+  // ** STATES
   const [bundleID, setBundleID] = useState("");
+
+  // ** HOOKS
+  const queryClient = useQueryClient();
+
   // ** API
   const { getAllCoinBundle } = CoinsBundle();
-  const { isLoading, data } = useQuery({
-    queryKey: ["Coins Bundle"],
+  const { isLoading, isRefetching, data } = useQuery({
+    queryKey: ["coinsBundle"],
     queryFn: () =>
       getAllCoinBundle({ data: { with: "sites" }, token: api_token }),
   });
+
+  // ** EVENTS
+  const onRefresh = useCallback(() => {
+    queryClient.invalidateQueries({
+      queryKey: ["coinsBundle"],
+    });
+  }, []);
 
   const handlePayment = (event) => {
     route.params.onOpen(event);
@@ -401,7 +420,7 @@ const Wallet = ({ route }) => {
     route.params.setApiType("coins");
   };
 
-  if (isLoading) {
+  if (isLoading || isRefetching) {
     return (
       <Container>
         <LoadingSpinner />
@@ -420,7 +439,7 @@ const Wallet = ({ route }) => {
           width="1/2"
         >
           <Text style={styles.smallText}>{translations.currentBalance}</Text>
-          <Text style={styles.largeText}>0元</Text>
+          <Text style={styles.largeText}>{coins}元</Text>
           <Text style={styles.smallText}>{translations.balanceDetails}</Text>
         </VStack>
         <VStack
@@ -435,7 +454,15 @@ const Wallet = ({ route }) => {
           <Text style={styles.smallText}>{translations.withdrawnProceeds}</Text>
         </VStack>
       </HStack>
-      <ScrollView>
+      <ScrollView
+        refreshControl={
+          <RefreshControl
+            colors={[GLOBAL_COLORS.secondaryColor]}
+            refreshing={isRefetching}
+            onRefresh={onRefresh}
+          />
+        }
+      >
         <VStack alignItems="center" p={3}>
           {data?.data.map((item, index) => (
             <Pressable onPress={() => handlePress(item)}>
@@ -775,7 +802,7 @@ const VIPMenu = ({ onOpen, setActiveBundleId, setApiType }) => {
 };
 // **** MENU TAB COMPONENT END CODE **** //
 
-const index = () => {
+const VIP = () => {
   // ** GLOBAL STORE
   const { recline } = userStore();
   // ** state
@@ -791,7 +818,9 @@ const index = () => {
 
   useEffect(() => {
     if (!!recline) {
-      const reclineArray = recline.split("|");
+      // Split by `|` and filter empty arrays
+      const reclineArray = recline.split("|").filter((element) => element);
+      console.log(reclineArray);
       if (reclineArray.length >= 2) {
         setOpen(false);
       }
@@ -812,12 +841,12 @@ const index = () => {
         activeBundleId={activeBundleId}
         apiType={apiType}
       />
-      <BindAccount open={open} setOpen={setOpen} />
+      {/* <BindAccount open={open} setOpen={setOpen} /> */}
     </Container>
   );
 };
 
-export default index;
+export default VIP;
 
 const styles = StyleSheet.create({
   // HEADER

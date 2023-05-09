@@ -405,7 +405,7 @@ const Wallet = ({ route }) => {
   // ** EVENTS
   const onRefresh = useCallback(() => {
     queryClient.invalidateQueries({
-      queryKey: ["coinsBundle"],
+      queryKey: ["customerProfile"],
     });
   }, []);
 

@@ -9,6 +9,7 @@ import BottomMessage from "components/BottomMessage";
 
 import { useQuery } from "@tanstack/react-query";
 import ModelGroupService from "services/api/ModelGroupService";
+import { GLOBAL_COLORS } from "global";
 
 type Props = {};
 
@@ -22,15 +23,15 @@ const UserProfilePicListSkeleton = () => {
           <Skeleton.Text lines={1} w="50" />
         </VStack>
         <VStack space={2} alignItems="center" maxW="60">
-          <Skeleton rounded="full" boxSize={"50"}/>
+          <Skeleton rounded="full" boxSize={"50"} />
           <Skeleton.Text lines={1} w="50" />
         </VStack>
         <VStack space={2} alignItems="center" maxW="60">
-          <Skeleton rounded="full" boxSize={"50"}/>
+          <Skeleton rounded="full" boxSize={"50"} />
           <Skeleton.Text lines={1} w="50" />
         </VStack>
         <VStack space={2} alignItems="center" maxW="60">
-          <Skeleton rounded="full" boxSize={"50"}/>
+          <Skeleton rounded="full" boxSize={"50"} />
           <Skeleton.Text lines={1} w="50" />
         </VStack>
       </HStack>
@@ -40,15 +41,15 @@ const UserProfilePicListSkeleton = () => {
           <Skeleton.Text lines={1} w="50" />
         </VStack>
         <VStack space={2} alignItems="center" maxW="60">
-          <Skeleton rounded="full" boxSize={"50"}/>
+          <Skeleton rounded="full" boxSize={"50"} />
           <Skeleton.Text lines={1} w="50" />
         </VStack>
         <VStack space={2} alignItems="center" maxW="60">
-          <Skeleton rounded="full" boxSize={"50"}/>
+          <Skeleton rounded="full" boxSize={"50"} />
           <Skeleton.Text lines={1} w="50" />
         </VStack>
         <VStack space={2} alignItems="center" maxW="60">
-          <Skeleton rounded="full" boxSize={"50"}/>
+          <Skeleton rounded="full" boxSize={"50"} />
           <Skeleton.Text lines={1} w="50" />
         </VStack>
       </HStack>
@@ -58,44 +59,45 @@ const UserProfilePicListSkeleton = () => {
           <Skeleton.Text lines={1} w="50" />
         </VStack>
         <VStack space={2} alignItems="center" maxW="60">
-          <Skeleton rounded="full" boxSize={"50"}/>
+          <Skeleton rounded="full" boxSize={"50"} />
           <Skeleton.Text lines={1} w="50" />
         </VStack>
         <VStack space={2} alignItems="center" maxW="60">
-          <Skeleton rounded="full" boxSize={"50"}/>
+          <Skeleton rounded="full" boxSize={"50"} />
           <Skeleton.Text lines={1} w="50" />
         </VStack>
         <VStack space={2} alignItems="center" maxW="60">
-          <Skeleton rounded="full" boxSize={"50"}/>
+          <Skeleton rounded="full" boxSize={"50"} />
           <Skeleton.Text lines={1} w="50" />
         </VStack>
       </HStack>
     </Container>
-  )
-}
+  );
+};
 
 const All = (props: Props) => {
   const { getAllModelGroup } = ModelGroupService();
   const { isLoading, refetch, data } = useQuery({
     queryKey: ["allModelGroup"],
-    queryFn: () => getAllModelGroup({
-    }),
+    queryFn: () => getAllModelGroup({}),
     onSuccess: () => {
-      console.log("=== model group fetched from backend! ===")
+      console.log("=== model group fetched from backend! ===");
     },
     onError: (error) => {
       alert(error);
     },
   });
-  
+
   return (
     <Container>
-      {isLoading ? <UserProfilePicListSkeleton/> :
+      {isLoading ? (
+        <UserProfilePicListSkeleton />
+      ) : (
         <View style={styles.userContainer}>
           <FlashList
             estimatedItemSize={399}
             data={data}
-            renderItem={({ item } : any) => (
+            renderItem={({ item }: any) => (
               <>
                 <Text style={styles.categoryText}>{item.name}</Text>
                 <UserProfilePicList userInfo={item.users} />
@@ -104,7 +106,8 @@ const All = (props: Props) => {
             keyExtractor={(item, index) => "" + index}
             ListFooterComponent={<BottomMessage />}
           />
-        </View>}
+        </View>
+      )}
     </Container>
   );
 };
@@ -113,13 +116,14 @@ export default All;
 
 const styles = StyleSheet.create({
   categoryText: {
-    color: "white",
-    borderLeftColor: "#e15655",
+    color: GLOBAL_COLORS.primaryTextColor,
+    borderLeftColor: GLOBAL_COLORS.secondaryColor,
     borderLeftWidth: 4,
     paddingLeft: 12,
     marginTop: 12,
   },
   userContainer: {
     flex: 1,
-  }
+    paddingHorizontal: 15,
+  },
 });

@@ -21,7 +21,7 @@ const Chat = (props: Props) => {
       },
     ],
   };
-  return <MaterialTopTabs data={chatTabSubNav} />;
+  return <MaterialTopTabs data={chatTabSubNav} isEqualWidth />;
 };
 
 export default Chat;

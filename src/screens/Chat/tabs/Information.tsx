@@ -15,17 +15,23 @@ import FontAwesome from "react-native-vector-icons/FontAwesome";
 import Octicons from "react-native-vector-icons/Octicons";
 import Fontisto from "react-native-vector-icons/Fontisto";
 import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons";
-
-import Container from "components/Container";
-import BottomMessage from "components/BottomMessage";
-
-import { messageList } from "data/messageList";
-import { useNavigation } from "@react-navigation/native";
-import { translationStore } from "../../../zustand/translationStore";
-import ChatService from "services/api/ChatService";
-import { useQuery } from "@tanstack/react-query";
-import { userStore } from "../../../zustand/userStore";
 import { BASE_URL_FILE_SERVER } from "react-native-dotenv";
+import { useQuery } from "@tanstack/react-query";
+import { useNavigation } from "@react-navigation/native";
+
+import BottomMessage from "components/BottomMessage";
+import ChatService from "services/api/ChatService";
+import CommentsIcon from "assets/images/CommentsIcon.png";
+import Container from "components/Container";
+import FansIcon from "assets/images/FansIcon.png";
+import IncomeIcon from "assets/images/IncomeIcon.png";
+import LikeIcon from "assets/images/LikeIcon.png";
+import SystemIcon from "assets/images/SystemIcon.png";
+import { messageList } from "data/messageList";
+import { translationStore } from "../../../zustand/translationStore";
+import { userStore } from "../../../zustand/userStore";
+import { Image } from "react-native";
+import { GLOBAL_COLORS } from "global";
 
 const windowWidth = Dimensions.get("window").width;
 
@@ -62,7 +68,7 @@ const MessageItem = (props: MessageItemProps) => {
               source={{ uri: BASE_URL_FILE_SERVER + props.senderImgURL }}
             />
           </Pressable>
-          <VStack space={1}>
+          <VStack space={1} width="3/4">
             <Text style={[styles.text, { maxWidth: windowWidth - 110 }]}>
               {props.senderUserName}
             </Text>
@@ -156,10 +162,9 @@ const Information = (props: Props) => {
             });
           }}
         >
-          <VStack space={1.5} style={styles.boxContainer}>
-            <Box style={styles.box}>
-              <Feather name="heart" color={"white"} size={24} />
-            </Box>
+          <VStack space={1} style={styles.boxContainer}>
+            <Image source={FansIcon} style={styles.icons} />
+
             <Text style={styles.centerText}>{translations.fan}</Text>
           </VStack>
         </Pressable>
@@ -171,9 +176,8 @@ const Information = (props: Props) => {
           }}
         >
           <VStack space={1.5} style={styles.boxContainer}>
-            <Box style={styles.box}>
-              <AntDesign name="like2" color={"white"} size={24} />
-            </Box>
+            <Image source={LikeIcon} style={styles.icons} />
+
             <Text style={styles.centerText}>{translations.liked}</Text>
           </VStack>
         </Pressable>
@@ -185,9 +189,8 @@ const Information = (props: Props) => {
           }}
         >
           <VStack space={1.5} style={styles.boxContainer}>
-            <Box style={styles.box}>
-              <FontAwesome name="comment-o" color={"white"} size={24} />
-            </Box>
+            <Image source={CommentsIcon} style={styles.icons} />
+
             <Text style={styles.centerText}>{translations.comments}</Text>
           </VStack>
         </Pressable>
@@ -199,9 +202,8 @@ const Information = (props: Props) => {
           }}
         >
           <VStack space={1.5} style={styles.boxContainer}>
-            <Box style={styles.box}>
-              <Fontisto name="money-symbol" color={"white"} size={24} />
-            </Box>
+            <Image source={IncomeIcon} style={styles.icons} />
+
             <Text style={styles.centerText}>{translations.income}</Text>
           </VStack>
         </Pressable>
@@ -213,9 +215,7 @@ const Information = (props: Props) => {
           }}
         >
           <VStack space={1.5} style={styles.boxContainer}>
-            <Box style={styles.box}>
-              <Octicons name="gear" color={"white"} size={24} />
-            </Box>
+            <Image source={SystemIcon} style={styles.icons} />
             <Text style={styles.centerText}>{translations.system}</Text>
           </VStack>
         </Pressable>
@@ -254,25 +254,17 @@ const styles = StyleSheet.create({
   boxContainer: {
     alignItems: "center",
   },
-  box: {
-    alignItems: "center",
-    justifyContent: "center",
-    width: 50,
-    height: 50,
-    padding: 8,
-    borderWidth: 1,
-    borderColor: "white",
-  },
   centerText: {
     color: "white",
     textAlign: "center",
   },
   categoryText: {
     color: "white",
-    borderLeftColor: "#e15655",
+    borderLeftColor: GLOBAL_COLORS.secondaryColor,
     borderLeftWidth: 4,
     paddingLeft: 12,
     marginTop: 12,
+    marginHorizontal: 15,
   },
   text: {
     color: "white",
@@ -285,8 +277,14 @@ const styles = StyleSheet.create({
     backgroundColor: "#262632",
     marginTop: 12,
     padding: 12,
+    marginHorizontal: 15,
   },
   dividerColor: {
     backgroundColor: "#999",
+  },
+  icons: {
+    height: 38,
+    width: 38,
+    resizeMode: "contain",
   },
 });

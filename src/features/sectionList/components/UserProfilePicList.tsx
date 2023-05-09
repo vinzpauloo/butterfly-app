@@ -36,22 +36,22 @@ const UserProfilePicItem = (props: UserProfilePicItem) => {
 const UserProfilePicList = (props: Props) => {
   let numberOfRows = 1 + Math.floor(props.userInfo.length / 4);
   return (
-    <View style={[styles.wrapper, { height: 139.5 * numberOfRows }]}>
-      <FlashList
-        scrollEnabled={false}
-        estimatedItemSize={83}
-        numColumns={4}
-        data={props.userInfo}
-        renderItem={({ item, index }) => (
-          <UserProfilePicItem
-            name={item.username}
-            imgURL={item.photo}
-            userID={item.id}
-          />
-        )}
-        keyExtractor={(item, index) => "" + index}
-      />
-    </View>
+    // <View style={[styles.wrapper, { height: 139.5 * numberOfRows }]}>
+    <FlashList
+      scrollEnabled={false}
+      estimatedItemSize={83}
+      numColumns={4}
+      data={props.userInfo}
+      renderItem={({ item, index }) => (
+        <UserProfilePicItem
+          name={item.username}
+          imgURL={item.photo}
+          userID={item.id}
+        />
+      )}
+      keyExtractor={(item, index) => "" + index}
+    />
+    // </View>
   );
 };
 
@@ -66,6 +66,7 @@ const styles = StyleSheet.create({
     color: "white",
   },
   profPicItem: {
-    margin: 24,
+    marginVertical: 15,
+    marginHorizontal: 5,
   },
 });

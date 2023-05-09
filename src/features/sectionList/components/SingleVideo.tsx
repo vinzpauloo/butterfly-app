@@ -109,6 +109,6 @@ const styles = StyleSheet.create({
   },
   username: {
     color: GLOBAL_COLORS.usernameTextColor,
-    fontSize: 15,
+    fontSize: 13,
   },
 });

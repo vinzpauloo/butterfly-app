@@ -228,14 +228,14 @@ const styles = StyleSheet.create({
   },
   title: {
     paddingHorizontal: 5,
-    fontSize: 16,
+    fontSize: 15,
   },
   text: {
     color: GLOBAL_COLORS.primaryTextColor,
   },
   username: {
     color: GLOBAL_COLORS.usernameTextColor,
-    fontSize: 15,
+    fontSize: 13,
   },
   modelImg: {
     height: 20,

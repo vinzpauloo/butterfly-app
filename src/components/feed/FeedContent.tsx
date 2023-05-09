@@ -1,7 +1,6 @@
 import {
   Dimensions,
   Image,
-  ImageBackground,
   Pressable,
   StyleSheet,
   Text,
@@ -230,8 +229,6 @@ const FeedContent = ({ data, singleFeedPadding = 0 }) => {
     isAlreadyLike: item.is_liked,
     likeCount: item.like?.total_likes || 0,
   });
-
-  console.log("@@@!", item?.videos, item?.images);
 
   return (
     <View

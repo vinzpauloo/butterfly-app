@@ -2,7 +2,6 @@ import { Image, Pressable, StyleSheet, Text } from "react-native";
 import React, { memo, useEffect, useState } from "react";
 
 import { useIsFetching, useMutation } from "@tanstack/react-query";
-import AntDesign from "react-native-vector-icons/AntDesign";
 
 import HeartActive from "assets/images/heartActive.png";
 import HeartInactive from "assets/images/heartInactive.png";

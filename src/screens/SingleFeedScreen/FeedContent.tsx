@@ -9,25 +9,30 @@ import {
 import React, { useState } from "react";
 
 import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons";
+import { HStack, VStack } from "native-base";
+import { useNavigation } from "@react-navigation/native";
+import { BASE_URL_FILE_SERVER } from "react-native-dotenv";
 
-import VideoPlayer from "components/VideoPlayer";
+import CommentIcon from "assets/images/commentIcon.png";
 import CustomModal from "components/CustomModal";
+import FeedContentLikeBtn from "./FeedContentLikeBtn";
 import Fontisto from "react-native-vector-icons/Fontisto";
+import formatDate from "utils/formatDate";
+import ShareIcon from "assets/images/shareIcon.png";
+import VideoPlayer from "components/VideoPlayer";
 import VIPModalContent from "components/VIPModalContent";
 import { GLOBAL_COLORS } from "global";
 import { translationStore } from "../../zustand/translationStore";
-import { useNavigation } from "@react-navigation/native";
-import FeedContentLikeBtn from "./FeedContentLikeBtn";
-import { BASE_URL_FILE_SERVER } from "react-native-dotenv";
 
 const { height, width } = Dimensions.get("window");
 
-const Header = ({ user, userId, setOpen }) => {
+const Header = ({ item, setOpen }) => {
   const translations = translationStore((state) => state.translations);
+  const { dateTimeFormater } = formatDate();
   const navigation = useNavigation<any>();
   const navigateSingleUser = () => {
     navigation.navigate(`SingleUser`, {
-      userID: userId,
+      userID: item.user_id,
     });
   };
   const openVIPModal = () => {
@@ -37,10 +42,20 @@ const Header = ({ user, userId, setOpen }) => {
     <View style={styles.headerContainer}>
       <Pressable style={styles.profileContent} onPress={navigateSingleUser}>
         <Image
-          source={{ uri: BASE_URL_FILE_SERVER + user.photo }}
+          source={{ uri: BASE_URL_FILE_SERVER + item.user.photo }}
           style={styles.profilePhoto}
         />
-        <Text style={styles.username}>{user.username}</Text>
+        <VStack>
+          <Text style={styles.username}>{item.user.username}</Text>
+          <HStack>
+            <Text style={styles.timeDate}>
+              {dateTimeFormater(item.created_at).time}
+            </Text>
+            <Text style={styles.timeDate}>
+              {dateTimeFormater(item.created_at).date}
+            </Text>
+          </HStack>
+        </VStack>
       </Pressable>
       <Pressable style={styles.privateBtn} onPress={openVIPModal}>
         <Text style={styles.privateText}>{translations.chat}</Text>
@@ -74,18 +89,6 @@ const Captions = ({ tags, story, id, like, setLike }) => {
 const Images = ({ images }) => {
   const navigation = useNavigation<any>();
 
-  const columnsCount = (picCount) => {
-    switch (picCount) {
-      case 1:
-        return 1; // column
-      case 2:
-        return 2;
-      case 4:
-        return 2;
-      default:
-        return 3;
-    }
-  };
   const columnImageWidth = (picCount) => {
     switch (picCount) {
       case 1:
@@ -139,18 +142,10 @@ const BottomContent = ({ totalComments, id, like, setLike }) => {
         style={styles.bottomItem}
         onPress={() => navigation.navigate("SharingPromotion")}
       >
-        <MaterialCommunityIcons
-          name="share"
-          size={20}
-          color={GLOBAL_COLORS.inactiveTextColor}
-        />
+        <Image source={ShareIcon} style={styles.icon} />
       </Pressable>
       <View style={styles.bottomItem}>
-        <Fontisto
-          name="commenting"
-          size={16}
-          color={GLOBAL_COLORS.inactiveTextColor}
-        />
+        <Image source={CommentIcon} style={styles.icon} />
         <Text style={styles.bottomText}>{totalComments}</Text>
       </View>
       <FeedContentLikeBtn id={id} like={like} setLike={setLike} />
@@ -163,7 +158,7 @@ const FeedContent = ({ data, like, setLike }) => {
 
   return (
     <View style={styles.mainContainer}>
-      <Header user={data.user} userId={data.user_id} setOpen={setOpen} />
+      <Header item={data} setOpen={setOpen} />
       <Captions
         tags={data.tags}
         story={data.string_story}
@@ -171,8 +166,8 @@ const FeedContent = ({ data, like, setLike }) => {
         like={like}
         setLike={setLike}
       />
-      {!!data?.images && <Images images={data?.images} />}
       {!!data?.videos && <Video url={data?.videos.url} />}
+      {!!data?.images && <Images images={data?.images} />}
       <BottomContent
         totalComments={data.comment?.total_comments || 0}
         like={like}
@@ -217,15 +212,19 @@ const styles = StyleSheet.create({
     color: GLOBAL_COLORS.primaryTextColor,
     fontSize: 16,
   },
+  timeDate: {
+    color: GLOBAL_COLORS.inactiveTextColor,
+    fontSize: 12,
+    marginRight: 5,
+  },
   privateBtn: {
-    borderColor: GLOBAL_COLORS.inactiveTextColor,
-    borderWidth: 1,
-    borderRadius: 2,
-    paddingVertical: 3,
-    paddingHorizontal: 5,
+    backgroundColor: GLOBAL_COLORS.secondaryColor,
+    borderRadius: 16,
+    paddingVertical: 5,
+    paddingHorizontal: 15,
   },
   privateText: {
-    color: GLOBAL_COLORS.inactiveTextColor,
+    color: GLOBAL_COLORS.primaryTextColor,
   },
   //CAPTIONS
   captionContainer: {
@@ -256,8 +255,7 @@ const styles = StyleSheet.create({
     justifyContent: "space-evenly",
   },
   image: {
-    borderWidth: 1,
-    borderColor: "#fff",
+    borderRadius: 4,
   },
   //BOTTOMCONTENT
   bottomContentContainer: {
@@ -277,5 +275,10 @@ const styles = StyleSheet.create({
   bottomText: {
     color: GLOBAL_COLORS.inactiveTextColor,
     marginHorizontal: 3,
+  },
+  icon: {
+    height: 20,
+    width: 20,
+    resizeMode: "contain",
   },
 });

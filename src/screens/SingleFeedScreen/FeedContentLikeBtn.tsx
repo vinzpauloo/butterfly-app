@@ -1,9 +1,11 @@
-import { Pressable, StyleSheet, Text } from "react-native";
+import { Image, Pressable, StyleSheet, Text } from "react-native";
 import React, { memo, useEffect, useState } from "react";
 
 import { useIsFetching, useMutation } from "@tanstack/react-query";
 import AntDesign from "react-native-vector-icons/AntDesign";
 
+import HeartActive from "assets/images/heartActive.png";
+import HeartInactive from "assets/images/heartInactive.png";
 import LikeService from "services/api/LikeService";
 import { GLOBAL_COLORS } from "global";
 import { userStore } from "../../zustand/userStore";
@@ -81,10 +83,9 @@ const FeedContentLikeBtn = ({ id, like, setLike }) => {
 
   return (
     <Pressable style={styles.bottomItem} onPress={handleLike}>
-      <AntDesign
-        name="heart"
-        color={changeButtonColor(isAlreadyLike)}
-        size={15}
+      <Image
+        source={like.isAlreadyLike ? HeartActive : HeartInactive}
+        style={styles.icon}
       />
       <Text
         style={[styles.bottomText, { color: changeButtonColor(isAlreadyLike) }]}
@@ -106,5 +107,10 @@ const styles = StyleSheet.create({
   bottomText: {
     color: GLOBAL_COLORS.inactiveTextColor,
     marginHorizontal: 3,
+  },
+  icon: {
+    height: 20,
+    width: 20,
+    resizeMode: "contain",
   },
 });

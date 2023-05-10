@@ -1,25 +1,59 @@
-import { StyleSheet, TextInput, View } from "react-native";
+import { Image, StyleSheet, TextInput, View } from "react-native";
 import React, { useState } from "react";
 
-import { VStack, Modal, Text, Button } from "native-base";
-import { FontAwesome5 } from "@expo/vector-icons";
+import { VStack, Modal, Text, Button, Spinner } from "native-base";
+import { useMutation } from "@tanstack/react-query";
 
 import { GLOBAL_COLORS } from "global";
+import DonateService from "services/api/DonateService";
 import { translationStore } from "../zustand/translationStore";
+import { userStore } from "../zustand/userStore";
 
-type Props = {};
+import CoinIcon from "assets/images/coinIcon.png";
 
-const DonateModalContent = ({ setOpen }) => {
+const DonateModalContent = ({ setOpen, userID = 1 }) => {
+  // ** GLOBAL STORE
   const translations = translationStore((state) => state.translations);
-  const [donationAmount, setDonationAmount] = useState("");
+  const { api_token } = userStore((state) => state);
+
+  // ** STATES
+  const [amount, setAmount] = useState("");
   const [message, setMessage] = useState("");
 
-  function donateToContentCreator() {
-    setOpen(false);
-    alert(
-      `WIP + TBD \nDonation Amount: ${donationAmount}\nMessage: ${message}`
-    );
-  }
+  // ** API
+  const { postDonate } = DonateService();
+  const { mutate, isLoading, isSuccess, reset } = useMutation(postDonate, {
+    onSuccess: (data) => {
+      console.log("mutateDonate onSuccess", data);
+      handleResetDonate();
+    },
+    onError: (error) => {
+      console.log("mutateDonate onError", error);
+    },
+  });
+
+  // ** EVENTS
+  const onPressDonate = () => {
+    const donateData = {
+      data: {
+        user_id: userID,
+        amount: parseInt(amount),
+        message,
+      },
+      token: api_token,
+    };
+
+    console.log("donating ...", donateData);
+    mutate(donateData);
+  };
+
+  const handleResetDonate = () => {
+    setAmount("");
+    setMessage("");
+    setTimeout(() => {
+      reset();
+    }, 3000);
+  };
 
   return (
     <Modal.Content bgColor={GLOBAL_COLORS.headerBasicBg}>
@@ -36,11 +70,11 @@ const DonateModalContent = ({ setOpen }) => {
               placeholder={translations.tipAmount}
               placeholderTextColor={GLOBAL_COLORS.inactiveTextColor}
               keyboardType="number-pad"
-              value={donationAmount}
-              onChangeText={setDonationAmount}
+              value={amount}
+              onChangeText={setAmount}
             />
             <View style={styles.coinIconContainer}>
-              <FontAwesome5 name="coins" size={12} color="goldenrod" />
+              <Image source={CoinIcon} style={styles.icon} />
             </View>
           </View>
           <TextInput
@@ -53,19 +87,28 @@ const DonateModalContent = ({ setOpen }) => {
             value={message}
             onChangeText={setMessage}
           />
-          <Button
-            disabled={donationAmount === "" ? true : false}
-            size="sm"
-            style={[
-              styles.button,
-              donationAmount === ""
-                ? styles.disabledButton
-                : styles.enabledButton,
-            ]}
-            onPress={donateToContentCreator}
-          >
-            {translations.rewarded}
-          </Button>
+
+          {isSuccess && (
+            <Text color={GLOBAL_COLORS.secondaryColor}>
+              {translations.donateSuccess}
+            </Text>
+          )}
+
+          {!isLoading ? (
+            <Button
+              disabled={amount === "" ? true : false}
+              size="sm"
+              style={[
+                styles.button,
+                amount === "" ? styles.disabledButton : styles.enabledButton,
+              ]}
+              onPress={onPressDonate}
+            >
+              {translations.rewarded}
+            </Button>
+          ) : (
+            <Spinner color={GLOBAL_COLORS.secondaryColor} size="lg" />
+          )}
         </VStack>
       </Modal.Body>
     </Modal.Content>
@@ -94,7 +137,7 @@ const styles = StyleSheet.create({
     justifyContent: "flex-start",
   },
   coinIconContainer: {
-    backgroundColor: "gold",
+    // backgroundColor: "gold",
     height: 24,
     width: 24,
     borderRadius: 12,
@@ -103,5 +146,11 @@ const styles = StyleSheet.create({
     position: "absolute",
     right: 8,
     top: 12,
+  },
+  icon: {
+    marginHorizontal: 3,
+    height: 24,
+    width: 24,
+    resizeMode: "contain",
   },
 });

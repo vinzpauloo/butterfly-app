@@ -215,7 +215,7 @@ const SingleUserHeader = (props: Props) => {
             <VIPModalContent setOpen={setVIPModalOpen} />
           </CustomModal>
           <CustomModal open={openDonateModal} setOpen={setOpenDonateModal}>
-            <DonateModalContent setOpen={setOpenDonateModal} />
+            <DonateModalContent setOpen={setOpenDonateModal} userID={userID} />
           </CustomModal>
         </>
       )}

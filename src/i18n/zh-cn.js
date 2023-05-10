@@ -159,4 +159,5 @@ export default zh_cn = {
   withdrawnProceeds: "提取的收益",
   wonPraise: "获赞",
   work: "作品",
+  donateSuccess: "捐赠成功!",
 };

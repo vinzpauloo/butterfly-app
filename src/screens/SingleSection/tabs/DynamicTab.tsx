@@ -1,4 +1,4 @@
-import { StyleSheet, Text, View } from "react-native";
+import { Dimensions, StyleSheet, Text, View } from "react-native";
 import { useCallback, useState } from "react";
 
 import MasonryList from "@react-native-seoul/masonry-list";
@@ -13,6 +13,8 @@ import WorkgroupService from "services/api/WorkgroupService";
 import { GLOBAL_COLORS } from "global";
 import { translationStore } from "../../../zustand/translationStore";
 import { Video } from "features/sectionList/components/GridVideos";
+
+const { width } = Dimensions.get("window");
 
 const BottomMessage = () => {
   const translation = translationStore((state) => state.translations);
@@ -92,7 +94,7 @@ const DynamicTab = ({ id: selectionId, tabCategory }) => {
         //   />
         // }
         data={data}
-        numColumns={2}
+        numColumns={width < 480 ? 2 : 3}
         onEndReachedThreshold={0.01} // always make this default to 0.01 to have no bug for fetching data for the onEndReached -> https://github.com/facebook/react-native/issues/14015#issuecomment-346547942
         onMomentumScrollBegin={() => setStartScroll(false)}
         onEndReached={reachEnd}

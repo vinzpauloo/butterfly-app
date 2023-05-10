@@ -48,10 +48,11 @@ const Header = ({ item, setOpen }) => {
           <Text style={styles.username}>{item.user.username}</Text>
           <HStack>
             <Text style={styles.timeDate}>
-              {dateTimeFormater(item.created_at).time}
+              {item.created_at}
+              {/* {dateTimeFormater(item.created_at).time} */}
             </Text>
             <Text style={styles.timeDate}>
-              {dateTimeFormater(item.created_at).date}
+              {/* {dateTimeFormater(item.created_at).date} */}
             </Text>
           </HStack>
         </VStack>

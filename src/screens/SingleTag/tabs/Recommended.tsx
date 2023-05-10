@@ -1,4 +1,4 @@
-import { RefreshControl, StyleSheet, View } from "react-native";
+import { Dimensions, RefreshControl, StyleSheet, View } from "react-native";
 import React, { useCallback, useState } from "react";
 
 import { useDisclose } from "native-base";
@@ -14,6 +14,8 @@ import { Video } from "features/sectionList/components/GridVideos";
 import { GLOBAL_COLORS } from "global";
 import WorkService from "services/api/WorkService";
 import { userStore } from "../../../zustand/userStore";
+
+const { width } = Dimensions.get("window");
 
 const Recommended = ({ tag, isFollowingScreen = false }) => {
   const token = userStore((state) => state.api_token);
@@ -84,7 +86,7 @@ const Recommended = ({ tag, isFollowingScreen = false }) => {
           //   />
           // }
           data={data}
-          numColumns={2}
+          numColumns={width < 480 ? 2 : 3}
           onEndReachedThreshold={0.01} // always make this default to 0.01 to have no bug for fetching data for the onEndReached -> https://github.com/facebook/react-native/issues/14015#issuecomment-346547942
           onMomentumScrollBegin={() => setStartScroll(false)}
           onEndReached={reachEnd}

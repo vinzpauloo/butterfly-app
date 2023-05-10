@@ -8,7 +8,6 @@ import {
 } from "react-native";
 import React, { useState } from "react";
 
-import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons";
 import { HStack, VStack } from "native-base";
 import { useNavigation } from "@react-navigation/native";
 import { BASE_URL_FILE_SERVER } from "react-native-dotenv";
@@ -16,19 +15,18 @@ import { BASE_URL_FILE_SERVER } from "react-native-dotenv";
 import CommentIcon from "assets/images/commentIcon.png";
 import CustomModal from "components/CustomModal";
 import FeedContentLikeBtn from "./FeedContentLikeBtn";
-import Fontisto from "react-native-vector-icons/Fontisto";
-import formatDate from "utils/formatDate";
 import ShareIcon from "assets/images/shareIcon.png";
 import VideoPlayer from "components/VideoPlayer";
 import VIPModalContent from "components/VIPModalContent";
 import { GLOBAL_COLORS } from "global";
 import { translationStore } from "../../zustand/translationStore";
 
+import moment from "moment";
+
 const { height, width } = Dimensions.get("window");
 
 const Header = ({ item, setOpen }) => {
   const translations = translationStore((state) => state.translations);
-  const { dateTimeFormater } = formatDate();
   const navigation = useNavigation<any>();
   const navigateSingleUser = () => {
     navigation.navigate(`SingleUser`, {
@@ -49,10 +47,8 @@ const Header = ({ item, setOpen }) => {
           <Text style={styles.username}>{item.user.username}</Text>
           <HStack>
             <Text style={styles.timeDate}>
-              {dateTimeFormater(item.created_at).time}
-            </Text>
-            <Text style={styles.timeDate}>
-              {dateTimeFormater(item.created_at).date}
+              {moment(item.created_at).format("h:mm A")}{" "}
+              {moment(item.created_at).format("MM/DD/YYYY")}
             </Text>
           </HStack>
         </VStack>

@@ -23,7 +23,9 @@ import {
 import AccountIcon from "assets/images/account_icon.png";
 import ApplicationIcon from "assets/images/application_icon.png";
 import Container from "components/Container";
+import CopyIcon from "assets/images/copy_icon.png";
 import DownloadIcon from "assets/images/download_icon.png";
+import EmailIcon from "assets/images/email_icon.png";
 import Entypo from "react-native-vector-icons/Entypo";
 import FlagUSA from "assets/images/Flag-USA.png";
 import FlagChina from "assets/images/Flag-China.webp";
@@ -32,27 +34,30 @@ import HistoryIcon from "assets/images/history_icon.png";
 import Ionicons from "react-native-vector-icons/Ionicons";
 import LanguageImg from "assets/images/language.png";
 import localizations from "i18n/localizations";
-import NotVIPDiamondImage from "assets/images/not_vip_diamond.png";
 import OfficialIcon from "assets/images/official_icon.png";
 import SaveIcon from "assets/images/save_icon.png";
 import ServiceIcon from "assets/images/service_icon.png";
 import ShareIcon from "assets/images/share_icon.png";
-import VIPDiamondImage from "assets/images/vip_diamond.png";
+import VIPActive from "assets/images/VIPActive.png";
+import VIPNotActive from "assets/images/VIPNotActive.png";
 import { GLOBAL_COLORS } from "global";
 import { translationStore } from "../../zustand/translationStore";
 import { userStore } from "../../zustand/userStore";
-import { useNavigation } from "@react-navigation/native";
+import { useIsFocused, useNavigation } from "@react-navigation/native";
 import UserService from "services/api/UserService";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import CustomerService from "services/api/CustomerService";
 
 // **** COMPONENTS START **** //
-const Layout = (props) => {
-  return (
-    <VStack backgroundColor="#202833" borderRadius={5} {...props}>
-      {props.children}
-    </VStack>
-  );
+const Layout = ({ children, style = null }) => {
+  const styles = StyleSheet.create({
+    container: {
+      paddingHorizontal: 15,
+      backgroundColor: "#202833",
+      ...style,
+    },
+  });
+  return <View style={styles.container}>{children}</View>;
 };
 // **** COMPONENTS END **** //
 
@@ -65,7 +70,7 @@ const Header = () => {
   };
 
   return (
-    <HStack py={2} justifyContent={"flex-end"} pr={2} alignItems="center">
+    <HStack py={2} justifyContent={"flex-end"} alignItems="center">
       <Fontisto name="bell" color="#fff" size={25} style={styles.icon} />
       <Pressable onPress={handlePressSettings}>
         <Ionicons
@@ -86,19 +91,19 @@ const User = () => {
   const { translations } = translationStore((store) => store);
 
   return (
-    <Box style={styles.mainContainer}>
-      <VStack p={3}>
+    <HStack>
+      <Box mr="2.5">
+        <Image
+          source={{ uri: BASE_URL_FILE_SERVER + photo }}
+          style={styles.profileImg}
+        />
+      </Box>
+      <VStack space={2}>
         <HStack>
-          <Box ml="3" mr="2.5" position="relative">
-            <Image
-              source={{ uri: BASE_URL_FILE_SERVER + photo }}
-              style={styles.profileImg}
-            />
-            {is_Vip ? <Text style={styles.vipText}>VIP</Text> : null}
-          </Box>
-          <VStack justifyContent="space-evenly">
-            <HStack w="72" justifyContent="space-between">
+          <VStack justifyContent="space-evenly" space={1}>
+            <HStack w="72" space={2}>
               <Text style={styles.usernameText}>{alias}</Text>
+              {!is_Vip ? <Text style={styles.vipText}>VIP</Text> : null}
               {/* <HStack alignItems="center" space={1}>
                   <Text style={styles.bottomText}>轮廓</Text>
                   <Entypo
@@ -119,14 +124,24 @@ const User = () => {
             </HStack>
           </VStack>
         </HStack>
-        <Divider bg="#565656" thickness="1" my={2} />
-        <HStack justifyContent="space-evenly" ml="9">
-          <Text style={styles.bottomText}>{translations.talkAbout} : 0</Text>
-          <Text style={styles.bottomText}>{translations.follow} : 0</Text>
-          <Text style={styles.bottomText}>{translations.fan} : 0</Text>
+        <HStack justifyContent="space-between" alignItems="center">
+          <VStack alignItems="center">
+            <Text style={styles.bottomTopText}>0</Text>
+            <Text style={styles.bottomText}>{translations.talkAbout}</Text>
+          </VStack>
+          <Divider orientation="vertical" mx={1} h="1/2" />
+          <VStack alignItems="center">
+            <Text style={styles.bottomTopText}>0</Text>
+            <Text style={styles.bottomText}>{translations.follow}</Text>
+          </VStack>
+          <Divider orientation="vertical" mx={1} h="1/2" />
+          <VStack alignItems="center">
+            <Text style={styles.bottomTopText}>0</Text>
+            <Text style={styles.bottomText}>{translations.fan}</Text>
+          </VStack>
         </HStack>
       </VStack>
-    </Box>
+    </HStack>
   );
 };
 // **** USER COMPONENT END CODE **** //
@@ -142,36 +157,57 @@ const VIPStatus = () => {
   };
 
   return (
-    <Box p={1} style={styles.mainContainer}>
+    <Box>
       <Pressable onPress={handlePressVIP}>
-        <VStack m={1}>
-          <Box
+        <VStack my={5}>
+          <HStack
+            alignItems="center"
             alignSelf="flex-end"
-            backgroundColor="#EF9535"
+            backgroundColor="#F09536"
+            justifyContent="space-between"
             py=".5"
-            px="4"
+            pl="4"
             borderTopRightRadius={5}
             borderTopLeftRadius={20}
+            space={2}
           >
             <Text style={styles.subscribe}>
               {is_Vip ? translations.renewVIP : translations.subscribeToVIP}
             </Text>
-          </Box>
+            <Entypo
+              name="chevron-small-right"
+              color={GLOBAL_COLORS.primaryTextColor}
+              size={15}
+            />
+          </HStack>
           <HStack
-            backgroundColor={is_Vip ? "#694C2A" : "#373E48"}
+            backgroundColor={is_Vip ? "#4a3e34" : "#363e47"}
             py={3}
             px="2.5"
             alignItems="center"
             borderLeftRadius={5}
             borderBottomRightRadius={5}
           >
-            <Image source={is_Vip ? VIPDiamondImage : NotVIPDiamondImage} />
+            <Image
+              source={is_Vip ? VIPActive : VIPNotActive}
+              style={styles.vipImage}
+            />
             <VStack pl={2.5}>
-              <Text style={styles.vipTitle}>
-                {translations.vipPeriod} :{" "}
-                {is_Vip ? "2023-05-19" : translations.notYetMember}
-              </Text>
-              <Text style={styles.vipSubtitle}>
+              {is_Vip ? (
+                <Text style={[styles.vipTitle, { color: "#F09536" }]}>
+                  {translations.vipPeriod} : {"2023-05-19"}
+                </Text>
+              ) : (
+                <Text
+                  style={[
+                    styles.vipTitle,
+                    { color: GLOBAL_COLORS.primaryTextColor },
+                  ]}
+                >
+                  {translations.vip} : {translations.notYetMember}
+                </Text>
+              )}
+              <Text style={{ color: is_Vip ? "#DBAD7D" : "#73787F" }}>
                 {translations.userID} : {_id}
               </Text>
             </VStack>
@@ -191,14 +227,8 @@ const LanguageTranlation = ({ setOpen, language }) => {
   };
   return (
     <Pressable onPress={handlePress}>
-      <HStack
-        py={3}
-        pl={6}
-        pr={4}
-        alignItems="center"
-        justifyContent="space-between"
-      >
-        <HStack alignItems="center" space="xl">
+      <HStack py={3} pl={1} alignItems="center" justifyContent="space-between">
+        <HStack alignItems="center" space={4}>
           <Image source={LanguageImg} style={styles.langImg} />
           <Text style={styles.langText}>{translations.language}</Text>
         </HStack>
@@ -206,7 +236,7 @@ const LanguageTranlation = ({ setOpen, language }) => {
           <Image source={language.flag} style={styles.flagImg} />
           <Text style={styles.langText}>{language.title}</Text>
           <Entypo
-            name="chevron-right"
+            name="chevron-small-right"
             color={GLOBAL_COLORS.primaryTextColor}
             size={28}
           />
@@ -262,6 +292,12 @@ const LinkList = () => {
       icon: OfficialIcon,
       navigate: () => {},
     },
+    {
+      title: `${translations.officialEmail}: butterflyproject@gmail.com`,
+      icon: EmailIcon,
+      icon2: CopyIcon,
+      navigate: () => {},
+    },
   ];
   return (
     <>
@@ -269,20 +305,23 @@ const LinkList = () => {
         <Pressable onPress={item.navigate}>
           <HStack
             py={3}
-            pl={6}
-            pr={4}
+            pl={1}
             alignItems="center"
             justifyContent="space-between"
           >
-            <HStack alignItems="center" space="xl">
+            <HStack alignItems="center" space={4}>
               <Image source={item.icon} style={styles.langImg} />
               <Text style={styles.langText}>{item.title}</Text>
             </HStack>
-            <Entypo
-              name="chevron-right"
-              color={GLOBAL_COLORS.primaryTextColor}
-              size={28}
-            />
+            {!!item?.icon2 ? (
+              <Image source={item.icon2} style={styles.langImg2} />
+            ) : (
+              <Entypo
+                name="chevron-small-right"
+                color={GLOBAL_COLORS.primaryTextColor}
+                size={28}
+              />
+            )}
           </HStack>
         </Pressable>
       ))}
@@ -301,20 +340,14 @@ const Download = () => {
         navigation.navigate("Downloads", { postTitle: translations.download })
       }
     >
-      <HStack
-        py={3}
-        pl={6}
-        pr={4}
-        alignItems="center"
-        justifyContent="space-between"
-      >
-        <HStack alignItems="center" space="xl">
+      <HStack py={3} pl={1} alignItems="center" justifyContent="space-between">
+        <HStack alignItems="center" space={4}>
           <Image source={SaveIcon} style={styles.langImg} />
           <Text style={styles.langText}>{translations.recordingHistory}</Text>
         </HStack>
         <HStack alignItems="center">
           <Entypo
-            name="chevron-right"
+            name="chevron-small-right"
             color={GLOBAL_COLORS.primaryTextColor}
             size={28}
           />
@@ -324,22 +357,6 @@ const Download = () => {
   );
 };
 // **** DOWNLOAD COMPONENT END CODE **** //
-
-// **** EMAIL COMPONENT START CODE **** //
-const Email = () => {
-  const { translations } = translationStore((store) => store);
-  return (
-    <HStack mb={3} alignItems="center" justifyContent="center" space={5}>
-      <Text style={styles.emailText}>
-        {translations.officialEmail}: butterflyproject@gmail.com
-      </Text>
-      <Pressable style={styles.emailBtn}>
-        <Text style={styles.emailTextBtn}>{translations.copy}</Text>
-      </Pressable>
-    </HStack>
-  );
-};
-// **** EMAIL COMPONENT END CODE **** //
 
 // **** MODAL COMPONENT START CODE **** //
 const LanguageModal = ({ open, setOpen, setLanguage }) => {
@@ -434,6 +451,7 @@ const MainProfile = () => {
   const { api_token } = userStore();
   const userStoreData = userStore((store) => store);
   const setUserStore = userStore((state) => state.setUserData);
+  const isFocus = useIsFocused();
 
   // ** STATES
   const [open, setOpen] = useState(false);
@@ -463,6 +481,7 @@ const MainProfile = () => {
     onError: (error) => {
       console.log("onError customerProfile", error);
     },
+    enabled: isFocus,
   });
 
   // ** EVENTS
@@ -488,16 +507,15 @@ const MainProfile = () => {
           <User />
           <VIPStatus />
         </Layout>
-        <Layout my={5}>
+        <Layout style={{ marginVertical: 15 }}>
           <LanguageTranlation setOpen={setOpen} language={language} />
         </Layout>
         <Layout>
           <LinkList />
         </Layout>
-        <Layout my={5}>
+        <Layout style={{ marginVertical: 15 }}>
           <Download />
         </Layout>
-        <Email />
       </ScrollView>
       <LanguageModal open={open} setOpen={setOpen} setLanguage={setLanguage} />
     </Container>
@@ -509,7 +527,7 @@ export default MainProfile;
 const styles = StyleSheet.create({
   // **** HEADER **** //
   icon: {
-    marginHorizontal: 10,
+    marginLeft: 20,
   },
   // **** COUNTRY SELECT **** //
   container: {
@@ -547,46 +565,43 @@ const styles = StyleSheet.create({
     height: 15,
   },
   // **** USER **** //
-  mainContainer: {
-    borderRadius: 10,
-  },
   profileImg: {
     height: 45,
     width: 45,
     borderRadius: 25,
-    borderWidth: 2,
-    borderColor: GLOBAL_COLORS.primaryTextColor,
   },
   vipText: {
-    position: "absolute",
-    bottom: -3,
-    left: 14,
-    paddingHorizontal: 5,
-    borderRadius: 10,
-    backgroundColor: GLOBAL_COLORS.secondaryColor,
-    color: GLOBAL_COLORS.primaryTextColor,
+    paddingTop: 2,
+    textAlign: "center",
+    paddingHorizontal: 10,
+    borderRadius: 5,
+    backgroundColor: "#F7D3A5",
     fontSize: 10,
-    fontWeight: "bold",
+    marginVertical: 3,
   },
   usernameText: {
-    fontSize: 16,
+    fontSize: 18,
     fontWeight: "bold",
     color: GLOBAL_COLORS.primaryTextColor,
   },
   middleText: {
-    color: GLOBAL_COLORS.primaryTextColor,
+    color: GLOBAL_COLORS.inactiveTextColor,
     fontSize: 12,
   },
-  bottomText: {
+  bottomTopText: {
     color: GLOBAL_COLORS.primaryTextColor,
-    paddingLeft: 3,
+    fontSize: 20,
+    fontWeight: "bold",
+  },
+  bottomText: {
+    color: GLOBAL_COLORS.inactiveTextColor,
   },
   // **** VIP STATUS **** //
   subscribe: {
     textTransform: "uppercase",
     fontWeight: "bold",
     color: GLOBAL_COLORS.primaryTextColor,
-    fontSize: 16,
+    fontSize: 14,
     textAlign: "center",
   },
   textContainer: {
@@ -594,17 +609,26 @@ const styles = StyleSheet.create({
     left: 76,
     top: 30,
   },
+  vipImage: {
+    height: 40,
+    width: 40,
+    resizeMode: "contain",
+  },
   vipTitle: {
     fontSize: 20,
-    color: GLOBAL_COLORS.primaryTextColor,
     fontWeight: "bold",
   },
-  vipSubtitle: { color: GLOBAL_COLORS.primaryTextColor },
   // **** LANGUAGE TRANSLATION **** //
   langImg: {
-    height: 28,
-    width: 28,
+    height: 22,
+    width: 22,
     resizeMode: "contain",
+  },
+  langImg2: {
+    height: 15,
+    width: 15,
+    resizeMode: "contain",
+    marginRight: 10,
   },
   langText: {
     fontWeight: "500",

@@ -25,6 +25,7 @@ import { GLOBAL_COLORS } from "global";
 import { translationStore } from "../../../zustand/translationStore";
 import { userStore } from "../../../zustand/userStore";
 import { useQuery } from "@tanstack/react-query";
+import DonateModalContent from "components/DonateModalContent";
 
 export const Header = ({
   data,
@@ -33,25 +34,24 @@ export const Header = ({
   isAlreadyFavorite,
   setIsAlreadyFavorite,
 }) => {
-  const route = useRoute<any>();
-  const navigation = useNavigation<any>();
+  // ** GLOBAL STORE
   const translations = translationStore((state) => state.translations);
-  const token = userStore((store) => store.api_token);
-  const isVIP = userStore((state) => state.is_Vip);
   const { downloaded, downloading, setDownloaded, setDownloading } =
     downloadStore((state) => state);
-  const { getDownloadVideo } = WatchVideo();
+  const token = userStore((store) => store.api_token);
+  const isVIP = userStore((state) => state.is_Vip);
+
+  // ** STATES
   const [open, setOpen] = useState(false);
+  const [openDonateModal, setOpenDonateModal] = useState(false);
   const [toDownload, setToDownload] = useState(false);
 
-  // navigate to single tag screen
-  const handleNavigate = (item) => {
-    navigation.navigate("SingleTag", {
-      id: route.params.id,
-      postTitle: item,
-      userId: route.params.userId,
-    });
-  };
+  // ** HOOKS
+  const route = useRoute<any>();
+  const navigation = useNavigation<any>();
+
+  // ** API
+  const { getDownloadVideo } = WatchVideo();
 
   const { isLoading } = useQuery({
     queryKey: ["download-video-single-video"],
@@ -76,6 +76,15 @@ export const Header = ({
     },
     enabled: toDownload,
   });
+
+  // ** EVENTS
+  const handleNavigate = (item) => {
+    navigation.navigate("SingleTag", {
+      id: route.params.id,
+      postTitle: item,
+      userId: route.params.userId,
+    });
+  };
 
   const handleDownload = () => {
     if (isVIP) {
@@ -169,13 +178,15 @@ export const Header = ({
             isAlreadyFavorite={isAlreadyFavorite}
             setIsAlreadyFavorite={setIsAlreadyFavorite}
           />
-          <View style={styles.buttonItem}>
-            <Image source={CoinIcon} style={styles.icon} />
-            <Text style={styles.text}>
-              {/* 22{translations.coin} */}
-              {translations.donate}
-            </Text>
-          </View>
+          <Pressable onPress={() => setOpenDonateModal(true)}>
+            <View style={styles.buttonItem}>
+              <Image source={CoinIcon} style={styles.icon} />
+              <Text style={styles.text}>
+                {/* 22{translations.coin} */}
+                {translations.donate}
+              </Text>
+            </View>
+          </Pressable>
           <DownloadStatus videoID={data._id} />
           <Pressable onPress={() => navigation.navigate("SharingPromotion")}>
             <View style={styles.buttonItem} pointerEvents="box-none">
@@ -188,6 +199,12 @@ export const Header = ({
       <BannerAds />
       <CustomModal open={open} setOpen={setOpen}>
         <VIPModalContent setOpen={setOpen} />
+      </CustomModal>
+      <CustomModal open={openDonateModal} setOpen={setOpenDonateModal}>
+        <DonateModalContent
+          setOpen={setOpenDonateModal}
+          userID={data?.user.id}
+        />
       </CustomModal>
     </>
   );

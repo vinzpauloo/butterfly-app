@@ -161,4 +161,5 @@ export default en_us = {
   withdrawnProceeds: "Withdrawn Proceeds",
   wonPraise: "Won Praise",
   work: "Work",
+  donateSuccess: "Donation success!",
 };

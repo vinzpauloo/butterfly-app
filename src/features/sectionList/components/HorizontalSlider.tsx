@@ -65,7 +65,7 @@ const Video = ({ index, data, item, setId, onOpen }: any) => {
         </Pressable>
         <View style={styles.texts}>
           <Text style={styles.text} numberOfLines={1}>
-            Width: {width} | {video.title}
+            {video.title}
           </Text>
           <HStack alignItems="center" justifyContent="space-between">
             <Text style={styles.username} numberOfLines={1}>

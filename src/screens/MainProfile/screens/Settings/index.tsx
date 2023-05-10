@@ -5,34 +5,23 @@ import Entypo from "react-native-vector-icons/Entypo";
 import LottieView from "lottie-react-native";
 import { HStack, Input, Modal, Pressable, Stack, VStack } from "native-base";
 
-import AccountIcon from "assets/images/account_icon.png";
-import ActiveFemaleIcon from "assets/images/active_female_icon.png";
-import ActiveMaleIcon from "assets/images/active_male_icon.png";
-import CertificateIcon from "assets/images/certificate.png";
-import ChainIcon from "assets/images/chain_icon.png";
+import CoinIcon from "assets/images/coinIcon.png";
 import Container from "components/Container";
 import CustomerService from "services/api/CustomerService";
-import FileIcon from "assets/images/file_icon.png";
-import FemaleIcon from "assets/images/female_icon.png";
-import GlassIcon from "assets/images/glass_icon.png";
-import HeadphoneIcon from "assets/images/headphone_icon.png";
-import InfoIcon from "assets/images/info_icon.png";
 import LoadingSpinner from "components/LoadingSpinner";
-import MaleIcon from "assets/images/male_icon.png";
-import SecurityIcon from "assets/images/security_icon.png";
 import Succesful from "assets/succesful.json";
-import useDebounce from "hooks/useDebounce";
 import { BASE_URL_FILE_SERVER } from "react-native-dotenv";
 import { GLOBAL_COLORS } from "global";
 import { translationStore } from "../../../../zustand/translationStore";
 import { userStore } from "../../../../zustand/userStore";
 import { useNavigation } from "@react-navigation/native";
 import { useMutation, useQuery } from "@tanstack/react-query";
+import Ionicons from "react-native-vector-icons/Ionicons";
 
 // **** START: FILE COMPONENTS **** //
 const LayoutContent = ({ children }) => {
   return (
-    <HStack px={5} py={2} alignItems="center" justifyContent="space-between">
+    <HStack px={5} py="2" alignItems="center" justifyContent="space-between">
       {children}
     </HStack>
   );
@@ -53,14 +42,6 @@ const ModalContent = ({ open, setOpen, children }) => {
     >
       {children}
     </Modal>
-  );
-};
-
-const TextIconContent = ({ children }) => {
-  return (
-    <HStack alignItems="center" space={5}>
-      {children}
-    </HStack>
   );
 };
 
@@ -87,58 +68,28 @@ const SuccessNotification = () => {
 // **** START: FIRST CONTAINER **** //
 const FirstContainer = ({
   gender,
-  setGender,
   nickname,
-  setNickname,
-  setOpen,
+  setOpenNickName,
+  setGenderModal,
+  setOpenBindMobileModal,
 }) => {
   const userStoreData = userStore((store) => store);
-  const setUserStore = userStore((state) => state.setUserData);
   const { translations } = translationStore((store) => store);
-  const { putCustomerProfile } = CustomerService();
-  const [aliasHasChange, setAliasHasChange] = useState(false);
 
-  const { mutate: mutateGender } = useMutation(putCustomerProfile, {
-    onSuccess: (data) => {
-      setGender(data.gender);
-    },
-  });
-
-  const { mutate: mutateAlias } = useMutation(putCustomerProfile, {
-    onSuccess: (data) => {
-      setUserStore({ ...userStoreData, alias: data.alias });
-    },
-  });
-
-  const handlePress = (value) => {
-    mutateGender({
-      data: {
-        gender: value,
-      },
-      token: userStoreData.api_token,
-    });
+  const handleOpenNickNameModal = () => {
+    setOpenNickName(true);
   };
 
-  const handleAliasChange = (text) => {
-    setNickname(text);
-    setAliasHasChange(true);
+  const handleOpenGenderModal = () => {
+    setGenderModal(true);
   };
 
-  const newAlias = useDebounce(nickname, 500);
-
-  useEffect(() => {
-    if (aliasHasChange) {
-      mutateAlias({
-        data: {
-          alias: newAlias,
-        },
-        token: userStoreData.api_token,
-      });
-    }
-  }, [newAlias]);
+  const handleOpenBindMobileModal = () => {
+    setOpenBindMobileModal(true);
+  };
 
   return (
-    <VStack mb={10}>
+    <VStack mt={5} style={{ backgroundColor: GLOBAL_COLORS.videoContentBG }}>
       <LayoutContent>
         <Text style={styles.textLabel}>{translations.setup}</Text>
         <HStack alignItems="center">
@@ -147,57 +98,64 @@ const FirstContainer = ({
             style={styles.profileImg}
           />
           <Entypo
-            name="chevron-right"
+            name="chevron-small-right"
             color={GLOBAL_COLORS.primaryTextColor}
             size={25}
           />
         </HStack>
       </LayoutContent>
-      <LayoutContent>
-        <Text style={styles.textLabel}>{translations.nickname}</Text>
-        <Input
-          width="56"
-          placeholder={translations.nickname}
-          value={nickname}
-          onChangeText={handleAliasChange}
-          placeholderTextColor="#000000"
-          style={[styles.textInput, { backgroundColor: "#7f7b7c" }]}
-        />
-      </LayoutContent>
-      <LayoutContent>
-        <Text style={styles.textLabel}>{translations.gender}</Text>
-        <HStack>
-          <Pressable onPress={() => handlePress("Female")}>
-            <Image
-              source={gender === "Female" ? ActiveFemaleIcon : FemaleIcon}
-              style={styles.femaleIcon}
+      <Pressable onPress={handleOpenNickNameModal}>
+        <LayoutContent>
+          <Text style={styles.textLabel}>{translations.nickname}</Text>
+          <HStack alignItems="center">
+            <Text style={styles.textLabel}>{nickname}</Text>
+            <Entypo
+              name="chevron-small-right"
+              color={GLOBAL_COLORS.primaryTextColor}
+              size={25}
             />
-          </Pressable>
-          <Pressable onPress={() => handlePress("Male")}>
-            <Image
-              source={gender === "Male" ? ActiveMaleIcon : MaleIcon}
-              style={styles.maleIcon}
-            />
-          </Pressable>
-        </HStack>
-      </LayoutContent>
-      <LayoutContent>
-        {!!userStoreData.mobile ? (
-          <>
-            <Text style={styles.textLabel}>{translations.mobileNumber}</Text>
-            <Text style={styles.textLabel}>{userStoreData.mobile}</Text>
-          </>
-        ) : (
-          <>
+          </HStack>
+        </LayoutContent>
+      </Pressable>
+      <Pressable onPress={handleOpenGenderModal}>
+        <LayoutContent>
+          <Text style={styles.textLabel}>{translations.gender}</Text>
+          <HStack alignItems="center">
             <Text style={styles.textLabel}>
-              {translations.pleaseEnterPhoneNumber}
+              {gender === "Male" ? translations.male : translations.female}
             </Text>
-            <Pressable onPress={() => setOpen(true)}>
-              <Text style={styles.button}>{translations.toBind}</Text>
-            </Pressable>
-          </>
-        )}
-      </LayoutContent>
+            <Entypo
+              name="chevron-small-right"
+              color={GLOBAL_COLORS.primaryTextColor}
+              size={25}
+            />
+          </HStack>
+        </LayoutContent>
+      </Pressable>
+      <Pressable onPress={handleOpenBindMobileModal}>
+        <LayoutContent>
+          {!!userStoreData.mobile ? (
+            <>
+              <Text style={styles.textLabel}>{translations.mobileNumber}</Text>
+              <Text style={styles.textLabel}>{userStoreData.mobile}</Text>
+            </>
+          ) : (
+            <>
+              <Text style={styles.textLabel}>
+                {translations.pleaseEnterPhoneNumber}
+              </Text>
+              <HStack alignItems="center">
+                <Text style={styles.textLabel}>去绑定</Text>
+                <Entypo
+                  name="chevron-small-right"
+                  color={GLOBAL_COLORS.primaryTextColor}
+                  size={25}
+                />
+              </HStack>
+            </>
+          )}
+        </LayoutContent>
+      </Pressable>
       {/* <LayoutContent>
         <Text style={styles.textLabel}>个人简介</Text>
         <Input
@@ -223,19 +181,15 @@ const SecondContainer = ({ setOpen }) => {
   };
 
   return (
-    <VStack mb={10}>
+    <VStack mt={5} style={{ backgroundColor: GLOBAL_COLORS.videoContentBG }}>
       <LayoutContent>
-        <TextIconContent>
-          <Image source={AccountIcon} style={styles.textIcon} />
-          <Text style={styles.textLabel}>{translations.accountID}</Text>
-        </TextIconContent>
+        <Text style={styles.textLabel}>{translations.accountID}</Text>
         <HStack
           alignItems="center"
           space={5}
-          backgroundColor="#787879"
           style={styles.accountContainer}
           maxWidth="56"
-          paddingRight="20"
+          paddingRight="12"
         >
           <Text style={styles.accountText} numberOfLines={1}>
             {_id}
@@ -244,63 +198,61 @@ const SecondContainer = ({ setOpen }) => {
             <Text style={styles.redBtn}>{translations.copy}</Text>
           </Pressable>
         </HStack>
-      </LayoutContent>
-
-      <LayoutContent>
-        <TextIconContent>
-          <Image source={CertificateIcon} style={styles.textIcon} />
-          <Text style={styles.textLabel}>
-            {translations.accountCertificate}
-          </Text>
-        </TextIconContent>
         <Entypo
-          name="chevron-right"
+          name="chevron-small-right"
           color={GLOBAL_COLORS.primaryTextColor}
           size={25}
         />
       </LayoutContent>
 
       <LayoutContent>
-        <TextIconContent>
-          <Image source={GlassIcon} style={styles.textIcon} />
-          <Text style={styles.textLabel}>{translations.accountRetrieval}</Text>
-        </TextIconContent>
+        <Text style={styles.textLabel}>{translations.accountCertificate}</Text>
+        <Entypo
+          name="chevron-small-right"
+          color={GLOBAL_COLORS.primaryTextColor}
+          size={25}
+        />
+      </LayoutContent>
+
+      <LayoutContent>
+        <Text style={styles.textLabel}>{translations.accountRetrieval}</Text>
         <HStack alignItems="center">
           <Text style={styles.textLabel}>
             {translations.lostAccountRecovered}
           </Text>
           <Entypo
-            name="chevron-right"
+            name="chevron-small-right"
             color={GLOBAL_COLORS.primaryTextColor}
             size={25}
           />
         </HStack>
       </LayoutContent>
-      <LayoutContent>
-        {!!referral_code ? (
-          <>
-            <TextIconContent>
-              <Image source={ChainIcon} style={styles.textIcon} />
+      <Pressable onPress={handlePress}>
+        <LayoutContent>
+          {!!referral_code ? (
+            <>
               <Text style={styles.textLabel}>
                 {translations.invitationCode}
               </Text>
-            </TextIconContent>
-            <Text style={styles.textLabel}>{referral_code}</Text>
-          </>
-        ) : (
-          <>
-            <TextIconContent>
-              <Image source={ChainIcon} style={styles.textIcon} />
+              <Text style={styles.textLabel}>{referral_code}</Text>
+            </>
+          ) : (
+            <>
               <Text style={styles.textLabel}>
                 {translations.bindInvitationCode}
               </Text>
-            </TextIconContent>
-            <Pressable onPress={handlePress}>
-              <Text style={styles.button}>{translations.toBind}</Text>
-            </Pressable>
-          </>
-        )}
-      </LayoutContent>
+              <HStack alignItems="center">
+                <Text style={styles.textLabel}>去绑定</Text>
+                <Entypo
+                  name="chevron-small-right"
+                  color={GLOBAL_COLORS.primaryTextColor}
+                  size={25}
+                />
+              </HStack>
+            </>
+          )}
+        </LayoutContent>
+      </Pressable>
     </VStack>
   );
 };
@@ -316,14 +268,11 @@ const ThirdContainer = () => {
   };
 
   return (
-    <VStack>
+    <VStack mt={5} style={{ backgroundColor: GLOBAL_COLORS.videoContentBG }}>
       <LayoutContent>
-        <TextIconContent>
-          <Image source={HeadphoneIcon} style={styles.textIcon} />
-          <Text style={styles.textLabel}>{translations.customerService}</Text>
-        </TextIconContent>
+        <Text style={styles.textLabel}>{translations.customerService}</Text>
         <Entypo
-          name="chevron-right"
+          name="chevron-small-right"
           color={GLOBAL_COLORS.primaryTextColor}
           size={25}
         />
@@ -332,12 +281,9 @@ const ThirdContainer = () => {
         onPress={() => handlePress(translations.privacyPolicy, "policy")}
       >
         <LayoutContent>
-          <TextIconContent>
-            <Image source={SecurityIcon} style={styles.textIcon} />
-            <Text style={styles.textLabel}>{translations.privacyPolicy}</Text>
-          </TextIconContent>
+          <Text style={styles.textLabel}>{translations.privacyPolicy}</Text>
           <Entypo
-            name="chevron-right"
+            name="chevron-small-right"
             color={GLOBAL_COLORS.primaryTextColor}
             size={25}
           />
@@ -347,12 +293,9 @@ const ThirdContainer = () => {
         onPress={() => handlePress(translations.termOfService, "provisions")}
       >
         <LayoutContent>
-          <TextIconContent>
-            <Image source={FileIcon} style={styles.textIcon} />
-            <Text style={styles.textLabel}>{translations.termOfService}</Text>
-          </TextIconContent>
+          <Text style={styles.textLabel}>{translations.termOfService}</Text>
           <Entypo
-            name="chevron-right"
+            name="chevron-small-right"
             color={GLOBAL_COLORS.primaryTextColor}
             size={25}
           />
@@ -362,14 +305,9 @@ const ThirdContainer = () => {
         onPress={() => handlePress(translations.aboutApplication, "about")}
       >
         <LayoutContent>
-          <TextIconContent>
-            <Image source={InfoIcon} style={styles.textIcon} />
-            <Text style={styles.textLabel}>
-              {translations.aboutApplication}
-            </Text>
-          </TextIconContent>
+          <Text style={styles.textLabel}>{translations.aboutApplication}</Text>
           <Entypo
-            name="chevron-right"
+            name="chevron-small-right"
             color={GLOBAL_COLORS.primaryTextColor}
             size={25}
           />
@@ -379,6 +317,165 @@ const ThirdContainer = () => {
   );
 };
 // **** END: THIRD CONTAINER **** //
+
+// **** START: Nickname MODAL **** //
+const NicknameModal = ({ open, setOpen, nickname, setNickname }) => {
+  // ** GLOBAL STORE
+  const userStoreData = userStore((store) => store);
+  const setUserStore = userStore((state) => state.setUserData);
+  const { translations } = translationStore((store) => store);
+  // ** STORE
+  const [newNickname, setNewNickname] = useState(nickname);
+  // ** API
+  const { putCustomerProfile } = CustomerService();
+
+  const { mutate: mutateAlias } = useMutation(putCustomerProfile, {
+    onSuccess: (data) => {
+      setUserStore({ ...userStoreData, alias: data.alias });
+      setNickname(data.alias);
+    },
+  });
+
+  const handlePress = () => {
+    mutateAlias({
+      data: {
+        alias: newNickname,
+      },
+      token: userStoreData.api_token,
+    });
+    setOpen(false);
+  };
+
+  const handleClose = () => {
+    setOpen(false);
+  };
+
+  return (
+    <ModalContent open={open} setOpen={setOpen}>
+      <VStack
+        position="relative"
+        width="3/4"
+        backgroundColor="#202833"
+        p={5}
+        alignItems="center"
+        borderRadius={5}
+        space={3}
+      >
+        <Pressable onPress={handleClose} style={styles.closeBtn}>
+          <Ionicons
+            name="close-outline"
+            size={25}
+            color={GLOBAL_COLORS.primaryTextColor}
+          />
+        </Pressable>
+        <Text style={styles.bindMobileTitle}>
+          {translations.changeUsername}
+        </Text>
+        <Input
+          width="56"
+          placeholder={translations.nickname}
+          value={newNickname}
+          onChangeText={setNewNickname}
+          placeholderTextColor={GLOBAL_COLORS.inactiveTextColor}
+          style={[styles.textInput, { backgroundColor: "#FFFFFF" }]}
+        />
+        <Pressable onPress={handlePress}>
+          <Text style={styles.confirm}>{translations.confirm}</Text>
+        </Pressable>
+      </VStack>
+    </ModalContent>
+  );
+};
+// **** END: Nickname MODAL **** //
+
+// **** START: Gender MODAL **** //
+const GenderModal = ({ open, setOpen, gender, setGender }) => {
+  // ** GLOBAL STORE
+  const userStoreData = userStore((store) => store);
+  const { translations } = translationStore((store) => store);
+  // ** STORE
+  const [newGender, setNewGender] = useState(gender);
+  // ** API
+  const { putCustomerProfile } = CustomerService();
+
+  const { mutate: mutateGender } = useMutation(putCustomerProfile, {
+    onSuccess: (data) => {
+      setGender(data.gender);
+    },
+  });
+
+  const handlePress = () => {
+    mutateGender({
+      data: {
+        gender: newGender,
+      },
+      token: userStoreData.api_token,
+    });
+    setOpen(false);
+  };
+
+  const handleChangeGender = (value) => {
+    setNewGender(value);
+  };
+
+  const handleClose = () => {
+    setOpen(false);
+  };
+
+  return (
+    <ModalContent open={open} setOpen={setOpen}>
+      <VStack
+        position="relative"
+        width="3/4"
+        backgroundColor="#202833"
+        p={5}
+        alignItems="center"
+        borderRadius={5}
+        space={3}
+      >
+        <Pressable onPress={handleClose} style={styles.closeBtn}>
+          <Ionicons
+            name="close-outline"
+            size={25}
+            color={GLOBAL_COLORS.primaryTextColor}
+          />
+        </Pressable>
+        <Text style={styles.bindMobileTitle}>{translations.chooseGender}</Text>
+        <HStack>
+          <Pressable onPress={() => handleChangeGender("Male")}>
+            <Text
+              style={[
+                styles.gender,
+                {
+                  backgroundColor: newGender === "Male" ? "#3C97FF" : "#171E26",
+                },
+              ]}
+            >
+              {translations.male}
+            </Text>
+          </Pressable>
+          <Pressable onPress={() => handleChangeGender("Female")}>
+            <Text
+              style={[
+                styles.gender,
+                {
+                  backgroundColor:
+                    newGender === "Female" ? "#F03663" : "#171E26",
+                },
+              ]}
+            >
+              {translations.female}
+            </Text>
+          </Pressable>
+        </HStack>
+        <Pressable onPress={handlePress}>
+          <Text style={styles.confirm}>{translations.confirm}</Text>
+        </Pressable>
+      </VStack>
+    </ModalContent>
+  );
+};
+// **** END: Gender MODAL **** //
 
 // **** START: BIND MOBILE MODAL **** //
 const BindMobileModal = ({ open, setOpen, setSuccessfulNotification }) => {
@@ -416,51 +513,67 @@ const BindMobileModal = ({ open, setOpen, setSuccessfulNotification }) => {
     }
   };
 
+  const handleClose = () => {
+    setOpen(false);
+  };
+
   return (
     <ModalContent open={open} setOpen={setOpen}>
       <VStack
-        width="full"
+        position="relative"
+        width="3/4"
         backgroundColor="#202833"
         p={4}
         alignItems="center"
         borderRadius={5}
       >
+        <Pressable onPress={handleClose} style={styles.closeBtn}>
+          <Ionicons
+            name="close-outline"
+            size={25}
+            color={GLOBAL_COLORS.primaryTextColor}
+          />
+        </Pressable>
         <Text style={styles.bindMobileTitle}>
           {translations.bindMobilePhone}
         </Text>
         <VStack width="full" my={3}>
-          <Input
-            placeholder={translations.enterTheMobilePhoneNumber}
-            variant="filled"
-            backgroundColor="#FFFFFF"
-            value={mobileNumber}
-            onChangeText={setMobileNumber}
-          />
-          <HStack space={2} alignItems="center" mt={2}>
+          <HStack width="full" position="relative">
             <Input
-              placeholder={translations.pleaseEnterSMSCode}
+              placeholder={translations.enterTheMobilePhoneNumber}
               variant="filled"
               backgroundColor="#FFFFFF"
-              width="2/3"
+              value={mobileNumber}
+              onChangeText={setMobileNumber}
+              width="full"
+              paddingRight={8}
             />
-            <Pressable>
-              <Text style={styles.bindMobileBtn}>
-                {translations.obtainSMSVerification}
-              </Text>
-            </Pressable>
+            <Image source={CoinIcon} style={styles.coinIcon} />
+          </HStack>
+          <HStack
+            width="full"
+            alignItems="center"
+            mt={2}
+            justifyContent="space-between"
+          >
+            <HStack width="2/3">
+              <Input
+                placeholder={translations.pleaseEnterSMSCode}
+                variant="filled"
+                backgroundColor="#FFFFFF"
+              />
+            </HStack>
+            <HStack width="1/3">
+              <Pressable style={{ width: "100%" }}>
+                <Text style={styles.bindMobileBtn}>
+                  {translations.obtainSMSVerification}
+                </Text>
+              </Pressable>
+            </HStack>
           </HStack>
         </VStack>
         <Pressable onPress={handlePress}>
-          <Text
-            style={[
-              styles.bindMobileConfirmBtn,
-              {
-                backgroundColor: mobileNumber.length !== 0 ? "#ac1f99" : "#777",
-              },
-            ]}
-          >
-            {translations.bindMobilePhone}
-          </Text>
+          <Text style={styles.confirm}>{translations.clickToGet}</Text>
         </Pressable>
       </VStack>
     </ModalContent>
@@ -508,21 +621,33 @@ const BindAccountModal = ({ open, setOpen, setSuccessfulNotification }) => {
     }
   };
 
+  const handleClose = () => {
+    setOpen(false);
+  };
+
   return (
     <ModalContent open={open} setOpen={setOpen}>
       <VStack
-        width="full"
+        position="relative"
+        width="3/4"
         backgroundColor="#202833"
         p={4}
         alignItems="center"
         borderRadius={5}
       >
+        <Pressable onPress={handleClose} style={styles.closeBtn}>
+          <Ionicons
+            name="close-outline"
+            size={25}
+            color={GLOBAL_COLORS.primaryTextColor}
+          />
+        </Pressable>
         <Text style={styles.bindMobileTitle}>
-          {translations.fillInInvitation}
+          {translations.bindInvitationCode}
         </Text>
         <VStack width="full" my={3}>
           <Input
-            placeholder={translations.pleaseFillInvitationCode}
+            placeholder={translations.pleaseEnterInvitationCode}
             variant="filled"
             backgroundColor="#FFFFFF"
             value={agentReferral}
@@ -533,17 +658,7 @@ const BindAccountModal = ({ open, setOpen, setSuccessfulNotification }) => {
           ) : null}
         </VStack>
         <Pressable onPress={handlePress}>
-          <Text
-            style={[
-              styles.bindMobileConfirmBtn,
-              {
-                backgroundColor:
-                  agentReferral.length !== 0 ? "#ac1f99" : "#777",
-              },
-            ]}
-          >
-            {translations.submit}
-          </Text>
+          <Text style={styles.confirm}>{translations.toBind}</Text>
         </Pressable>
       </VStack>
     </ModalContent>
@@ -557,6 +672,8 @@ const index = () => {
   // ** STATE
   const [gender, setGender] = useState("");
   const [nickname, setNickname] = useState("");
+  const [nicknameModal, setNicknameModal] = useState(false);
+  const [genderModal, setGenderModal] = useState(false);
   const [openBindMobileModal, setOpenBindMobileModal] = useState(false);
   const [openBindAccountModal, setOpenBindAccountModal] = useState(false);
   const [succesfulNotification, setSuccessfulNotification] = useState(false);
@@ -584,10 +701,10 @@ const index = () => {
       <Container>
         <FirstContainer
           gender={gender}
-          setGender={setGender}
           nickname={nickname}
-          setNickname={setNickname}
-          setOpen={setOpenBindMobileModal}
+          setOpenNickName={setNicknameModal}
+          setGenderModal={setGenderModal}
+          setOpenBindMobileModal={setOpenBindMobileModal}
         />
         <SecondContainer setOpen={setOpenBindAccountModal} />
         <ThirdContainer />
@@ -600,6 +717,18 @@ const index = () => {
           open={openBindAccountModal}
           setOpen={setOpenBindAccountModal}
           setSuccessfulNotification={setSuccessfulNotification}
+        />
+        <NicknameModal
+          open={nicknameModal}
+          setOpen={setNicknameModal}
+          nickname={nickname}
+          setNickname={setNickname}
+        />
+        <GenderModal
+          open={genderModal}
+          setOpen={setGenderModal}
+          gender={gender}
+          setGender={setGender}
         />
       </Container>
       {succesfulNotification ? <SuccessNotification /> : null}
@@ -618,11 +747,8 @@ const styles = StyleSheet.create({
     height: 35,
     width: 35,
     borderRadius: 25,
-    borderWidth: 1,
-    borderColor: GLOBAL_COLORS.primaryTextColor,
   },
   textInput: {
-    textAlign: "right",
     fontSize: 14,
     color: "#000000",
     height: 30,
@@ -655,7 +781,6 @@ const styles = StyleSheet.create({
     resizeMode: "contain",
   },
   accountContainer: {
-    backgroundColor: "#787879",
     paddingVertical: 5,
     paddingHorizontal: 10,
     borderRadius: 5,
@@ -663,17 +788,21 @@ const styles = StyleSheet.create({
   accountText: {
     textTransform: "uppercase",
     fontWeight: "bold",
+    color: GLOBAL_COLORS.primaryTextColor,
   },
   redBtn: {
     paddingVertical: 5,
     paddingHorizontal: 15,
-    borderRadius: 5,
-    borderWidth: 1,
-    borderColor: GLOBAL_COLORS.primaryTextColor,
+    borderRadius: 15,
     color: GLOBAL_COLORS.primaryTextColor,
-    backgroundColor: "#9C001C",
+    backgroundColor: "#171E26",
   },
   // ***** MODAL CONTAINER ***** //
+  closeBtn: {
+    position: "absolute",
+    right: 5,
+    top: 5,
+  },
   bindMobileTitle: {
     color: GLOBAL_COLORS.primaryTextColor,
     fontSize: 20,
@@ -682,18 +811,20 @@ const styles = StyleSheet.create({
   bindMobileBtn: {
     textAlign: "center",
     color: GLOBAL_COLORS.primaryTextColor,
-    backgroundColor: "#00bce6",
+    backgroundColor: "#171E26",
     paddingVertical: 15,
     borderRadius: 5,
-    paddingHorizontal: 15,
-    width: 112,
+    width: "100%",
+    // paddingHorizontal: 15,
   },
-  bindMobileConfirmBtn: {
+  confirm: {
+    marginTop: 10,
     textAlign: "center",
     color: GLOBAL_COLORS.primaryTextColor,
-    paddingVertical: 10,
-    borderRadius: 5,
-    paddingHorizontal: 15,
+    paddingVertical: 8,
+    borderRadius: 15,
+    paddingHorizontal: 45,
+    backgroundColor: "#FF644A",
   },
   error: {
     color: "#FF0000",
@@ -718,5 +849,22 @@ const styles = StyleSheet.create({
     fontSize: 20,
     fontWeight: "bold",
     marginTop: 10,
+  },
+  gender: {
+    color: GLOBAL_COLORS.primaryTextColor,
+    textAlign: "center",
+    paddingVertical: 10,
+    marginHorizontal: 15,
+    borderRadius: 20,
+    width: 70,
+  },
+  coinIcon: {
+    position: "absolute",
+    height: 25,
+    width: 25,
+    resizeMode: "contain",
+    right: 8,
+    top: "50%",
+    transform: [{ translateY: -13 }],
   },
 });

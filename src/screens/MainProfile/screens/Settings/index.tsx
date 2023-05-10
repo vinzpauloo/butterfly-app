@@ -21,7 +21,7 @@ import Ionicons from "react-native-vector-icons/Ionicons";
 // **** START: FILE COMPONENTS **** //
 const LayoutContent = ({ children }) => {
   return (
-    <HStack px={5} py="2" alignItems="center" justifyContent="space-between">
+    <HStack px={5} py="3" alignItems="center" justifyContent="space-between">
       {children}
     </HStack>
   );

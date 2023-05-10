@@ -1,18 +1,13 @@
-import {
-  Dimensions,
-  ImageBackground,
-  StyleSheet,
-  Text,
-  View,
-} from "react-native";
+import { Dimensions, Pressable, StyleSheet, Text, View } from "react-native";
 import React from "react";
 
 import { useNavigation, useRoute } from "@react-navigation/native";
 import Ionicons from "react-native-vector-icons/Ionicons";
 
-import Banner10 from "assets/images/banner10.jpg";
 import SingleTagTabs from "./tabs/SingleTagTabs";
 import { translationStore } from "../../zustand/translationStore";
+import { GLOBAL_COLORS } from "global";
+import { HStack } from "native-base";
 
 const { height, width } = Dimensions.get("window");
 
@@ -22,8 +17,8 @@ const ProfileBanner = () => {
   const translations = translationStore((state) => state.translations);
 
   return (
-    <View style={styles.bannerContainer}>
-      <ImageBackground
+    <View style={styles.headerContainer}>
+      {/* <ImageBackground
         source={Banner10}
         resizeMode="cover"
         style={styles.bgImg}
@@ -40,7 +35,20 @@ const ProfileBanner = () => {
           <Text style={styles.description}>{route.params?.tag}</Text>
           <Text style={styles.description}>{translations.like}</Text>
         </View>
-      </View>
+      </View> */}
+      <Ionicons
+        name="chevron-back-sharp"
+        color="#fff"
+        size={30}
+        onPress={() => navigation.goBack()}
+      />
+      <HStack alignItems="center" space={3}>
+        <Text style={styles.tagText}>{route.params?.tag}</Text>
+        {/* onPress={handleFollow} */}
+        <Pressable style={styles.followBtn}>
+          <Text style={styles.followText}>+{translations.follow}</Text>
+        </Pressable>
+      </HStack>
     </View>
   );
 };
@@ -48,7 +56,7 @@ const ProfileBanner = () => {
 const SingleTag = () => {
   return (
     <>
-      <ProfileBanner />
+      {/* <ProfileBanner /> */}
       <SingleTagTabs />
     </>
   );
@@ -57,37 +65,28 @@ const SingleTag = () => {
 export default SingleTag;
 
 const styles = StyleSheet.create({
-  bannerContainer: {
-    height: height * 0.15,
-    width: width,
-    position: "relative",
+  headerContainer: {
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between",
+    paddingHorizontal: 15,
+    paddingVertical: 16,
+    zIndex: 2,
+    backgroundColor: GLOBAL_COLORS.videoContentBG,
   },
-  bgImg: {
-    top: 0,
-    left: 0,
-    right: 0,
-    height: height * 0.15,
-    width: width,
-    position: "absolute",
+  tagText: {
+    fontSize: 16,
+    fontWeight: "bold",
+    color: GLOBAL_COLORS.primaryTextColor,
   },
-  bannerContent: {
-    backgroundColor: "rgba(0,0,0, 0.3)",
-    height: height * 0.15,
-    width: width,
-    position: "relative",
+  followBtn: {
+    backgroundColor: GLOBAL_COLORS.secondaryColor,
+    paddingVertical: 5,
+    paddingHorizontal: 15,
+    borderRadius: 15,
   },
-  backIcon: {
-    position: "absolute",
-    left: 10,
-    top: 10,
-  },
-  descriptionContainer: {
-    marginLeft: 15,
-    marginTop: 45,
-  },
-  description: {
+  followText: {
     color: "#fff",
-    fontSize: 18,
-    lineHeight: 36,
+    fontSize: 14,
   },
 });

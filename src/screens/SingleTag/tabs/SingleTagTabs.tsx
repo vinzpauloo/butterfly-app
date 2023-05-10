@@ -28,12 +28,7 @@ const SingleTagTabs = () => {
       },
     ],
   };
-  return (
-    <MaterialTopTabs
-      data={singleTagSubNav}
-      tabBarColor={GLOBAL_COLORS.headerBasicBg}
-    />
-  );
+  return <MaterialTopTabs data={singleTagSubNav} isEqualWidth />;
 };
 
 export default SingleTagTabs;

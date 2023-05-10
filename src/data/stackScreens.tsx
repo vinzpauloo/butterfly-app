@@ -303,7 +303,7 @@ export const stackScreens = {
     {
       name: "SingleTag",
       component: SingleTag,
-      options: { headerShown: false },
+      options: basicHeader,
     },
     {
       name: "SingleUser",

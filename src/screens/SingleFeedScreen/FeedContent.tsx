@@ -68,7 +68,7 @@ const Captions = ({ tags, story, id, like, setLike }) => {
   const navigation = useNavigation<any>();
   const navigateSingleTag = (tag) => {
     navigation.navigate(`SingleTag`, {
-      tag: tag,
+      postTitle: tag,
     });
   };
   return (

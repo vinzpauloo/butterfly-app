@@ -33,7 +33,7 @@ const BottomOverlay = (props: Props) => {
             key={index}
             style={styles.tag}
             onPress={() => {
-              navigation.navigate("SingleTag", { tag: item });
+              navigation.navigate("SingleTag", { postTitle: item });
             }}
           >
             <Text style={styles.iconText}>#{item}</Text>

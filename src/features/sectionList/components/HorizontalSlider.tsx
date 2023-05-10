@@ -65,7 +65,7 @@ const Video = ({ index, data, item, setId, onOpen }: any) => {
         </Pressable>
         <View style={styles.texts}>
           <Text style={styles.text} numberOfLines={1}>
-            {video.title}
+            Width: {width} | {video.title}
           </Text>
           <HStack alignItems="center" justifyContent="space-between">
             <Text style={styles.username} numberOfLines={1}>
@@ -121,7 +121,7 @@ const styles = StyleSheet.create({
     position: "relative",
   },
   container: {
-    width: width * 0.7,
+    width: width < 480 ? width * 0.7 : width * 0.45,
     marginHorizontal: 5,
     borderRadius: 4,
   },
@@ -148,7 +148,7 @@ const styles = StyleSheet.create({
   },
   texts: {
     justifyContent: "space-evenly",
-    width: width * 0.56,
+    width: width < 480 ? width * 0.56 : width * 0.35,
   },
   text: {
     color: GLOBAL_COLORS.primaryTextColor,

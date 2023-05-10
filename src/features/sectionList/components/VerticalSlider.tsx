@@ -80,7 +80,7 @@ export default VerticalSlider;
 const styles = StyleSheet.create({
   feedContent: {
     height: 250,
-    width: width * 0.33,
+    width: width < 480 ? width * 0.33 : width * 0.26,
     marginHorizontal: 3,
     position: "relative",
   },

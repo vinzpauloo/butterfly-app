@@ -1,4 +1,11 @@
-import { Image, StyleSheet, Text, Pressable, View } from "react-native";
+import {
+  Dimensions,
+  Image,
+  StyleSheet,
+  Text,
+  Pressable,
+  View,
+} from "react-native";
 import React, { useState } from "react";
 
 import VideoComponent from "components/VideoComponent";
@@ -8,6 +15,8 @@ import { BASE_URL_FILE_SERVER } from "react-native-dotenv";
 import { HStack, useDisclose } from "native-base";
 import Entypo from "react-native-vector-icons/Entypo";
 import Modal from "components/BottomModal";
+
+const { width } = Dimensions.get("window");
 
 const SingleVideo = ({ data, isSingleVideoMultiple = false }) => {
   const item = isSingleVideoMultiple ? data : data[0];
@@ -69,7 +78,7 @@ export default SingleVideo;
 
 const styles = StyleSheet.create({
   container: {
-    height: 200,
+    height: width < 480 ? 200 : 360,
     marginHorizontal: 15,
     marginBottom: 20,
   },
@@ -79,7 +88,7 @@ const styles = StyleSheet.create({
   image: {
     borderTopLeftRadius: 4,
     borderTopRightRadius: 4,
-    height: 160,
+    height: width < 480 ? 160 : 315,
     width: "100%",
   },
   content: {

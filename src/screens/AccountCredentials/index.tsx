@@ -1,13 +1,13 @@
 import { StyleSheet, Text, View } from "react-native";
 import React from "react";
 
-import { Box, Image, VStack } from "native-base";
+import { Box, HStack, Image, VStack } from "native-base";
 import QRCode from "react-native-qrcode-svg";
 
 import ButterflyLogo from "assets/images/butterflyLogo.png";
 import Container from "components/Container";
+import CredentialDownloadIcon from "assets/images/credentialDownloadIcon.png";
 import { GLOBAL_COLORS } from "global";
-import { LinearGradient } from "expo-linear-gradient";
 import { userStore } from "../../zustand/userStore";
 
 const QRCodes = () => {
@@ -20,6 +20,7 @@ const QRCodes = () => {
         alignItems="center"
         m={5}
         mt={20}
+        pt={12}
         p={10}
         style={styles.qrContent}
       >
@@ -40,28 +41,23 @@ const QRCodes = () => {
 
 const BottomText = () => {
   return (
-    <VStack alignItems="center">
-      <LinearGradient
-        colors={["#280B2B", "#280B2B", "#070307"]}
-        style={{ width: "100%" }}
+    <VStack alignItems="center" space={5}>
+      <HStack
+        alignItems="center"
+        justifyContent="center"
+        px={5}
+        style={styles.downloadContent}
       >
+        <Image source={CredentialDownloadIcon} style={styles.downloadIcon} />
         <Text style={styles.title}>将帐户凭据保存到手机</Text>
-      </LinearGradient>
+      </HStack>
       <Text style={styles.text1}>
-        账号丢失，请进入 设置-找回账号-账号-凭据找回-上传或扫描凭据
+        账号丢失，请进入 设置-找回账号-账号-凭证找回-上传或扫描凭证
       </Text>
-      <VStack alignItems="center">
-        <Text style={styles.text2}>
-          账号丢失不用担心，保存凭证解决后顾之忧!
-        </Text>
-        <Text style={styles.paragraph}>
-          由于行业的特殊性，当APP无法使用时，需要重新下载安装包，升级系统。用户进入APP后，自动生成新账号，导致原账号丢失。对此，账号丢失的用户可前
-          <Text style={styles.paragraph2}>
-            往我的-设置-找回账号-账号证书找回
-          </Text>
-          ，扫描或上传证书二维码即可找回更新前的原账号，以及原账号的VIP等级全套数据也将被恢复。
-        </Text>
-      </VStack>
+      <Text style={styles.text2}>账号丢失不用担心，保存凭证解决后顾之忧!</Text>
+      <Text style={styles.paragraph}>
+        由于行业的特殊性，当APP无法使用时，需重新下载
+      </Text>
     </VStack>
   );
 };
@@ -88,9 +84,12 @@ const styles = StyleSheet.create({
   },
   butterflyLogo: {
     position: "absolute",
-    height: 94,
-    width: 94,
-    top: -60,
+    height: 90,
+    width: 90,
+    top: -45,
+    borderColor: "#fff",
+    borderWidth: 2,
+    borderRadius: 45,
   },
   qrTitle: {
     fontSize: 20,
@@ -110,35 +109,34 @@ const styles = StyleSheet.create({
   },
   // **** BottomText **** //
   title: {
-    color: GLOBAL_COLORS.primaryTextColor,
     fontSize: 16,
-    width: "100%",
     textAlign: "center",
     paddingTop: 10,
     marginBottom: 10,
   },
   text1: {
     color: GLOBAL_COLORS.primaryTextColor,
-    marginVertical: 10,
   },
   text2: {
     fontSize: 12,
-    color: "#FF0000",
+    color: GLOBAL_COLORS.primaryTextColor,
     textAlign: "center",
-    backgroundColor: GLOBAL_COLORS.primaryTextColor,
-    paddingVertical: 5,
-    paddingHorizontal: 10,
+    backgroundColor: "#F09536",
+    paddingVertical: 10,
+    paddingHorizontal: 15,
     borderRadius: 5,
-    borderWidth: 1,
-    borderColor: "#FF0000",
-    margin: 10,
   },
   paragraph: {
-    color: "#FFBEBE",
-    paddingHorizontal: 20,
-    textAlign: "justify",
+    color: GLOBAL_COLORS.primaryTextColor,
   },
-  paragraph2: {
-    color: "#00BDE6",
+  downloadContent: {
+    backgroundColor: "#C79765",
+    borderRadius: 20,
+  },
+  downloadIcon: {
+    height: 18,
+    width: 18,
+    resizeMode: "contain",
+    marginHorizontal: 5,
   },
 });

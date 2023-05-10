@@ -7,14 +7,8 @@ import {
   FlatList,
   Dimensions,
 } from "react-native";
-import { VStack, Box, HStack, Avatar, Skeleton } from "native-base";
+import { VStack, HStack, Avatar, Skeleton } from "native-base";
 
-import Feather from "react-native-vector-icons/Feather";
-import AntDesign from "react-native-vector-icons/AntDesign";
-import FontAwesome from "react-native-vector-icons/FontAwesome";
-import Octicons from "react-native-vector-icons/Octicons";
-import Fontisto from "react-native-vector-icons/Fontisto";
-import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons";
 import { BASE_URL_FILE_SERVER } from "react-native-dotenv";
 import { useQuery } from "@tanstack/react-query";
 import { useNavigation } from "@react-navigation/native";
@@ -56,7 +50,7 @@ const MessageItem = (props: MessageItemProps) => {
           });
         }}
       >
-        <HStack space={3}>
+        <HStack space={3} alignItems='center'>
           <Pressable
             onPress={() => {
               Alert.alert("Go to " + props.senderUserName + " profile");
@@ -64,31 +58,19 @@ const MessageItem = (props: MessageItemProps) => {
           >
             <Avatar
               color="white"
-              size={42}
+              size={12}
               source={{ uri: BASE_URL_FILE_SERVER + props.senderImgURL }}
             />
           </Pressable>
-          <VStack space={1} width="3/4">
-            <Text style={[styles.text, { maxWidth: windowWidth - 110 }]}>
-              {props.senderUserName}
-            </Text>
+          <VStack w='5/6' space={1.5}>
+            <HStack justifyContent='space-between'>
+              <Text style={[styles.text, { maxWidth: windowWidth - 110 }]}> {props.senderUserName}</Text>
+              <Text style={{opacity: 0.5, color: 'white'}}>18:24 05/04/2023</Text>
+            </HStack>
             <Text style={[styles.text, { maxWidth: windowWidth - 110 }]}>
               {props.senderMessage}
             </Text>
           </VStack>
-          <Pressable
-            onPress={() => {
-              Alert.alert("Delete Message from " + props.senderUserName);
-            }}
-            style={styles.deleteIcon}
-          >
-            <MaterialCommunityIcons
-              name="delete-outline"
-              color={"white"}
-              size={24}
-            />
-            {/* <Text style={styles.text}>删除</Text> */}
-          </Pressable>
         </HStack>
       </Pressable>
     </VStack>
@@ -159,6 +141,7 @@ const Information = (props: Props) => {
           onPress={() => {
             navigation.navigate("InformationScreen", {
               postTitle: translations.liked,
+              postMessage: 'LikeCard'
             });
           }}
         >
@@ -171,6 +154,7 @@ const Information = (props: Props) => {
           onPress={() => {
             navigation.navigate("InformationScreen", {
               postTitle: translations.fan,
+              postMessage: 'FanCard'
             });
           }}
         >
@@ -184,6 +168,7 @@ const Information = (props: Props) => {
           onPress={() => {
             navigation.navigate("InformationScreen", {
               postTitle: translations.comments,
+              postMessage: 'CommentCard'
             });
           }}
         >
@@ -197,6 +182,7 @@ const Information = (props: Props) => {
           onPress={() => {
             navigation.navigate("InformationScreen", {
               postTitle: translations.income,
+              postMessage: 'IncomeCard'
             });
           }}
         >
@@ -210,6 +196,7 @@ const Information = (props: Props) => {
           onPress={() => {
             navigation.navigate("InformationScreen", {
               postTitle: translations.system,
+              postMessage: 'SystemCard'
             });
           }}
         >
@@ -273,10 +260,11 @@ const styles = StyleSheet.create({
     marginLeft: "auto",
   },
   messageContainer: {
-    backgroundColor: "#262632",
-    marginTop: 12,
-    padding: 12,
-    marginHorizontal: 15,
+    backgroundColor: GLOBAL_COLORS.videoContentBG,
+    marginTop: 16,
+    padding: 16,
+    marginHorizontal: 16,
+    borderRadius: 4
   },
   dividerColor: {
     backgroundColor: "#999",

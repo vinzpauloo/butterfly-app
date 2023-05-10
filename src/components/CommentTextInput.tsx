@@ -148,19 +148,11 @@ const CommentTextInput = (props: Props) => {
             onChangeText={(text) => setText(text)}
           />
           <Pressable
-            style={styles.sendComment}
+            style={[styles.sendComment, { opacity: text === "" ? 0.3 : 1}]}
             disabled={text === "" ? true : false}
             onPress={isOnReplyMode ? replyToComment : addNewComment}
           >
-            <Feather
-              name="send"
-              color={
-                text === ""
-                  ? GLOBAL_COLORS.inactiveTextColor
-                  : GLOBAL_COLORS.secondaryColor
-              }
-              size={20}
-            />
+            <Text style={styles.whiteText}>发布</Text>
           </Pressable>
         </HStack>
       </VStack>
@@ -174,18 +166,19 @@ const styles = StyleSheet.create({
   bottomForm: {
     paddingHorizontal: 12,
     paddingBottom: 12,
-    backgroundColor: GLOBAL_COLORS.headerBasicBg,
+    backgroundColor: GLOBAL_COLORS.videoContentBG,
     width: Dimensions.get("window").width,
   },
   inputContainer: {
     alignItems: "center",
-    backgroundColor: GLOBAL_COLORS.headerBasicBg,
+    backgroundColor: GLOBAL_COLORS.videoContentBG,
   },
   textInput: {
-    backgroundColor: "white",
+    backgroundColor: GLOBAL_COLORS.primaryColor,
     paddingHorizontal: 12,
     borderRadius: 16,
-    width: "90%",
+    width: "82.5%",
+    color: 'white'
   },
   cancelReply: {
     color: GLOBAL_COLORS.secondaryColor,
@@ -195,8 +188,13 @@ const styles = StyleSheet.create({
     color: "white",
   },
   sendComment: {
-    width: "10%",
+    // width: "17.5%",
     alignItems: "center",
-    paddingVertical: 4,
+    backgroundColor: GLOBAL_COLORS.secondaryColor,
+    paddingVertical: 5,
+    paddingHorizontal: 19,
+    borderRadius: 16
+    // borderColor: 'red',
+    // borderWidth: 1
   },
 });

@@ -54,6 +54,7 @@ const CommentItem = (props: commentItemProps) => {
       <Avatar size={42} source={{ uri: BASE_URL_FILE_SERVER + props.photo }} />
       <VStack space={1} flex={1} px={2}>
         <Text style={styles.whiteText}>{props.username}</Text>
+        <Text style={styles.subText}>18:24 05/04/2023</Text>
         <Text style={styles.whiteText}>{props.comment}</Text>
         <Pressable style={styles.interactable} onPress={enableReplyMode}>
           <HStack space={1.5} alignItems="center">
@@ -92,7 +93,7 @@ const CommentItem = (props: commentItemProps) => {
                   />
                   <VStack space={1} px={2} flex={1}>
                     <Text style={styles.whiteText}>{item.username}</Text>
-                    <Text style={styles.whiteText}>{item.comment}</Text>
+                    <Text style={styles.subText}>{item.comment}</Text>
                   </VStack>
                 </HStack>
               )}
@@ -132,4 +133,8 @@ const styles = StyleSheet.create({
   interactable: {
     paddingVertical: 8,
   },
+  subText: {
+    color: GLOBAL_COLORS.primaryTextColor,
+    opacity: 0.5
+  }
 });

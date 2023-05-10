@@ -18,7 +18,7 @@ const LikeCard = () => {
   return (
     <HStack style={styles.cardContainer} space={2}>
       <Avatar size={12} source={vincent}/>
-      <VStack space={1}>
+      <VStack space={1} flexShrink={1}>
         <Text style={styles.whiteText}>Vincent@CC</Text>
         <Text style={styles.subtext}>Aut totam nihil cumque ...</Text>
       </VStack>
@@ -35,7 +35,7 @@ const FanCard = () => {
   return (
     <HStack style={styles.cardContainer} space={2}>
       <Avatar size={12} source={vincent}/>
-      <VStack space={1}>
+      <VStack space={1} flexShrink={1}>
         <Text style={styles.whiteText}>Vincent@CC</Text>
         <Text style={styles.subtext}>04/05 关注了你</Text>
       </VStack>
@@ -55,8 +55,8 @@ const CommentCard = () => {
   return (
     <HStack style={[styles.cardContainer, {alignItems: 'flex-start'}]} space={2}>
       <Avatar size={12} source={vincent}/>
-      <VStack space={1}>
-        <HStack space={2}>
+      <VStack space={1} flexShrink={1}>
+        <HStack space={2} flexShrink={1}>
           <Text style={styles.whiteText}>Vincent@CC</Text>
           <Text style={styles.redText}>UP</Text>
         </HStack>
@@ -90,7 +90,7 @@ const SystemCard = () => {
   return (
     <HStack style={styles.cardContainer} space={2}>
       <Image source={SystemIcon} style={styles.systemIcon}/>
-      <VStack space={2}>
+      <VStack space={2} flexShrink={1}>
         <Text style={styles.whiteText}>系统公告</Text>
         <Text style={styles.subtext}>您的视频“xxxxxxx”涉嫌违规，被强制下架，请及时查看</Text>
       </VStack>

@@ -1,5 +1,6 @@
 import {
   Dimensions,
+  Image,
   Pressable,
   StyleSheet,
   Text,
@@ -12,11 +13,12 @@ import AntDesign from "react-native-vector-icons/AntDesign";
 import Feather from "react-native-vector-icons/Feather";
 import Ionicons from "react-native-vector-icons/Ionicons";
 import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons";
-import { ScrollView } from "native-base";
+import { HStack, ScrollView } from "native-base";
 import { useNavigation } from "@react-navigation/native";
 import { useMutation, useQuery } from "@tanstack/react-query";
 
 import Container from "components/Container";
+import DeleteIcon from "assets/images/deleteIcon.png";
 import Feed from "./tabs/Feed";
 import GeneralSearch from "services/api/GeneralSearch";
 import GridVideos from "features/sectionList/components/GridVideos";
@@ -172,18 +174,6 @@ const SearchHistory = ({ history, setSearch, setHasSearch, setHistory }) => {
             {translations.previousSearches}
           </Text>
         </View>
-        <View style={styles.iconContent}>
-          <MaterialCommunityIcons
-            name="delete-outline"
-            color="#fff"
-            size={22}
-          />
-          <Pressable onPress={handleClear}>
-            <Text style={[styles.text, { marginLeft: 4 }]}>
-              {translations.clearSearches}
-            </Text>
-          </Pressable>
-        </View>
       </View>
       <View style={styles.searchesContainer}>
         <FlashList
@@ -203,6 +193,21 @@ const SearchHistory = ({ history, setSearch, setHasSearch, setHistory }) => {
           keyExtractor={(_, index) => "" + index}
         />
       </View>
+      <HStack alignItems="center" justifyContent="center">
+        <View style={styles.iconContent}>
+          {/* <MaterialCommunityIcons
+            name="delete-outline"
+            color="#fff"
+            size={22}
+          /> */}
+          <Image source={DeleteIcon} style={styles.deleteIcon} />
+          <Pressable onPress={handleClear}>
+            <Text style={[styles.deleteText, { marginLeft: 4 }]}>
+              {translations.clearSearches}
+            </Text>
+          </Pressable>
+        </View>
+      </HStack>
     </View>
   );
 };
@@ -494,6 +499,10 @@ const styles = StyleSheet.create({
     color: GLOBAL_COLORS.primaryTextColor,
     fontSize: 16,
   },
+  deleteText: {
+    color: GLOBAL_COLORS.inactiveTextColor,
+    fontSize: 16,
+  },
   searchesContainer: {
     marginHorizontal: 5,
   },
@@ -501,17 +510,25 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "space-between",
-    backgroundColor: GLOBAL_COLORS.primaryTextColor,
-    margin: 10,
+    backgroundColor: GLOBAL_COLORS.videoContentBG,
+    marginHorizontal: 10,
+    marginVertical: 5,
     paddingHorizontal: 2,
     paddingVertical: 1,
     width: width * 0.3,
     borderRadius: 20,
+    borderWidth: 1,
+    borderColor: GLOBAL_COLORS.primaryTextColor,
   },
   searchesText: {
     width: width * 0.22,
     paddingLeft: 5,
-    color: GLOBAL_COLORS.secondaryColor,
+    color: GLOBAL_COLORS.primaryTextColor,
+  },
+  deleteIcon: {
+    height: 20,
+    width: 20,
+    resizeMode: "contain",
   },
 
   //Popular Search Item

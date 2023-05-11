@@ -9,21 +9,21 @@ import {
 } from "react-native";
 import React, { useCallback, useState } from "react";
 
-import { Center, HStack, VStack, useDisclose } from "native-base";
 import MasonryList from "@react-native-seoul/masonry-list";
+import { Center, HStack, VStack, useDisclose } from "native-base";
 import { ScrollView } from "react-native-gesture-handler";
 import { useNavigation } from "@react-navigation/native";
 import { useMutation, useQuery } from "@tanstack/react-query";
 
 import BottomMessage from "components/BottomMessage";
-import Container from "components/Container";
+import CarouselContainer from "features/ads/components/CarouselContainer";
+import CarouselSkeleton from "components/skeletons/CarouselSkeleton";
 import CustomerService from "services/api/CustomerService";
-import DividerContainer from "features/sectionList/components/DividerContainer";
+import Entypo from "react-native-vector-icons/Entypo";
 import Loading from "components/Loading";
 import Modal from "components/BottomModal";
-import NoFollowIcon from "assets/images/nofollowIcon.png";
 import VideoListSkeleton from "components/skeletons/VideoListSkeleton";
-import VIPTag from "components/VIPTag";
+import VideoComponent from "components/VideoComponent";
 import WorkService from "services/api/WorkService";
 import { GLOBAL_COLORS } from "global";
 import {
@@ -33,9 +33,6 @@ import {
 import { userStore } from "../../../zustand/userStore";
 import { translationStore } from "../../../zustand/translationStore";
 import { BASE_URL_FILE_SERVER } from "react-native-dotenv";
-import VideoComponent from "components/VideoComponent";
-import Entypo from "react-native-vector-icons/Entypo";
-import CarouselContainer from "features/ads/components/CarouselContainer";
 
 const { width, height } = Dimensions.get("window");
 
@@ -63,8 +60,6 @@ const Video = ({
       });
     }
   };
-
-  console.log("@@", item);
 
   const handleThreeDots = (e) => {
     onOpen(e);
@@ -130,6 +125,7 @@ const NoFollowing = ({
   if (isLoading || refreshing) {
     return (
       <View style={{ height }}>
+        <CarouselSkeleton />
         <VideoListSkeleton />
       </View>
     );
@@ -165,8 +161,6 @@ const NoFollowing = ({
 };
 
 const SectionContent = ({ index, info, onOpen, setId, data }) => {
-  console.log("@@", info);
-
   const translations = translationStore((state) => state.translations);
   const navigation = useNavigation<any>();
   const { followCreator } = CustomerService();
@@ -293,6 +287,7 @@ const Follow = ({
   if ((isLoading || refreshing) && page === 1) {
     return (
       <View style={{ height }}>
+        <CarouselSkeleton />
         <VideoListSkeleton />
       </View>
     );

@@ -1,4 +1,4 @@
-import { Pressable, StyleSheet, Text } from "react-native";
+import { Dimensions, Pressable, StyleSheet, Text } from "react-native";
 import React, { useEffect } from "react";
 
 import Ionicons from "react-native-vector-icons/Ionicons";
@@ -16,6 +16,8 @@ import { readFileDirectory } from "lib/expoFileSystem";
 import { translationStore } from "../../zustand/translationStore";
 import { GLOBAL_COLORS } from "global";
 
+const { width } = Dimensions.get("window");
+
 // Search Icon
 const Search = () => {
   const translations = translationStore((state) => state.translations);
@@ -25,10 +27,18 @@ const Search = () => {
   };
 
   return (
-    <Pressable onPress={handlePress} style={styles.searchContainer}>
-      <Ionicons name="search" size={20} color="#fff" />
-      <Text style={styles.searchText}>{translations.search}</Text>
-    </Pressable>
+    <>
+      {width < 350 ? (
+        <Pressable onPress={handlePress} style={styles.smallSearchContainer}>
+          <Ionicons name="search" size={20} color="#fff" />
+        </Pressable>
+      ) : (
+        <Pressable onPress={handlePress} style={styles.searchContainer}>
+          <Ionicons name="search" size={20} color="#fff" />
+          <Text style={styles.searchText}>{translations.search}</Text>
+        </Pressable>
+      )}
+    </>
   );
 };
 
@@ -77,6 +87,17 @@ const HomeTab = () => {
 export default HomeTab;
 
 const styles = StyleSheet.create({
+  smallSearchContainer: {
+    position: "absolute",
+    top: 0,
+    right: 0,
+    height: 30,
+    marginVertical: 5,
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "center",
+    marginRight: 10,
+  },
   searchContainer: {
     position: "absolute",
     top: 0,

@@ -11,19 +11,18 @@ import React, { useState } from "react";
 
 import { useNavigation } from "@react-navigation/native";
 
+import Entypo from "react-native-vector-icons/Entypo";
+import Modal from "components/BottomModal";
 import VideoComponent from "components/VideoComponent";
 import { GLOBAL_COLORS } from "global";
 import { BASE_URL_FILE_SERVER } from "react-native-dotenv";
 import { HStack, useDisclose } from "native-base";
-import Entypo from "react-native-vector-icons/Entypo";
-import Modal from "components/BottomModal";
 
 const { width } = Dimensions.get("window");
 
 const Video = ({ index, data, item, setId, onOpen }: any) => {
   const { video } = item;
   const navigation = useNavigation<any>();
-  console.log("@@@", video);
 
   const handlePress = () => {
     navigation.navigate("SingleVideo", {

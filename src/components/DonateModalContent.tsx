@@ -19,18 +19,24 @@ const DonateModalContent = ({ setOpen, userID = 1 }) => {
   // ** STATES
   const [amount, setAmount] = useState("");
   const [message, setMessage] = useState("");
+  const [errorMsg, setErrorMsg] = useState("");
 
   // ** API
   const { postDonate } = DonateService();
-  const { mutate, isLoading, isSuccess, reset } = useMutation(postDonate, {
-    onSuccess: (data) => {
-      console.log("mutateDonate onSuccess", data);
-      handleResetDonate();
-    },
-    onError: (error) => {
-      console.log("mutateDonate onError", error);
-    },
-  });
+  const { mutate, isLoading, isSuccess, isError, reset } = useMutation(
+    postDonate,
+    {
+      onSuccess: (data) => {
+        console.log("mutateDonate onSuccess", data);
+        handleResetDonate();
+      },
+      onError: (error) => {
+        console.log("mutateDonate onError", error);
+        // @ts-ignore
+        setErrorMsg(error.data.message);
+      },
+    }
+  );
 
   // ** EVENTS
   const onPressDonate = () => {
@@ -94,6 +100,12 @@ const DonateModalContent = ({ setOpen, userID = 1 }) => {
             </Text>
           )}
 
+          {isError && (
+            <Text color={GLOBAL_COLORS.errorColor} style={styles.errorMsg}>
+              {errorMsg}
+            </Text>
+          )}
+
           {!isLoading ? (
             <Button
               disabled={amount === "" ? true : false}
@@ -152,5 +164,8 @@ const styles = StyleSheet.create({
     height: 24,
     width: 24,
     resizeMode: "contain",
+  },
+  errorMsg: {
+    textTransform: "capitalize",
   },
 });

@@ -9,6 +9,7 @@ export default en_us = {
   agentAccount: "Agent Account",
   all: "All",
   allComments: "All Comments",
+  avatar: "Avatar",
   balanceDetails: "Balance Details",
   bestApps: "Best Apps",
   bindAccount: "Bind Account",
@@ -85,7 +86,7 @@ export default en_us = {
   movieTicket: "Movie Ticket",
   muchLove: "How much is love",
   mwah: "MWAH",
-  nickname: "Enter your nickname",
+  nickname: "Nickname",
   notYetMember: "False",
   numberOfWorks: "Number of Works",
   obtainSMSVerification: "SMS Code",
@@ -170,5 +171,5 @@ export default en_us = {
   work: "Work",
   donateSuccess: "Donation success!",
   send: "Send",
-  download: "Download"
+  download: "Download",
 };

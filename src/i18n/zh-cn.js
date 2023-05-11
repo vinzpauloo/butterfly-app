@@ -9,6 +9,7 @@ export default zh_cn = {
   agentAccount: "代理帐号",
   all: "综合",
   allComments: "全部评论",
+  avatar: "头像",
   balanceDetails: "余额明细",
   bestApps: "精品应用",
   bindAccount: "绑定账号",
@@ -84,7 +85,7 @@ export default zh_cn = {
   movieTicket: "电影票",
   muchLove: "多少都是爱",
   mwah: "哇哦",
-  nickname: "输入你的昵称",
+  nickname: "昵称",
   notYetMember: "错误的",
   numberOfWorks: "作品数量",
   obtainSMSVerification: "获取短信验证码",
@@ -168,5 +169,5 @@ export default zh_cn = {
   work: "作品",
   donateSuccess: "捐赠成功!",
   send: "发送",
-  download: "下载"
+  download: "下载",
 };

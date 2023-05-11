@@ -1,4 +1,11 @@
-import { Image, StyleSheet, Text, View } from "react-native";
+import {
+  Dimensions,
+  Image,
+  ScrollView,
+  StyleSheet,
+  Text,
+  View,
+} from "react-native";
 import React, { useState } from "react";
 
 import Entypo from "react-native-vector-icons/Entypo";
@@ -16,6 +23,8 @@ import { userStore } from "../../../../zustand/userStore";
 import { useNavigation } from "@react-navigation/native";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import Ionicons from "react-native-vector-icons/Ionicons";
+
+const { width } = Dimensions.get("window");
 
 // **** START: FILE COMPONENTS **** //
 const LayoutContent = ({ children }) => {
@@ -90,7 +99,7 @@ const FirstContainer = ({
   return (
     <VStack mt={5} style={{ backgroundColor: GLOBAL_COLORS.videoContentBG }}>
       <LayoutContent>
-        <Text style={styles.textLabel}>{translations.setup}</Text>
+        <Text style={styles.textLabel}>{translations.avatar}</Text>
         <HStack alignItems="center">
           <Image
             source={{ uri: BASE_URL_FILE_SERVER + userStoreData.photo }}
@@ -140,11 +149,9 @@ const FirstContainer = ({
             </>
           ) : (
             <>
-              <Text style={styles.textLabel}>
-                {translations.pleaseEnterPhoneNumber}
-              </Text>
+              <Text style={styles.textLabel}>{translations.mobileNumber}</Text>
               <HStack alignItems="center">
-                <Text style={styles.textLabel}>去绑定</Text>
+                <Text style={styles.textLabel}>{translations.toBind}</Text>
                 <Entypo
                   name="chevron-small-right"
                   color={GLOBAL_COLORS.primaryTextColor}
@@ -183,25 +190,28 @@ const SecondContainer = ({ setOpen }) => {
     <VStack mt={5} style={{ backgroundColor: GLOBAL_COLORS.videoContentBG }}>
       <LayoutContent>
         <Text style={styles.textLabel}>{translations.accountID}</Text>
-        <HStack
-          alignItems="center"
-          space={5}
-          style={styles.accountContainer}
-          maxWidth="56"
-          paddingRight="12"
-        >
-          <Text style={styles.accountText} numberOfLines={1}>
-            {_id}
-          </Text>
-          <Pressable>
-            <Text style={styles.redBtn}>{translations.copy}</Text>
-          </Pressable>
+        <HStack alignItems="center">
+          <HStack
+            alignItems="center"
+            space={width < 350 ? 1 : 2}
+            style={styles.accountContainer}
+            pr="12"
+            mr={3}
+            width={width < 350 ? "40" : "56"}
+          >
+            <Text style={styles.accountText} numberOfLines={1}>
+              {_id}
+            </Text>
+            <Pressable>
+              <Text style={styles.redBtn}>{translations.copy}</Text>
+            </Pressable>
+          </HStack>
+          <Entypo
+            name="chevron-small-right"
+            color={GLOBAL_COLORS.primaryTextColor}
+            size={25}
+          />
         </HStack>
-        <Entypo
-          name="chevron-small-right"
-          color={GLOBAL_COLORS.primaryTextColor}
-          size={25}
-        />
       </LayoutContent>
 
       <LayoutContent>
@@ -215,8 +225,11 @@ const SecondContainer = ({ setOpen }) => {
 
       <LayoutContent>
         <Text style={styles.textLabel}>{translations.accountRetrieval}</Text>
-        <HStack alignItems="center">
-          <Text style={styles.textLabel}>
+        <HStack alignItems="center" justifyContent="flex-end">
+          <Text
+            style={[styles.textLabel, { width: width < 350 ? "50%" : null }]}
+            numberOfLines={1}
+          >
             {translations.lostAccountRecovered}
           </Text>
           <Entypo
@@ -241,7 +254,7 @@ const SecondContainer = ({ setOpen }) => {
                 {translations.bindInvitationCode}
               </Text>
               <HStack alignItems="center">
-                <Text style={styles.textLabel}>去绑定</Text>
+                <Text style={styles.textLabel}>{translations.toBind}</Text>
                 <Entypo
                   name="chevron-small-right"
                   color={GLOBAL_COLORS.primaryTextColor}
@@ -696,37 +709,39 @@ const index = () => {
   return (
     <>
       <Container>
-        <FirstContainer
-          gender={gender}
-          nickname={nickname}
-          setOpenNickName={setNicknameModal}
-          setGenderModal={setGenderModal}
-          setOpenBindMobileModal={setOpenBindMobileModal}
-        />
-        <SecondContainer setOpen={setOpenBindAccountModal} />
-        <ThirdContainer />
-        <BindMobileModal
-          open={openBindMobileModal}
-          setOpen={setOpenBindMobileModal}
-          setSuccessfulNotification={setSuccessfulNotification}
-        />
-        <BindAccountModal
-          open={openBindAccountModal}
-          setOpen={setOpenBindAccountModal}
-          setSuccessfulNotification={setSuccessfulNotification}
-        />
-        <NicknameModal
-          open={nicknameModal}
-          setOpen={setNicknameModal}
-          nickname={nickname}
-          setNickname={setNickname}
-        />
-        <GenderModal
-          open={genderModal}
-          setOpen={setGenderModal}
-          gender={gender}
-          setGender={setGender}
-        />
+        <ScrollView>
+          <FirstContainer
+            gender={gender}
+            nickname={nickname}
+            setOpenNickName={setNicknameModal}
+            setGenderModal={setGenderModal}
+            setOpenBindMobileModal={setOpenBindMobileModal}
+          />
+          <SecondContainer setOpen={setOpenBindAccountModal} />
+          <ThirdContainer />
+          <BindMobileModal
+            open={openBindMobileModal}
+            setOpen={setOpenBindMobileModal}
+            setSuccessfulNotification={setSuccessfulNotification}
+          />
+          <BindAccountModal
+            open={openBindAccountModal}
+            setOpen={setOpenBindAccountModal}
+            setSuccessfulNotification={setSuccessfulNotification}
+          />
+          <NicknameModal
+            open={nicknameModal}
+            setOpen={setNicknameModal}
+            nickname={nickname}
+            setNickname={setNickname}
+          />
+          <GenderModal
+            open={genderModal}
+            setOpen={setGenderModal}
+            gender={gender}
+            setGender={setGender}
+          />
+        </ScrollView>
       </Container>
       {succesfulNotification ? <SuccessNotification /> : null}
     </>

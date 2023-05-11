@@ -1,169 +1,141 @@
-import {
-  ScrollView,
-  Text,
-  Dimensions,
-  View,
-  StyleSheet,
-  Image,
-  TouchableOpacity,
-} from "react-native";
-import { FlatList, HStack, VStack } from "native-base";
-
-import { SimpleLineIcons, MaterialCommunityIcons } from "@expo/vector-icons";
-
-import ImageTitle from "assets/images/profilePhoto.jpg";
-import UserProfileSettingsHeader from "components/UserProfileSettingsHeader";
+import { ScrollView, Text, View, StyleSheet, Image, ImageBackground, Pressable } from "react-native";
+import { Avatar, HStack, VStack } from "native-base";
 import { GLOBAL_COLORS } from "global";
-import { sharingPromotionData } from "data/sharingPromotionData";
-
-const QRCode = () => {
-  return (
-    <VStack
-      justifyContent={"center"}
-      alignItems={"center"}
-      space={3}
-      p={5}
-      mx={5}
-      mt={1}
-      bg={GLOBAL_COLORS.primaryTextColor}
-    >
-      <HStack>
-        <Image style={styles.qrCodeTitleImage} source={ImageTitle} />
-        <Text style={styles.qrCodeTitle}>
-          网黄UP主的性爱博客{"\n"}
-          分享你我的性福生活
-        </Text>
-      </HStack>
-
-      <Image style={styles.qrCodeImage} source={ImageTitle} />
-
-      <View>
-        <Text style={styles.qrCodeDetails}>分享好友立赠糖心专享会员</Text>
-        <Text style={styles.qrCodeDetails}>
-          邀请码:&nbsp;
-          <Text style={styles.qrCodeDetails2}>CDWQMC</Text>
-        </Text>
-      </View>
-
-      <HStack space={4}>
-        <TouchableOpacity style={styles.qrCodeBtn}>
-          <Text>保存图片</Text>
-        </TouchableOpacity>
-        <TouchableOpacity style={styles.qrCodeBtn}>
-          <Text>复制链接</Text>
-        </TouchableOpacity>
-      </HStack>
-    </VStack>
-  );
-};
-
-const Rewards = () => {
-  return (
-    <HStack justifyContent={"center"} alignItems={"center"} space={10} p={5}>
-      <VStack alignItems={"center"} space={2}>
-        <Text style={styles.rewardsText}>推广成功1人</Text>
-        <SimpleLineIcons name="diamond" size={34} color="#FAC690" />
-        <Text style={styles.rewardsText}>1天VIP</Text>
-        <Text style={styles.rewardsText}>推广成功1人</Text>
-      </VStack>
-
-      <VStack alignItems={"center"} space={2}>
-        <Text style={styles.rewardsText}>推广成功3人</Text>
-        <SimpleLineIcons name="diamond" size={34} color="#FAC690" />
-        <Text style={styles.rewardsText}>3天VIP</Text>
-        <Text style={styles.rewardsText}>推广成功3人</Text>
-      </VStack>
-
-      <VStack alignItems={"center"} space={1.5}>
-        <Text style={styles.rewardsText}>推广成功10人</Text>
-        <HStack alignItems={"center"}>
-          <SimpleLineIcons name="diamond" size={18} color="#FAC690" />
-          <Text style={styles.rewardsText}> + </Text>
-          <MaterialCommunityIcons
-            name="ticket-confirmation-outline"
-            size={24}
-            color="#FAC690"
-          />
-        </HStack>
-        <VStack alignItems={"center"}>
-          <Text style={styles.rewardsText}>10天VIP+5元</Text>
-          <Text style={styles.rewardsText}>观影券</Text>
-        </VStack>
-        <Text style={styles.rewardsText}>推广成功10人</Text>
-      </VStack>
-    </HStack>
-  );
-};
-
-const OtherDetails = () => {
-  return (
-    <FlatList
-      data={sharingPromotionData}
-      renderItem={({ item }) => (
-        <VStack p={3.5} mx={1}>
-          <View>
-            <Text style={styles.rewardsText}>{item.rewards}</Text>
-            <Text style={styles.otherDetailsText}>{item.details}</Text>
-          </View>
-        </VStack>
-      )}
-    />
-  );
-};
+import sharingQRContainer from "assets/images/sharingQRContainer.png";
+import QR from "assets/images/QR.png";
+import vincent from "assets/images/vincent-avatar.png";
+import Container from "components/Container";
+import React from "react";
 
 const SharingPromotion = () => {
   return (
-    <ScrollView style={styles.container}>
-      <UserProfileSettingsHeader title="分享推广" btnRight={null} />
-      <QRCode />
-      <Rewards />
-      <OtherDetails />
-    </ScrollView>
+    <Container>
+      <ScrollView>
+        <View style={styles.container}>
+          <View>
+            <ImageBackground source={sharingQRContainer} style={styles.imageBackground}>
+              <VStack pt={33} alignItems='center' space={3}>
+                <Text style={styles.headerText}>我的专属邀请码</Text>
+                <Image source={QR} style={styles.QRImage} />
+                <Text style={styles.redText}>分享好友立赠xx专享会员</Text>
+                <Text style={[styles.redText, { marginTop: 35 }]} >邀请码：CDWQMC</Text>
+              </VStack>
+              <HStack style={styles.userContainer} space={2}>
+                <Avatar source={vincent} size={42} borderWidth={2} borderColor='white' />
+                <VStack>
+                  <Text style={styles.whiteTextBold}>xxup主的博客</Text>
+                  <Text style={styles.whiteText}>分享你我的生活</Text>
+                </VStack>
+              </HStack>
+            </ImageBackground>
+            <HStack space={4} mt={6}>
+              <Pressable style={styles.button}>
+                <Text style={styles.blackTextBold}>保存图片</Text>
+              </Pressable>
+              <Pressable style={styles.button}>
+                <Text style={styles.blackTextBold}>复制链接</Text>
+              </Pressable>
+            </HStack>
+            <VStack space={5} mt={6} maxW={336}>
+              <VStack space={2}>
+                <Text style={styles.whiteTextBold}>推广奖励</Text>
+                <Text style={styles.whiteTextBold}>推广成功
+                  <Text style={styles.brownText}> 1 </Text>
+                  人，赠送：VIP
+                  <Text style={styles.brownText}> 1 </Text>
+                  天
+                </Text>
+                <Text style={styles.whiteTextBold}>
+                  推广成功
+                  <Text style={styles.brownText}> 3 </Text>
+                  人，赠送：VIP
+                  <Text style={styles.brownText}> 3 </Text>
+                  天
+                </Text>
+                <Text style={styles.whiteTextBold}>
+                  推广成功
+                  <Text style={styles.brownText}> 10 </Text>
+                  人，赠送：VIP
+                  <Text style={styles.brownText}> 10 </Text>
+                  天 + 观影券
+                  <Text style={styles.brownText}> 5 </Text>
+                  元
+                </Text>
+              </VStack>
+              <VStack space={1}>
+                <Text style={styles.whiteText}>注意事项：</Text>
+                <Text style={styles.grayText}>观影优惠仅用于抵扣任意金币视频。</Text>
+              </VStack>
+              <VStack space={1}>
+                <Text style={styles.whiteText}>操作说明：</Text>
+                <Text style={styles.grayText}>点击各视频世界分享按钮，保存二维码及推广链接口，立即分享到微博、朋友圈、论坛分类。</Text>
+              </VStack>
+            </VStack>
+          </View>
+        </View>
+      </ScrollView>
+    </Container>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
-    maxHeight: Dimensions.get("window").height,
-    maxWidth: Dimensions.get("window").width,
-    backgroundColor: GLOBAL_COLORS.headerBasicBg,
+    paddingVertical: 12,
+    paddingHorizontal: 16,
+    alignItems: 'center',
   },
-  qrCodeTitleImage: {
-    width: 35,
-    height: 35,
+  imageBackground: {
+    height: 481,
+    width: 343,
+    resizeMode: "contain",
+    position: 'relative',
   },
-  qrCodeTitle: {
-    color: "grey",
-  },
-  qrCodeImage: {
+  QRImage: {
     width: 200,
-    height: 200,
+    height: 200
   },
-  qrCodeDetails: {
-    color: "grey",
-    textAlign: "justify",
+  headerText: {
+    color: GLOBAL_COLORS.secondaryColor,
+    fontSize: 28,
+    fontWeight: 'bold'
   },
-  qrCodeDetails2: {
+  redText: {
+    color: '#FF5949',
+    fontSize: 14,
+    fontWeight: 'bold'
+  },
+  userContainer: {
+    position: 'absolute',
+    bottom: 20,
+    left: 30
+  },
+  whiteText: {
+    color: 'white'
+  },
+  whiteTextBold: {
+    color: 'white',
+    fontWeight: 'bold'
+  },
+  brownText: {
+    color: '#C79765'
+  },
+  button: {
+    backgroundColor: '#C79765',
+    width: 163,
+    height: 40,
+    borderRadius: 20,
+    alignItems: 'center',
+    justifyContent: 'center'
+  },
+  blackTextBold: {
+    color: 'black',
     fontSize: 15,
-    fontWeight: "600",
-    color: "black",
+    fontWeight: 'bold'
   },
-  qrCodeBtn: {
-    backgroundColor: "#FAC690",
-    height: 30,
-    width: 110,
-    alignItems: "center",
-    justifyContent: "center",
-    borderRadius: 15,
-  },
-  rewardsText: {
-    color: GLOBAL_COLORS.primaryTextColor,
-  },
-  otherDetailsText: {
-    color: "grey",
-    marginTop: 10,
-  },
+  grayText: {
+    color: '#8B8E92',
+    fontWeight: 'bold'
+  }
 });
 
 export default SharingPromotion;

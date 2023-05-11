@@ -288,7 +288,11 @@ const LinkList = () => {
     {
       title: translations.sharingPromotion,
       icon: ShareIcon,
-      navigate: () => {},
+      navigate: () => {
+        navigation.navigate("SharingPromotion", {
+          postTitle: translations.sharingPromotion,
+        });
+      },
     },
     {
       title: translations.accountCredentials,

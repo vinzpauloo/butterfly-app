@@ -1,11 +1,10 @@
 import { Image, StyleSheet, Text, View } from "react-native";
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 
 import Entypo from "react-native-vector-icons/Entypo";
 import LottieView from "lottie-react-native";
 import { HStack, Input, Modal, Pressable, Stack, VStack } from "native-base";
 
-import CoinIcon from "assets/images/coinIcon.png";
 import Container from "components/Container";
 import CustomerService from "services/api/CustomerService";
 import LoadingSpinner from "components/LoadingSpinner";
@@ -546,9 +545,7 @@ const BindMobileModal = ({ open, setOpen, setSuccessfulNotification }) => {
               value={mobileNumber}
               onChangeText={setMobileNumber}
               width="full"
-              paddingRight={8}
             />
-            <Image source={CoinIcon} style={styles.coinIcon} />
           </HStack>
           <HStack
             width="full"
@@ -857,14 +854,5 @@ const styles = StyleSheet.create({
     marginHorizontal: 15,
     borderRadius: 20,
     width: 70,
-  },
-  coinIcon: {
-    position: "absolute",
-    height: 25,
-    width: 25,
-    resizeMode: "contain",
-    right: 8,
-    top: "50%",
-    transform: [{ translateY: -13 }],
   },
 });

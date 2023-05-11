@@ -62,14 +62,14 @@ export default MomentHeader;
 
 const styles = StyleSheet.create({
   certificateContainer: {
-    backgroundColor: GLOBAL_COLORS.headerBasicBg,
+    backgroundColor: GLOBAL_COLORS.videoContentBG,
     padding: 12,
     marginTop: 15,
     marginHorizontal: 15,
     borderRadius: 4,
   },
   certificateContainerSkeleton: {
-    backgroundColor: GLOBAL_COLORS.headerBasicBg,
+    backgroundColor: GLOBAL_COLORS.videoContentBG,
     padding: 12,
     flex: 1,
   },

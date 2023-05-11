@@ -58,7 +58,7 @@ const BottomTabs = ({ data }) => {
           tabBarActiveTintColor: GLOBAL_COLORS.secondaryColor,
           tabBarInactiveTintColor: "#fff",
           tabBarStyle: {
-            backgroundColor: "#262632",
+            backgroundColor: GLOBAL_COLORS.videoContentBG,
             paddingBottom: 10,
             height: 60,
           },

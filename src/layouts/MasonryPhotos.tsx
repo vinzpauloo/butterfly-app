@@ -5,25 +5,27 @@ import {
   ImageBackground,
   Pressable,
   RefreshControl,
+  Image,
 } from "react-native";
 
+import MasonryList from "@react-native-seoul/masonry-list";
+import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons";
 import { useNavigation, useRoute } from "@react-navigation/native";
 import { VStack, HStack, Text } from "native-base";
 import { MasonryFlashList } from "@shopify/flash-list";
-import MasonryList from "@react-native-seoul/masonry-list";
-import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons";
 import { useQuery } from "@tanstack/react-query";
 
-import { photoGalleryImages } from "data/photoGalleryImages";
-import Container from "components/Container";
-import { GLOBAL_COLORS } from "global";
+import AlbumsService from "services/api/AlbumsService";
 import BottomMessage from "components/BottomMessage";
-import Loading from "components/Loading";
-import VIPTag from "components/VIPTag";
+import Container from "components/Container";
 import CustomModal from "components/CustomModal";
+import HeartActive from "assets/images/heartActive.png";
+import Loading from "components/Loading";
 import MasonrySkeleton from "components/skeletons/MasonrySkeleton";
 import VIPModalContent from "components/VIPModalContent";
-import AlbumsService from "services/api/AlbumsService";
+import VIPTag from "components/VIPTag";
+import { photoGalleryImages } from "data/photoGalleryImages";
+import { GLOBAL_COLORS } from "global";
 import { captureSuccess, captureError } from "services/sentry";
 import { userStore } from "../zustand/userStore";
 import { BASE_URL_FILE_SERVER } from "react-native-dotenv";
@@ -62,6 +64,7 @@ const SingleImage = (props: SingleImageProp) => {
         }}
         style={[styles.singleImage, { height: props.height }]}
         resizeMode="cover"
+        imageStyle={{ borderRadius: 4 }}
       >
         <VIPTag />
         <VStack style={styles.blackContainer}>
@@ -69,11 +72,7 @@ const SingleImage = (props: SingleImageProp) => {
             {props.postTitle}
           </Text>
           <HStack space={1}>
-            <MaterialCommunityIcons
-              name="heart"
-              color={GLOBAL_COLORS.secondaryColor}
-              size={20}
-            />
+            <Image source={HeartActive} style={styles.heartIcon} />
             <Text style={styles.whiteText}>{props.totalViews}</Text>
           </HStack>
         </VStack>
@@ -203,10 +202,11 @@ const styles = StyleSheet.create({
   },
   blackContainer: {
     marginTop: "auto",
-    backgroundColor: "rgba(0,0,0, 0.5)",
-    paddingHorizontal: 6,
+    // backgroundColor: "rgba(0,0,0, 0.5)",
+    padding: 6,
   },
   whiteText: {
     color: "white",
   },
+  heartIcon: { height: 20, width: 20, resizeMode: "contain" },
 });

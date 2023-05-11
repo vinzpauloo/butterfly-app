@@ -386,10 +386,13 @@ const Member = ({ route }) => {
 const Wallet = ({ route }) => {
   // ** GLOBAL STORE
   const { api_token, coins } = userStore((store) => store);
+  const userStoreData = userStore((store) => store);
+  const setUserStore = userStore((state) => state.setUserData);
   const { translations } = translationStore((store) => store);
 
   // ** STATES
   const [bundleID, setBundleID] = useState("");
+  const [isRefetchProfile, setisRefetchProfile] = useState(false);
 
   // ** HOOKS
   const queryClient = useQueryClient();
@@ -402,11 +405,34 @@ const Wallet = ({ route }) => {
       getAllCoinBundle({ data: { with: "sites" }, token: api_token }),
   });
 
+  const { getCustomerProfile } = CustomerService();
+  const {} = useQuery({
+    queryKey: ["customerProfileWallet"],
+    queryFn: () => getCustomerProfile(api_token),
+    onSuccess: (data) => {
+      console.log("onSuccess customerProfile (WALLET)", data);
+
+      // Update userStore data here
+      setUserStore({
+        ...userStoreData,
+        coins: data.coins,
+        is_Vip: data.is_Vip,
+      });
+
+      setisRefetchProfile(false);
+    },
+    onError: (error) => {
+      console.log("onError customerProfile (WALLET)", error);
+    },
+    enabled: isRefetchProfile,
+  });
+
   // ** EVENTS
   const onRefresh = useCallback(() => {
-    queryClient.invalidateQueries({
-      queryKey: ["customerProfile"],
-    });
+    // queryClient.invalidateQueries({
+    //   queryKey: ["customerProfile"],
+    // });
+    setisRefetchProfile(true);
   }, []);
 
   const handlePayment = (event) => {

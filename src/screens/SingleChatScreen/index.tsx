@@ -23,6 +23,7 @@ import { GLOBAL_COLORS } from "global";
 import formatDate from "../../utils/formatDate";
 import { singleChatMessageList } from "data/singleChatMessageList";
 import { BASE_URL_FILE_SERVER } from "react-native-dotenv";
+import { translationStore } from "../../zustand/translationStore";
 
 type Props = {};
 
@@ -48,14 +49,7 @@ type SenderMessageProps = {
 
 const SenderMessage = (props: SenderMessageProps) => {
   return (
-    <View style={styles.senderMessagesContainer}>
-      <Image
-        style={styles.userImage}
-        source={{
-          uri: BASE_URL_FILE_SERVER + props.senderImgURL,
-          cache: "only-if-cached",
-        }}
-      />
+    <View>
       <VStack style={styles.senderMessageAndTimeStampContainer}>
         <>
           <Text style={styles.senderName}>{props.senderUserName}</Text>
@@ -86,14 +80,7 @@ type YourMessageProps = {
 
 const YourMessage = (props: YourMessageProps) => {
   return (
-    <View style={styles.yourMessagesContainer}>
-      <Image
-        style={styles.userImage}
-        source={{
-          uri: BASE_URL_FILE_SERVER + props.yourImgUrl,
-          cache: "only-if-cached",
-        }}
-      />
+    <View>
       <VStack style={styles.yourMessageAndTimeStampContainer}>
         <>
           <View style={styles.messageContainer}>
@@ -160,6 +147,7 @@ const SingleChatScreen = (props: Props) => {
   const { getDate } = formatDate();
   const scrollViewRef = useRef(null);
   const [chatListIsLoaded, setChatListIsLoaded] = useState(false);
+  const translations = translationStore((state) => state.translations);
 
   useEffect(() => {
     setTimeout(() => setChatListIsLoaded(true), 1000);
@@ -214,7 +202,7 @@ const SingleChatScreen = (props: Props) => {
           <NoMessageYet />
         ) : (
           <>
-            <ScrollView ref={scrollViewRef}>
+            <ScrollView ref={scrollViewRef} style={{paddingHorizontal: 24, paddingVertical: 16}}>
               {singleChatMessageList[0].messageChain.map((message, index) =>
                 message.isMessageFromSender ? (
                   <SenderMessage
@@ -259,12 +247,12 @@ const SingleChatScreen = (props: Props) => {
                 keyboardType="default"
                 onChangeText={(text) => setInput(text)}
               />
-              <Pressable onPress={handleSend}>
-                <Feather
-                  name="send"
-                  color={GLOBAL_COLORS.secondaryColor}
-                  size={20}
-                />
+              <Pressable 
+                onPress={handleSend}
+                style={[styles.sendMessage, { opacity: input === "" ? 0.3 : 1 }]}
+                disabled={input === "" ? true : false}
+              >
+                <Text style={styles.whiteText}>{translations.send}</Text>
               </Pressable>
             </HStack>
           </>
@@ -279,21 +267,9 @@ const SingleChatScreen = (props: Props) => {
 export default SingleChatScreen;
 
 const styles = StyleSheet.create({
-  senderMessagesContainer: {
-    flexDirection: "row",
-    marginVertical: 12,
-    marginHorizontal: 20,
-    alignItems: "flex-start",
-  },
   senderName: {
     color: "white",
     marginBottom: 4,
-  },
-  yourMessagesContainer: {
-    flexDirection: "row-reverse",
-    marginVertical: 12,
-    marginHorizontal: 20,
-    alignItems: "flex-start",
   },
   senderMessageAndTimeStampContainer: {
     marginLeft: 12,
@@ -303,20 +279,15 @@ const styles = StyleSheet.create({
     marginRight: 12,
     alignItems: "flex-end",
   },
-  userImage: {
-    width: 42,
-    height: 42,
-    borderRadius: 21,
-  },
   senderSingleMessageContainer: {
     backgroundColor: GLOBAL_COLORS.secondaryColor,
   },
   messageContainer: {
-    paddingHorizontal: 12,
-    paddingVertical: 6,
-    backgroundColor: GLOBAL_COLORS.headerBasicBg,
-    borderRadius: 8,
-    maxWidth: 224,
+    paddingHorizontal: 16,
+    paddingVertical: 12,
+    backgroundColor: GLOBAL_COLORS.videoContentBG,
+    borderRadius: 4,
+    maxWidth: 260,
   },
   senderMessageText: {
     color: "white",
@@ -332,10 +303,12 @@ const styles = StyleSheet.create({
     maxHeight: 500,
   },
   messageTimeStamp: {
-    color: "#999",
-    fontSize: 8,
+    color: 'white',
+    fontSize: 11,
     textAlign: "right",
     marginTop: 6,
+    opacity: 0.5,
+    marginBottom: 16
   },
   centeredContent: {
     flex: 1,
@@ -353,12 +326,20 @@ const styles = StyleSheet.create({
   bottomForm: {
     padding: 12,
     alignItems: "center",
-    backgroundColor: GLOBAL_COLORS.headerBasicBg,
+    backgroundColor: GLOBAL_COLORS.videoContentBG,
   },
   textInput: {
-    backgroundColor: "white",
-    paddingHorizontal: 12,
+    color: 'white',
+    backgroundColor: GLOBAL_COLORS.primaryColor,
+    paddingHorizontal: 16,
+    paddingVertical: 5,
     borderRadius: 16,
-    width: Dimensions.get("window").width - 88,
+    width: "75%",
+  },
+  sendMessage: {
+    backgroundColor: GLOBAL_COLORS.secondaryColor,
+    paddingVertical: 5,
+    paddingHorizontal: 19,
+    borderRadius: 16
   },
 });

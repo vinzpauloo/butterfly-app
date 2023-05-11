@@ -167,4 +167,5 @@ export default zh_cn = {
   wonPraise: "获赞",
   work: "作品",
   donateSuccess: "捐赠成功!",
+  send: "发送",
 };

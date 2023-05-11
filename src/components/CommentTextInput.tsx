@@ -152,7 +152,7 @@ const CommentTextInput = (props: Props) => {
             disabled={text === "" ? true : false}
             onPress={isOnReplyMode ? replyToComment : addNewComment}
           >
-            <Text style={styles.whiteText}>发布</Text>
+            <Text style={styles.whiteText}>{translations.send}</Text>
           </Pressable>
         </HStack>
       </VStack>
@@ -188,13 +188,10 @@ const styles = StyleSheet.create({
     color: "white",
   },
   sendComment: {
-    // width: "17.5%",
     alignItems: "center",
     backgroundColor: GLOBAL_COLORS.secondaryColor,
     paddingVertical: 5,
     paddingHorizontal: 19,
     borderRadius: 16
-    // borderColor: 'red',
-    // borderWidth: 1
   },
 });

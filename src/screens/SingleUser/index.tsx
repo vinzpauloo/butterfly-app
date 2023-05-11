@@ -116,7 +116,7 @@ const SingleUserScreen = () => {
         <Pressable onPress={() => setVIPModalOpen(true)} style={{marginRight: 'auto'}}>
           <VStack alignItems='center' space={0.5}>
             <Image style={styles.image} source={chatInactive}/>
-            <Text style={styles.whiteText}>私信</Text>
+            <Text style={styles.whiteText}>{translations.chat}</Text>
           </VStack>
         </Pressable>
         <Pressable style={styles.donateButton} onPress={() => setOpenDonateModal(true)}>

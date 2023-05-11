@@ -39,7 +39,7 @@ const SingleUserHeader = (props: Props) => {
             <View style={styles.bannerContent} pointerEvents="box-none">
               <HStack alignItems='center' justifyContent='center'>
                 <Ionicons name="chevron-back" color="#fff" size={24} style={styles.backIcon} onPress={() => navigation.goBack()} />
-                <Text style={[styles.usernameText, {marginRight: 'auto'}]}>UP主页</Text>
+                <Text style={[styles.usernameText, {marginRight: 'auto'}]}>UP {translations.profile}</Text>
               </HStack>
               <HStack alignItems='center' space={3} mt='auto' mb={4}>
                 <Image source={{ uri: BASE_URL_FILE_SERVER + props?.photo }} style={styles.profileImg} />
@@ -65,8 +65,8 @@ const SingleUserHeader = (props: Props) => {
                   <Text style={styles.summaryText}>{translations.wonPraise}</Text>
                 </View>
                 <View style={styles.summaryContent}>
-                  <Text style={styles.summaryNumber}>32人</Text>
-                  <Text style={styles.summaryText}>打赏</Text>
+                  <Text style={styles.summaryNumber}>32</Text>
+                  <Text style={styles.summaryText}>{translations.reward}</Text>
                 </View>
               </View>
             </View>

@@ -169,5 +169,6 @@ export default en_us = {
   wonPraise: "Won Praise",
   work: "Work",
   donateSuccess: "Donation success!",
-  send: "send"
+  send: "Send",
+  download: "Download"
 };

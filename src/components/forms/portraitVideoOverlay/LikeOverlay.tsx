@@ -2,7 +2,8 @@ import React, { useState } from "react";
 import { Pressable, StyleSheet, Text, View } from "react-native";
 import { GLOBAL_COLORS } from "global";
 
-import Ionicons from "react-native-vector-icons/Ionicons";
+import Foundation from "react-native-vector-icons/Foundation";
+import AntDesign from "react-native-vector-icons/AntDesign";
 import LikeService from "services/api/LikeService";
 import { useMutation } from "@tanstack/react-query";
 import { userStore } from "../../../zustand/userStore";
@@ -63,10 +64,10 @@ const LikeOverlay = (props: Props) => {
   return (
     <View style={styles.verticalBarItem}>
       <Pressable onPress={props.isLiked ? unlikeVideo : likeVideo}>
-        <Ionicons
+        <Foundation
           name="heart"
-          color={props.isLiked ? GLOBAL_COLORS.secondaryColor : "white"}
-          size={40}
+          color={props.isLiked ? GLOBAL_COLORS.errorColor : "white"}
+          size={36}
         />
       </Pressable>
       <Text style={styles.iconText}>{props.likeCount}</Text>

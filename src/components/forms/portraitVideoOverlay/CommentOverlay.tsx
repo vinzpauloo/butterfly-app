@@ -1,6 +1,7 @@
 import React from 'react'
-import { Pressable, StyleSheet, Text, View } from 'react-native'
-import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons";
+import { Pressable, StyleSheet, Text, View, Image } from 'react-native'
+import chatActiveWhite from "assets/images/chatActiveWhite.png";
+import { VStack } from 'native-base';
 
 type Props = {
   amountOfComments: number;
@@ -9,12 +10,12 @@ type Props = {
 
 const CommentOverlay = (props: Props) => {
   return (
-    <View style={styles.verticalBarItem}>
+    <VStack style={styles.verticalBarItem} space={1}>
       <Pressable onPress={() => props.openComments()}>
-        <MaterialCommunityIcons name="comment" color={"white"} size={40} />
+        <Image source={chatActiveWhite} style={styles.image} />
       </Pressable>
       <Text style={styles.iconText}>{props.amountOfComments}</Text>
-    </View>
+    </VStack>
   )
 }
 
@@ -31,4 +32,8 @@ const styles = StyleSheet.create({
     textShadowOffset: { width: 0, height: 0 },
     textShadowRadius: 24,
   },
+  image: {
+    width: 24,
+    height: 24
+  }
 })

@@ -2,9 +2,11 @@ import React, { useState } from "react";
 import { Pressable, StyleSheet, Text, View } from "react-native";
 import { useMutation } from "@tanstack/react-query";
 
-import Ionicons from "react-native-vector-icons/Ionicons";
+import AntDesign from "react-native-vector-icons/AntDesign";
 import CustomerService from "services/api/CustomerService";
 import { userStore } from "../../../zustand/userStore";
+import { GLOBAL_COLORS } from "global";
+import { translationStore } from "../../../zustand/translationStore";
 
 type Props = {
   videoID: string;
@@ -15,6 +17,7 @@ type Props = {
 
 const FavoriteOVerlay = (props: Props) => {
   // const [videoIsFaved, setVideoIsFaved] = useState(props.isFavorite);
+  const translations = translationStore((state) => state.translations);
   const token = userStore((state) => state.api_token);
 
   const { favoriteVideo, unfavoriteVideo } = CustomerService();
@@ -57,13 +60,13 @@ const FavoriteOVerlay = (props: Props) => {
           props.isFavorite ? removeVideoFromFavorite : addVideoToFavorite
         }
       >
-        <Ionicons
+        <AntDesign
           name="star"
-          color={props.isFavorite ? "yellow" : "white"}
-          size={40}
+          color={props.isFavorite ? GLOBAL_COLORS.secondaryColor : "white"}
+          size={28}
         />
       </Pressable>
-      <Text style={styles.iconText}>Fave</Text>
+      <Text style={styles.iconText}>{translations.favorite}</Text>
     </View>
   );
 };

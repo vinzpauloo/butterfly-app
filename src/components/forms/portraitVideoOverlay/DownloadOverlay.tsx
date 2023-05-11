@@ -1,19 +1,19 @@
 import React, { useEffect, useState } from "react";
-import { Pressable, StyleSheet, Text, View } from "react-native";
-
-import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons";
+import { Pressable, StyleSheet, Text, View, Image } from "react-native";
 import { useQuery } from "@tanstack/react-query";
-
 import CustomModal from "components/CustomModal";
 import VIPModalContent from "components/VIPModalContent";
 import WatchVideo from "services/api/WatchVideo";
 import { downloadFile } from "utils/downloadFile";
 import { readFileDirectory } from "lib/expoFileSystem";
 import { userStore } from "../../../zustand/userStore";
+import downloadedIcon from "assets/images/downloadedIcon.png";
+import { translationStore } from "../../../zustand/translationStore";
 
 type Props = { videoID: string };
 
 const DownloadOverlay: React.FC<Props> = ({ videoID }) => {
+  const translations = translationStore((state) => state.translations);
   const token = userStore((store) => store.api_token);
   const isVIP = userStore((state) => state.is_Vip);
   const { getDownloadVideo } = WatchVideo();
@@ -51,9 +51,9 @@ const DownloadOverlay: React.FC<Props> = ({ videoID }) => {
     <>
       <View style={styles.verticalBarItem}>
         <Pressable onPress={handleDownload}>
-          <MaterialCommunityIcons name="download" color={"white"} size={40} />
+          <Image source={downloadedIcon} style={styles.image} />
         </Pressable>
-        <Text style={styles.iconText}>DL</Text>
+        <Text style={styles.iconText}>{translations.download}</Text>
       </View>
       <CustomModal open={open} setOpen={setOpen}>
         <VIPModalContent setOpen={setOpen} />
@@ -75,4 +75,8 @@ const styles = StyleSheet.create({
     textShadowOffset: { width: 0, height: 0 },
     textShadowRadius: 24,
   },
+  image: {
+    width: 34,
+    height: 34
+  }
 });

@@ -22,11 +22,11 @@ const BottomOverlay = (props: Props) => {
           navigation.navigate("SingleUser", { userID: props.userID })
         }
       >
-        <Text style={[styles.userName, styles.iconText]}>
+        <Text style={styles.whiteBoldText}>
           @{props.userName}
         </Text>
       </Pressable>
-      <Text style={styles.iconText}>{props.title}</Text>
+      <Text style={styles.whiteText}>{props.title}</Text>
       <View style={styles.tags}>
         {props.tags.map((item, index) => (
           <Pressable
@@ -36,7 +36,7 @@ const BottomOverlay = (props: Props) => {
               navigation.navigate("SingleTag", { postTitle: item });
             }}
           >
-            <Text style={styles.iconText}>#{item}</Text>
+            <Text style={styles.whiteBoldText}>#{item}</Text>
           </Pressable>
         ))}
       </View>
@@ -66,12 +66,8 @@ const styles = StyleSheet.create({
     paddingBottom: 16,
     bottom: 0,
   },
-  userName: {
-    fontWeight: "bold",
-  },
-  iconText: {
+  whiteText: {
     color: "white",
-    textShadowColor: "black",
     textShadowOffset: { width: 0, height: 0 },
     textShadowRadius: 24,
   },
@@ -82,12 +78,19 @@ const styles = StyleSheet.create({
   tag: {
     marginRight: 5,
   },
+  whiteBoldText: {
+    color: 'white',
+    fontWeight: 'bold',
+    textShadowOffset: { width: 0, height: 0 },
+    textShadowRadius: 24,
+  },
   subscribe: {
     color: "white",
     borderWidth: 1,
     borderColor: "white",
-    borderRadius: 4,
-    padding: 5,
+    borderRadius: 16,
+    paddingHorizontal: 12,
+    paddingVertical: 6,
     fontWeight: "bold",
     textShadowColor: "black",
     textShadowOffset: { width: 0, height: 0 },

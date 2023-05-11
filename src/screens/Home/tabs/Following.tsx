@@ -5,7 +5,6 @@ import {
   RefreshControl,
   StyleSheet,
   Text,
-  TouchableOpacity,
   View,
 } from "react-native";
 import React, { useCallback, useState } from "react";
@@ -22,7 +21,7 @@ import CustomerService from "services/api/CustomerService";
 import DividerContainer from "features/sectionList/components/DividerContainer";
 import Loading from "components/Loading";
 import Modal from "components/BottomModal";
-import NoFollowingImg from "assets/images/nofollowing.png";
+import NoFollowIcon from "assets/images/nofollowIcon.png";
 import VideoListSkeleton from "components/skeletons/VideoListSkeleton";
 import VIPTag from "components/VIPTag";
 import WorkService from "services/api/WorkService";
@@ -36,6 +35,7 @@ import { translationStore } from "../../../zustand/translationStore";
 import { BASE_URL_FILE_SERVER } from "react-native-dotenv";
 import VideoComponent from "components/VideoComponent";
 import Entypo from "react-native-vector-icons/Entypo";
+import CarouselContainer from "features/ads/components/CarouselContainer";
 
 const { width, height } = Dimensions.get("window");
 
@@ -145,7 +145,7 @@ const NoFollowing = ({
         />
       }
     >
-      <Image source={NoFollowingImg} style={styles.image} />
+      <CarouselContainer />
       <Text style={styles.popular}>{translations.popularUsers}</Text>
       {data.map((info, index) => (
         <>
@@ -430,9 +430,9 @@ const styles = StyleSheet.create({
     borderRadius: 4,
   },
   image: {
-    width: width,
-    height: 150,
-    resizeMode: "cover",
+    width: 90,
+    height: 90,
+    resizeMode: "contain",
   },
   popular: {
     color: "#fff",
@@ -440,7 +440,9 @@ const styles = StyleSheet.create({
     borderLeftWidth: 3,
     paddingHorizontal: 12,
     marginHorizontal: 15,
-    marginVertical: 15,
+    marginBottom: 5,
+    fontWeight: "bold",
+    fontSize: 16,
   },
   usersCategoryContainer: {
     flex: 1,

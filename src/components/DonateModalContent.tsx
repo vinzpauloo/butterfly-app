@@ -62,7 +62,7 @@ const DonateModalContent = ({ setOpen, userID = 1 }) => {
   };
 
   return (
-    <Modal.Content bgColor={GLOBAL_COLORS.headerBasicBg}>
+    <Modal.Content bgColor={GLOBAL_COLORS.videoContentBG}>
       <Modal.CloseButton />
       <Modal.Body>
         <VStack space={4} alignItems="center" pt={6}>

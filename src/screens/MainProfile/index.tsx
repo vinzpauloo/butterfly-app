@@ -91,7 +91,7 @@ const Header = () => {
 
 // **** USER COMPONENT START CODE **** //
 const User = () => {
-  const { alias, photo, is_Vip } = userStore((store) => store);
+  const { alias, photo, is_Vip, coins } = userStore((store) => store);
   const { translations } = translationStore((store) => store);
 
   return (
@@ -119,7 +119,9 @@ const User = () => {
             </HStack>
             <HStack justifyContent="space-between">
               <Stack flexGrow="1">
-                <Text style={styles.middleText}>{translations.coin} : 0</Text>
+                <Text style={styles.middleText}>
+                  {translations.coin} : {coins}
+                </Text>
               </Stack>
               <Stack flexGrow="1">
                 <Text style={styles.middleText}>

@@ -103,7 +103,7 @@ const User = () => {
           <VStack justifyContent="space-evenly" space={1}>
             <HStack w="72" space={2}>
               <Text style={styles.usernameText}>{alias}</Text>
-              {!is_Vip ? <Text style={styles.vipText}>VIP</Text> : null}
+              {is_Vip ? <Text style={styles.vipText}>VIP</Text> : null}
               {/* <HStack alignItems="center" space={1}>
                   <Text style={styles.bottomText}>轮廓</Text>
                   <Entypo
@@ -256,12 +256,20 @@ const LinkList = () => {
     {
       title: translations.recordingHistory,
       icon: HistoryIcon,
-      navigate: () => {},
+      navigate: () => {
+        navigation.navigate("Videos", {
+          postTitle: "历史记录",
+        });
+      },
     },
     {
       title: translations.offlineCache,
       icon: DownloadIcon,
-      navigate: () => {},
+      navigate: () => {
+        navigation.navigate("Videos", {
+          postTitle: "离线缓存",
+        });
+      },
     },
     {
       title: translations.sharingPromotion,
@@ -343,7 +351,7 @@ const Download = () => {
       <HStack py={3} pl={1} alignItems="center" justifyContent="space-between">
         <HStack alignItems="center" space={4}>
           <Image source={SaveIcon} style={styles.langImg} />
-          <Text style={styles.langText}>{translations.recordingHistory}</Text>
+          <Text style={styles.langText}>{translations.gotoDownload}</Text>
         </HStack>
         <HStack alignItems="center">
           <Entypo

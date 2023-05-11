@@ -44,6 +44,7 @@ import SingleChatScreen from "screens/SingleChatScreen";
 import SingleTag from "screens/SingleTag";
 import SingleFeedScreen from "screens/SingleFeedScreen";
 import TermsOfService from "screens/TermsOfService";
+import Videos from "screens/Videos";
 import VIPScreen from "screens/VIP";
 import WorkService from "services/api/WorkService";
 import { GLOBAL_COLORS } from "global";
@@ -329,6 +330,11 @@ export const stackScreens = {
       name: "VlogScreen",
       component: VlogScreen,
       options: { headerShown: false },
+    },
+    {
+      name: "Videos",
+      component: Videos,
+      options: basicHeader,
     },
     {
       name: "VIPScreen",

@@ -59,7 +59,7 @@ export default zh_cn = {
   getOffer: "获取报价",
   giveReward: "喜欢就来点打赏吧",
   goldCoinsFree: "金币免费",
-  gotoDownload: "去下载",
+  gotoDownload: "前往下载",
   hide: "隐藏",
   home: "首页",
   hottest: "最热",

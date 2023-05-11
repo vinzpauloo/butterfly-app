@@ -110,10 +110,7 @@ const DonateModalContent = ({ setOpen, userID = 1 }) => {
             <Button
               disabled={amount === "" ? true : false}
               size="sm"
-              style={[
-                styles.button,
-                amount === "" ? styles.disabledButton : styles.enabledButton,
-              ]}
+              style={[styles.donateButton, {opacity: amount === "" ? 0.5 : 1 }]}
               onPress={onPressDonate}
             >
               {translations.rewarded}
@@ -130,13 +127,8 @@ const DonateModalContent = ({ setOpen, userID = 1 }) => {
 export default DonateModalContent;
 
 const styles = StyleSheet.create({
-  enabledButton: {
-    backgroundColor: GLOBAL_COLORS.secondaryColor,
-  },
-  disabledButton: {
-    backgroundColor: GLOBAL_COLORS.inactiveTextColor,
-  },
-  button: {
+  donateButton: {
+    backgroundColor: '#FF644A',
     borderRadius: 20,
     width: 120,
   },
@@ -149,7 +141,6 @@ const styles = StyleSheet.create({
     justifyContent: "flex-start",
   },
   coinIconContainer: {
-    // backgroundColor: "gold",
     height: 24,
     width: 24,
     borderRadius: 12,

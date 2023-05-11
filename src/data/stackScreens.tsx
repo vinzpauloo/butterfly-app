@@ -319,7 +319,7 @@ export const stackScreens = {
     {
       name: "SharingPromotion",
       component: SharingPromotion,
-      options: { headerShown: false },
+      options: basicHeader,
     },
     {
       name: "TermsOfService",

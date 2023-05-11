@@ -1,4 +1,5 @@
 import {
+  Dimensions,
   Image,
   Pressable,
   RefreshControl,
@@ -16,6 +17,7 @@ import {
   FlatList,
   HStack,
   Modal,
+  Stack,
   VStack,
   useDisclose,
 } from "native-base";
@@ -47,6 +49,8 @@ import { useIsFocused, useNavigation } from "@react-navigation/native";
 import UserService from "services/api/UserService";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import CustomerService from "services/api/CustomerService";
+
+const { width } = Dimensions.get("window");
 
 // **** COMPONENTS START **** //
 const Layout = ({ children, style = null }) => {
@@ -98,10 +102,10 @@ const User = () => {
           style={styles.profileImg}
         />
       </Box>
-      <VStack space={2}>
+      <VStack space={2} flexGrow="1">
         <HStack>
-          <VStack justifyContent="space-evenly" space={1}>
-            <HStack w="72" space={2}>
+          <VStack justifyContent="space-evenly" space={1} flexGrow="1">
+            <HStack space={2}>
               <Text style={styles.usernameText}>{alias}</Text>
               {is_Vip ? <Text style={styles.vipText}>VIP</Text> : null}
               {/* <HStack alignItems="center" space={1}>
@@ -113,18 +117,24 @@ const User = () => {
                   />
                 </HStack> */}
             </HStack>
-            <HStack space={5}>
-              <Text style={styles.middleText}>{translations.coin} : 0</Text>
-              <Text style={styles.middleText}>
-                {translations.movieTicket} : 0
-              </Text>
-              <Text style={styles.middleText}>
-                {translations.watchForFree} : 0/0
-              </Text>
+            <HStack justifyContent="space-between">
+              <Stack flexGrow="1">
+                <Text style={styles.middleText}>{translations.coin} : 0</Text>
+              </Stack>
+              <Stack flexGrow="1">
+                <Text style={styles.middleText}>
+                  {translations.movieTicket} : 0
+                </Text>
+              </Stack>
+              <Stack flexGrow="1">
+                <Text style={styles.middleText}>
+                  {translations.watchForFree} : 0/0
+                </Text>
+              </Stack>
             </HStack>
           </VStack>
         </HStack>
-        <HStack justifyContent="space-between" alignItems="center">
+        <HStack justifyContent="space-between" alignItems="center" pr="8">
           <VStack alignItems="center">
             <Text style={styles.bottomTopText}>0</Text>
             <Text style={styles.bottomText}>{translations.talkAbout}</Text>
@@ -183,7 +193,8 @@ const VIPStatus = () => {
           <HStack
             backgroundColor={is_Vip ? "#4a3e34" : "#363e47"}
             py={3}
-            px="2.5"
+            pl="2.5"
+            pr="6"
             alignItems="center"
             borderLeftRadius={5}
             borderBottomRightRadius={5}
@@ -192,7 +203,7 @@ const VIPStatus = () => {
               source={is_Vip ? VIPActive : VIPNotActive}
               style={styles.vipImage}
             />
-            <VStack pl={2.5}>
+            <VStack pl={2.5} flexGrow={1}>
               {is_Vip ? (
                 <Text style={[styles.vipTitle, { color: "#F09536" }]}>
                   {translations.vipPeriod} : {"2023-05-19"}
@@ -207,7 +218,10 @@ const VIPStatus = () => {
                   {translations.vip} : {translations.notYetMember}
                 </Text>
               )}
-              <Text style={{ color: is_Vip ? "#DBAD7D" : "#73787F" }}>
+              <Text
+                style={{ color: is_Vip ? "#DBAD7D" : "#73787F" }}
+                numberOfLines={1}
+              >
                 {translations.userID} : {_id}
               </Text>
             </VStack>
@@ -274,7 +288,11 @@ const LinkList = () => {
     {
       title: translations.sharingPromotion,
       icon: ShareIcon,
-      navigate: () => {},
+      navigate: () => {
+        navigation.navigate("SharingPromotion", {
+          postTitle: translations.sharingPromotion,
+        });
+      },
     },
     {
       title: translations.accountCredentials,
@@ -319,7 +337,12 @@ const LinkList = () => {
           >
             <HStack alignItems="center" space={4}>
               <Image source={item.icon} style={styles.langImg} />
-              <Text style={styles.langText}>{item.title}</Text>
+              <Text
+                numberOfLines={1}
+                style={[styles.langText, { width: "80%" }]}
+              >
+                {item.title}
+              </Text>
             </HStack>
             {!!item?.icon2 ? (
               <Image source={item.icon2} style={styles.langImg2} />

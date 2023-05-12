@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { StyleSheet, View, Dimensions, FlatList } from "react-native";
+import { StyleSheet, SafeAreaView, Dimensions, FlatList, StatusBar } from "react-native";
 import { useDisclose } from "native-base";
 import { useIsFocused, useNavigation } from "@react-navigation/native";
 
@@ -10,6 +10,7 @@ import Container from "components/Container";
 import RightOverlay from "components/forms/portraitVideoOverlay/RightOverlay";
 import VideoOverlay from "components/forms/portraitVideoOverlay/VideoOverlay";
 import { commentGlobalStore } from "../zustand/commentGlobalStore";
+import { GLOBAL_COLORS } from "global";
 
 interface PortraitVideoDataType {
   reelsVideos?: any[];
@@ -58,9 +59,7 @@ const PortraitVideoContent = (props: Props) => {
   ]);
 
   return (
-    <View
-      style={[styles.container, { height: windowHeight - props.tabBarHeight }]}
-    >
+    <SafeAreaView style={[styles.container, { height: windowHeight - props.tabBarHeight }]}>
       {props.isActive && (
         <>
           <VideoOverlay
@@ -91,7 +90,7 @@ const PortraitVideoContent = (props: Props) => {
           />
         </>
       )}
-    </View>
+    </SafeAreaView>
   );
 };
 
@@ -117,6 +116,7 @@ const PortraitVideo: React.FC<PortraitVideoDataType> = ({
 
   return (
     <Container>
+      <StatusBar hidden />
       {hasBackButton ? (
         <Ionicons
           name="chevron-back-outline"
@@ -177,7 +177,6 @@ export default PortraitVideo;
 const styles = StyleSheet.create({
   container: {
     width: windowWidth,
-    height: windowHeight,
-    backgroundColor: "#191d26",
+    backgroundColor: GLOBAL_COLORS.primaryColor,
   },
 });

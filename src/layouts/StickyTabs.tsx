@@ -1,4 +1,4 @@
-import { StyleSheet, View } from "react-native";
+import { Dimensions, StyleSheet, View } from "react-native";
 import React from "react";
 
 import {
@@ -8,7 +8,7 @@ import {
   ScrollView,
 } from "react-native-collapsible-tab-view";
 
-import { GLOBAL_COLORS } from "global";
+import { GLOBAL_COLORS, GLOBAL_SCREEN_SIZE } from "global";
 
 interface IStickyTabsProps {
   scrollEnabled?: boolean;
@@ -23,6 +23,8 @@ interface ITabItems {
   label: string;
   Content: JSX.Element;
 }
+
+const { width } = Dimensions.get("window");
 
 const StickyTabs: React.FC<IStickyTabsProps> = ({
   data,
@@ -101,5 +103,6 @@ const styles = StyleSheet.create({
   },
   labelStyle: {
     textAlign: "center",
+    fontSize: width < GLOBAL_SCREEN_SIZE.mobile ? 10 : 14,
   },
 });

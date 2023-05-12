@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Pressable, StyleSheet, View, Image } from "react-native";
+import { Pressable, StyleSheet, View, Image, Dimensions } from "react-native";
 import { AVPlaybackStatusSuccess, ResizeMode, Video } from "expo-av";
 import Animated, { ZoomIn, ZoomOut } from "react-native-reanimated";
 import Ionicons from "react-native-vector-icons/Ionicons";
@@ -15,6 +15,8 @@ type Props = {
   videoURL: string;
   thumbnail: string;
 };
+
+const { width: windowWidth, height: windowHeight } = Dimensions.get("window");
 
 const VideoOverlay = (props: Props) => {
   const [isVideoPlaying, setisVideoPlaying] = useState(false);
@@ -110,10 +112,11 @@ const styles = StyleSheet.create({
   videoContainer: {
     width: "100%",
     height: "100%",
+    alignItems: 'center'
   },
   video: {
     position: "absolute",
-    width: "100%",
+    width: windowWidth > 500 ? 375 : windowWidth,
     height: "100%",
   },
   videoThumbnail: {

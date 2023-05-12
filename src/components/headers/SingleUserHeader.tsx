@@ -43,7 +43,7 @@ const SingleUserHeader = (props: Props) => {
               </HStack>
               <HStack alignItems='center' space={3} mt='auto' mb={4}>
                 <Image source={{ uri: BASE_URL_FILE_SERVER + props?.photo }} style={styles.profileImg} />
-                  <VStack space={1}>
+                  <VStack space={1} flexShrink={1}>
                     <HStack alignItems='center' space={1.5}>
                       <Text style={styles.usernameText}>{props?.username}</Text>
                       <Text style={styles.usernameUp}>UP</Text>

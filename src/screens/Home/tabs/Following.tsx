@@ -498,14 +498,12 @@ const styles = StyleSheet.create({
     padding: 5,
   },
   titleContent: {
-    height: 35,
-    marginBottom: 5,
-    paddingVertical: 4,
+    height: 40,
+    marginBottom: 3,
   },
   title: {
     paddingHorizontal: 5,
     fontSize: 15,
-    lineHeight: 17,
   },
   text: {
     color: "#fff",

@@ -4,9 +4,9 @@ import React, { useState } from "react";
 import SingleUserHeader from "components/headers/SingleUserHeader";
 import StickyTabs from "layouts/StickyTabs";
 import { translationStore } from "../../zustand/translationStore";
-import { Text, Pressable, StyleSheet, Image } from "react-native";
-import { GLOBAL_COLORS } from "global";
-import { HStack, VStack, View } from "native-base";
+import { Text, Pressable, StyleSheet, Image, Dimensions } from "react-native";
+import { GLOBAL_COLORS, GLOBAL_SCREEN_SIZE } from "global";
+import { HStack, VStack } from "native-base";
 import chatInactive from "assets/images/chatInactive.png";
 import coinIcon from "assets/images/coinIcon.png";
 import CustomModal from "components/CustomModal";
@@ -17,7 +17,8 @@ import CustomerService from "services/api/CustomerService";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { userStore } from "../../zustand/userStore";
 import UserService from "services/api/UserService";
-import Loading from "components/Loading";
+
+const { width } = Dimensions.get("window");
 
 const SingleUserScreen = () => {
   const translations = translationStore((state) => state.translations);
@@ -122,7 +123,7 @@ const SingleUserScreen = () => {
                 <Text style={styles.whiteText}>{translations.chat}</Text>
               </VStack>
             </Pressable>
-            <Pressable style={styles.donateButton} onPress={() => setOpenDonateModal(true)}>
+            <Pressable style={[styles.donateButton, styles.button]} onPress={() => setOpenDonateModal(true)}>
               <HStack space={1.5}>
                 <Image style={styles.image} source={coinIcon} />
                 <Text style={styles.whiteText}>{translations.reward}</Text>
@@ -130,9 +131,9 @@ const SingleUserScreen = () => {
             </Pressable>
             <Pressable
               onPress={isCreatorFollowed ? unfollowContentCreator : followContentCreator}
-              style={[styles.followButton, isCreatorFollowed ? styles.unfollowBG : styles.followBG]}
+              style={[styles.button, isCreatorFollowed ? styles.unfollowBG : styles.followBG]}
             >
-              <Text style={styles.whiteText}>+ {isCreatorFollowed ? translations.unfollow : translations.follow}</Text>
+              <Text style={styles.whiteText}>{isCreatorFollowed? '-' : '+'} {isCreatorFollowed ? translations.unfollow : translations.follow}</Text>
             </Pressable>
           </HStack>
           <CustomModal open={openVIPModal} setOpen={setVIPModalOpen}>
@@ -165,21 +166,15 @@ const styles = StyleSheet.create({
     color: 'white',
     fontWeight: 'bold'
   },
-  donateButton: {
-    backgroundColor: '#FF644A',
-    width: 136,
+  button: {
+    width: width < GLOBAL_SCREEN_SIZE.mobile ? 100 : 136,
     height: 28,
     borderRadius: 16,
     justifyContent: 'center',
     alignItems: 'center'
   },
-  followButton: {
-    width: 136,
-    height: 28,
-    borderRadius: 16,
-    justifyContent: 'center',
-    alignItems: 'center',
-    marginRight: 'auto'
+  donateButton: {
+    backgroundColor: '#FF644A',
   },
   followBG: {
     backgroundColor: GLOBAL_COLORS.secondaryColor

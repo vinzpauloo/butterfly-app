@@ -1,20 +1,22 @@
-import { ScrollView, Text, View, StyleSheet, Image, ImageBackground, Pressable } from "react-native";
+import { ScrollView, Text, View, StyleSheet, Image, ImageBackground, Pressable, Dimensions } from "react-native";
 import { Avatar, HStack, VStack } from "native-base";
-import { GLOBAL_COLORS } from "global";
+import { GLOBAL_COLORS, GLOBAL_SCREEN_SIZE } from "global";
 import sharingQRContainer from "assets/images/sharingQRContainer.png";
 import QR from "assets/images/QR.png";
 import vincent from "assets/images/vincent-avatar.png";
 import Container from "components/Container";
 import React from "react";
 
+const { width } = Dimensions.get("window");
+
 const SharingPromotion = () => {
   return (
     <Container>
       <ScrollView>
         <View style={styles.container}>
-          <View>
-            <ImageBackground source={sharingQRContainer} style={styles.imageBackground}>
-              <VStack pt={33} alignItems='center' space={3}>
+          <VStack alignItems='center'>
+            <ImageBackground resizeMode='contain' source={sharingQRContainer} style={styles.imageBackground}>
+              <VStack pt={width < GLOBAL_SCREEN_SIZE.mobile? '10px' : '33px'} alignItems='center' space={width < GLOBAL_SCREEN_SIZE.mobile? 0 : 3}>
                 <Text style={styles.headerText}>我的专属邀请码</Text>
                 <Image source={QR} style={styles.QRImage} />
                 <Text style={styles.redText}>分享好友立赠xx专享会员</Text>
@@ -28,7 +30,7 @@ const SharingPromotion = () => {
                 </VStack>
               </HStack>
             </ImageBackground>
-            <HStack space={4} mt={6}>
+            <HStack space={4} mt={6} justifyContent={width < GLOBAL_SCREEN_SIZE.mobile ? 'center' : null}>
               <Pressable style={styles.button}>
                 <Text style={styles.blackTextBold}>保存图片</Text>
               </Pressable>
@@ -71,7 +73,7 @@ const SharingPromotion = () => {
                 <Text style={styles.grayText}>点击各视频世界分享按钮，保存二维码及推广链接口，立即分享到微博、朋友圈、论坛分类。</Text>
               </VStack>
             </VStack>
-          </View>
+          </VStack>
         </View>
       </ScrollView>
     </Container>
@@ -82,13 +84,10 @@ const styles = StyleSheet.create({
   container: {
     paddingVertical: 12,
     paddingHorizontal: 16,
-    alignItems: 'center',
   },
   imageBackground: {
-    height: 481,
-    width: 343,
-    resizeMode: "contain",
-    position: 'relative',
+    height: width < GLOBAL_SCREEN_SIZE.mobile ? 400 : 481,
+    width: width < GLOBAL_SCREEN_SIZE.mobile ? '100%' : 343,
   },
   QRImage: {
     width: 200,
@@ -105,12 +104,11 @@ const styles = StyleSheet.create({
     fontWeight: 'bold'
   },
   userContainer: {
-    position: 'absolute',
-    bottom: 20,
-    left: 30
+    paddingTop: width < GLOBAL_SCREEN_SIZE.mobile ? 25 : 30,
+    paddingLeft: width < GLOBAL_SCREEN_SIZE.mobile ? 25 : 30
   },
   whiteText: {
-    color: 'white'
+    color: 'white',
   },
   whiteTextBold: {
     color: 'white',
@@ -121,7 +119,7 @@ const styles = StyleSheet.create({
   },
   button: {
     backgroundColor: '#C79765',
-    width: 163,
+    width: width < GLOBAL_SCREEN_SIZE.mobile ? 130 : 163,
     height: 40,
     borderRadius: 20,
     alignItems: 'center',

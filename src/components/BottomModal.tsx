@@ -33,7 +33,11 @@ const Modal = ({ onOpen, isOpen, onClose, id }) => {
             >
               <Pressable
                 style={{ alignItems: "center" }}
-                onPress={() => navigation.navigate("SharingPromotion")}
+                onPress={() =>
+                  navigation.navigate("SharingPromotion", {
+                    postTitle: translations.sharingPromotion,
+                  })
+                }
               >
                 <View
                   style={{

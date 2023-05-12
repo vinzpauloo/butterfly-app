@@ -29,6 +29,7 @@ import { GLOBAL_COLORS } from "global";
 import { captureSuccess, captureError } from "services/sentry";
 import { userStore } from "../zustand/userStore";
 import { BASE_URL_FILE_SERVER } from "react-native-dotenv";
+import { LinearGradient } from "expo-linear-gradient";
 
 type SingleImageProp = {
   idx: number;
@@ -67,15 +68,20 @@ const SingleImage = (props: SingleImageProp) => {
         imageStyle={{ borderRadius: 4 }}
       >
         <VIPTag />
-        <VStack style={styles.blackContainer}>
-          <Text style={styles.whiteText} numberOfLines={1}>
-            {props.postTitle}
-          </Text>
-          <HStack space={1}>
-            <Image source={HeartActive} style={styles.heartIcon} />
-            <Text style={styles.whiteText}>{props.totalViews}</Text>
-          </HStack>
-        </VStack>
+        <LinearGradient
+          colors={["rgba(0, 0, 0, 0)", "rgba(0, 0, 0, .8)"]}
+          style={{ marginTop: "auto" }}
+        >
+          <VStack style={styles.blackContainer}>
+            <Text style={styles.whiteText} numberOfLines={1}>
+              {props.postTitle}
+            </Text>
+            <HStack space={1}>
+              <Image source={HeartActive} style={styles.heartIcon} />
+              <Text style={styles.whiteText}>{props.totalViews}</Text>
+            </HStack>
+          </VStack>
+        </LinearGradient>
       </ImageBackground>
     </Pressable>
   );
@@ -164,7 +170,8 @@ const MasonryPhotos = ({ filter }) => {
                 postTitle={item.title}
                 totalViews={item.views}
                 /* height ratio of the cover photo */
-                height={item.cover.cover_height / 2}
+                // height={item.cover.cover_height / 2}
+                height={220}
                 setOpen={setOpen}
               />
             )}
@@ -198,11 +205,10 @@ const styles = StyleSheet.create({
     minHeight: 100,
   },
   singleImage: {
-    margin: 4,
+    margin: 7,
   },
   blackContainer: {
     marginTop: "auto",
-    // backgroundColor: "rgba(0,0,0, 0.5)",
     padding: 6,
   },
   whiteText: {

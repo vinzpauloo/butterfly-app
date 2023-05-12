@@ -68,9 +68,10 @@ const Layout = ({ children, style = null }) => {
 // **** HEADER COMPONENT START CODE **** //
 const Header = () => {
   const navigation = useNavigation<any>();
+  const { translations } = translationStore((store) => store);
 
   const handlePressSettings = () => {
-    navigation.navigate("Settings", { postTitle: "设置" });
+    navigation.navigate("Settings", { postTitle: translations.setup });
   };
 
   return (

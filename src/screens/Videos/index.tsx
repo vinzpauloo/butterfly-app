@@ -1,4 +1,11 @@
-import { Image, Pressable, StyleSheet, Text, View } from "react-native";
+import {
+  Image,
+  Pressable,
+  ScrollView,
+  StyleSheet,
+  Text,
+  View,
+} from "react-native";
 import React, { useState } from "react";
 
 import { Box, HStack, VStack, useDisclose } from "native-base";
@@ -48,8 +55,14 @@ const Video = ({ onOpen, setId }) => {
           style={{ width: "100%", height: "100%", borderRadius: 4 }}
         />
       </VStack>
-      <VStack width="3/5" height="full" py="0.5" pl="2" space="1.5">
-        <Text style={styles.title}>
+      <VStack
+        width="3/5"
+        height="full"
+        py="0.5"
+        pl="2"
+        justifyContent="space-between"
+      >
+        <Text style={styles.title} numberOfLines={2}>
           逃离996露营好物的入坑推荐！逃离996露营好物的入坑推荐！
         </Text>
         <Text style={styles.subtitle}>今日 12:38</Text>
@@ -89,11 +102,13 @@ const index = () => {
 
   return (
     <Container>
-      <Layout>
-        <Content title="今日" data={[1, 2]} onOpen={onOpen} setId={setId} />
-        <Content title="昨天" data={[1, 2]} onOpen={onOpen} setId={setId} />
-        <Content title="更早" data={[1, 2]} onOpen={onOpen} setId={setId} />
-      </Layout>
+      <ScrollView>
+        <Layout>
+          <Content title="今日" data={[1, 2]} onOpen={onOpen} setId={setId} />
+          <Content title="昨天" data={[1, 2]} onOpen={onOpen} setId={setId} />
+          <Content title="更早" data={[1, 2]} onOpen={onOpen} setId={setId} />
+        </Layout>
+      </ScrollView>
       <Modal isOpen={isOpen} onOpen={onOpen} onClose={onClose} id={id} />
     </Container>
   );

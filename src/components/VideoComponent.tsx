@@ -1,10 +1,13 @@
-import { Image, StyleSheet } from "react-native";
+import { Dimensions, Image, StyleSheet } from "react-native";
 import React from "react";
 
 import { HStack, Text } from "native-base";
 
-import VIPTag from "./VIPTag";
 import VideoIcon from "assets/images/videoIcon.png";
+import VIPTag from "./VIPTag";
+import { GLOBAL_COLORS } from "global";
+
+const { width } = Dimensions.get("window");
 
 const VideoComponent = ({ item }) => {
   return (
@@ -16,7 +19,10 @@ const VideoComponent = ({ item }) => {
         alignItems="center"
       >
         <Image source={VideoIcon} style={styles.videoIcon} />
-        <Text color="#fff" fontSize="md">
+        <Text
+          color={GLOBAL_COLORS.primaryTextColor}
+          fontSize={width < 350 ? "xs" : "md"}
+        >
           {/* if the statistic value is null the watch count will be 0 */}
           {!!item.statistic ? item.statistic.watched : 0}w
         </Text>
@@ -25,7 +31,10 @@ const VideoComponent = ({ item }) => {
         space={2}
         style={[styles.videoComponents, { right: 5, bottom: 5 }]}
       >
-        <Text color="#fff" fontSize="md">
+        <Text
+          color={GLOBAL_COLORS.primaryTextColor}
+          fontSize={width < 350 ? "xs" : "md"}
+        >
           {item.duration}
         </Text>
       </HStack>

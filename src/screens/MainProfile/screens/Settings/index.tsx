@@ -181,9 +181,16 @@ const SecondContainer = ({ setOpen }) => {
   // ** GLOBAL STORE
   const { _id, referral_code } = userStore((store) => store);
   const { translations } = translationStore((store) => store);
+  const navigation = useNavigation<any>();
 
   const handlePress = () => {
     setOpen(true);
+  };
+
+  const handleCertificate = () => {
+    navigation.navigate("AccountCredentials", {
+      postTitle: translations.accountCredentials,
+    });
   };
 
   return (
@@ -213,15 +220,18 @@ const SecondContainer = ({ setOpen }) => {
           />
         </HStack>
       </LayoutContent>
-
-      <LayoutContent>
-        <Text style={styles.textLabel}>{translations.accountCertificate}</Text>
-        <Entypo
-          name="chevron-small-right"
-          color={GLOBAL_COLORS.primaryTextColor}
-          size={25}
-        />
-      </LayoutContent>
+      <Pressable onPress={handleCertificate}>
+        <LayoutContent>
+          <Text style={styles.textLabel}>
+            {translations.accountCertificate}
+          </Text>
+          <Entypo
+            name="chevron-small-right"
+            color={GLOBAL_COLORS.primaryTextColor}
+            size={25}
+          />
+        </LayoutContent>
+      </Pressable>
 
       <LayoutContent>
         <Text style={styles.textLabel}>{translations.accountRetrieval}</Text>
@@ -279,16 +289,24 @@ const ThirdContainer = () => {
     navigation.navigate("Certificate", { postTitle: title, api_params });
   };
 
+  const handleCertificate = () => {
+    navigation.navigate("SingleChatScreen", {
+      postTitle: translations.customerService,
+    });
+  };
+
   return (
     <VStack mt={5} style={{ backgroundColor: GLOBAL_COLORS.videoContentBG }}>
-      <LayoutContent>
-        <Text style={styles.textLabel}>{translations.customerService}</Text>
-        <Entypo
-          name="chevron-small-right"
-          color={GLOBAL_COLORS.primaryTextColor}
-          size={25}
-        />
-      </LayoutContent>
+      <Pressable onPress={handleCertificate}>
+        <LayoutContent>
+          <Text style={styles.textLabel}>{translations.customerService}</Text>
+          <Entypo
+            name="chevron-small-right"
+            color={GLOBAL_COLORS.primaryTextColor}
+            size={25}
+          />
+        </LayoutContent>
+      </Pressable>
       <Pressable
         onPress={() => handlePress(translations.privacyPolicy, "policy")}
       >

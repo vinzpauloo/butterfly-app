@@ -62,12 +62,13 @@ const MessageItem = (props: MessageItemProps) => {
               source={{ uri: BASE_URL_FILE_SERVER + props.senderImgURL }}
             />
           </Pressable>
-          <VStack w='5/6' space={1.5}>
-            <HStack justifyContent='space-between'>
-              <Text style={[styles.text, { maxWidth: windowWidth - 110 }]}> {props.senderUserName}</Text>
-              <Text style={{opacity: 0.5, color: 'white'}}>18:24 05/04/2023</Text>
+          <VStack space={1.5} flexShrink={1}>
+            <HStack justifyContent='space-between' alignItems='center'>
+              <Text style={styles.text}>{props.senderUserName}</Text>
+              <Text style={{opacity: 0.5, color: 'white', fontSize: 10}}>18:24 05/04/2023</Text>
             </HStack>
-            <Text style={[styles.text, { maxWidth: windowWidth - 110 }]}>
+            <Text style={styles.text}>
+              {props.senderMessage}
               {props.senderMessage}
             </Text>
           </VStack>

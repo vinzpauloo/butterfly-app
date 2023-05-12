@@ -503,7 +503,7 @@ const styles = StyleSheet.create({
     color: GLOBAL_COLORS.primaryTextColor,
   },
   clearBtn: {
-    backgroundColor: "#FF644A ",
+    backgroundColor: "#FF644A",
     paddingVertical: 5,
     paddingHorizontal: 10,
     marginHorizontal: 10,

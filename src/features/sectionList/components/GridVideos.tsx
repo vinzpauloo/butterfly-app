@@ -234,6 +234,7 @@ const styles = StyleSheet.create({
   title: {
     paddingHorizontal: 5,
     fontSize: 15,
+    lineHeight: 17,
   },
   text: {
     color: GLOBAL_COLORS.primaryTextColor,

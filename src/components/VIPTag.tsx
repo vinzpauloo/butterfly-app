@@ -1,16 +1,24 @@
 import { Alert, Pressable, StyleSheet, Text, View } from "react-native";
 import React from "react";
 import { useNavigation } from "@react-navigation/native";
+import { userStore } from "../zustand/userStore";
+import { translationStore } from "../zustand/translationStore";
 
 interface IVIPTag {
   isAbsolute?: boolean;
 }
 
 const VIPTag: React.FC<IVIPTag> = ({ isAbsolute }) => {
+  const { is_Vip } = userStore((state) => state);
+  const { translations } = translationStore((store) => store);
+
   const navigation = useNavigation<any>();
 
   const handlePress = () => {
-    navigation.navigate("SharingPromotion");
+    if (!is_Vip)
+      navigation.navigate("VIPScreen", {
+        postTitle: translations.memberCentre,
+      });
   };
 
   return (

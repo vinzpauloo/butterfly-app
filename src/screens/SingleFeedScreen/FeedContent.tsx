@@ -130,6 +130,7 @@ const Video = ({ url }) => {
 };
 
 const BottomContent = ({ totalComments, id, like, setLike }) => {
+  const { translations } = translationStore((store) => store);
   const navigation = useNavigation<any>();
 
   return (
@@ -137,7 +138,11 @@ const BottomContent = ({ totalComments, id, like, setLike }) => {
       <View style={styles.bottomContentContainer}>
         <Pressable
           style={styles.bottomItem}
-          onPress={() => navigation.navigate("SharingPromotion")}
+          onPress={() =>
+            navigation.navigate("SharingPromotion", {
+              postTitle: translations.sharingPromotion,
+            })
+          }
         >
           <Image source={ShareIcon} style={styles.icon} />
         </Pressable>

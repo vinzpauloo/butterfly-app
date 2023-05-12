@@ -203,6 +203,7 @@ const Video = ({ id, like, setLike }) => {
 };
 
 const BottomContent = ({ totalComments, id, like, setLike }) => {
+  const translations = translationStore((state) => state.translations);
   const navigation = useNavigation<any>();
   const navigateSingleFeed = () => {
     navigation.navigate("SingleFeedScreen", {
@@ -216,7 +217,11 @@ const BottomContent = ({ totalComments, id, like, setLike }) => {
     <View style={styles.bottomContentContainer}>
       <Pressable
         style={styles.bottomItem}
-        onPress={() => navigation.navigate("SharingPromotion")}
+        onPress={() =>
+          navigation.navigate("SharingPromotion", {
+            postTitle: translations.sharingPromotion,
+          })
+        }
       >
         <Image source={ShareIcon} style={styles.icon} />
       </Pressable>

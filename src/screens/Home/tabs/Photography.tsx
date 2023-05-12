@@ -23,7 +23,7 @@ const Photography = () => {
       },
     ],
   };
-  return <MaterialTopTabs data={photographySubNav} />;
+  return <MaterialTopTabs data={photographySubNav} isEqualWidth />;
 };
 
 export default Photography;

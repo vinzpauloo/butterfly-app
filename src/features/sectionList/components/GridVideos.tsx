@@ -15,11 +15,11 @@ import MasonryList from "@react-native-seoul/masonry-list";
 import { useNavigation } from "@react-navigation/native";
 import { useDisclose } from "native-base";
 
-import { GLOBAL_COLORS } from "global";
 import Modal from "components/BottomModal";
-import VIPTag from "components/VIPTag";
-import { BASE_URL_FILE_SERVER } from "react-native-dotenv";
 import VideoComponent from "components/VideoComponent";
+import VIPTag from "components/VIPTag";
+import { GLOBAL_COLORS, GLOBAL_SCREEN_SIZE } from "global";
+import { BASE_URL_FILE_SERVER } from "react-native-dotenv";
 
 const { width } = Dimensions.get("window");
 
@@ -31,7 +31,9 @@ export const FollowingBottomContent = ({ item }) => {
           source={{ uri: BASE_URL_FILE_SERVER + item.user.photo }}
           style={styles.modelImg}
         />
-        <Text style={styles.modelText}>{item.user.username}</Text>
+        <Text numberOfLines={1} style={styles.modelText}>
+          {item.user.username}
+        </Text>
       </View>
       <View style={{ flexDirection: "row", alignItems: "center" }}>
         <Foundation
@@ -86,21 +88,23 @@ const AdsContainer = ({ item, isFollowingScreen, onOpen, setId }: any) => {
           style={[styles.video, { height: width * 0.3 }]}
         />
       </View>
-      <View style={styles.titleContent}>
-        <Text style={[styles.text, styles.title]} numberOfLines={2}>
-          {item?.title}
-        </Text>
+      <View style={styles.bottomContent}>
+        <View style={styles.titleContent}>
+          <Text style={[styles.text, styles.title]} numberOfLines={2}>
+            {item?.title}
+          </Text>
+        </View>
+        {isFollowingScreen ? (
+          <FollowingBottomContent item={item} />
+        ) : (
+          <GridVideosBottomContent
+            username={item?.username}
+            onOpen={onOpen}
+            setId={setId}
+            id={item._id}
+          />
+        )}
       </View>
-      {isFollowingScreen ? (
-        <FollowingBottomContent item={item} />
-      ) : (
-        <GridVideosBottomContent
-          username={item?.username}
-          onOpen={onOpen}
-          setId={setId}
-          id={item._id}
-        />
-      )}
     </TouchableOpacity>
   );
 };
@@ -247,6 +251,7 @@ const styles = StyleSheet.create({
     fontSize: 12,
     color: GLOBAL_COLORS.usernameTextColor,
     paddingHorizontal: 5,
+    width: width < GLOBAL_SCREEN_SIZE.mobile ? 60 : null,
   },
   modelLikeCount: {
     fontSize: 12,

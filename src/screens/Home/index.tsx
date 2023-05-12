@@ -4,6 +4,7 @@ import React, { useEffect } from "react";
 import Ionicons from "react-native-vector-icons/Ionicons";
 import MaterialTopTabs from "layouts/navigators/MaterialTopTabs";
 import { useNavigation } from "@react-navigation/native";
+import { readFileDirectory } from "lib/expoFileSystem";
 
 import Announcement from "features/announcement";
 import Following from "./tabs/Following";
@@ -12,9 +13,8 @@ import Moment from "./tabs/Moment";
 import Photography from "./tabs/Photography";
 import PopupAds from "features/ads/components/PopupAds";
 import { downloadStore } from "../../zustand/downloadStore";
-import { readFileDirectory } from "lib/expoFileSystem";
 import { translationStore } from "../../zustand/translationStore";
-import { GLOBAL_COLORS } from "global";
+import { GLOBAL_COLORS, GLOBAL_SCREEN_SIZE } from "global";
 
 const { width } = Dimensions.get("window");
 
@@ -28,7 +28,7 @@ const Search = () => {
 
   return (
     <>
-      {width < 350 ? (
+      {width < GLOBAL_SCREEN_SIZE.mobile ? (
         <Pressable onPress={handlePress} style={styles.smallSearchContainer}>
           <Ionicons name="search" size={20} color="#fff" />
         </Pressable>

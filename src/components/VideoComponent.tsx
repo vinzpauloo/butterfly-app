@@ -5,7 +5,7 @@ import { HStack, Text } from "native-base";
 
 import VideoIcon from "assets/images/videoIcon.png";
 import VIPTag from "./VIPTag";
-import { GLOBAL_COLORS } from "global";
+import { GLOBAL_COLORS, GLOBAL_SCREEN_SIZE } from "global";
 
 const { width } = Dimensions.get("window");
 
@@ -21,7 +21,7 @@ const VideoComponent = ({ item }) => {
         <Image source={VideoIcon} style={styles.videoIcon} />
         <Text
           color={GLOBAL_COLORS.primaryTextColor}
-          fontSize={width < 350 ? "xs" : "md"}
+          fontSize={width < GLOBAL_SCREEN_SIZE.mobile ? "xs" : "md"}
         >
           {/* if the statistic value is null the watch count will be 0 */}
           {!!item.statistic ? item.statistic.watched : 0}w
@@ -33,7 +33,7 @@ const VideoComponent = ({ item }) => {
       >
         <Text
           color={GLOBAL_COLORS.primaryTextColor}
-          fontSize={width < 350 ? "xs" : "md"}
+          fontSize={width < GLOBAL_SCREEN_SIZE.mobile ? "xs" : "md"}
         >
           {item.duration}
         </Text>

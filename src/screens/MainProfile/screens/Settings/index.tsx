@@ -9,20 +9,20 @@ import {
 import React, { useState } from "react";
 
 import Entypo from "react-native-vector-icons/Entypo";
+import Ionicons from "react-native-vector-icons/Ionicons";
 import LottieView from "lottie-react-native";
 import { HStack, Input, Modal, Pressable, Stack, VStack } from "native-base";
+import { useMutation, useQuery } from "@tanstack/react-query";
+import { BASE_URL_FILE_SERVER } from "react-native-dotenv";
 
 import Container from "components/Container";
 import CustomerService from "services/api/CustomerService";
 import LoadingSpinner from "components/LoadingSpinner";
 import Succesful from "assets/succesful.json";
-import { BASE_URL_FILE_SERVER } from "react-native-dotenv";
-import { GLOBAL_COLORS } from "global";
+import { GLOBAL_COLORS, GLOBAL_SCREEN_SIZE } from "global";
 import { translationStore } from "../../../../zustand/translationStore";
 import { userStore } from "../../../../zustand/userStore";
 import { useNavigation } from "@react-navigation/native";
-import { useMutation, useQuery } from "@tanstack/react-query";
-import Ionicons from "react-native-vector-icons/Ionicons";
 
 const { width } = Dimensions.get("window");
 
@@ -200,11 +200,11 @@ const SecondContainer = ({ setOpen }) => {
         <HStack alignItems="center">
           <HStack
             alignItems="center"
-            space={width < 350 ? 1 : 2}
+            space={width < GLOBAL_SCREEN_SIZE.mobile ? 1 : 2}
             style={styles.accountContainer}
             pr="12"
             mr={3}
-            width={width < 350 ? "40" : "56"}
+            width={width < GLOBAL_SCREEN_SIZE.mobile ? "40" : "56"}
           >
             <Text style={styles.accountText} numberOfLines={1}>
               {_id}
@@ -237,7 +237,10 @@ const SecondContainer = ({ setOpen }) => {
         <Text style={styles.textLabel}>{translations.accountRetrieval}</Text>
         <HStack alignItems="center" justifyContent="flex-end">
           <Text
-            style={[styles.textLabel, { width: width < 350 ? "50%" : null }]}
+            style={[
+              styles.textLabel,
+              { width: width < GLOBAL_SCREEN_SIZE.mobile ? "50%" : null },
+            ]}
             numberOfLines={1}
           >
             {translations.lostAccountRecovered}

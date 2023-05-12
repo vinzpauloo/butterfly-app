@@ -16,6 +16,7 @@ import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityI
 import { HStack, ScrollView } from "native-base";
 import { useNavigation } from "@react-navigation/native";
 import { useMutation, useQuery } from "@tanstack/react-query";
+import { FlashList } from "@shopify/flash-list";
 
 import Container from "components/Container";
 import DeleteIcon from "assets/images/deleteIcon.png";
@@ -26,8 +27,7 @@ import MaterialTopTabs from "layouts/navigators/MaterialTopTabs";
 import Users from "./tabs/Users";
 import VideoListSkeleton from "components/skeletons/VideoListSkeleton";
 import Work from "./tabs/Work";
-import { FlashList } from "@shopify/flash-list";
-import { GLOBAL_COLORS } from "global";
+import { GLOBAL_COLORS, GLOBAL_SCREEN_SIZE } from "global";
 import { translationStore } from "../../zustand/translationStore";
 import { userStore } from "../../zustand/userStore";
 
@@ -135,7 +135,15 @@ const SearchItem = ({ data, setSearch, setHasSearch, setHistory }) => {
       style={styles.searchItemContent}
       onPress={() => handleSearch(data)}
     >
-      <Text style={styles.searchesText} numberOfLines={1}>
+      <Text
+        style={[
+          styles.searchesText,
+          {
+            width: width < GLOBAL_SCREEN_SIZE.mobile ? 60 : null,
+          },
+        ]}
+        numberOfLines={1}
+      >
         {data}
       </Text>
       <AntDesign
@@ -237,7 +245,15 @@ const PopularSearchItem = ({ text, index, setSearch, setHasSearch }) => {
       <Text style={[styles.number, { backgroundColor: color(index + 1) }]}>
         {index + 1}
       </Text>
-      <Text style={styles.popularText} numberOfLines={1}>
+      <Text
+        style={[
+          styles.popularText,
+          {
+            width: width < GLOBAL_SCREEN_SIZE.mobile ? 110 : null,
+          },
+        ]}
+        numberOfLines={1}
+      >
         {text}
       </Text>
     </Pressable>

@@ -55,6 +55,7 @@ const StickyTabs: React.FC<IStickyTabsProps> = ({
         tabStyle={styles.tabStyle}
         indicatorStyle={styles.indicatorStyle}
         scrollEnabled={scrollEnabled}
+        labelStyle={styles.labelStyle}
       />
     );
   };
@@ -97,5 +98,8 @@ const styles = StyleSheet.create({
   },
   indicatorStyle: {
     backgroundColor: GLOBAL_COLORS.secondaryColor,
+  },
+  labelStyle: {
+    textAlign: "center",
   },
 });

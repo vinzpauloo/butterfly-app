@@ -1,4 +1,4 @@
-import { StyleSheet, Text, View } from "react-native";
+import { ScrollView, StyleSheet, Text, View } from "react-native";
 import React from "react";
 
 import { Box, HStack, Image, VStack } from "native-base";
@@ -18,10 +18,10 @@ const QRCodes = () => {
       <VStack
         position="relative"
         alignItems="center"
-        m={5}
-        mt={20}
-        pt={12}
-        p={10}
+        m="5"
+        mt="16"
+        pt="12"
+        p="10"
         style={styles.qrContent}
       >
         <Image source={ButterflyLogo} style={styles.butterflyLogo} />
@@ -41,7 +41,7 @@ const QRCodes = () => {
 
 const BottomText = () => {
   return (
-    <VStack alignItems="center" space={5}>
+    <VStack alignItems="center" space={5} m={2}>
       <HStack
         alignItems="center"
         justifyContent="center"
@@ -65,8 +65,10 @@ const BottomText = () => {
 const index = () => {
   return (
     <Container>
-      <QRCodes />
-      <BottomText />
+      <ScrollView>
+        <QRCodes />
+        <BottomText />
+      </ScrollView>
     </Container>
   );
 };
@@ -94,6 +96,7 @@ const styles = StyleSheet.create({
   qrTitle: {
     fontSize: 20,
     fontWeight: "bold",
+    textAlign: "center",
   },
   qrSubtitle: {
     fontSize: 16,

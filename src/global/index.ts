@@ -9,3 +9,7 @@ export const GLOBAL_COLORS = {
   videoContentBG: "#202833", // also navigation BG
   errorColor: "#E5404F",
 };
+
+export const GLOBAL_SCREEN_SIZE = {
+  mobile: 350,
+};

@@ -1,16 +1,22 @@
-import { Image, Pressable, StyleSheet, Text, View } from "react-native";
+import {
+  Dimensions,
+  Image,
+  Pressable,
+  StyleSheet,
+  Text,
+  View,
+} from "react-native";
 import { useState } from "react";
 
 import AntDesign from "react-native-vector-icons/AntDesign";
-import Fontisto from "react-native-vector-icons/Fontisto";
-import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons";
-import MaterialIcons from "react-native-vector-icons/MaterialIcons";
-import Zocial from "react-native-vector-icons/Zocial";
+import { downloadFile, writeAsString } from "lib/expoFileSystem";
 import { useNavigation, useRoute } from "@react-navigation/native";
+import { useQuery } from "@tanstack/react-query";
 
 import BannerAds from "features/ads/components/BannerAds";
 import CoinIcon from "assets/images/coinIcon.png";
 import CustomModal from "components/CustomModal";
+import DonateModalContent from "components/DonateModalContent";
 import DownloadIcon from "assets/images/downloadIcon.png";
 import DownloadedIcon from "assets/images/downloadedIcon.png";
 import FavoriteButton from "components/forms/singleVideo/FavoriteButton";
@@ -19,13 +25,12 @@ import ShareIcon from "assets/images/shareIcon.png";
 import WatchVideo from "services/api/WatchVideo";
 import VideoIcon from "assets/images/videoIcon.png";
 import VIPModalContent from "components/VIPModalContent";
-import { downloadFile, writeAsString } from "lib/expoFileSystem";
 import { downloadStore } from "../../../zustand/downloadStore";
-import { GLOBAL_COLORS } from "global";
+import { GLOBAL_COLORS, GLOBAL_SCREEN_SIZE } from "global";
 import { translationStore } from "../../../zustand/translationStore";
 import { userStore } from "../../../zustand/userStore";
-import { useQuery } from "@tanstack/react-query";
-import DonateModalContent from "components/DonateModalContent";
+
+const { width } = Dimensions.get("window");
 
 export const Header = ({
   data,
@@ -152,14 +157,14 @@ export const Header = ({
               {data?.duration}
             </Text>
           </View>
-          <View style={styles.item}>
-            <AntDesign
-              name="exclamationcircleo"
-              color="#999"
-              size={13}
-              style={styles.icon}
-            />
-            <Text style={styles.text} numberOfLines={2}>
+          <View
+            style={[
+              styles.item,
+              { width: width < GLOBAL_SCREEN_SIZE.mobile ? 120 : null },
+            ]}
+          >
+            <AntDesign name="exclamationcircleo" color="#999" size={13} />
+            <Text style={[styles.text, { marginLeft: 5 }]} numberOfLines={1}>
               {translations.reprinting}
             </Text>
           </View>

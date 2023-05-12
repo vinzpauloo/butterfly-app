@@ -193,7 +193,13 @@ export const Header = ({
             </View>
           </Pressable>
           <DownloadStatus videoID={data._id} />
-          <Pressable onPress={() => navigation.navigate("SharingPromotion")}>
+          <Pressable
+            onPress={() =>
+              navigation.navigate("SharingPromotion", {
+                postTitle: translations.sharingPromotion,
+              })
+            }
+          >
             <View style={styles.buttonItem} pointerEvents="box-none">
               <Image source={ShareIcon} style={styles.icon} />
               <Text style={styles.text}>{translations.share}</Text>

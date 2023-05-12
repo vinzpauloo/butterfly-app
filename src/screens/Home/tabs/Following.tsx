@@ -500,6 +500,7 @@ const styles = StyleSheet.create({
   titleContent: {
     height: 35,
     marginBottom: 5,
+    paddingVertical: 4,
   },
   title: {
     paddingHorizontal: 5,

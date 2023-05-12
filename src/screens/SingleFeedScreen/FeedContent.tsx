@@ -135,7 +135,10 @@ const BottomContent = ({ totalComments, id, like, setLike }) => {
   return (
     <>
       <View style={styles.bottomContentContainer}>
-        <Pressable style={styles.bottomItem} onPress={() => navigation.navigate("SharingPromotion")}>
+        <Pressable
+          style={styles.bottomItem}
+          onPress={() => navigation.navigate("SharingPromotion")}
+        >
           <Image source={ShareIcon} style={styles.icon} />
         </Pressable>
         <View style={styles.bottomItem}>
@@ -144,7 +147,7 @@ const BottomContent = ({ totalComments, id, like, setLike }) => {
         </View>
         <FeedContentLikeBtn id={id} like={like} setLike={setLike} />
       </View>
-      <Divider style={styles.divider} />    
+      <Divider style={styles.divider} />
     </>
   );
 };
@@ -279,7 +282,7 @@ const styles = StyleSheet.create({
   },
   divider: {
     marginVertical: 12,
-    backgroundColor: 'white',
+    backgroundColor: "white",
     opacity: 0.1,
   },
 });

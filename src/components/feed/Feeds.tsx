@@ -71,7 +71,10 @@ const Feeds = ({
           getItemCount={() => data.length}
           keyExtractor={(item: any) => item.id}
           renderItem={({ item, index }) => (
-            <FeedContent key={index} data={item} />
+            <>
+              <FeedContent key={index} data={item} />
+              <View style={styles.divider} />
+            </>
           )}
           ListFooterComponent={() => (
             <>
@@ -93,4 +96,9 @@ const Feeds = ({
 
 export default Feeds;
 
-const styles = StyleSheet.create({});
+const styles = StyleSheet.create({
+  divider: {
+    height: 8,
+    backgroundColor: GLOBAL_COLORS.videoContentBG,
+  },
+});

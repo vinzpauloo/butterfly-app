@@ -69,10 +69,6 @@ const LikeButton = ({ id, like, setLike }) => {
     }
   };
 
-  const changeButtonColor = (isTrue) => {
-    return isTrue ? GLOBAL_COLORS.secondaryColor : "#999";
-  };
-
   return (
     <TouchableWithoutFeedback onPress={handleLike}>
       <View style={styles.buttonItem} pointerEvents="box-none">
@@ -80,14 +76,7 @@ const LikeButton = ({ id, like, setLike }) => {
           source={like.isAlreadyLike ? HeartActive : HeartInactive}
           style={styles.icon}
         />
-        <Text
-          style={[
-            styles.text,
-            { color: changeButtonColor(like.isAlreadyLike) },
-          ]}
-        >
-          {like.likeCount}
-        </Text>
+        <Text style={styles.text}>{like.likeCount}</Text>
       </View>
     </TouchableWithoutFeedback>
   );
@@ -102,6 +91,7 @@ const styles = StyleSheet.create({
   },
   text: {
     fontSize: 12,
+    color: GLOBAL_COLORS.inactiveTextColor,
   },
   icon: {
     marginHorizontal: 3,

@@ -75,23 +75,13 @@ const FeedContentLikeBtn = ({ id, like, setLike }) => {
     }
   };
 
-  const changeButtonColor = (isTrue) => {
-    return isTrue
-      ? GLOBAL_COLORS.secondaryColor
-      : GLOBAL_COLORS.inactiveTextColor;
-  };
-
   return (
     <Pressable style={styles.bottomItem} onPress={handleLike}>
       <Image
-        source={like.isAlreadyLike ? HeartActive : HeartInactive}
+        source={isAlreadyLike ? HeartActive : HeartInactive}
         style={styles.icon}
       />
-      <Text
-        style={[styles.bottomText, { color: changeButtonColor(isAlreadyLike) }]}
-      >
-        {likeCount}
-      </Text>
+      <Text style={styles.bottomText}>{likeCount}</Text>
     </Pressable>
   );
 };

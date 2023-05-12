@@ -1,7 +1,7 @@
 import { Image, Pressable, StyleSheet, Text } from "react-native";
-import React, { memo, useEffect, useState } from "react";
+import React, { memo } from "react";
 
-import { useIsFetching, useMutation } from "@tanstack/react-query";
+import { useMutation } from "@tanstack/react-query";
 
 import HeartActive from "assets/images/heartActive.png";
 import HeartInactive from "assets/images/heartInactive.png";
@@ -11,7 +11,6 @@ import { userStore } from "../../zustand/userStore";
 
 const FeedContentLikeBtn = ({ id, like, setLike }) => {
   const token = userStore((store) => store.api_token);
-  const isFocused = useIsFetching();
   const { likeWork, unlikeWork } = LikeService();
 
   // for like
@@ -63,26 +62,13 @@ const FeedContentLikeBtn = ({ id, like, setLike }) => {
     }
   };
 
-  const changeButtonColor = (isTrue) => {
-    return isTrue
-      ? GLOBAL_COLORS.secondaryColor
-      : GLOBAL_COLORS.inactiveTextColor;
-  };
-
   return (
     <Pressable style={styles.bottomItem} onPress={handleLike}>
       <Image
         source={like.isAlreadyLike ? HeartActive : HeartInactive}
         style={styles.icon}
       />
-      <Text
-        style={[
-          styles.bottomText,
-          { color: changeButtonColor(like.isAlreadyLike) },
-        ]}
-      >
-        {like.likeCount}
-      </Text>
+      <Text style={styles.bottomText}>{like.likeCount}</Text>
     </Pressable>
   );
 };

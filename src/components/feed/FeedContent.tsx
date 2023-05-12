@@ -54,10 +54,11 @@ const Header = ({ item, setOpen, isFromSingleUserScreen }) => {
           </HStack>
         </VStack>
       </Pressable>
-      {isFromSingleUserScreen ? null : 
-      <Pressable style={styles.privateBtn} onPress={openVIPModal}>
-        <Text style={styles.privateText}>{translations.chat}</Text>
-        </Pressable>}
+      {isFromSingleUserScreen ? null : (
+        <Pressable style={styles.privateBtn} onPress={openVIPModal}>
+          <Text style={styles.privateText}>{translations.chat}</Text>
+        </Pressable>
+      )}
     </View>
   );
 };
@@ -109,11 +110,11 @@ const Images = ({ images, video, id, like, setLike }) => {
       case 1:
         return { width: width * 0.65, height: height * 0.5, marginVertical: 5 };
       case 2:
-        return { width: width * 0.45, height: width * 0.45, marginVertical: 5 };
+        return { width: width * 0.44, height: width * 0.45, marginVertical: 5 };
       case 4:
-        return { width: width * 0.45, height: width * 0.45, marginVertical: 5 };
+        return { width: width * 0.44, height: width * 0.45, marginVertical: 3 };
       default:
-        return { width: width * 0.3, height: width * 0.3, marginVertical: 3 };
+        return { width: width * 0.29, height: width * 0.3, marginVertical: 3 };
     }
   };
 
@@ -122,11 +123,11 @@ const Images = ({ images, video, id, like, setLike }) => {
       case 1:
         return { width: width * 0.65, height: height * 0.5 };
       case 2:
-        return { width: width * 0.45, height: width * 0.45 };
+        return { width: width * 0.44, height: width * 0.45 };
       case 4:
-        return { width: width * 0.45, height: width * 0.45 };
+        return { width: width * 0.44, height: width * 0.45 };
       default:
-        return { width: width * 0.3, height: width * 0.3 };
+        return { width: width * 0.29, height: width * 0.3 };
     }
   };
 
@@ -228,7 +229,7 @@ const BottomContent = ({ totalComments, id, like, setLike }) => {
   );
 };
 
-const FeedContent = ({ data, singleFeedPadding = 0, isFromSingleUserScreen = false }) => {
+const FeedContent = ({ data, isFromSingleUserScreen = false }) => {
   const item = !!data.item ? data.item : data;
   const [open, setOpen] = useState(false);
   const [like, setLike] = useState({
@@ -237,10 +238,12 @@ const FeedContent = ({ data, singleFeedPadding = 0, isFromSingleUserScreen = fal
   });
 
   return (
-    <View
-      style={[styles.mainContainer, { paddingHorizontal: singleFeedPadding }]}
-    >
-      <Header item={item} setOpen={setOpen} isFromSingleUserScreen={isFromSingleUserScreen} />
+    <View style={styles.mainContainer}>
+      <Header
+        item={item}
+        setOpen={setOpen}
+        isFromSingleUserScreen={isFromSingleUserScreen}
+      />
       <Captions
         tags={item.tags}
         story={item.string_story}

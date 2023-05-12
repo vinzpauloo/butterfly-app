@@ -8,7 +8,7 @@ import {
 } from "react-native";
 import React, { useState } from "react";
 
-import { HStack, VStack } from "native-base";
+import { Divider, HStack, VStack } from "native-base";
 import { useNavigation } from "@react-navigation/native";
 import { BASE_URL_FILE_SERVER } from "react-native-dotenv";
 
@@ -133,19 +133,19 @@ const BottomContent = ({ totalComments, id, like, setLike }) => {
   const navigation = useNavigation<any>();
 
   return (
-    <View style={styles.bottomContentContainer}>
-      <Pressable
-        style={styles.bottomItem}
-        onPress={() => navigation.navigate("SharingPromotion")}
-      >
-        <Image source={ShareIcon} style={styles.icon} />
-      </Pressable>
-      <View style={styles.bottomItem}>
-        <Image source={CommentIcon} style={styles.icon} />
-        <Text style={styles.bottomText}>{totalComments}</Text>
+    <>
+      <View style={styles.bottomContentContainer}>
+        <Pressable style={styles.bottomItem} onPress={() => navigation.navigate("SharingPromotion")}>
+          <Image source={ShareIcon} style={styles.icon} />
+        </Pressable>
+        <View style={styles.bottomItem}>
+          <Image source={CommentIcon} style={styles.icon} />
+          <Text style={styles.bottomText}>{totalComments}</Text>
+        </View>
+        <FeedContentLikeBtn id={id} like={like} setLike={setLike} />
       </View>
-      <FeedContentLikeBtn id={id} like={like} setLike={setLike} />
-    </View>
+      <Divider style={styles.divider} />    
+    </>
   );
 };
 
@@ -260,8 +260,8 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
     marginTop: 30,
     paddingBottom: 10,
-    borderBottomColor: GLOBAL_COLORS.inactiveTextColor,
-    borderBottomWidth: 2,
+    // borderBottomColor: 'white',
+    // borderBottomWidth: 1,
   },
   bottomItem: {
     flexDirection: "row",
@@ -276,5 +276,10 @@ const styles = StyleSheet.create({
     height: 20,
     width: 20,
     resizeMode: "contain",
+  },
+  divider: {
+    marginVertical: 12,
+    backgroundColor: 'white',
+    opacity: 0.1,
   },
 });

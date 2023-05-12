@@ -1,6 +1,6 @@
 import React from "react";
 import { StyleSheet, Text, View } from "react-native";
-import { Divider } from "native-base";
+import { Box, Divider, HStack } from "native-base";
 
 import { Tabs } from "react-native-collapsible-tab-view";
 
@@ -39,14 +39,15 @@ const SingleVideoFeedComment = ({
   return (
     <Container>
       <Tabs.FlatList
-        style={{ padding: 12 }}
+        style={{ padding: 16 }}
         ref={commentListRef}
         onMomentumScrollBegin={() => setStartScroll(false)}
         data={data}
         ListHeaderComponent={
-          <Text style={styles.commentHeader}>
-            {translations.allComments} {dataComments?.total}
-          </Text>
+          <HStack space={1.5}>
+            <Box style={styles.leftBox}></Box>
+            <Text style={styles.commentHeader}>{translations.allComments} {dataComments?.total}</Text>
+          </HStack>
         }
         keyExtractor={(_, index) => "" + index}
         renderItem={({ item }: any) => (
@@ -58,9 +59,7 @@ const SingleVideoFeedComment = ({
             replies={item.replies}
           />
         )}
-        ItemSeparatorComponent={() => (
-          <Divider color="#999" style={styles.divider} />
-        )}
+        ItemSeparatorComponent={() => <Divider style={styles.divider}/>}
         onEndReachedThreshold={0.1}
         onEndReached={reachEnd}
         ListFooterComponent={() => (
@@ -89,5 +88,15 @@ const styles = StyleSheet.create({
   },
   divider: {
     marginVertical: 12,
+    backgroundColor: 'white',
+    opacity: 0.1,
+    width: '85%',
+    marginLeft: '15%'
   },
+  leftBox: {
+    backgroundColor: '#F09536',
+    width: 4,
+    height: 22,
+    borderRadius: 2
+  }
 });

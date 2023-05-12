@@ -6,7 +6,7 @@ import StickyTabs from "layouts/StickyTabs";
 import { translationStore } from "../../zustand/translationStore";
 import { Text, Pressable, StyleSheet, Image } from "react-native";
 import { GLOBAL_COLORS } from "global";
-import { HStack, VStack } from "native-base";
+import { HStack, VStack, View } from "native-base";
 import chatInactive from "assets/images/chatInactive.png";
 import coinIcon from "assets/images/coinIcon.png";
 import CustomModal from "components/CustomModal";
@@ -17,6 +17,7 @@ import CustomerService from "services/api/CustomerService";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { userStore } from "../../zustand/userStore";
 import UserService from "services/api/UserService";
+import Loading from "components/Loading";
 
 const SingleUserScreen = () => {
   const translations = translationStore((state) => state.translations);
@@ -29,7 +30,7 @@ const SingleUserScreen = () => {
 
   // get specific content creators data
   const { getSpecificContentCreator } = UserService();
-  const { data, isLoading } = useQuery({
+  const { data, isFetching } = useQuery({
     queryKey: ["specificContentCreatorData", userID],
     queryFn: () =>
       getSpecificContentCreator({
@@ -93,7 +94,7 @@ const SingleUserScreen = () => {
         username={data?.username}
         biography={data?.biography}
         follower_count={data?.follower_count}
-        isLoading={isLoading}
+        isLoading={isFetching}
       />,
     tabItems: [
       {
@@ -112,32 +113,36 @@ const SingleUserScreen = () => {
   return (
     <React.Fragment>
       <StickyTabs data={tabsData} />
-      <HStack style={styles.bottomBar} space={2} justifyContent='center' alignItems='center'>
-        <Pressable onPress={() => setVIPModalOpen(true)} style={{marginRight: 'auto'}}>
-          <VStack alignItems='center' space={0.5}>
-            <Image style={styles.image} source={chatInactive}/>
-            <Text style={styles.whiteText}>{translations.chat}</Text>
-          </VStack>
-        </Pressable>
-        <Pressable style={styles.donateButton} onPress={() => setOpenDonateModal(true)}>
-          <HStack space={1.5}>
-            <Image style={styles.image} source={coinIcon} />
-            <Text style={styles.whiteText}>{translations.reward}</Text>
+      {!isFetching &&
+        <React.Fragment>
+          <HStack style={styles.bottomBar} space={2} justifyContent='center' alignItems='center'>
+            <Pressable onPress={() => setVIPModalOpen(true)} style={{ marginRight: 'auto' }}>
+              <VStack alignItems='center' space={0.5}>
+                <Image style={styles.image} source={chatInactive} />
+                <Text style={styles.whiteText}>{translations.chat}</Text>
+              </VStack>
+            </Pressable>
+            <Pressable style={styles.donateButton} onPress={() => setOpenDonateModal(true)}>
+              <HStack space={1.5}>
+                <Image style={styles.image} source={coinIcon} />
+                <Text style={styles.whiteText}>{translations.reward}</Text>
+              </HStack>
+            </Pressable>
+            <Pressable
+              onPress={isCreatorFollowed ? unfollowContentCreator : followContentCreator}
+              style={[styles.followButton, isCreatorFollowed ? styles.unfollowBG : styles.followBG]}
+            >
+              <Text style={styles.whiteText}>+ {isCreatorFollowed ? translations.unfollow : translations.follow}</Text>
+            </Pressable>
           </HStack>
-        </Pressable>
-        <Pressable
-          onPress={isCreatorFollowed ? unfollowContentCreator : followContentCreator}
-          style={[styles.followButton, isCreatorFollowed ? styles.unfollowBG : styles.followBG]}
-        >
-          <Text style={styles.whiteText}>+ {isCreatorFollowed ? translations.unfollow : translations.follow}</Text>
-        </Pressable>
-      </HStack>
-      <CustomModal open={openVIPModal} setOpen={setVIPModalOpen}>
-        <VIPModalContent setOpen={setVIPModalOpen} />
-      </CustomModal>
-      <CustomModal open={openDonateModal} setOpen={setOpenDonateModal}>
-        <DonateModalContent setOpen={setOpenDonateModal} userID={userID} />
-      </CustomModal>
+          <CustomModal open={openVIPModal} setOpen={setVIPModalOpen}>
+            <VIPModalContent setOpen={setVIPModalOpen} />
+          </CustomModal>
+          <CustomModal open={openDonateModal} setOpen={setOpenDonateModal}>
+            <DonateModalContent setOpen={setOpenDonateModal} userID={userID} />
+          </CustomModal>
+        </React.Fragment>
+      }
     </React.Fragment>
   );
 };

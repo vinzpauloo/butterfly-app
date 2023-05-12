@@ -26,7 +26,7 @@ import moment from "moment";
 
 const { height, width } = Dimensions.get("window");
 
-const Header = ({ item, setOpen }) => {
+const Header = ({ item, setOpen, isFromSingleUserScreen }) => {
   const translations = translationStore((state) => state.translations);
   const navigation = useNavigation<any>();
   const navigateSingleUser = () => {
@@ -54,9 +54,10 @@ const Header = ({ item, setOpen }) => {
           </HStack>
         </VStack>
       </Pressable>
+      {isFromSingleUserScreen ? null : 
       <Pressable style={styles.privateBtn} onPress={openVIPModal}>
         <Text style={styles.privateText}>{translations.chat}</Text>
-      </Pressable>
+        </Pressable>}
     </View>
   );
 };
@@ -227,7 +228,7 @@ const BottomContent = ({ totalComments, id, like, setLike }) => {
   );
 };
 
-const FeedContent = ({ data, singleFeedPadding = 0 }) => {
+const FeedContent = ({ data, singleFeedPadding = 0, isFromSingleUserScreen = false }) => {
   const item = !!data.item ? data.item : data;
   const [open, setOpen] = useState(false);
   const [like, setLike] = useState({
@@ -239,7 +240,7 @@ const FeedContent = ({ data, singleFeedPadding = 0 }) => {
     <View
       style={[styles.mainContainer, { paddingHorizontal: singleFeedPadding }]}
     >
-      <Header item={item} setOpen={setOpen} />
+      <Header item={item} setOpen={setOpen} isFromSingleUserScreen={isFromSingleUserScreen} />
       <Captions
         tags={item.tags}
         story={item.string_story}

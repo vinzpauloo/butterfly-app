@@ -58,10 +58,10 @@ const PortraitVideoContent = (props: Props) => {
   ]);
 
   return (
-    <SafeAreaView style={[styles.container, { height: windowHeight - props.tabBarHeight - StatusBar.currentHeight }]}>
+    <SafeAreaView style={[styles.container, { height: windowHeight - props.tabBarHeight }]}>
       {props.isActive && (
         <>
-          <StatusBar hidden={false}/>
+          <StatusBar hidden/>
           <VideoOverlay
             isActive={props.isActive}
             videoURL={props.videoURL}

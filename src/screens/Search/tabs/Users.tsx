@@ -63,13 +63,12 @@ const HeaderComponent = ({ data }) => {
           source={{ uri: BASE_URL_FILE_SERVER + data.photo }}
           style={styles.modelImg}
         />
-        <View>
+        <View style={styles.headerTextContent}>
           <Text style={styles.headerTitle}>{data.username}</Text>
           <Text style={styles.headerSubTitle}>
             {translations.followers}: {data.total_followers}{" "}
             {translations.videos}: {data.total_work}
           </Text>
-          <Text style={styles.headerSubTitle}>Description</Text>
         </View>
       </Pressable>
       {isFollowed ? null : (
@@ -133,9 +132,11 @@ const ModelVideosContainer = ({ data }) => {
           <VideoContainer key={index} data={item} user={data} />
         ))}
       </View>
-      <Pressable onPress={navigateToSingleUser}>
-        <Text style={styles.seeMoreBtn}>{translations.seeMoreVideos}</Text>
-      </Pressable>
+      <View style={styles.btnContainer}>
+        <Pressable onPress={navigateToSingleUser}>
+          <Text style={styles.seeMoreBtn}>{translations.seeMoreVideos}</Text>
+        </Pressable>
+      </View>
     </View>
   );
 };
@@ -265,9 +266,12 @@ const styles = StyleSheet.create({
   },
   modelImg: {
     marginRight: 10,
-    height: 50,
-    width: 50,
-    borderRadius: 25,
+    height: 40,
+    width: 40,
+    borderRadius: 20,
+  },
+  headerTextContent: {
+    justifyContent: "space-evenly",
   },
   headerTitle: {
     color: "#fff",
@@ -335,6 +339,7 @@ const styles = StyleSheet.create({
     marginVertical: 2,
     width: width * 0.3,
   },
+  btnContainer: { alignItems: "center", justifyContent: "center" },
   seeMoreBtn: {
     flexDirection: "row",
     alignItems: "center",
@@ -342,6 +347,10 @@ const styles = StyleSheet.create({
     marginBottom: 20,
     color: GLOBAL_COLORS.secondaryColor,
     textAlign: "center",
+    borderWidth: 1,
+    borderColor: GLOBAL_COLORS.secondaryColor,
+    borderRadius: 10,
+    paddingHorizontal: 10,
   },
   emptyResult: {
     textAlign: "center",

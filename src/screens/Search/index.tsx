@@ -33,6 +33,7 @@ import { userStore } from "../../zustand/userStore";
 
 const { width } = Dimensions.get("window");
 
+// **** START: SEARCH BAR **** //
 const SearchBar = ({ search, setSearch, hasSearch, setHasSearch, refetch }) => {
   const translations = translationStore((state) => state.translations);
   const navigation = useNavigation<any>();
@@ -97,7 +98,7 @@ const SearchBar = ({ search, setSearch, hasSearch, setHasSearch, refetch }) => {
         )}
       </View>
       {hasSearch ? (
-        <Pressable style={styles.searchBtn} onPress={searchClear}>
+        <Pressable style={styles.clearBtn} onPress={searchClear}>
           <Text style={styles.searchText}>{translations.clear}</Text>
         </Pressable>
       ) : (
@@ -108,7 +109,9 @@ const SearchBar = ({ search, setSearch, hasSearch, setHasSearch, refetch }) => {
     </View>
   );
 };
+// **** END: SEARCH BAR **** //
 
+// **** START: SEARCH ITEM **** //
 const SearchItem = ({ data, setSearch, setHasSearch, setHistory }) => {
   const token = userStore((state) => state.api_token);
   const { deleteSearchHistory } = GeneralSearch();
@@ -155,7 +158,9 @@ const SearchItem = ({ data, setSearch, setHasSearch, setHistory }) => {
     </Pressable>
   );
 };
+// **** END: SEARCH ITEM **** //
 
+// **** START: SEARCH HISTORY **** //
 const SearchHistory = ({ history, setSearch, setHasSearch, setHistory }) => {
   const token = userStore((state) => state.api_token);
   const translations = translationStore((state) => state.translations);
@@ -219,7 +224,9 @@ const SearchHistory = ({ history, setSearch, setHasSearch, setHistory }) => {
     </View>
   );
 };
+// **** END: SEARCH HISTORY **** //
 
+// **** START: POPULAR SEARCH ITEM **** //
 const PopularSearchItem = ({ text, index, setSearch, setHasSearch }) => {
   const color = (index) => {
     switch (index) {
@@ -259,7 +266,9 @@ const PopularSearchItem = ({ text, index, setSearch, setHasSearch }) => {
     </Pressable>
   );
 };
+// **** END: POPULAR SEARCH ITEM **** //
 
+// **** START: POPULAR SEARCHES **** //
 const PopularSearches = ({ data, setSearch, setHasSearch }) => {
   const translations = translationStore((state) => state.translations);
   return (
@@ -292,7 +301,9 @@ const PopularSearches = ({ data, setSearch, setHasSearch }) => {
     </View>
   );
 };
+// **** END: POPULAR SEARCHES **** //
 
+// **** START: VIDEO LIST **** //
 const VideoList = ({ data }) => {
   const translations = translationStore((state) => state.translations);
   return (
@@ -313,7 +324,9 @@ const VideoList = ({ data }) => {
     </View>
   );
 };
+// **** END: VIDEO LIST **** //
 
+// **** START: SEARCH OUTPUT **** //
 const SearchOutput = ({
   searchText,
   fetchChecker,
@@ -369,6 +382,7 @@ const SearchOutput = ({
   };
   return <MaterialTopTabs data={data} isEqualWidth={true} />;
 };
+// **** END: SEARCH OUTPUT **** //
 
 const Search = () => {
   const token = userStore((state) => state.api_token);
@@ -487,6 +501,13 @@ const styles = StyleSheet.create({
     paddingLeft: 40,
     paddingRight: 35,
     color: GLOBAL_COLORS.primaryTextColor,
+  },
+  clearBtn: {
+    backgroundColor: "#FF644A ",
+    paddingVertical: 5,
+    paddingHorizontal: 10,
+    marginHorizontal: 10,
+    borderRadius: 15,
   },
   searchBtn: {
     backgroundColor: GLOBAL_COLORS.secondaryColor,

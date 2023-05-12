@@ -8,6 +8,7 @@ import {
 } from "react-native";
 import React, { useState } from "react";
 
+import * as Clipboard from "expo-clipboard";
 import Entypo from "react-native-vector-icons/Entypo";
 import Ionicons from "react-native-vector-icons/Ionicons";
 import LottieView from "lottie-react-native";
@@ -193,6 +194,10 @@ const SecondContainer = ({ setOpen }) => {
     });
   };
 
+  const handleCopy = async () => {
+    await Clipboard.setStringAsync(_id);
+  };
+
   return (
     <VStack mt={5} style={{ backgroundColor: GLOBAL_COLORS.videoContentBG }}>
       <LayoutContent>
@@ -209,7 +214,7 @@ const SecondContainer = ({ setOpen }) => {
             <Text style={styles.accountText} numberOfLines={1}>
               {_id}
             </Text>
-            <Pressable>
+            <Pressable onPress={handleCopy}>
               <Text style={styles.redBtn}>{translations.copy}</Text>
             </Pressable>
           </HStack>

@@ -10,6 +10,7 @@ import {
 } from "react-native";
 import React, { useCallback, useState } from "react";
 
+import * as Clipboard from "expo-clipboard";
 import { BASE_URL_FILE_SERVER } from "react-native-dotenv";
 import {
   Box,
@@ -328,6 +329,11 @@ const LinkList = () => {
       navigate: () => {},
     },
   ];
+
+  const handleCopy = async () => {
+    await Clipboard.setStringAsync("butterflyproject@gmail.com");
+  };
+
   return (
     <>
       {lists.map((item, index) => (
@@ -348,7 +354,9 @@ const LinkList = () => {
               </Text>
             </HStack>
             {!!item?.icon2 ? (
-              <Image source={item.icon2} style={styles.langImg2} />
+              <Pressable onPress={handleCopy}>
+                <Image source={item.icon2} style={styles.langImg2} />
+              </Pressable>
             ) : (
               <Entypo
                 name="chevron-small-right"

@@ -120,7 +120,7 @@ export default en_us = {
   profile: "Profile",
   promotionPackage: "Promotion Package",
   purchaseVIP: "Purchase VIP",
-  recentlyUpdated: "Recently Updated",
+  recentlyUpdated: "Recent",
   recommend: "Recommended",
   recommended: "Recommended",
   recommendedVideosList: "Recommended Videos List",

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { StyleSheet, View, Dimensions, FlatList } from "react-native";
+import { StyleSheet, SafeAreaView, Dimensions, FlatList, StatusBar } from "react-native";
 import { useDisclose } from "native-base";
 import { useIsFocused, useNavigation } from "@react-navigation/native";
 
@@ -58,11 +58,10 @@ const PortraitVideoContent = (props: Props) => {
   ]);
 
   return (
-    <View
-      style={[styles.container, { height: windowHeight - props.tabBarHeight }]}
-    >
+    <SafeAreaView style={[styles.container, { height: windowHeight - props.tabBarHeight - StatusBar.currentHeight }]}>
       {props.isActive && (
         <>
+          <StatusBar hidden={false}/>
           <VideoOverlay
             isActive={props.isActive}
             videoURL={props.videoURL}
@@ -91,7 +90,7 @@ const PortraitVideoContent = (props: Props) => {
           />
         </>
       )}
-    </View>
+    </SafeAreaView>
   );
 };
 

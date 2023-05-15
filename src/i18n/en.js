@@ -15,6 +15,8 @@ export default en_us = {
   bindAccount: "Bind Account",
   bindingInformation: "Binding Information",
   bindInvitationCode: "Bind Invitation Code",
+  bindInvitationCodeOrMobile:
+    "Bind invitation code or mobile phone number to send free",
   bindMobilePhone: "Bind mobile phone number",
   bindMobilePhoneMessage:
     "Bind mobile phone number and agent code to get 7 days free VIP permission",
@@ -41,6 +43,7 @@ export default en_us = {
   cumulativeIncome: "Cumulative Income",
   customerService: "Customer Service",
   currentBalance: "Current Balance",
+  day: "Day",
   donate: "Donate",
   download: "Download",
   downloaded: "Downloaded",
@@ -77,8 +80,9 @@ export default en_us = {
   live: "Live",
   liveChat: "Live Chat",
   male: "Male",
-  mobileNumber: "Mobile Number",
   memberCentre: "Member Centre",
+  memberEnjoyBenefits: "Members enjoy 8 benefits",
+  mobileNumber: "Mobile Number",
   moment: "Moment",
   moreLoading: "More Loading",
   mostFavorite: "Most Favorite",

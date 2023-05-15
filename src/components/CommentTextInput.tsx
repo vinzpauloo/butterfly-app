@@ -136,7 +136,7 @@ const CommentTextInput = (props: Props) => {
             <Text style={styles.cancelReply}>{translations.cancel}</Text>
           </Pressable>
         </HStack>
-        <HStack style={styles.inputContainer} space={3}>
+        <HStack style={styles.inputContainer} space={2}>
           <TextInput
             ref={textInputRef}
             multiline={true}
@@ -148,7 +148,7 @@ const CommentTextInput = (props: Props) => {
             onChangeText={(text) => setText(text)}
           />
           <Pressable
-            style={[styles.sendComment, { opacity: text === "" ? 0.3 : 1}]}
+            style={[styles.sendComment, { opacity: text === "" ? 0.3 : 1 }]}
             disabled={text === "" ? true : false}
             onPress={isOnReplyMode ? replyToComment : addNewComment}
           >
@@ -167,18 +167,18 @@ const styles = StyleSheet.create({
     paddingHorizontal: 12,
     paddingBottom: 12,
     backgroundColor: GLOBAL_COLORS.videoContentBG,
-    width: Dimensions.get("window").width,
+    // width: Dimensions.get("window").width,
   },
   inputContainer: {
-    alignItems: "center",
+    // alignItems: "center",
     backgroundColor: GLOBAL_COLORS.videoContentBG,
   },
   textInput: {
     backgroundColor: GLOBAL_COLORS.primaryColor,
     paddingHorizontal: 12,
     borderRadius: 16,
-    width: "82.5%",
-    color: 'white'
+    color: "white",
+    flex: 1,
   },
   cancelReply: {
     color: GLOBAL_COLORS.secondaryColor,
@@ -192,6 +192,7 @@ const styles = StyleSheet.create({
     backgroundColor: GLOBAL_COLORS.secondaryColor,
     paddingVertical: 5,
     paddingHorizontal: 19,
-    borderRadius: 16
+    borderRadius: 16,
+    width: 80,
   },
 });

@@ -43,7 +43,7 @@ import ServiceIcon from "assets/images/service_icon.png";
 import ShareIcon from "assets/images/share_icon.png";
 import VIPActive from "assets/images/VIPActive.png";
 import VIPNotActive from "assets/images/VIPNotActive.png";
-import { GLOBAL_COLORS } from "global";
+import { GLOBAL_COLORS, GLOBAL_SCREEN_SIZE } from "global";
 import { translationStore } from "../../zustand/translationStore";
 import { userStore } from "../../zustand/userStore";
 import { useIsFocused, useNavigation } from "@react-navigation/native";
@@ -223,7 +223,10 @@ const VIPStatus = () => {
                 </Text>
               )}
               <Text
-                style={{ color: is_Vip ? "#DBAD7D" : "#73787F" }}
+                style={{
+                  color: is_Vip ? "#DBAD7D" : "#73787F",
+                  width: width < GLOBAL_SCREEN_SIZE.mobile ? width * 0.7 : null,
+                }}
                 numberOfLines={1}
               >
                 {translations.userID} : {_id}

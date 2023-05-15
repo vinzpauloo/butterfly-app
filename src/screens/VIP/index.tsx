@@ -1,4 +1,5 @@
 import {
+  Dimensions,
   Image,
   Pressable,
   RefreshControl,
@@ -49,16 +50,19 @@ import SubscriptionsBundle from "services/api/SubscriptionBundle";
 import VideoCall from "assets/images/vidoecall.png";
 import VideoCallWhite from "assets/images/videocall_white.png";
 import Videos from "assets/images/videos.png";
-import VideosWhite from "assets/images/videocall_white.png";
+import VideosWhite from "assets/images/videos_white.png";
 import VIPActive from "assets/images/VIPActive.png";
 import WatchTicket from "assets/images/watchTicket.png";
 import WatchTicketWhite from "assets/images/watchTicket_white.png";
 import { createMaterialTopTabNavigator } from "@react-navigation/material-top-tabs";
-import { GLOBAL_COLORS } from "global";
+import { GLOBAL_COLORS, GLOBAL_SCREEN_SIZE } from "global";
 import { translationStore } from "../../zustand/translationStore";
 import { userStore } from "../../zustand/userStore";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { BASE_URL_FILE_SERVER } from "react-native-dotenv";
+import { useNavigation } from "@react-navigation/native";
+
+const { width } = Dimensions.get("window");
 
 const Tab = createMaterialTopTabNavigator();
 
@@ -67,11 +71,23 @@ const Header = () => {
   const { alias } = userStore((state) => state);
   const { translations } = translationStore((store) => store);
   return (
-    <HStack alignItems="center" justifyContent="space-between" px={6} py={4}>
-      <HStack space={2} alignItems="center">
+    <HStack
+      flexDirection={width < GLOBAL_SCREEN_SIZE.mobile ? "column" : "row"}
+      alignItems="center"
+      justifyContent="space-between"
+      px={6}
+      py={4}
+    >
+      <HStack
+        space={2}
+        alignItems="center"
+        mb={width < GLOBAL_SCREEN_SIZE.mobile ? "2" : null}
+      >
         <Image source={Profile} style={styles.profileImg} />
         <VStack>
-          <Text style={styles.headerTitle}>{alias}</Text>
+          <Text style={styles.headerTitle} numberOfLines={1}>
+            {alias}
+          </Text>
           {/* <Text style={styles.headerSubtitle}>您目前不是会员</Text> */}
         </VStack>
       </HStack>
@@ -247,23 +263,30 @@ const VIPChoices = ({ active, setActive, bundle, setActiveBundleId }) => {
 const BindInvitationCode = () => {
   // ** GLOBAL STORE
   const { translations } = translationStore((store) => store);
+  const navigation = useNavigation<any>();
+
+  const handlePress = () => {
+    navigation.navigate("Settings", { postTitle: translations.setup });
+  };
 
   return (
-    <View style={styles.bindInvitationCodeContainer}>
-      <Text style={styles.bindLeftText} numberOfLines={2}>
-        {translations.bindInvitationCodeOrMobile}{" "}
-        <Text style={{ color: GLOBAL_COLORS.secondaryColor }}>VIP</Text> 1{" "}
-        {translations.day}
-      </Text>
-      <HStack width="16" alignItems="center">
-        <Text style={styles.bindRightText}>{translations.toBind}</Text>
-        <Entypo
-          name="chevron-small-right"
-          color={GLOBAL_COLORS.secondaryColor}
-          size={25}
-        />
-      </HStack>
-    </View>
+    <Pressable onPress={handlePress}>
+      <View style={styles.bindInvitationCodeContainer}>
+        <Text style={styles.bindLeftText} numberOfLines={2}>
+          {translations.bindInvitationCodeOrMobile}{" "}
+          <Text style={{ color: GLOBAL_COLORS.secondaryColor }}>VIP</Text> 1{" "}
+          {translations.day}
+        </Text>
+        <HStack width="16" alignItems="center">
+          <Text style={styles.bindRightText}>{translations.toBind}</Text>
+          <Entypo
+            name="chevron-small-right"
+            color={GLOBAL_COLORS.secondaryColor}
+            size={25}
+          />
+        </HStack>
+      </View>
+    </Pressable>
   );
 };
 
@@ -420,15 +443,17 @@ const Member = ({ route }) => {
 
   return (
     <Container>
-      <VIPChoices
-        active={active}
-        setActive={setActive}
-        bundle={bundle}
-        setActiveBundleId={route.params.setActiveBundleId}
-      />
-      <BindInvitationCode />
-      <PromotionalPackage perks={bundle[active]?.perks} />
-      <Button onOpen={route.params.onOpen} />
+      <ScrollView>
+        <VIPChoices
+          active={active}
+          setActive={setActive}
+          bundle={bundle}
+          setActiveBundleId={route.params.setActiveBundleId}
+        />
+        <BindInvitationCode />
+        <PromotionalPackage perks={bundle[active]?.perks} />
+        <Button onOpen={route.params.onOpen} />
+      </ScrollView>
     </Container>
   );
 };
@@ -579,9 +604,9 @@ const Wallet = ({ route }) => {
                   : inactiveColorScheme.border
               }
               height={172}
-              mx={3}
+              mx={width < GLOBAL_SCREEN_SIZE.mobile ? 2 : 3}
               mt={5}
-              width="40"
+              width={width < GLOBAL_SCREEN_SIZE.mobile ? "32" : "40"}
             >
               <LinearGradient
                 colors={
@@ -1010,6 +1035,12 @@ const styles = StyleSheet.create({
     color: GLOBAL_COLORS.primaryTextColor,
     fontSize: 16,
     fontWeight: "bold",
+    width:
+      width > 400
+        ? width * 0.5
+        : width < GLOBAL_SCREEN_SIZE.mobile
+        ? width * 0.6
+        : width * 0.3,
   },
   headerSubtitle: { color: GLOBAL_COLORS.primaryTextColor, fontSize: 10 },
   headerBtn: {
@@ -1068,7 +1099,12 @@ const styles = StyleSheet.create({
     paddingVertical: 5,
   },
   bindLeftText: {
-    maxWidth: 250,
+    width:
+      width > 400
+        ? width * 0.5
+        : width < GLOBAL_SCREEN_SIZE.mobile
+        ? width * 0.6
+        : width * 0.65,
     color: GLOBAL_COLORS.primaryTextColor,
   },
   bindRightText: {
@@ -1076,11 +1112,12 @@ const styles = StyleSheet.create({
   },
   // PromotionalPackage
   imagesContainer: {
-    backgroundColor: "#323A44",
     marginHorizontal: 15,
     marginVertical: 15,
     padding: 15,
     borderRadius: 10,
+    borderWidth: 1,
+    borderColor: "#E6D8D8",
   },
   vipImg: {
     width: 25,
@@ -1103,8 +1140,9 @@ const styles = StyleSheet.create({
   imagesText: {
     color: "#FFF",
     textTransform: "uppercase",
-    fontSize: 12,
+    fontSize: width < GLOBAL_SCREEN_SIZE.mobile ? 11 : 12,
     marginTop: 5,
+    textAlign: "center",
   },
   // Comment
   commentContainer: {
@@ -1149,12 +1187,14 @@ const styles = StyleSheet.create({
   smallText: {
     color: GLOBAL_COLORS.primaryTextColor,
     fontWeight: "bold",
+    textAlign: "center",
   },
   largeText: {
     color: "#F8D0BD",
     fontWeight: "bold",
     fontSize: 20,
     marginBottom: 10,
+    textAlign: "center",
   },
   boxContent: {
     borderWidth: 2,

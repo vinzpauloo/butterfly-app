@@ -548,7 +548,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "space-between",
     backgroundColor: GLOBAL_COLORS.videoContentBG,
-    marginHorizontal: 10,
+    marginHorizontal: 5,
     marginVertical: 5,
     paddingHorizontal: 2,
     paddingVertical: 1,

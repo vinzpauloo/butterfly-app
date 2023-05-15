@@ -378,16 +378,16 @@ const styles = StyleSheet.create({
     position: "relative",
   },
   video: {
-    alignItems: "center",
-    justifyContent: "center",
-    width: 200,
+    // alignItems: "center",
+    // justifyContent: "center",
+    width: width - 30, // minus the mainContainer horizontal margin
     height: 200,
     resizeMode: "cover",
     borderRadius: 4,
   },
   playIcon: {
     top: 100,
-    left: 100,
+    left: width / 2 - 15,
     transform: [{ translateX: -30 }, { translateY: -30 }],
     position: "absolute",
     height: 60,

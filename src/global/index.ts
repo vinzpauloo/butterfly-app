@@ -8,6 +8,7 @@ export const GLOBAL_COLORS = {
   btnColor: "#FF474E",
   videoContentBG: "#202833", // also navigation BG
   errorColor: "#E5404F",
+  grayColor: "#2C323A",
 };
 
 export const GLOBAL_SCREEN_SIZE = {

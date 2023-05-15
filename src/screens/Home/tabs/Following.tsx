@@ -163,7 +163,7 @@ const NoFollowing = ({
 const SectionContent = ({ index, info, onOpen, setId, data }) => {
   const translations = translationStore((state) => state.translations);
   const navigation = useNavigation<any>();
-  const { followCreator } = CustomerService();
+  const { followCreator, unfollowCreator } = CustomerService();
   const token = userStore((store) => store.api_token);
   const [isFollow, setIsFollow] = useState(false);
 
@@ -174,6 +174,16 @@ const SectionContent = ({ index, info, onOpen, setId, data }) => {
     },
     onError: (error) => {
       console.log("followingFollowCreator-error", error);
+    },
+  });
+
+  //for unfollow
+  const { mutate: mutateUnfollow } = useMutation(unfollowCreator, {
+    onSuccess: (data) => {
+      console.log("followingUnfollowCreator-success", data);
+    },
+    onError: (error) => {
+      console.log("followingUnfollowCreator-error", error);
     },
   });
 
@@ -190,6 +200,15 @@ const SectionContent = ({ index, info, onOpen, setId, data }) => {
     });
     setIsFollow(true);
   };
+
+  const handleUnfollow = (userId) => {
+    mutateUnfollow({
+      user_id: { user_id: userId },
+      token: token,
+    });
+    setIsFollow(false);
+  };
+
   return (
     // <>
     <View style={styles.usersCategoryContainer}>
@@ -209,7 +228,7 @@ const SectionContent = ({ index, info, onOpen, setId, data }) => {
             </Text>
           </VStack>
         </Pressable>
-        {isFollow ? null : (
+        {/* {isFollow ? null : (
           <Pressable
             style={styles.followBtn}
             onPress={() => handleFollow(info.id)}
@@ -223,7 +242,31 @@ const SectionContent = ({ index, info, onOpen, setId, data }) => {
               <Text style={styles.followText}>{translations.follow}</Text>
             </HStack>
           </Pressable>
-        )}
+        )} */}
+
+        <Pressable
+          style={[
+            styles.defaultBtn,
+            isFollow ? styles.unfollowBtn : styles.followBtn,
+          ]}
+          onPress={() =>
+            isFollow ? handleUnfollow(info.id) : handleFollow(info.id)
+          }
+        >
+          <HStack alignItems="center">
+            {!isFollow && (
+              <Entypo
+                name="plus"
+                size={12}
+                color={GLOBAL_COLORS.primaryTextColor}
+              />
+            )}
+
+            <Text style={styles.followText}>
+              {isFollow ? translations.unfollow : translations.follow}
+            </Text>
+          </HStack>
+        </Pressable>
       </View>
       <MasonryList
         numColumns={2}
@@ -465,13 +508,18 @@ const styles = StyleSheet.create({
     color: GLOBAL_COLORS.inactiveTextColor,
     marginHorizontal: 5,
   },
-  followBtn: {
-    backgroundColor: GLOBAL_COLORS.secondaryColor,
+  defaultBtn: {
     alignItems: "center",
     justifyContent: "center",
     paddingHorizontal: 10,
     paddingVertical: 5,
     borderRadius: 16,
+  },
+  followBtn: {
+    backgroundColor: GLOBAL_COLORS.secondaryColor,
+  },
+  unfollowBtn: {
+    backgroundColor: GLOBAL_COLORS.grayColor,
   },
   followText: {
     color: "#fff",

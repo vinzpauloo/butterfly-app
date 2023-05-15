@@ -14,7 +14,7 @@ import { useNavigation } from "@react-navigation/native";
 import Entypo from "react-native-vector-icons/Entypo";
 import Modal from "components/BottomModal";
 import VideoComponent from "components/VideoComponent";
-import { GLOBAL_COLORS } from "global";
+import { GLOBAL_COLORS, GLOBAL_SCREEN_SIZE } from "global";
 import { BASE_URL_FILE_SERVER } from "react-native-dotenv";
 import { HStack, useDisclose } from "native-base";
 
@@ -120,7 +120,7 @@ const styles = StyleSheet.create({
     position: "relative",
   },
   container: {
-    width: width < 480 ? width * 0.7 : width * 0.45,
+    width: width < GLOBAL_SCREEN_SIZE.mobileMedium ? width * 0.7 : width * 0.45,
     marginHorizontal: 5,
     borderRadius: 4,
   },
@@ -147,7 +147,8 @@ const styles = StyleSheet.create({
   },
   texts: {
     justifyContent: "space-evenly",
-    width: width < 480 ? width * 0.56 : width * 0.35,
+    width:
+      width < GLOBAL_SCREEN_SIZE.mobileMedium ? width * 0.56 : width * 0.35,
   },
   text: {
     color: GLOBAL_COLORS.primaryTextColor,

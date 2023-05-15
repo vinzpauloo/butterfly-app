@@ -16,6 +16,7 @@ interface IWorksParams {
     recommended?: boolean;
     exclude?: string;
     random?: boolean;
+    history?: boolean;
   };
   token: string;
 }
@@ -71,7 +72,12 @@ const WorkService = () => {
     });
   };
 
-  return { getWorks, getWorkById, getWorkFollowing, getWorksPortrait };
+  return {
+    getWorks,
+    getWorkById,
+    getWorkFollowing,
+    getWorksPortrait,
+  };
 };
 
 export default WorkService;

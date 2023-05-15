@@ -13,4 +13,5 @@ export const GLOBAL_COLORS = {
 
 export const GLOBAL_SCREEN_SIZE = {
   mobile: 350,
+  mobileMedium: 480,
 };

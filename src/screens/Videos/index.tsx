@@ -1,4 +1,5 @@
 import {
+  Dimensions,
   Image,
   Pressable,
   ScrollView,
@@ -13,10 +14,12 @@ import { Box, HStack, VStack, useDisclose } from "native-base";
 import Container from "components/Container";
 import SampleVidImg from "assets/images/sapleVidImg.png";
 import VideoComponent from "components/VideoComponent";
-import { GLOBAL_COLORS } from "global";
+import { GLOBAL_COLORS, GLOBAL_SCREEN_SIZE } from "global";
 import Entypo from "react-native-vector-icons/Entypo";
 import { duration } from "moment";
 import Modal from "components/BottomModal";
+
+const { width } = Dimensions.get("window");
 
 // **** SAMPLE DATA **** //
 const sampleData = {
@@ -40,14 +43,18 @@ const Layout = ({ children, style = null }) => {
 // **** END: COMPONENTS **** //
 
 const Video = ({ onOpen, setId }) => {
+  const WIDTH_IMG = width < GLOBAL_SCREEN_SIZE.mobileMedium ? "40%" : "30%";
+  const WIDTH_CONTENT = width < GLOBAL_SCREEN_SIZE.mobileMedium ? "60%" : "70%";
+
   const handlePressDots = (event) => {
     // setId(item._id);
     setId(1);
     onOpen(event);
   };
+
   return (
     <HStack width="full" height="20" my="1.5">
-      <VStack width="2/5" height="full" position="relative">
+      <VStack width={WIDTH_IMG} height="full" position="relative">
         <VideoComponent item={sampleData} />
         <Image
           source={SampleVidImg}
@@ -56,14 +63,14 @@ const Video = ({ onOpen, setId }) => {
         />
       </VStack>
       <VStack
-        width="3/5"
+        width={WIDTH_CONTENT}
         height="full"
         py="0.5"
         pl="2"
         justifyContent="space-between"
       >
         <Text style={styles.title} numberOfLines={2}>
-          逃离996露营好物的入坑推荐！逃离996露营好物的入坑推荐！
+          逃离996露营好物的入坑推荐！逃离996露营好物的入坑推荐！逃离996露营好物的入坑推荐！逃离996露营好物的入坑推荐！逃离996露营好物的入坑推荐！逃离996露营好物的入坑推荐！
         </Text>
         <Text style={styles.subtitle}>今日 12:38</Text>
         <HStack alignItems="center" justifyContent="space-between">

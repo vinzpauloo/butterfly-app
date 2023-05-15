@@ -1,11 +1,12 @@
-import { StyleSheet, ActivityIndicator, View } from "react-native";
+import { StyleSheet, ActivityIndicator, View, Dimensions } from "react-native";
 import React from "react";
 
 import { createMaterialTopTabNavigator } from "@react-navigation/material-top-tabs";
 
-import { GLOBAL_COLORS } from "global";
+import { GLOBAL_COLORS, GLOBAL_SCREEN_SIZE } from "global";
 import Container from "components/Container";
 
+const { width } = Dimensions.get("window");
 const TopTab = createMaterialTopTabNavigator();
 
 const MaterialTopTabs = ({
@@ -17,6 +18,8 @@ const MaterialTopTabs = ({
   tabBarColor = null,
 }) => {
   const { initialRoute, screens } = data;
+  const isSmallScreen = isEqualWidth && width < GLOBAL_SCREEN_SIZE.mobile;
+
   return (
     <>
       <TopTab.Navigator
@@ -39,10 +42,11 @@ const MaterialTopTabs = ({
           tabBarContentContainerStyle: {
             alignItems: "center",
           },
-          tabBarItemStyle: !isEqualWidth
-            ? styles.defaultTabBarItemStyle
-            : styles.equalWidthTabBarItemStyle,
-          tabBarScrollEnabled: !isEqualWidth,
+          tabBarItemStyle:
+            !isEqualWidth || isSmallScreen
+              ? styles.defaultTabBarItemStyle
+              : styles.equalWidthTabBarItemStyle,
+          tabBarScrollEnabled: !isEqualWidth || isSmallScreen,
           animationEnabled: false,
           lazy: true,
           lazyPlaceholder: () => (

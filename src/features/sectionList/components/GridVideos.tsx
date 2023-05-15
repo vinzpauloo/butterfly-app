@@ -75,6 +75,7 @@ export const GridVideosBottomContent = ({ onOpen, username, setId, id }) => {
 
 const AdsContainer = ({ item, isFollowingScreen, onOpen, setId }: any) => {
   const handlePress = () => {};
+
   return (
     <TouchableOpacity
       activeOpacity={1}
@@ -94,7 +95,7 @@ const AdsContainer = ({ item, isFollowingScreen, onOpen, setId }: any) => {
             {item?.title}
           </Text>
         </View>
-        {isFollowingScreen ? (
+        {/* {isFollowingScreen ? (
           <FollowingBottomContent item={item} />
         ) : (
           <GridVideosBottomContent
@@ -103,7 +104,7 @@ const AdsContainer = ({ item, isFollowingScreen, onOpen, setId }: any) => {
             setId={setId}
             id={item._id}
           />
-        )}
+        )} */}
       </View>
     </TouchableOpacity>
   );
@@ -125,7 +126,8 @@ export const Video = ({ item, isFollowingScreen, onOpen, setId }: any) => {
     }
   };
 
-  if (item?.username === "Ads") {
+  // if (item?.username === "Ads") {
+  if (item?.photo_url) {
     return (
       <AdsContainer
         item={item}

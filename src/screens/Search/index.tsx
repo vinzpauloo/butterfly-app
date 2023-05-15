@@ -142,7 +142,7 @@ const SearchItem = ({ data, setSearch, setHasSearch, setHistory }) => {
         style={[
           styles.searchesText,
           {
-            width: width < GLOBAL_SCREEN_SIZE.mobile ? 60 : null,
+            width: width < GLOBAL_SCREEN_SIZE.mobile ? 60 : width * 0.22,
           },
         ]}
         numberOfLines={1}

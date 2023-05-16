@@ -1,4 +1,10 @@
-import { Dimensions, StyleSheet, Text, View } from "react-native";
+import {
+  Dimensions,
+  StyleSheet,
+  Text,
+  View,
+  useWindowDimensions,
+} from "react-native";
 import React, { useEffect, useState } from "react";
 import { GLOBAL_COLORS } from "global";
 
@@ -11,31 +17,39 @@ let screen_height = Dimensions.get("window").height * scale;
 let screen_width = Dimensions.get("window").width * scale;
 
 const Container: React.FC<DataTypes> = ({ children }) => {
+  const { height, width } = useWindowDimensions();
   const [dimensions, setDimensions] = useState({
     height: screen_height,
     width: screen_width,
   });
 
-  useEffect(() => {
-    const subscription = Dimensions.addEventListener(
-      "change",
-      ({ window, screen }) => {
-        const newScale = screen.scale / window.scale;
-        setDimensions({
-          height: window.height * newScale,
-          width: window.width * newScale,
-        });
-      }
-    );
+  // console.log("useWindowDimensions height", height);
+  // console.log("useWindowDimensions width", width);
 
-    return () => subscription?.remove();
-  }, []);
+  // useEffect(() => {
+  //   const subscription = Dimensions.addEventListener(
+  //     "change",
+  //     ({ window, screen }) => {
+  //       // const newScale = screen.scale / window.scale;
+  //       // const newDimensions = {
+  //       //   height: window.height * newScale,
+  //       //   width: window.width * newScale,
+  //       // };
+  //       // setDimensions(newDimensions);
+  //       // console.log("newDimensions", newDimensions);
+  //       console.log("dimension changed!!!!!");
+  //     }
+  //   );
+
+  //   return () => subscription?.remove();
+  // }, []);
 
   return (
     <View
       style={[
         styles.container,
-        { height: dimensions.height, width: dimensions.width },
+        // { height: dimensions.height, width: dimensions.width },
+        { height, width },
       ]}
     >
       {children}

@@ -1,5 +1,12 @@
 import React, { useRef, useState } from "react";
-import { Dimensions, Image, StyleSheet, View, Pressable } from "react-native";
+import {
+  Dimensions,
+  Image,
+  StyleSheet,
+  View,
+  Pressable,
+  useWindowDimensions,
+} from "react-native";
 
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 import Carousel from "react-native-reanimated-carousel";
@@ -14,6 +21,7 @@ import { BASE_URL_FILE_SERVER } from "react-native-dotenv";
 const windowWidth = Dimensions.get("window").width;
 
 const CarouselContainer = () => {
+  const { height, width } = useWindowDimensions();
   const [index, setIndex] = useState(0);
   const isCarousel = useRef(null);
 
@@ -47,7 +55,7 @@ const CarouselContainer = () => {
   };
   return (
     <GestureHandlerRootView>
-      <View style={styles.container}>
+      <View style={[styles.container, { width }]}>
         <AntDesign
           name="leftcircleo"
           size={20}
@@ -58,7 +66,7 @@ const CarouselContainer = () => {
         <Carousel
           ref={isCarousel}
           loop
-          width={windowWidth}
+          width={width}
           height={150}
           autoPlay={true}
           data={carouselAds}
@@ -76,7 +84,7 @@ const CarouselContainer = () => {
           onPress={handleNext}
           color={GLOBAL_COLORS.secondaryColor}
         />
-        <View style={styles.pagination}>
+        <View style={[styles.pagination, { left: width / 2 }]}>
           {carouselAds.map((_, idx) => (
             <FontAwesome
               key={idx}
@@ -99,7 +107,7 @@ const styles = StyleSheet.create({
     height: 135,
     position: "relative",
     flexDirection: "row",
-    width: windowWidth,
+    // width: windowWidth,
     marginBottom: 30,
   },
   leftIcon: {
@@ -121,7 +129,7 @@ const styles = StyleSheet.create({
     width: 200,
     zIndex: 10,
     bottom: 10,
-    left: windowWidth / 2,
+    // left: windowWidth / 2,
     transform: [{ translateX: -100 }],
     flexDirection: "row",
     alignItems: "center",

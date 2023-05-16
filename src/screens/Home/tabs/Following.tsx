@@ -1,10 +1,10 @@
 import {
-  Dimensions,
   Image,
   Pressable,
   RefreshControl,
   StyleSheet,
   Text,
+  useWindowDimensions,
   View,
 } from "react-native";
 import React, { useCallback, useState } from "react";
@@ -34,8 +34,6 @@ import { userStore } from "../../../zustand/userStore";
 import { translationStore } from "../../../zustand/translationStore";
 import { BASE_URL_FILE_SERVER } from "react-native-dotenv";
 
-const { width, height } = Dimensions.get("window");
-
 const Video = ({
   userId,
   username,
@@ -46,6 +44,7 @@ const Video = ({
   setId,
   isFollowingScreen = false,
 }: any) => {
+  const { width } = useWindowDimensions();
   const navigation = useNavigation<any>();
   const videoHeight =
     item.orientation === "Landscape" ? width * 0.3 : width * 0.5;
@@ -112,6 +111,7 @@ const NoFollowing = ({
   setData,
   setRefreshingId,
 }) => {
+  const { height } = useWindowDimensions();
   const translations = translationStore((state) => state.translations);
   const onRefresh = useCallback(() => {
     setRefreshing(true);
@@ -305,6 +305,7 @@ const Follow = ({
   setRefreshing,
   setRefreshingId,
 }) => {
+  const { height } = useWindowDimensions();
   const [startScroll, setStartScroll] = useState(true);
 
   const onRefresh = useCallback(() => {

@@ -1,9 +1,9 @@
 import {
-  Dimensions,
   Image,
   Pressable,
   StyleSheet,
   Text,
+  useWindowDimensions,
   View,
 } from "react-native";
 import React, { useState } from "react";
@@ -22,8 +22,6 @@ import { GLOBAL_COLORS } from "global";
 import { translationStore } from "../../zustand/translationStore";
 
 import moment from "moment";
-
-const { height, width } = Dimensions.get("window");
 
 const Header = ({ item, setOpen }) => {
   const translations = translationStore((state) => state.translations);
@@ -83,6 +81,7 @@ const Captions = ({ tags, story, id, like, setLike }) => {
 };
 
 const Images = ({ images }) => {
+  const { height, width } = useWindowDimensions();
   const navigation = useNavigation<any>();
 
   const columnImageWidth = (picCount) => {

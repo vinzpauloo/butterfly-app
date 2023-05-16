@@ -2,15 +2,15 @@ import React, { useState } from "react";
 import {
   ScrollView,
   Text,
-  Dimensions,
+  useWindowDimensions,
   View,
   StyleSheet,
 } from "react-native";
 
 import UserProfileSettingsHeader from "components/UserProfileSettingsHeader";
 
-
 const PasscodeLock = () => {
+  const { height, width } = useWindowDimensions();
   const [selectedDots, setSelectedDots] = useState([]);
   const [lines, setLines] = useState([]);
   const [dots, setDots] = useState([
@@ -38,9 +38,17 @@ const PasscodeLock = () => {
   };
 
   return (
-    <ScrollView style={styles.container}>
+    <ScrollView
+      style={[
+        styles.container,
+        {
+          maxHeight: height,
+          maxWidth: width,
+        },
+      ]}
+    >
       {/*Title and Back Button  */}
-      <UserProfileSettingsHeader title={'应用锁'} btnRight={null}/>
+      <UserProfileSettingsHeader title={"应用锁"} btnRight={null} />
 
       <Text style={{ textAlign: "center" }}>
         Selected Dots: {selectedDots.join(", ")}
@@ -98,9 +106,7 @@ const PasscodeLock = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    maxHeight: Dimensions.get("window").height,
     marginVertical: 0,
-    maxWidth: Dimensions.get("window").width,
     backgroundColor: "#191d26",
   },
   lockContainer: {

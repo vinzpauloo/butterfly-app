@@ -1,4 +1,4 @@
-import { Dimensions, Pressable, StyleSheet, Text, View } from "react-native";
+import { Pressable, StyleSheet, Text, View } from "react-native";
 import React from "react";
 
 import { useNavigation, useRoute } from "@react-navigation/native";
@@ -8,8 +8,6 @@ import SingleTagTabs from "./tabs/SingleTagTabs";
 import { translationStore } from "../../zustand/translationStore";
 import { GLOBAL_COLORS } from "global";
 import { HStack } from "native-base";
-
-const { height, width } = Dimensions.get("window");
 
 const ProfileBanner = () => {
   const navigation = useNavigation<any>();

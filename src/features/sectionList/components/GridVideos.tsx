@@ -1,10 +1,10 @@
 import {
-  Dimensions,
   Image,
   Pressable,
   StyleSheet,
   Text,
   TouchableOpacity,
+  useWindowDimensions,
   View,
 } from "react-native";
 import React, { useState } from "react";
@@ -21,9 +21,8 @@ import VIPTag from "components/VIPTag";
 import { GLOBAL_COLORS, GLOBAL_SCREEN_SIZE } from "global";
 import { BASE_URL_FILE_SERVER } from "react-native-dotenv";
 
-const { width } = Dimensions.get("window");
-
 export const FollowingBottomContent = ({ item }) => {
+  const { width } = useWindowDimensions();
   return (
     <View style={styles.textContent}>
       <View style={{ flexDirection: "row", alignItems: "center" }}>
@@ -31,7 +30,13 @@ export const FollowingBottomContent = ({ item }) => {
           source={{ uri: BASE_URL_FILE_SERVER + item.user.photo }}
           style={styles.modelImg}
         />
-        <Text numberOfLines={1} style={styles.modelText}>
+        <Text
+          numberOfLines={1}
+          style={[
+            styles.modelText,
+            { width: width < GLOBAL_SCREEN_SIZE.mobile ? 60 : null },
+          ]}
+        >
           {item.user.username}
         </Text>
       </View>
@@ -70,6 +75,7 @@ export const GridVideosBottomContent = ({ onOpen, username, setId, id }) => {
 };
 
 const AdsContainer = ({ item, isFollowingScreen, onOpen, setId }: any) => {
+  const { width } = useWindowDimensions();
   const handlePress = () => {};
 
   return (
@@ -107,6 +113,7 @@ const AdsContainer = ({ item, isFollowingScreen, onOpen, setId }: any) => {
 };
 
 export const Video = ({ item, isFollowingScreen, onOpen, setId }: any) => {
+  const { width } = useWindowDimensions();
   const navigation = useNavigation<any>();
   const videoHeight =
     item.orientation === "Landscape" ? width * 0.3 : width * 0.5;
@@ -249,7 +256,6 @@ const styles = StyleSheet.create({
     fontSize: 12,
     color: GLOBAL_COLORS.usernameTextColor,
     paddingHorizontal: 5,
-    width: width < GLOBAL_SCREEN_SIZE.mobile ? 60 : null,
   },
   modelLikeCount: {
     fontSize: 12,

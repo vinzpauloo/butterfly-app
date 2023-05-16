@@ -1,6 +1,6 @@
 import React from "react";
 import {
-  Dimensions,
+  useWindowDimensions,
   ScrollView,
   View,
   KeyboardAvoidingView,
@@ -13,9 +13,18 @@ import UserProfileSettingsHeader from "components/UserProfileSettingsHeader";
 import { GLOBAL_COLORS } from "../../../global";
 
 const RequestCode = () => {
+  const { height, width } = useWindowDimensions();
   return (
     <KeyboardAvoidingView behavior="height" style={{ flex: 1 }}>
-      <ScrollView style={styles.container}>
+      <ScrollView
+        style={[
+          styles.container,
+          {
+            maxHeight: height,
+            maxWidth: width,
+          },
+        ]}
+      >
         {/*Title and Back Button  */}
         <UserProfileSettingsHeader title={"填写邀请码"} btnRight={null} />
 
@@ -43,8 +52,6 @@ const RequestCode = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    maxHeight: Dimensions.get("window").height,
-    maxWidth: Dimensions.get("window").width,
     backgroundColor: "#191d26",
   },
   textInputContainer: {

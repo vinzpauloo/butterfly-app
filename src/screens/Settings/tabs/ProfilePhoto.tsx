@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import {
   View,
   ScrollView,
-  Dimensions,
+  useWindowDimensions,
   Image,
   TouchableOpacity,
   StyleSheet,
@@ -13,7 +13,7 @@ import { modelListData } from "data/modelListData";
 import UserProfileSettingsHeader from "components/UserProfileSettingsHeader";
 
 const ProfilePhoto = () => {
-
+  const { height, width } = useWindowDimensions();
   const [mainImage, setMainImage] = useState(mainPhoto);
 
   //Changes Main Profile Photo placeholder on hover
@@ -22,9 +22,17 @@ const ProfilePhoto = () => {
   };
 
   return (
-    <ScrollView style={styles.container}>
+    <ScrollView
+      style={[
+        styles.container,
+        {
+          maxHeight: height,
+          maxWidth: width,
+        },
+      ]}
+    >
       {/*Title and Back Button  */}
-      <UserProfileSettingsHeader title='修改头像' btnRight/>
+      <UserProfileSettingsHeader title="修改头像" btnRight />
 
       {/*Main Profile Photo*/}
       <View style={styles.mainPhotoContainer}>
@@ -46,14 +54,12 @@ const ProfilePhoto = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    maxHeight: Dimensions.get("window").height,
     marginVertical: 0,
-    maxWidth: Dimensions.get("window").width,
     backgroundColor: "#191d26",
   },
   mainPhotoContainer: {
     alignItems: "center",
-    marginVertical: 20
+    marginVertical: 20,
   },
   mainPhoto: {
     flex: 1,

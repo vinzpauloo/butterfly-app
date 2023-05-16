@@ -1,9 +1,9 @@
 import {
-  Dimensions,
   ImageBackground,
   Pressable,
   StyleSheet,
   Text,
+  useWindowDimensions,
   View,
 } from "react-native";
 import React, { useState } from "react";
@@ -50,8 +50,6 @@ import { useNavigation } from "@react-navigation/native";
 import { userStore } from "../../zustand/userStore";
 import { useMutation } from "@tanstack/react-query";
 import { BASE_URL_FILE_SERVER } from "react-native-dotenv";
-
-const { height, width } = Dimensions.get("window");
 
 // Change Language
 const Intl = () => {
@@ -364,6 +362,7 @@ const Email = () => {
 };
 
 const index = () => {
+  const { width, height } = useWindowDimensions();
   const [scanned, setScanned] = useState(false);
   const [scannedID, setScannedID] = useState("");
   const { bindDevice } = CustomerService();

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import {
   StyleSheet,
   Text,
@@ -7,7 +7,7 @@ import {
   Image,
   TouchableOpacity,
   SafeAreaView,
-  Dimensions,
+  useWindowDimensions,
   Linking,
 } from "react-native";
 import Modal from "react-native-modal";
@@ -20,7 +20,6 @@ import {
   SimpleLineIcons,
   MaterialCommunityIcons,
   MaterialIcons,
-  FontAwesome5,
 } from "@expo/vector-icons";
 
 import Container from "components/Container";
@@ -28,7 +27,9 @@ import profilePhoto from "assets/images/profilePhoto.jpg";
 import { GLOBAL_COLORS } from "../../global";
 import { HStack, VStack } from "native-base";
 import { settingsOthersList } from "../../data/settingsOthersList";
+
 const MainSettings = (navigation: any) => {
+  const { height, width } = useWindowDimensions();
   const [selected, setSelected] = useState(null);
   const [image, setImage] = useState(null);
   const [isModalVisible, setModalVisible] = useState(false);
@@ -115,9 +116,9 @@ const MainSettings = (navigation: any) => {
         onBackdropPress={() => setModalVisible(false)}
         onSwipeComplete={() => setModalVisible(false)}
         swipeDirection="down"
-        style={styles.modalContainer}
+        style={[styles.modalContainer, { width: width }]}
       >
-        <View style={styles.modal}>
+        <View style={[styles.modal, { height: height / 5 }]}>
           <ChangeGenderModal />
         </View>
       </Modal>
@@ -398,11 +399,9 @@ const styles = StyleSheet.create({
   //
   modalContainer: {
     margin: 0,
-    width: Dimensions.get("window").width,
   },
   modal: {
     backgroundColor: "#262632",
-    height: Dimensions.get("window").height / 5,
     top: 290,
     borderRadius: 4,
     borderColor: "rgba(0, 0, 0, 0.1)",

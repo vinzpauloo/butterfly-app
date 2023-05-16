@@ -1,5 +1,11 @@
 import React from "react";
-import { StyleSheet, Text, View, ScrollView, Dimensions } from "react-native";
+import {
+  StyleSheet,
+  Text,
+  View,
+  ScrollView,
+  useWindowDimensions,
+} from "react-native";
 
 import { useNavigation } from "@react-navigation/native";
 
@@ -9,8 +15,9 @@ import UserProfileSettingsHeader from "components/UserProfileSettingsHeader";
 import { GLOBAL_COLORS } from "../../../global";
 
 const PetName = () => {
+  const { height } = useWindowDimensions();
   return (
-    <ScrollView style={styles.container}>
+    <ScrollView style={[styles.container, { maxHeight: height }]}>
       {/*Title and Back Button  */}
       <UserProfileSettingsHeader title="昵称" btnRight={null} />
 
@@ -45,7 +52,6 @@ const PetName = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    maxHeight: Dimensions.get("window").height,
     marginVertical: 0,
     backgroundColor: "#191d26",
   },

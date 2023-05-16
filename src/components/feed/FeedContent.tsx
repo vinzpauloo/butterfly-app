@@ -4,6 +4,7 @@ import {
   Pressable,
   StyleSheet,
   Text,
+  useWindowDimensions,
   View,
 } from "react-native";
 import React, { useState } from "react";
@@ -23,8 +24,6 @@ import { useNavigation } from "@react-navigation/native";
 import { HStack, VStack } from "native-base";
 
 import moment from "moment";
-
-const { height, width } = Dimensions.get("window");
 
 const Header = ({ item, setOpen, isFromSingleUserScreen }) => {
   const translations = translationStore((state) => state.translations);
@@ -106,6 +105,7 @@ const Images = ({ images, video, id, like, setLike }) => {
   };
 
   const columnImageWidth = (picCount) => {
+    const { width, height } = useWindowDimensions();
     switch (picCount) {
       case 1:
         return { width: width * 0.65, height: height * 0.5, marginVertical: 5 };
@@ -119,6 +119,7 @@ const Images = ({ images, video, id, like, setLike }) => {
   };
 
   const columnImageWidthForVid = (picCount) => {
+    const { width, height } = useWindowDimensions();
     switch (picCount) {
       case 1:
         return { width: width * 0.65, height: height * 0.5 };
@@ -182,6 +183,7 @@ const Images = ({ images, video, id, like, setLike }) => {
 
 const Video = ({ id, like, setLike }) => {
   const navigation = useNavigation<any>();
+  const { width } = useWindowDimensions();
 
   const navigateSingleFeed = () => {
     navigation.navigate("SingleFeedScreen", {
@@ -195,8 +197,14 @@ const Video = ({ id, like, setLike }) => {
     <Pressable style={styles.videoCont} onPress={navigateSingleFeed}>
       {/* <VideoPlayer url={url} isFocus={false} /> */}
       <View style={styles.images}>
-        <Image style={styles.video} source={VideoPlaceholder} />
-        <Image source={PlayIcon} style={styles.playIcon} />
+        <Image
+          style={[styles.video, { width: width - 30 }]}
+          source={VideoPlaceholder}
+        />
+        <Image
+          source={PlayIcon}
+          style={[styles.playIcon, { left: width / 2 - 15 }]}
+        />
       </View>
     </Pressable>
   );
@@ -380,14 +388,13 @@ const styles = StyleSheet.create({
   video: {
     // alignItems: "center",
     // justifyContent: "center",
-    width: width - 30, // minus the mainContainer horizontal margin
+    // minus the mainContainer horizontal margin
     height: 200,
     resizeMode: "cover",
     borderRadius: 4,
   },
   playIcon: {
     top: 100,
-    left: width / 2 - 15,
     transform: [{ translateX: -30 }, { translateY: -30 }],
     position: "absolute",
     height: 60,

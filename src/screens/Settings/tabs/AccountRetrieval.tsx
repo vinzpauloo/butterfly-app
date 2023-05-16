@@ -1,9 +1,9 @@
 import React, { useState } from "react";
 import {
-  Dimensions,
   StyleSheet,
   Text,
   TouchableOpacity,
+  useWindowDimensions,
   View,
 } from "react-native";
 import Modal from "react-native-modal";
@@ -16,6 +16,7 @@ import * as ImagePicker from "expo-image-picker";
 import UserProfileSettingsHeader from "components/UserProfileSettingsHeader";
 
 const AccountRetrieval = () => {
+  const { height, width } = useWindowDimensions();
   const navigation = useNavigation<any>();
 
   const [isModalVisible, setModalVisible] = useState(false);
@@ -65,7 +66,15 @@ const AccountRetrieval = () => {
   };
 
   return (
-    <View style={styles.container}>
+    <View
+      style={[
+        styles.container,
+        {
+          maxHeight: height,
+          maxWidth: width,
+        },
+      ]}
+    >
       {/*============================================================================*/}
       {/*Modal*/}
       <Modal
@@ -75,15 +84,15 @@ const AccountRetrieval = () => {
         onBackdropPress={() => setModalVisible(false)}
         onSwipeComplete={() => setModalVisible(false)}
         swipeDirection="down"
-        style={styles.modalContainer}
+        style={[styles.modalContainer, { width: width }]}
       >
-        <View style={styles.modal}>
+        <View style={[styles.modal, { height: height / 5 }]}>
           <ButtonModal />
         </View>
       </Modal>
       {/*============================================================================*/}
       {/*Title and Back Button  */}
-      <UserProfileSettingsHeader title={'账号找回'} btnRight={null}/>
+      <UserProfileSettingsHeader title={"账号找回"} btnRight={null} />
 
       <View style={styles.tabContainer}>
         {/*FIRST BUTTON*/}
@@ -113,13 +122,15 @@ const AccountRetrieval = () => {
         {/*THIRD BUTTON*/}
         <View>
           <TouchableOpacity
-            onPress={() => navigation.navigate("CustomerService", {
-              postTitle: 'Test Sender',
-              senderUserName: 'Test Sender Username',
-              senderMessage: 'Test Sender Message',
-              senderImgURL: 'https://randomuser.me/api/portraits/men/3.jpg',
-              senderTimeStamp: 'Test Date',
-            })}
+            onPress={() =>
+              navigation.navigate("CustomerService", {
+                postTitle: "Test Sender",
+                senderUserName: "Test Sender Username",
+                senderMessage: "Test Sender Message",
+                senderImgURL: "https://randomuser.me/api/portraits/men/3.jpg",
+                senderTimeStamp: "Test Date",
+              })
+            }
           >
             <View style={styles.tabInnerContainer}>
               <Text style={styles.tabText}>联系客服找回</Text>
@@ -136,11 +147,9 @@ const AccountRetrieval = () => {
 const styles = StyleSheet.create({
   modalContainer: {
     margin: 0,
-    width: Dimensions.get("window").width,
   },
   modal: {
     backgroundColor: "transparent",
-    height: Dimensions.get("window").height / 5,
     top: 270,
     borderRadius: 4,
     borderColor: "rgba(0, 0, 0, 0.1)",
@@ -187,8 +196,6 @@ const styles = StyleSheet.create({
   },
   container: {
     flex: 1,
-    maxHeight: Dimensions.get("window").height,
-    maxWidth: Dimensions.get("window").width,
     backgroundColor: "#191d26",
   },
   tabContainer: {

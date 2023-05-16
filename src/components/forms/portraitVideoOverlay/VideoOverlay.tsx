@@ -1,5 +1,11 @@
 import React, { useEffect, useState } from "react";
-import { Pressable, StyleSheet, View, Image, Dimensions } from "react-native";
+import {
+  Pressable,
+  StyleSheet,
+  View,
+  Image,
+  useWindowDimensions,
+} from "react-native";
 import { AVPlaybackStatusSuccess, ResizeMode, Video } from "expo-av";
 import Animated, { ZoomIn, ZoomOut } from "react-native-reanimated";
 import Ionicons from "react-native-vector-icons/Ionicons";
@@ -16,9 +22,8 @@ type Props = {
   thumbnail: string;
 };
 
-const { width: windowWidth, height: windowHeight } = Dimensions.get("window");
-
 const VideoOverlay = (props: Props) => {
+  const { width, height } = useWindowDimensions();
   const [isVideoPlaying, setisVideoPlaying] = useState(false);
   const [showPlayPauseButton, setShowPlayPauseButton] = useState(false);
   const [videoOrientation, setVideoOrientation] = useState("");
@@ -45,7 +50,7 @@ const VideoOverlay = (props: Props) => {
       <Pressable style={styles.videoContainer} onPress={pausePlayVideo}>
         <Video
           source={{ uri: BASE_URL_STREAMING_SERVER + props.videoURL }}
-          style={styles.video}
+          style={[styles.video, { width: width > 500 ? 375 : width }]}
           resizeMode={
             videoOrientation === "portrait"
               ? ResizeMode.STRETCH
@@ -112,11 +117,10 @@ const styles = StyleSheet.create({
   videoContainer: {
     width: "100%",
     height: "100%",
-    alignItems: 'center'
+    alignItems: "center",
   },
   video: {
     position: "absolute",
-    width: windowWidth > 500 ? 375 : windowWidth,
     height: "100%",
   },
   videoThumbnail: {

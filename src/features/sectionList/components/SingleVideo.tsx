@@ -1,9 +1,9 @@
 import {
-  Dimensions,
   Image,
   StyleSheet,
   Text,
   Pressable,
+  useWindowDimensions,
   View,
 } from "react-native";
 import React, { useState } from "react";
@@ -15,11 +15,10 @@ import { BASE_URL_FILE_SERVER } from "react-native-dotenv";
 
 import Modal from "components/BottomModal";
 import VideoComponent from "components/VideoComponent";
-import { GLOBAL_COLORS } from "global";
-
-const { width } = Dimensions.get("window");
+import { GLOBAL_COLORS, GLOBAL_SCREEN_SIZE } from "global";
 
 const SingleVideo = ({ data, isSingleVideoMultiple = false }) => {
+  const { width } = useWindowDimensions();
   const item = isSingleVideoMultiple ? data : data[0];
   const { isOpen, onOpen, onClose } = useDisclose();
   const [id, setId] = useState<String | null>(null);
@@ -39,12 +38,21 @@ const SingleVideo = ({ data, isSingleVideoMultiple = false }) => {
 
   return (
     <>
-      <Pressable style={styles.container} onPress={handlePress}>
+      <Pressable
+        style={[
+          styles.container,
+          { height: width < GLOBAL_SCREEN_SIZE.mobileMedium ? 200 : 360 },
+        ]}
+        onPress={handlePress}
+      >
         <View style={styles.thumbnailContainer}>
           <VideoComponent item={item} />
           <Image
             source={{ uri: BASE_URL_FILE_SERVER + item.thumbnail_url }}
-            style={styles.image}
+            style={[
+              styles.image,
+              { height: width < GLOBAL_SCREEN_SIZE.mobileMedium ? 160 : 315 },
+            ]}
           />
         </View>
         <View style={styles.content}>
@@ -79,7 +87,6 @@ export default SingleVideo;
 
 const styles = StyleSheet.create({
   container: {
-    height: width < 480 ? 200 : 360,
     marginHorizontal: 15,
     marginBottom: 20,
   },
@@ -89,7 +96,6 @@ const styles = StyleSheet.create({
   image: {
     borderTopLeftRadius: 4,
     borderTopRightRadius: 4,
-    height: width < 480 ? 160 : 315,
     width: "100%",
   },
   content: {

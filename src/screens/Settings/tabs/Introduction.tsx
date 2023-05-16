@@ -1,5 +1,10 @@
 import React from "react";
-import { Dimensions, ScrollView, View, StyleSheet } from "react-native";
+import {
+  ScrollView,
+  View,
+  StyleSheet,
+  useWindowDimensions,
+} from "react-native";
 
 import AreaText from "components/forms/AreaText";
 import Buttons from "components/forms/Buttons";
@@ -7,8 +12,17 @@ import UserProfileSettingsHeader from "components/UserProfileSettingsHeader";
 import { GLOBAL_COLORS } from "../../../global";
 
 const Introduction = () => {
+  const { width, height } = useWindowDimensions();
   return (
-    <ScrollView style={styles.container}>
+    <ScrollView
+      style={[
+        styles.container,
+        {
+          maxHeight: height,
+          maxWidth: width,
+        },
+      ]}
+    >
       {/*Title and Back Button  */}
       <UserProfileSettingsHeader title={"签名"} btnRight={null} />
 
@@ -35,8 +49,6 @@ const Introduction = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    maxHeight: Dimensions.get("window").height,
-    maxWidth: Dimensions.get("window").width,
     backgroundColor: "#191d26",
   },
   btnContainer: {

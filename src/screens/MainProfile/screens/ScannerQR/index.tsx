@@ -1,11 +1,10 @@
-import { Dimensions, Image, Pressable, StyleSheet, Text } from "react-native";
+import { StyleSheet, useWindowDimensions } from "react-native";
 import React, { useState } from "react";
 
-import { Box, VStack, useToast } from "native-base";
+import { useToast } from "native-base";
 import { BarCodeScanner } from "expo-barcode-scanner";
 import { useMutation } from "@tanstack/react-query";
 
-import ButterflyLogo from "assets/images/butterflyLogo.png";
 import Container from "components/Container";
 import CustomerService from "services/api/CustomerService";
 import { GLOBAL_COLORS } from "global";
@@ -14,10 +13,9 @@ import { storeDataObject } from "lib/asyncStorage";
 import { useNavigation } from "@react-navigation/native";
 import { translationStore } from "../../../../zustand/translationStore";
 
-const { height, width } = Dimensions.get("window");
-
 const index = () => {
   const toast = useToast();
+  const { width, height } = useWindowDimensions();
   // **** GLOBAL STATE
   const token = userStore((store) => store.api_token);
   const setUserStore = userStore((state) => state.setUserData);

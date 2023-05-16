@@ -69,7 +69,7 @@ const index = () => {
 
   return (
     <Container>
-      <VStack
+      {/* <VStack
         alignItems="center"
         height={height}
         width={width}
@@ -77,13 +77,13 @@ const index = () => {
       >
         <Text style={styles.title}>{translations.theButterflyProject}</Text>
         <Box alignItems="center" mt={20} style={styles.scannerContent}>
-          <Image source={ButterflyLogo} style={styles.butterflyLogo} />
-          <BarCodeScanner
-            onBarCodeScanned={handleBarCodeScanned}
-            style={{ height: height * 0.5, width: width * 0.9 }}
-          />
-        </Box>
-      </VStack>
+          <Image source={ButterflyLogo} style={styles.butterflyLogo} /> */}
+      <BarCodeScanner
+        onBarCodeScanned={handleBarCodeScanned}
+        style={{ height, width }}
+      />
+      {/* </Box> */}
+      {/* // </VStack> */}
     </Container>
   );
 };

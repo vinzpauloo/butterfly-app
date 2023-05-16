@@ -39,6 +39,7 @@ export default en_us = {
   comments: "Comments",
   confirm: "Confirm",
   continue: "Continue",
+  copied: "Copied",
   copy: "Copy",
   cumulativeIncome: "Cumulative Income",
   customerService: "Customer Service",

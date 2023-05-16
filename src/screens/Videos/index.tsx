@@ -153,22 +153,18 @@ const index = () => {
           });
         }
         // check if the date is YESTERDAY
-        else if (
-          moment(item.view_at)
-            .subtract(1, "days")
-            .calendar()
-            .includes("Yesterday")
-        ) {
+        else if (moment(item.view_at).calendar().includes("Yesterday")) {
           setHistory((prev) => {
-            return { ...prev, today: [...prev.yesterday, item] };
+            return { ...prev, yesterday: [...prev.yesterday, item] };
           });
           // check if the date is EARLIER
         } else {
           setHistory((prev) => {
-            return { ...prev, today: [...prev.earlier, item] };
+            return { ...prev, earlier: [...prev.earlier, item] };
           });
         }
       });
+      setLastPage(data.last_page);
     },
     onError: (error) => {
       console.log("ERROR IN WORK HISTORY", error);

@@ -20,7 +20,7 @@ import {
   Modal,
   Stack,
   VStack,
-  useDisclose,
+  useToast,
 } from "native-base";
 
 import AccountIcon from "assets/images/account_icon.png";
@@ -270,8 +270,10 @@ const LanguageTranlation = ({ setOpen, language }) => {
 
 // **** SECTION LIST COMPONENT START CODE **** //
 const LinkList = () => {
+  // **** GLOBAL STATE
   const navigation = useNavigation<any>();
   const { translations } = translationStore((store) => store);
+  const toast = useToast();
 
   const lists = [
     {
@@ -335,6 +337,11 @@ const LinkList = () => {
 
   const handleCopy = async () => {
     await Clipboard.setStringAsync("butterflyproject@gmail.com");
+    toast.show({
+      description: translations.copied,
+      duration: 3000,
+      backgroundColor: GLOBAL_COLORS.secondaryColor,
+    });
   };
 
   return (

@@ -12,7 +12,15 @@ import * as Clipboard from "expo-clipboard";
 import Entypo from "react-native-vector-icons/Entypo";
 import Ionicons from "react-native-vector-icons/Ionicons";
 import LottieView from "lottie-react-native";
-import { HStack, Input, Modal, Pressable, Stack, VStack } from "native-base";
+import {
+  HStack,
+  Input,
+  Modal,
+  Pressable,
+  Stack,
+  useToast,
+  VStack,
+} from "native-base";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { BASE_URL_FILE_SERVER } from "react-native-dotenv";
 
@@ -179,10 +187,13 @@ const FirstContainer = ({
 
 // **** START: SECOND CONTAINER **** //
 const SecondContainer = ({ setOpen }) => {
+  // ** STATE
+  const [copy, setCopy] = useState(false);
   // ** GLOBAL STORE
   const { _id, referral_code } = userStore((store) => store);
   const { translations } = translationStore((store) => store);
   const navigation = useNavigation<any>();
+  const toast = useToast();
 
   const handlePress = () => {
     setOpen(true);
@@ -196,6 +207,15 @@ const SecondContainer = ({ setOpen }) => {
 
   const handleCopy = async () => {
     await Clipboard.setStringAsync(_id);
+    setCopy(true);
+    toast.show({
+      description: translations.copied,
+      duration: 3000,
+      backgroundColor: GLOBAL_COLORS.secondaryColor,
+    });
+    setTimeout(() => {
+      setCopy(false);
+    }, 3000);
   };
 
   return (
@@ -207,22 +227,31 @@ const SecondContainer = ({ setOpen }) => {
             alignItems="center"
             space={width < GLOBAL_SCREEN_SIZE.mobile ? 1 : 2}
             style={styles.accountContainer}
-            pr="12"
-            mr={3}
-            width={width < GLOBAL_SCREEN_SIZE.mobile ? "40" : "56"}
+            width={"40"}
           >
             <Text style={styles.accountText} numberOfLines={1}>
               {_id}
             </Text>
-            <Pressable onPress={handleCopy}>
-              <Text style={styles.redBtn}>{translations.copy}</Text>
-            </Pressable>
           </HStack>
-          <Entypo
+          <Pressable onPress={handleCopy}>
+            <Text
+              style={[
+                styles.redBtn,
+                {
+                  backgroundColor: copy
+                    ? GLOBAL_COLORS.secondaryColor
+                    : "#171E26",
+                },
+              ]}
+            >
+              {copy ? translations.copied : translations.copy}
+            </Text>
+          </Pressable>
+          {/* <Entypo
             name="chevron-small-right"
             color={GLOBAL_COLORS.primaryTextColor}
             size={25}
-          />
+          /> */}
         </HStack>
       </LayoutContent>
       <Pressable onPress={handleCertificate}>
@@ -705,6 +734,7 @@ const BindAccountModal = ({ open, setOpen, setSuccessfulNotification }) => {
 const index = () => {
   // ** GLOBAL STORE
   const { api_token } = userStore();
+  const { translations } = translationStore((store) => store);
   // ** STATE
   const [gender, setGender] = useState("");
   const [nickname, setNickname] = useState("");
@@ -833,7 +863,6 @@ const styles = StyleSheet.create({
     paddingHorizontal: 15,
     borderRadius: 15,
     color: GLOBAL_COLORS.primaryTextColor,
-    backgroundColor: "#171E26",
   },
   // ***** MODAL CONTAINER ***** //
   closeBtn: {

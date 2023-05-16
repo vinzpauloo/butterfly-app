@@ -586,13 +586,7 @@ const Wallet = ({ route }) => {
           </VStack>
         </View>
         <BindInvitationCode />
-        <Stack
-          flexDirection="row"
-          flexWrap="wrap"
-          alignItems="center"
-          px={3}
-          pt={3}
-        >
+        <Stack flexDirection="row" flexWrap="wrap" px={3} pt={3}>
           {data?.data.map((item, index) => (
             <Box
               key={index}
@@ -604,9 +598,17 @@ const Wallet = ({ route }) => {
                   : inactiveColorScheme.border
               }
               height={172}
-              mx={width < GLOBAL_SCREEN_SIZE.mobile ? 2 : 3}
               mt={5}
-              width={width < GLOBAL_SCREEN_SIZE.mobile ? "32" : "40"}
+              style={{
+                width:
+                  width < GLOBAL_SCREEN_SIZE.mobileMedium
+                    ? width * 0.4
+                    : width * 0.27,
+                marginHorizontal:
+                  width < GLOBAL_SCREEN_SIZE.mobileMedium
+                    ? (width * 0.4) / 14
+                    : (width * 0.27) / 12,
+              }}
             >
               <LinearGradient
                 colors={

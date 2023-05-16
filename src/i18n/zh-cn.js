@@ -37,6 +37,7 @@ export default zh_cn = {
   comments: "评论",
   confirm: "确认",
   continue: "继续",
+  copied: "复制",
   copy: "复制",
   cumulativeIncome: "累计收入",
   customerService: "客户服务",

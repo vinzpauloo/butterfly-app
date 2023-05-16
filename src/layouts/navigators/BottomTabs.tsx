@@ -94,7 +94,7 @@ export default BottomTabs;
 
 const styles = StyleSheet.create({
   confirmExitText: {
-    backgroundColor: "#0072E1",
+    backgroundColor: GLOBAL_COLORS.secondaryColor,
     position: "absolute",
     zIndex: 1,
     color: "white",

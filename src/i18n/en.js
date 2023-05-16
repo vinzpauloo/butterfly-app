@@ -93,6 +93,7 @@ export default en_us = {
   muchLove: "How much is love",
   mwah: "MWAH",
   nickname: "Nickname",
+  noData: "No Data",
   notYetMember: "False",
   numberOfWorks: "Number of Works",
   obtainSMSVerification: "SMS Code",

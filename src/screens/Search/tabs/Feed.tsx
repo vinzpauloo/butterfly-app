@@ -9,9 +9,11 @@ import { GLOBAL_COLORS } from "global";
 import { userStore } from "../../../zustand/userStore";
 import { useQuery } from "@tanstack/react-query";
 import { useIsFocused } from "@react-navigation/native";
+import { translationStore } from "../../../zustand/translationStore";
 
 const Feed = ({ searchText, fetchChecker, setFetchChecker, page, setPage }) => {
   const token = userStore((state) => state.api_token);
+  const translations = translationStore((state) => state.translations);
   const { getSearchPage } = GeneralSearch();
   const [data, setData] = useState([]);
   const [lastPage, setLastPage] = useState(1);
@@ -69,7 +71,7 @@ const Feed = ({ searchText, fetchChecker, setFetchChecker, page, setPage }) => {
   return (
     <Container>
       {data.length === 0 && !isLoading ? (
-        <Text style={styles.emptyResult}>No Data</Text>
+        <Text style={styles.emptyResult}>{translations.noData}</Text>
       ) : (
         <Feeds
           data={data}

@@ -18,13 +18,21 @@ interface IDeleteSearchHistory {
     all?: boolean;
   };
 }
+interface SearchPageRecommendedHistory {
+  token?: string;
+  data: {
+    sort_by?: string;
+    sort?: string;
+  };
+}
 
 const GeneralSearch = () => {
-  const getSearchPageRecommended = (token: string) => {
+  const getSearchPageRecommended = (params: SearchPageRecommendedHistory) => {
     return request({
-      headers: { ...getHeaders(), Authorization: `Bearer ${token}` },
+      headers: { ...getHeaders(), Authorization: `Bearer ${params.token}` },
       url: "/search/recommended",
       method: "GET",
+      params: params.data,
     });
   };
   const getSearchPage = (params: IGetSearchPage) => {

@@ -149,6 +149,7 @@ const Users = ({
   setPage,
 }) => {
   const token = userStore((state) => state.api_token);
+  const translation = translationStore((state) => state.translations);
   const { getSearchPage } = GeneralSearch();
   const [data, setData] = useState([]);
   const [lastPage, setLastPage] = useState(1);
@@ -217,7 +218,7 @@ const Users = ({
   return (
     <Container>
       {data.length === 0 && !isLoading ? (
-        <Text style={styles.emptyResult}>No Data</Text>
+        <Text style={styles.emptyResult}>{translation.noData}</Text>
       ) : (
         <FlashList
           data={data}

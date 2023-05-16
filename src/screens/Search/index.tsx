@@ -401,7 +401,11 @@ const Search = () => {
 
   const { isLoading, data, refetch } = useQuery({
     queryKey: ["search"],
-    queryFn: () => getSearchPageRecommended(token),
+    queryFn: () =>
+      getSearchPageRecommended({
+        token,
+        data: { sort: "asc", sort_by: "created_at" },
+      }),
     onSuccess: (data) => {
       setHistory(data.search_history);
     },

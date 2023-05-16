@@ -91,6 +91,7 @@ export default zh_cn = {
   muchLove: "多少都是爱",
   mwah: "哇哦",
   nickname: "昵称",
+  noData: "暂无数据",
   notYetMember: "错误的",
   numberOfWorks: "作品数量",
   obtainSMSVerification: "获取短信验证码",

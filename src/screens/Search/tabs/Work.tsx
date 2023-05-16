@@ -14,9 +14,11 @@ import { useDisclose } from "native-base";
 import Loading from "components/Loading";
 import BottomMessage from "components/BottomMessage";
 import { useIsFocused } from "@react-navigation/native";
+import { translationStore } from "../../../zustand/translationStore";
 
 const Work = ({ searchText, fetchChecker, setFetchChecker, page, setPage }) => {
   const token = userStore((state) => state.api_token);
+  const translation = translationStore((state) => state.translations);
   const { isOpen, onOpen, onClose } = useDisclose();
   const { getSearchPage } = GeneralSearch();
   const [data, setData] = useState([]);
@@ -87,7 +89,7 @@ const Work = ({ searchText, fetchChecker, setFetchChecker, page, setPage }) => {
   return (
     <Container>
       {data.length === 0 && !isLoading ? (
-        <Text style={styles.emptyResult}>No Data</Text>
+        <Text style={styles.emptyResult}>{translation.noData}</Text>
       ) : (
         <MasonryFlashList
           data={data}

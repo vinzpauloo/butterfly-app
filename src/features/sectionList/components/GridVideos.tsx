@@ -59,15 +59,11 @@ export const GridVideosBottomContent = ({ onOpen, username, setId, id }) => {
       <Text style={styles.username} numberOfLines={1}>
         {username}
       </Text>
-      <Pressable
-        style={{
-          height: 15,
-          width: 15,
-          alignItems: "center",
-        }}
-        onPress={handlePress}
-      >
-        <Entypo name="dots-three-vertical" color={"#fff"} />
+      <Pressable style={{ padding: 4 }} onPress={handlePress}>
+        <Entypo
+          name="dots-three-vertical"
+          color={GLOBAL_COLORS.inactiveTextColor}
+        />
       </Pressable>
     </View>
   );

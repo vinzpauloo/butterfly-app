@@ -8,13 +8,14 @@ import {
 } from "react-native";
 import React, { useState } from "react";
 
-import VideoComponent from "components/VideoComponent";
-import { GLOBAL_COLORS } from "global";
+import Entypo from "react-native-vector-icons/Entypo";
+import { HStack, useDisclose } from "native-base";
 import { useNavigation } from "@react-navigation/native";
 import { BASE_URL_FILE_SERVER } from "react-native-dotenv";
-import { HStack, useDisclose } from "native-base";
-import Entypo from "react-native-vector-icons/Entypo";
+
 import Modal from "components/BottomModal";
+import VideoComponent from "components/VideoComponent";
+import { GLOBAL_COLORS } from "global";
 
 const { width } = Dimensions.get("window");
 
@@ -59,7 +60,7 @@ const SingleVideo = ({ data, isSingleVideoMultiple = false }) => {
               <Text style={styles.username} numberOfLines={1}>
                 {item.user.username}
               </Text>
-              <Pressable onPress={handlePressDots}>
+              <Pressable onPress={handlePressDots} style={{ padding: 4 }}>
                 <Entypo
                   name="dots-three-vertical"
                   color={GLOBAL_COLORS.inactiveTextColor}

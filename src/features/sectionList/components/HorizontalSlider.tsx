@@ -70,7 +70,7 @@ const Video = ({ index, data, item, setId, onOpen }: any) => {
             <Text style={styles.username} numberOfLines={1}>
               {video.user.username}
             </Text>
-            <Pressable onPress={handlePressDots}>
+            <Pressable onPress={handlePressDots} style={{ padding: 4 }}>
               <Entypo
                 name="dots-three-vertical"
                 color={GLOBAL_COLORS.inactiveTextColor}

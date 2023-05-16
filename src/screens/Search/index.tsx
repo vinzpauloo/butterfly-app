@@ -404,7 +404,7 @@ const Search = () => {
     queryFn: () =>
       getSearchPageRecommended({
         token,
-        data: { sort: "asc", sort_by: "created_at" },
+        data: { sort: "desc", sort_by: "created_at" },
       }),
     onSuccess: (data) => {
       setHistory(data.search_history);

@@ -92,9 +92,7 @@ const Header = () => {
         </VStack>
       </HStack>
       <Pressable style={styles.headerBtn}>
-        <Text style={styles.headerBtnText}>
-          {translations.useRedemptionCode}
-        </Text>
+        <Text style={styles.headerBtnText}>{translations.useCode}</Text>
       </Pressable>
     </HStack>
   );

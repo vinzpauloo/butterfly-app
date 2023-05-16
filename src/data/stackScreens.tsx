@@ -32,6 +32,7 @@ import PrivacyPolicy from "screens/Settings/tabs/PrivacyPolicy";
 import ProfilePhoto from "screens/Settings/tabs/ProfilePhoto";
 import RecordingHistory from "../screens/Account/tabs/RecordingHistory";
 import RequestCode from "screens/Settings/tabs/RequestCode";
+import ScannerQR from "screens/MainProfile/screens/ScannerQR";
 import Search from "screens/Search";
 import SingleSectionScreen from "screens/SingleSection";
 // import Settings from "screens/Settings";
@@ -265,6 +266,11 @@ export const stackScreens = {
       name: "RequestCode",
       component: RequestCode,
       options: { headerShown: false },
+    },
+    {
+      name: "ScannerQR",
+      component: ScannerQR,
+      options: basicHeader,
     },
     {
       name: "Search",

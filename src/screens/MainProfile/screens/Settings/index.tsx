@@ -218,6 +218,12 @@ const SecondContainer = ({ setOpen }) => {
     }, 3000);
   };
 
+  const handleQRScanner = () => {
+    navigation.navigate("ScannerQR", {
+      postTitle: translations.qrCodeScanning,
+    });
+  };
+
   return (
     <VStack mt={5} style={{ backgroundColor: GLOBAL_COLORS.videoContentBG }}>
       <LayoutContent>
@@ -266,26 +272,27 @@ const SecondContainer = ({ setOpen }) => {
           />
         </LayoutContent>
       </Pressable>
-
-      <LayoutContent>
-        <Text style={styles.textLabel}>{translations.accountRetrieval}</Text>
-        <HStack alignItems="center" justifyContent="flex-end">
-          <Text
-            style={[
-              styles.textLabel,
-              { width: width < GLOBAL_SCREEN_SIZE.mobile ? "50%" : null },
-            ]}
-            numberOfLines={1}
-          >
-            {translations.lostAccountRecovered}
-          </Text>
-          <Entypo
-            name="chevron-small-right"
-            color={GLOBAL_COLORS.primaryTextColor}
-            size={25}
-          />
-        </HStack>
-      </LayoutContent>
+      <Pressable onPress={handleQRScanner}>
+        <LayoutContent>
+          <Text style={styles.textLabel}>{translations.accountRetrieval}</Text>
+          <HStack alignItems="center" justifyContent="flex-end">
+            <Text
+              style={[
+                styles.textLabel,
+                { width: width < GLOBAL_SCREEN_SIZE.mobile ? "50%" : null },
+              ]}
+              numberOfLines={1}
+            >
+              {translations.lostAccountRecovered}
+            </Text>
+            <Entypo
+              name="chevron-small-right"
+              color={GLOBAL_COLORS.primaryTextColor}
+              size={25}
+            />
+          </HStack>
+        </LayoutContent>
+      </Pressable>
       <Pressable onPress={handlePress}>
         <LayoutContent>
           {!!referral_code ? (

@@ -1,15 +1,14 @@
 import {
-  Dimensions,
   Keyboard,
   KeyboardAvoidingView,
   Pressable,
   StyleSheet,
   Text,
   TextInput,
+  useWindowDimensions,
 } from "react-native";
 import React, { useEffect, useRef, useState } from "react";
 
-import Feather from "react-native-vector-icons/Feather";
 import { HStack, VStack } from "native-base";
 import { useMutation } from "@tanstack/react-query";
 import { useQueryClient } from "@tanstack/react-query";
@@ -27,6 +26,7 @@ type Props = {
 };
 
 const CommentTextInput = (props: Props) => {
+  const { width } = useWindowDimensions();
   const translations = translationStore((state) => state.translations);
   const [text, setText] = useState("");
   const [isKeyboardShown, setIsKeyboardShown] = useState(false);
@@ -127,7 +127,12 @@ const CommentTextInput = (props: Props) => {
       behavior={props.keyboardAvoidBehavior}
       enabled={isKeyboardShown}
     >
-      <VStack pt={isOnReplyMode ? 0 : 3} style={styles.bottomForm} space={1}>
+      <VStack
+        w={width}
+        pt={isOnReplyMode ? 0 : 3}
+        style={styles.bottomForm}
+        space={1}
+      >
         <HStack alignItems="center" display={isOnReplyMode ? "flex" : "none"}>
           <Text style={styles.whiteText}>
             {translations.replyTo}: {userNameToReplyTo} ·{" "}

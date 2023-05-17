@@ -86,7 +86,7 @@ export const Header = ({
   const handleNavigate = (item) => {
     navigation.navigate("SingleTag", {
       id: route.params.id,
-      postTitle: item,
+      tag: item,
       userId: route.params.userId,
     });
   };

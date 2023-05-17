@@ -22,9 +22,7 @@ const BottomOverlay = (props: Props) => {
           navigation.navigate("SingleUser", { userID: props.userID })
         }
       >
-        <Text style={styles.whiteBoldText}>
-          @{props.userName}
-        </Text>
+        <Text style={styles.whiteBoldText}>@{props.userName}</Text>
       </Pressable>
       <Text style={styles.whiteText}>{props.title}</Text>
       <View style={styles.tags}>
@@ -33,7 +31,7 @@ const BottomOverlay = (props: Props) => {
             key={index}
             style={styles.tag}
             onPress={() => {
-              navigation.navigate("SingleTag", { postTitle: item });
+              navigation.navigate("SingleTag", { tag: item });
             }}
           >
             <Text style={styles.whiteBoldText}>#{item}</Text>
@@ -79,8 +77,8 @@ const styles = StyleSheet.create({
     marginRight: 5,
   },
   whiteBoldText: {
-    color: 'white',
-    fontWeight: 'bold',
+    color: "white",
+    fontWeight: "bold",
     textShadowOffset: { width: 0, height: 0 },
     textShadowRadius: 24,
   },

@@ -1,11 +1,14 @@
 const IS_DEV = process.env.APP_VARIANT === "development";
 const IS_SIT = process.env.APP_VARIANT === "sit";
+const IS_192 = process.env.APP_VARIANT === "192";
 
 export default {
   name: IS_DEV
     ? "Butterfly App (Dev)"
     : IS_SIT
     ? "(SIT) Butterfly"
+    : IS_192
+    ? "(192) Butterfly"
     : "Butterfly App (Preview)",
   slug: "butterfly-mobile-app-fe",
   version: "0.0.1",

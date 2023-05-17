@@ -1,6 +1,7 @@
 import { Platform, Pressable, StyleSheet } from "react-native";
 import React, { useEffect, useState } from "react";
 
+import localizations from "i18n/localizations";
 import { Box, Center, Spinner, Text, VStack } from "native-base";
 import {
   StackActions,
@@ -11,10 +12,14 @@ import { useMutation, useQuery } from "@tanstack/react-query";
 import * as Linking from "expo-linking";
 import { useCountdown } from "usehooks-ts";
 
-import { storeDataObject, getDataObject } from "lib/asyncStorage";
-import { getDeviceId, getCurrentVersion } from "lib/appInfo";
-import SiteSettingsService from "services/api/SiteSettingsService";
 import CustomerService from "services/api/CustomerService";
+import SiteSettingsService from "services/api/SiteSettingsService";
+import {
+  storeDataObject,
+  getDataObject,
+  getDataString,
+} from "lib/asyncStorage";
+import { getDeviceId, getCurrentVersion } from "lib/appInfo";
 import { captureSuccess, captureError } from "services/sentry";
 import { adsGlobalStore } from "../../zustand/adsGlobalStore";
 import { userStore } from "../../zustand/userStore";
@@ -29,11 +34,16 @@ const InitialLoad = () => {
   // ** States
   const [isQueryEnable, setIsQueryEnable] = useState(false);
   const [isLatestVersion, setIsLatestVersion] = useState(true);
+  const [locale, setLocale] = useState("");
 
   // ** Stores
   const setAdsGlobalStore = adsGlobalStore((state) => state.setAdvertisement);
   const setUserStore = userStore((state) => state.setUserData);
-  const translations = translationStore((state) => state.translations);
+  const { translations, lang } = translationStore((state) => state);
+  const [setLang, setTranslations] = translationStore((state) => [
+    state.setLang,
+    state.setTranslations,
+  ]);
 
   const [count, { startCountdown }] = useCountdown({
     countStart: 3,
@@ -46,6 +56,23 @@ const InitialLoad = () => {
     }
   }, [count]);
   */
+
+  useEffect(() => {
+    const datas = async () => {
+      const data = await getDataString("locale");
+      //@ts-ignore
+      if (!!data.message) {
+        setLocale("en_us");
+      } else {
+        //@ts-ignore
+        setLocale(data);
+        //@ts-ignore
+        setLang(data);
+        setTranslations(localizations[data]);
+      }
+    };
+    datas();
+  }, []);
 
   const generateCustomerData = async () => {
     const customerDevice = {
@@ -95,7 +122,7 @@ const InitialLoad = () => {
   // if local app cache dont have ads, fetch all ads data from backend
   const {} = useQuery({
     queryKey: ["ads"],
-    queryFn: () => getAds(),
+    queryFn: () => getAds({ lang: locale === "en_us" ? "en" : "zh_cn" }),
     onSuccess: (data) => {
       if (data && data.length) {
         console.log("=== Ads Fetched from backend! ===");

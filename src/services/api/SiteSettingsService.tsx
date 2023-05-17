@@ -14,9 +14,9 @@ const SiteSettingsService = () => {
     });
   };
 
-  const getAds = () => {
+  const getAds = (params) => {
     return request({
-      headers: getHeaders(),
+      headers: { ...getHeaders(), locale: params.lang },
       url: "/advertisements",
       method: "GET",
     });

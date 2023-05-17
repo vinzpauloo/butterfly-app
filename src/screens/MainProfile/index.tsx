@@ -27,6 +27,7 @@ import AccountIcon from "assets/images/account_icon.png";
 import ApplicationIcon from "assets/images/application_icon.png";
 import Container from "components/Container";
 import CopyIcon from "assets/images/copy_icon.png";
+import CustomerService from "services/api/CustomerService";
 import DownloadIcon from "assets/images/download_icon.png";
 import EmailIcon from "assets/images/email_icon.png";
 import Entypo from "react-native-vector-icons/Entypo";
@@ -41,15 +42,26 @@ import OfficialIcon from "assets/images/official_icon.png";
 import SaveIcon from "assets/images/save_icon.png";
 import ServiceIcon from "assets/images/service_icon.png";
 import ShareIcon from "assets/images/share_icon.png";
+import SiteSettingsService from "services/api/SiteSettingsService";
+import UserService from "services/api/UserService";
 import VIPActive from "assets/images/VIPActive.png";
 import VIPNotActive from "assets/images/VIPNotActive.png";
 import { GLOBAL_COLORS, GLOBAL_SCREEN_SIZE } from "global";
 import { translationStore } from "../../zustand/translationStore";
 import { userStore } from "../../zustand/userStore";
-import { useIsFocused, useNavigation } from "@react-navigation/native";
-import UserService from "services/api/UserService";
+import {
+  useIsFocused,
+  useNavigation,
+  useRoute,
+} from "@react-navigation/native";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
-import CustomerService from "services/api/CustomerService";
+import { adsGlobalStore } from "../../zustand/adsGlobalStore";
+import {
+  storeDataObject,
+  getDataObject,
+  storeDataString,
+} from "lib/asyncStorage";
+import { captureSuccess, captureError } from "services/sentry";
 
 const { width } = Dimensions.get("window");
 
@@ -412,12 +424,19 @@ const Download = () => {
 
 // **** MODAL COMPONENT START CODE **** //
 const LanguageModal = ({ open, setOpen, setLanguage }) => {
-  const { translations } = translationStore((store) => store);
-  const [country, setCountry] = useState("en_us");
+  const route = useRoute<any>();
+  // **** GLOBAL STATES
+  const setAdsGlobalStore = adsGlobalStore((state) => state.setAdvertisement);
+  const { translations, lang } = translationStore((store) => store);
   const [setLang, setTranslations] = translationStore((state) => [
     state.setLang,
     state.setTranslations,
   ]);
+  // **** STATES
+  const [fetch, setFetch] = useState(false);
+  const [country, setCountry] = useState(lang);
+  // **** API
+  const { getAds } = SiteSettingsService();
 
   const data = [
     {
@@ -432,12 +451,59 @@ const LanguageModal = ({ open, setOpen, setLanguage }) => {
     },
   ];
 
+  const {} = useQuery({
+    queryKey: ["ads", lang],
+    queryFn: () => getAds({ lang: lang === "en_us" ? "en" : "zh_cn" }),
+    onSuccess: (data) => {
+      if (data && data.length) {
+        console.log("=== Ads Fetched from backend! ===");
+        // fetch ads from backend and put into ads global store
+        setAdsGlobalStore(
+          // all arrays
+          { photo_url: data[0].banners.photo_url, url: data[0].banners.url },
+          { photo_url: data[1].banners.photo_url, url: data[1].banners.url },
+          data[2].banners,
+          { photo_url: data[3].banners.photo_url, url: data[3].banners.url }
+        );
+
+        // store ads to local app cache
+        storeDataObject("AdvertisementCacheData", {
+          localCache_fullscreen_banner: {
+            photo_url: data[0].banners.photo_url,
+            url: data[0].banners.url,
+          },
+          localCache_popup_banner: {
+            photo_url: data[1].banners.photo_url,
+            url: data[1].banners.url,
+          },
+          localCache_carousel_banner: data[2].banners,
+          localCache_single_banner: {
+            photo_url: data[3].banners.photo_url,
+            url: data[3].banners.url,
+          },
+        });
+      } else {
+        console.log("=== No ads available. ===");
+      }
+
+      captureSuccess(route.name, "storeDataObject(AdvertisementCacheData)");
+      // navigation.dispatch(StackActions.replace("TermsOfService"));
+    },
+    onError: (error) => {
+      console.log("getAds Error", error);
+      captureError(error, route.name, "queryFn: () => getAds()");
+    },
+    enabled: fetch,
+  });
+
   const handleChangeLang = (item) => {
     setLang(item.id);
     setTranslations(localizations[item.id]);
     setLanguage({ title: item.title, flag: item.image });
     setCountry(item.id);
     setOpen(false);
+    setFetch(true);
+    storeDataString("locale", item.id);
   };
 
   return (
@@ -499,17 +565,18 @@ const LanguageModal = ({ open, setOpen, setLanguage }) => {
 // **** MODAL COMPONENT END CODE **** //
 
 const MainProfile = () => {
+  const isFocus = useIsFocused();
   // ** GLOBAL STORE
   const { api_token } = userStore();
   const userStoreData = userStore((store) => store);
   const setUserStore = userStore((state) => state.setUserData);
-  const isFocus = useIsFocused();
+  const { lang } = translationStore((store) => store);
 
   // ** STATES
   const [open, setOpen] = useState(false);
   const [language, setLanguage] = useState({
-    flag: FlagUSA,
-    title: "English - US",
+    flag: lang === "en_us" ? FlagUSA : FlagChina,
+    title: lang === "en_us" ? "English - US" : "Chinese - China",
   });
 
   // ** HOOKS

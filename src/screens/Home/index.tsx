@@ -43,7 +43,7 @@ const Search = () => {
 };
 
 const HomeTab = () => {
-  const translations = translationStore((state) => state.translations);
+  const { translations } = translationStore((state) => state);
   const { setDownloaded } = downloadStore((state) => state);
 
   const topMainNav = {

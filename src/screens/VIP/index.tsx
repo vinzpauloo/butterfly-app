@@ -1040,7 +1040,7 @@ const styles = StyleSheet.create({
         ? width * 0.5
         : width < GLOBAL_SCREEN_SIZE.mobile
         ? width * 0.6
-        : width * 0.3,
+        : width * 0.5,
   },
   headerSubtitle: { color: GLOBAL_COLORS.primaryTextColor, fontSize: 10 },
   headerBtn: {

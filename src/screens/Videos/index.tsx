@@ -114,6 +114,7 @@ const Content = ({ title, data, onOpen, setId }) => {
 // **** END: CONTENT **** //
 
 const index = () => {
+  const translation = translationStore((state) => state.translations);
   const { isOpen, onOpen, onClose } = useDisclose();
   // **** GLOBAL STATE
   const { api_token } = userStore((store) => store);
@@ -247,7 +248,15 @@ const index = () => {
                 {isLoading ? <Loading /> : null}
               </View>
             ) : null}
-            {lastPage === page && !isLoading ? <BottomMessage /> : null}
+            {lastPage === page &&
+            !isLoading &&
+            !!history.today.length &&
+            !!history.yesterday.length &&
+            !!history.earlier.length ? (
+              <BottomMessage />
+            ) : (
+              <Text style={styles.emptyResult}>{translation.noData}</Text>
+            )}
           </>
         )}
       />
@@ -271,5 +280,11 @@ const styles = StyleSheet.create({
   },
   subtitle: {
     color: GLOBAL_COLORS.inactiveTextColor,
+  },
+  emptyResult: {
+    textAlign: "center",
+    fontSize: 30,
+    marginVertical: 15,
+    color: GLOBAL_COLORS.secondaryColor,
   },
 });

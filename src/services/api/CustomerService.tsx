@@ -49,6 +49,7 @@ interface ICertificate {
     details: string;
   };
   token: string;
+  locale: string;
 }
 
 interface IExistingCustomer extends INewCustomer {
@@ -193,7 +194,11 @@ const CustomerService = () => {
 
   const getCertificate = (params: ICertificate) => {
     return request({
-      headers: { ...getHeaders(), Authorization: `Bearer ${params.token}` },
+      headers: {
+        ...getHeaders(),
+        Authorization: `Bearer ${params.token}`,
+        locale: params.locale,
+      },
       url: "/sites/others",
       method: "GET",
       params: params.data,

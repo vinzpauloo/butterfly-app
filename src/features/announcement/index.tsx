@@ -16,12 +16,12 @@ const Content = ({ setOpen }) => {
   const [announcementTitle, setAnnouncementTitle] = useState("");
   const [announcementDescription, setAnnouncementDescription] = useState("");
   const token = userStore((store) => store.api_token);
-  const { translations } = translationStore((store) => store);
+  const { translations, lang } = translationStore((store) => store);
 
   const { getAnnouncement } = SiteSettingsService();
   const { isLoading, isError, data, error, status } = useQuery({
     queryKey: ["announcement"],
-    queryFn: () => getAnnouncement(token),
+    queryFn: () => getAnnouncement(token, lang === "en_us" ? "en" : "zh_cn"),
     onSuccess: (data) => {
       console.log("=== Announcement fetched from backend! ===", data);
       setAnnouncementTitle(data.title);

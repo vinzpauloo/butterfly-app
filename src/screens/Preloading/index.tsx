@@ -7,15 +7,19 @@ import {
   BackHandler,
   useWindowDimensions,
 } from "react-native";
-import { StackActions, useNavigation } from "@react-navigation/native";
-import * as Linking from "expo-linking";
-import { GLOBAL_COLORS } from "global";
-import { adsGlobalStore } from "../../zustand/adsGlobalStore";
 import { useState } from "react";
+
+import * as Linking from "expo-linking";
 import * as Updates from "expo-updates";
 import { BASE_URL_FILE_SERVER } from "react-native-dotenv";
+import { StackActions, useNavigation } from "@react-navigation/native";
+
+import { GLOBAL_COLORS } from "global";
+import { adsGlobalStore } from "../../zustand/adsGlobalStore";
+import { translationStore } from "../../zustand/translationStore";
 
 const Preloading = () => {
+  const { translations } = translationStore((store) => store);
   const { height } = useWindowDimensions();
   const navigation = useNavigation<any>();
   const [appState, setAppState] = useState(AppState.currentState);
@@ -62,7 +66,7 @@ const Preloading = () => {
         style={{ height: height }}
       >
         <Pressable style={styles.button} onPress={goToMainHome}>
-          <Text style={styles.text}>Go to Home</Text>
+          <Text style={styles.text}>{translations.gotoHome}</Text>
         </Pressable>
       </ImageBackground>
     </Pressable>

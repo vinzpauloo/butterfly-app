@@ -1,20 +1,22 @@
 import { StyleSheet } from "react-native";
 import React, { useState } from "react";
 
-import { Button, HStack, Modal, Text, VStack } from "native-base";
 import FontAwesome from "react-native-vector-icons/FontAwesome";
+import { Button, HStack, Modal, Text, VStack } from "native-base";
 import { useQuery } from "@tanstack/react-query";
 
-import { GLOBAL_COLORS } from "global";
 import CustomModal from "components/CustomModal";
 import SiteSettingsService from "services/api/SiteSettingsService";
+import { GLOBAL_COLORS } from "global";
 import { userStore } from "../../zustand/userStore";
+import { translationStore } from "../../zustand/translationStore";
 
 const Content = ({ setOpen }) => {
   const [isQueryEnable, setIsQueryEnable] = useState(true);
   const [announcementTitle, setAnnouncementTitle] = useState("");
   const [announcementDescription, setAnnouncementDescription] = useState("");
   const token = userStore((store) => store.api_token);
+  const { translations } = translationStore((store) => store);
 
   const { getAnnouncement } = SiteSettingsService();
   const { isLoading, isError, data, error, status } = useQuery({
@@ -55,7 +57,7 @@ const Content = ({ setOpen }) => {
             style={styles.button}
             onPress={() => setOpen(false)}
           >
-            I know
+            {translations.iKnow}
           </Button>
         </HStack>
       </Modal.Body>

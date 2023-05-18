@@ -1,61 +1,72 @@
 import React, { useState } from "react";
-import { ScrollView, Text, TouchableOpacity, View, BackHandler, StyleSheet, AppState } from "react-native";
+import {
+  ScrollView,
+  Text,
+  TouchableOpacity,
+  View,
+  BackHandler,
+  StyleSheet,
+  AppState,
+} from "react-native";
 import { HStack, VStack } from "native-base";
 import { StackActions, useNavigation } from "@react-navigation/native";
 import { GLOBAL_COLORS } from "global";
-import * as Updates from "expo-updates"
+import * as Updates from "expo-updates";
 import Buttons from "components/forms/Buttons";
+import { translationStore } from "../../zustand/translationStore";
 
 const TermsOfService = ({}) => {
   const navigation = useNavigation<any>();
+  const { translations } = translationStore((store) => store);
   const [appState, setAppState] = useState(AppState.currentState);
 
   const handleAppStateChange = (nextAppState) => {
-    if (appState.match(/inactive|background/) && nextAppState === 'active') {
+    if (appState.match(/inactive|background/) && nextAppState === "active") {
       // reloads the app on coming back from tab
-      Updates.reloadAsync()
+      Updates.reloadAsync();
     }
     setAppState(nextAppState);
-  }
+  };
 
-  AppState.addEventListener('change', handleAppStateChange);
-  
+  AppState.addEventListener("change", handleAppStateChange);
+
   return (
     <ScrollView style={styles.container}>
       <VStack alignItems={"center"} space={7} p={5} mt={200}>
-        <Text style={styles.title}>Are you 18 years of age or older?</Text>
+        <Text style={styles.title}>{translations.termsOfUseTitle}</Text>
         <View>
-          <Text style={styles.info}>
-            You must be 18 years or older and agree to our Terms of Use to
-            access and use this website.
-          </Text>
-          <Text style={styles.info}>
-            By clicking ENTER below, you certify that you are 18 years or older
-            and that you accept our Terms of Use.
-          </Text>
+          <Text style={styles.info}>{translations.termsOfUseParagraph1}</Text>
+          <Text style={styles.info}>{translations.termsOfUseParagraph2}</Text>
         </View>
         <HStack space={5}>
           <View style={styles.btnContainer}>
             <Buttons
-              title={"ENTER"}
-              onPress={() => navigation.dispatch(StackActions.replace("Preloading"))}
+              title={translations.enter}
+              onPress={() =>
+                navigation.dispatch(StackActions.replace("Preloading"))
+              }
               color={"black"}
               backgroundColor={"#FFF"}
             />
           </View>
           <View style={styles.btnContainer}>
             <Buttons
-              title={"NO"}
-              // if possible change the - animation: "slide_from_right" 
+              title={translations.no}
+              // if possible change the - animation: "slide_from_right"
               // in StackScreen options, specifically for "OnAppExitScreen" to fade instead
-              onPress={() => { navigation.navigate("OnAppExitScreen"); BackHandler.exitApp() }}
+              onPress={() => {
+                navigation.navigate("OnAppExitScreen");
+                BackHandler.exitApp();
+              }}
               backgroundColor={"purple"}
               color={"white"}
             />
           </View>
         </HStack>
-        <TouchableOpacity onPress={() => navigation.navigate("ServiceProvisions")}>
-          <Text style={styles.tos}>TERMS OF USE</Text>
+        <TouchableOpacity
+          onPress={() => navigation.navigate("ServiceProvisions")}
+        >
+          <Text style={styles.tos}>{translations.termOfUse}</Text>
         </TouchableOpacity>
       </VStack>
     </ScrollView>

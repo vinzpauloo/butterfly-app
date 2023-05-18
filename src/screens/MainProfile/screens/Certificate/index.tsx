@@ -10,11 +10,13 @@ import Container from "components/Container";
 import CustomerService from "services/api/CustomerService";
 import LoadingSpinner from "components/LoadingSpinner";
 import { userStore } from "../../../../zustand/userStore";
+import { translationStore } from "../../../../zustand/translationStore";
 
 const index = () => {
   const { api_token } = userStore((state) => state);
   const { getCertificate } = CustomerService();
   const { params } = useRoute<any>();
+  const { lang } = translationStore((store) => store);
 
   const [data, setData] = useState("");
 
@@ -24,6 +26,7 @@ const index = () => {
       getCertificate({
         data: { details: params.api_params },
         token: api_token,
+        locale: lang === "en_us" ? "en" : "zh_cn",
       }),
     onSuccess: (data) => {
       setData(data);

@@ -26,6 +26,7 @@ import { GLOBAL_COLORS, GLOBAL_SCREEN_SIZE } from "global";
 import { translationStore } from "../../zustand/translationStore";
 import { userStore } from "../../zustand/userStore";
 import { useNavigation } from "@react-navigation/native";
+import VideoHistorySkeleton from "components/skeletons/VidoeHistorySkeleton";
 
 const { width } = Dimensions.get("window");
 
@@ -134,7 +135,7 @@ const index = () => {
   // **** API
   const { getWorks } = WorkService();
 
-  const { isLoading } = useQuery({
+  const { isLoading, data } = useQuery({
     queryKey: ["work-history", page, refreshingId],
     queryFn: () =>
       getWorks({
@@ -197,6 +198,10 @@ const index = () => {
     }, 2000);
   }, []);
 
+  if (isLoading) {
+    return <VideoHistorySkeleton />;
+  }
+
   return (
     <Container>
       <FlashList
@@ -248,13 +253,8 @@ const index = () => {
                 {isLoading ? <Loading /> : null}
               </View>
             ) : null}
-            {lastPage === page &&
-            !isLoading &&
-            !!history.today.length &&
-            !!history.yesterday.length &&
-            !!history.earlier.length ? (
-              <BottomMessage />
-            ) : (
+            {lastPage === page && !isLoading ? <BottomMessage /> : null}
+            {!!data?.data.length ? null : (
               <Text style={styles.emptyResult}>{translation.noData}</Text>
             )}
           </>

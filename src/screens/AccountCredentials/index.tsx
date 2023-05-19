@@ -42,7 +42,7 @@ const QRCodes = () => {
 const BottomText = () => {
   return (
     <VStack alignItems="center" space={5} m={2}>
-      <HStack
+      {/* <HStack
         alignItems="center"
         justifyContent="center"
         px={5}
@@ -50,7 +50,7 @@ const BottomText = () => {
       >
         <Image source={CredentialDownloadIcon} style={styles.downloadIcon} />
         <Text style={styles.title}>将帐户凭据保存到手机</Text>
-      </HStack>
+      </HStack> */}
       <Text style={styles.text1}>
         账号丢失，请进入 设置-找回账号-账号-凭证找回-上传或扫描凭证
       </Text>

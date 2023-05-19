@@ -327,18 +327,22 @@ const LinkList = () => {
     {
       title: translations.onlineService,
       icon: ServiceIcon,
-      navigate: () => {},
+      navigate: () => {
+        navigation.navigate("SingleChatScreen", {
+          postTitle: "Customer Service Chat",
+        });
+      },
     },
-    {
-      title: translations.bestApps,
-      icon: ApplicationIcon,
-      navigate: () => {},
-    },
-    {
-      title: translations.officialGroup,
-      icon: OfficialIcon,
-      navigate: () => {},
-    },
+    // {
+    //   title: translations.bestApps,
+    //   icon: ApplicationIcon,
+    //   navigate: () => {},
+    // },
+    // {
+    //   title: translations.officialGroup,
+    //   icon: OfficialIcon,
+    //   navigate: () => {},
+    // },
     {
       title: `${translations.officialEmail}: butterflyproject@gmail.com`,
       icon: EmailIcon,

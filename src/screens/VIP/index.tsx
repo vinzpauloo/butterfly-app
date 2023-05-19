@@ -91,9 +91,9 @@ const Header = () => {
           {/* <Text style={styles.headerSubtitle}>您目前不是会员</Text> */}
         </VStack>
       </HStack>
-      <Pressable style={styles.headerBtn}>
+      {/* <Pressable style={styles.headerBtn}>
         <Text style={styles.headerBtnText}>{translations.useCode}</Text>
-      </Pressable>
+      </Pressable> */}
     </HStack>
   );
 };

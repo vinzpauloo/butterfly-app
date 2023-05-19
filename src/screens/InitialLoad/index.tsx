@@ -8,11 +8,12 @@ import {
   useNavigation,
   useRoute,
 } from "@react-navigation/native";
-import { useMutation, useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import * as Linking from "expo-linking";
 import { useCountdown } from "usehooks-ts";
 
 import CustomerService from "services/api/CustomerService";
+import initializePusher from "services/pusher";
 import SiteSettingsService from "services/api/SiteSettingsService";
 import {
   storeDataObject,
@@ -44,6 +45,12 @@ const InitialLoad = () => {
     state.setLang,
     state.setTranslations,
   ]);
+
+  // **  Get QueryClient from the context
+  const queryClient = useQueryClient();
+
+  // ** pusher
+  const { pusherInitialization } = initializePusher();
 
   const [count, { startCountdown }] = useCountdown({
     countStart: 3,
@@ -184,6 +191,18 @@ const InitialLoad = () => {
         recline: data?.recline || null,
       };
 
+      // ** initialize pusher
+      const callback = (data) => {
+        queryClient.invalidateQueries({
+          queryKey: ["getAllChats"],
+        });
+        queryClient.invalidateQueries({
+          queryKey: ["SingleChatScreen"],
+        });
+      };
+
+      pusherInitialization(data._id, callback);
+
       // set user global store
       setUserStore(userData);
 
@@ -217,6 +236,18 @@ const InitialLoad = () => {
         referral_code: data.referral_code,
         recline: data?.recline || null,
       };
+
+      // ** initialize pusher
+      const callback = (data) => {
+        queryClient.invalidateQueries({
+          queryKey: ["getAllChats"],
+        });
+        queryClient.invalidateQueries({
+          queryKey: ["SingleChatScreen"],
+        });
+      };
+
+      pusherInitialization(data._id, callback);
 
       // set user global store
       setUserStore(userData);

@@ -23,7 +23,6 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import ChatService from "services/api/ChatService";
 import Container from "components/Container";
 import formatDate from "../../utils/formatDate";
-import initializePusher from "services/pusher";
 import { GLOBAL_COLORS } from "global";
 import { singleChatMessageList } from "data/singleChatMessageList";
 import { BASE_URL_FILE_SERVER } from "react-native-dotenv";
@@ -158,7 +157,7 @@ const SingleChatScreen = () => {
   // ** state
   const [localMessage, setLocalMessages] = useState([]);
   const [input, setInput] = useState("");
-  const [paginate, setPaginate] = useState(10);
+  const [paginate, setPaginate] = useState(1000);
   const [lastPage, setLastPage] = useState(0);
   const [startScroll, setStartScroll] = useState(true);
   const [page, setPage] = useState(1);
@@ -172,14 +171,13 @@ const SingleChatScreen = () => {
 
   // ** api
   const { getSingleChat, postChat } = ChatService();
-  const { subscribeToChannel } = initializePusher();
 
   // **  Get QueryClient from the context
   const queryClient = useQueryClient();
 
   // ** fetch chats
-  const { isLoading } = useQuery({
-    queryKey: ["SingleChatScreen", route.params.chatId, page, refreshingId],
+  const { isLoading, data: dataChat } = useQuery({
+    queryKey: ["SingleChatScreen"],
     queryFn: () =>
       getSingleChat({
         token: api_token,
@@ -193,8 +191,9 @@ const SingleChatScreen = () => {
       }),
     onSuccess: (data) => {
       setLastPage(data.last_page);
-      setData((prev) => [...prev].concat(data.data));
-      // scrollViewRef.current.scrollToEnd({ animated: true });
+      // setData((prev) => [...prev].concat(data.data));
+      setData(data.data);
+      scrollViewRef?.current.scrollToEnd({ animated: true });
     },
   });
 
@@ -203,7 +202,7 @@ const SingleChatScreen = () => {
     onSuccess: (data) => {
       setInput("");
       queryClient.invalidateQueries({
-        queryKey: ["SingleChatScreen", route.params.chatId],
+        queryKey: ["SingleChatScreen"],
       });
       console.log("mutateDonate onSuccess", data);
     },
@@ -223,18 +222,14 @@ const SingleChatScreen = () => {
 
   // ** when scroll reach the end or bottom part
   const reachEnd = () => {
-    if (startScroll) return null;
-    if (!isLoading) {
-      if (lastPage !== page) {
-        setPage((prev) => prev + 1);
-        setStartScroll(true);
-      }
-    }
+    // if (startScroll) return null;
+    // if (!isLoading) {
+    //   if (lastPage !== page) {
+    //     setPage((prev) => prev + 1);
+    //     setStartScroll(true);
+    //   }
+    // }
   };
-
-  useEffect(() => {});
-
-  // LOCAL MESSAGE DATA AND FUNCTIONALITY
 
   const handleSend = () => {
     mutate({
@@ -244,7 +239,7 @@ const SingleChatScreen = () => {
         to_id: route.params.chatId,
       },
     });
-    // scrollViewRef.current.scrollToEnd({ animated: true });
+    scrollViewRef?.current.scrollToEnd({ animated: true });
   };
 
   const handleCamera = async () => {
@@ -262,12 +257,23 @@ const SingleChatScreen = () => {
           },
         ]);
         setInput("");
-        scrollViewRef.current.scrollToEnd({ animated: true });
+        scrollViewRef?.current.scrollToEnd({ animated: true });
       }
     } else {
       Alert.alert("Permission not granted");
     }
   };
+
+  useEffect(() => {
+    let timer;
+    if (dataChat) {
+      timer = setTimeout(() => {
+        // pansamantala hahaha
+        scrollViewRef?.current.scrollToEnd({ animated: true });
+      }, 1000);
+    }
+    return () => clearTimeout(timer);
+  }, []);
 
   if (isLoading) {
     return (
@@ -279,7 +285,8 @@ const SingleChatScreen = () => {
 
   return (
     <Container>
-      <FlashList
+      {/* <FlashList
+        ref={scrollViewRef}
         refreshControl={
           <RefreshControl
             colors={[GLOBAL_COLORS.secondaryColor]}
@@ -312,7 +319,28 @@ const SingleChatScreen = () => {
             />
           )
         }
-      />
+      /> */}
+      <ScrollView ref={scrollViewRef}>
+        {data.map((item, index) =>
+          item.from_id === _id ? (
+            <YourMessage
+              key={index}
+              yourImgUrl={singleChatMessageList[0].yourImgUrl}
+              yourUserName={singleChatMessageList[0].yourUserName}
+              message={item.message}
+              timeStamp={item.created_at}
+            />
+          ) : (
+            <SenderMessage
+              key={index}
+              senderImgURL={singleChatMessageList[0].senderImgURL}
+              senderUserName={singleChatMessageList[0].senderUserName}
+              message={item.message}
+              timeStamp={item.created_at}
+            />
+          )
+        )}
+      </ScrollView>
       <HStack style={styles.bottomForm} space={3} width="full">
         {/* <Pressable onPress={handleCamera}>
               <Entypo name="camera" color={"white"} size={20} />

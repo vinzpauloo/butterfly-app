@@ -125,7 +125,7 @@ const MessageItemSkeleton = () => {
 const Information = (props: Props) => {
   const navigation = useNavigation<any>();
   // ** state
-  const [paginate, setPaginate] = useState(10);
+  const [paginate, setPaginate] = useState(1000);
   const [lastPage, setLastPage] = useState(0);
   const [startScroll, setStartScroll] = useState(true);
   const [page, setPage] = useState(1);
@@ -135,9 +135,9 @@ const Information = (props: Props) => {
   const [loading, setLoading] = useState(true);
   // ** global state
   const { translations } = translationStore((state) => state);
-  const { api_token } = userStore((state) => state);
+  const { api_token, _id } = userStore((state) => state);
   // ** api
-  const { getChats, getAllChats } = ChatService();
+  const { getAllChats } = ChatService();
 
   const { isLoading } = useQuery({
     queryKey: ["getAllChats", page, refreshingId],
@@ -148,7 +148,8 @@ const Information = (props: Props) => {
       }),
     onSuccess: (data) => {
       setLastPage(data.last_page);
-      setData((prev) => [...prev].concat(data.data));
+      // setData((prev) => [...prev].concat(data.data));
+      setData(data.data);
       console.log("Success getChats", data);
     },
     onError: (error) => {
@@ -171,17 +172,15 @@ const Information = (props: Props) => {
 
   // ** when scroll reach the end or bottom part
   const reachEnd = () => {
-    if (startScroll) return null;
-    if (!isLoading) {
-      if (lastPage !== page) {
-        setPage((prev) => prev + 1);
-        setStartScroll(true);
-        setLoading(false);
-      }
-    }
+    // if (startScroll) return null;
+    // if (!isLoading) {
+    //   if (lastPage !== page) {
+    //     setPage((prev) => prev + 1);
+    //     setStartScroll(true);
+    //     setLoading(false);
+    //   }
+    // }
   };
-
-  useEffect(() => {});
 
   return (
     <Container>

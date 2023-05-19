@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useCallback, useEffect, useRef, useState } from "react";
 import {
   StyleSheet,
   Text,
@@ -8,24 +8,28 @@ import {
   Alert,
   ScrollView,
   Image,
-  Dimensions,
+  RefreshControl,
 } from "react-native";
-import { HStack, VStack, Skeleton } from "native-base";
 
 import * as ImagePicker from "expo-image-picker";
-import { Camera } from "expo-camera";
-
 import Entypo from "react-native-vector-icons/Entypo";
 import Feather from "react-native-vector-icons/Feather";
+import moment from "moment";
+import { HStack, VStack, Skeleton } from "native-base";
+import { Camera } from "expo-camera";
+import { useRoute } from "@react-navigation/native";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 
+import ChatService from "services/api/ChatService";
 import Container from "components/Container";
-import { GLOBAL_COLORS } from "global";
 import formatDate from "../../utils/formatDate";
+import initializePusher from "services/pusher";
+import { GLOBAL_COLORS } from "global";
 import { singleChatMessageList } from "data/singleChatMessageList";
 import { BASE_URL_FILE_SERVER } from "react-native-dotenv";
 import { translationStore } from "../../zustand/translationStore";
-
-type Props = {};
+import { userStore } from "../../zustand/userStore";
+import { FlashList } from "@shopify/flash-list";
 
 const NoMessageYet = () => {
   return (
@@ -49,7 +53,7 @@ type SenderMessageProps = {
 
 const SenderMessage = (props: SenderMessageProps) => {
   return (
-    <View>
+    <View style={{ marginVertical: 8 }}>
       <VStack style={styles.senderMessageAndTimeStampContainer}>
         <>
           <Text style={styles.senderName}>{props.senderUserName}</Text>
@@ -80,7 +84,7 @@ type YourMessageProps = {
 
 const YourMessage = (props: YourMessageProps) => {
   return (
-    <View>
+    <View style={{ marginVertical: 8 }}>
       <VStack style={styles.yourMessageAndTimeStampContainer}>
         <>
           <View style={styles.messageContainer}>
@@ -96,7 +100,10 @@ const YourMessage = (props: YourMessageProps) => {
             )}
           </View>
         </>
-        <Text style={styles.messageTimeStamp}>{props.timeStamp}</Text>
+        <Text style={styles.messageTimeStamp}>
+          {moment(props.timeStamp).format("h:mm A")}{" "}
+          {moment(props.timeStamp).format("MM/DD/YYYY")}
+        </Text>
       </VStack>
     </View>
   );
@@ -143,34 +150,101 @@ const ChatScreenSkeleton = () => {
   );
 };
 
-const SingleChatScreen = (props: Props) => {
+const SingleChatScreen = () => {
   const { getDate } = formatDate();
   const scrollViewRef = useRef(null);
-  const [chatListIsLoaded, setChatListIsLoaded] = useState(false);
-  const translations = translationStore((state) => state.translations);
+  const route = useRoute<any>();
 
-  useEffect(() => {
-    setTimeout(() => setChatListIsLoaded(true), 1000);
-  });
-
-  // LOCAL MESSAGE DATA AND FUNCTIONALITY
+  // ** state
   const [localMessage, setLocalMessages] = useState([]);
   const [input, setInput] = useState("");
+  const [paginate, setPaginate] = useState(10);
+  const [lastPage, setLastPage] = useState(0);
+  const [startScroll, setStartScroll] = useState(true);
+  const [page, setPage] = useState(1);
+  const [data, setData] = useState([]);
+  const [refreshing, setRefreshing] = useState(false);
+  const [refreshingId, setRefreshingId] = useState(0);
+
+  // ** global store
+  const translations = translationStore((state) => state.translations);
+  const { _id, api_token } = userStore((store) => store);
+
+  // ** api
+  const { getSingleChat, postChat } = ChatService();
+  const { subscribeToChannel } = initializePusher();
+
+  // **  Get QueryClient from the context
+  const queryClient = useQueryClient();
+
+  // ** fetch chats
+  const { isLoading } = useQuery({
+    queryKey: ["SingleChatScreen", route.params.chatId, page, refreshingId],
+    queryFn: () =>
+      getSingleChat({
+        token: api_token,
+        chatId: route.params.chatId,
+        data: {
+          page: page,
+          paginate: paginate,
+          sort_by: "created_at",
+          sort: "asc",
+        },
+      }),
+    onSuccess: (data) => {
+      setLastPage(data.last_page);
+      setData((prev) => [...prev].concat(data.data));
+      // scrollViewRef.current.scrollToEnd({ animated: true });
+    },
+  });
+
+  // ** send chat
+  const { mutate } = useMutation(postChat, {
+    onSuccess: (data) => {
+      setInput("");
+      queryClient.invalidateQueries({
+        queryKey: ["SingleChatScreen", route.params.chatId],
+      });
+      console.log("mutateDonate onSuccess", data);
+    },
+  });
+
+  // ** refresher
+  const onRefresh = useCallback(() => {
+    setStartScroll(true);
+    setRefreshing(true);
+    setTimeout(() => {
+      setData([]);
+      setPage(1);
+      setRefreshingId((prev) => prev + 1);
+      setRefreshing(false);
+    }, 2000);
+  }, []);
+
+  // ** when scroll reach the end or bottom part
+  const reachEnd = () => {
+    if (startScroll) return null;
+    if (!isLoading) {
+      if (lastPage !== page) {
+        setPage((prev) => prev + 1);
+        setStartScroll(true);
+      }
+    }
+  };
+
+  useEffect(() => {});
+
+  // LOCAL MESSAGE DATA AND FUNCTIONALITY
 
   const handleSend = () => {
-    if (!input) {
-      return;
-    }
-    setLocalMessages([
-      ...localMessage,
-      {
-        text: input,
-        user: "You",
-        profile: "https://randomuser.me/api/portraits/men/4.jpg",
+    mutate({
+      token: api_token,
+      data: {
+        message: input,
+        to_id: route.params.chatId,
       },
-    ]);
-    setInput("");
-    scrollViewRef.current.scrollToEnd({ animated: true });
+    });
+    // scrollViewRef.current.scrollToEnd({ animated: true });
   };
 
   const handleCamera = async () => {
@@ -195,71 +269,72 @@ const SingleChatScreen = (props: Props) => {
     }
   };
 
+  if (isLoading) {
+    return (
+      <Container>
+        <ChatScreenSkeleton />
+      </Container>
+    );
+  }
+
   return (
     <Container>
-      {chatListIsLoaded ? (
-        singleChatMessageList.length === 0 ? (
-          <NoMessageYet />
-        ) : (
-          <>
-            <ScrollView ref={scrollViewRef} style={{paddingHorizontal: 24, paddingVertical: 16}}>
-              {singleChatMessageList[0].messageChain.map((message, index) =>
-                message.isMessageFromSender ? (
-                  <SenderMessage
-                    key={index}
-                    senderImgURL={singleChatMessageList[0].senderImgURL}
-                    senderUserName={singleChatMessageList[0].senderUserName}
-                    message={message.message}
-                    timeStamp={message.timeStamp}
-                  />
-                ) : (
-                  <YourMessage
-                    key={index}
-                    yourImgUrl={singleChatMessageList[0].yourImgUrl}
-                    yourUserName={singleChatMessageList[0].yourUserName}
-                    message={message.message}
-                    timeStamp={message.timeStamp}
-                  />
-                )
-              )}
-              {/* MESSAGES FROM LOCAL SESSION (unsaved data)*/}
-              {localMessage.map((localItem, index) => (
-                <YourMessage
-                  key={index}
-                  yourImgUrl={localItem.profile}
-                  yourUserName={localItem.user}
-                  message={localItem.text}
-                  timeStamp={getDate()}
-                  messageImage={localItem.image}
-                />
-              ))}
-            </ScrollView>
-            <HStack style={styles.bottomForm} space={3}>
-              <Pressable onPress={handleCamera}>
-                <Entypo name="camera" color={"white"} size={20} />
-              </Pressable>
-              <TextInput
-                multiline={true}
-                style={styles.textInput}
-                value={input}
-                placeholder="请输入您的消息"
-                placeholderTextColor="#999"
-                keyboardType="default"
-                onChangeText={(text) => setInput(text)}
-              />
-              <Pressable 
-                onPress={handleSend}
-                style={[styles.sendMessage, { opacity: input === "" ? 0.3 : 1 }]}
-                disabled={input === "" ? true : false}
-              >
-                <Text style={styles.whiteText}>{translations.send}</Text>
-              </Pressable>
-            </HStack>
-          </>
-        )
-      ) : (
-        <ChatScreenSkeleton />
-      )}
+      <FlashList
+        refreshControl={
+          <RefreshControl
+            colors={[GLOBAL_COLORS.secondaryColor]}
+            refreshing={refreshing}
+            onRefresh={onRefresh}
+          />
+        }
+        onEndReachedThreshold={0.01} // always make this default to 0.01 to have no bug for fetching data for the onEndReached -> https://github.com/facebook/react-native/issues/14015#issuecomment-346547942
+        onMomentumScrollBegin={() => setStartScroll(false)}
+        onEndReached={reachEnd}
+        bounces={false}
+        data={data}
+        scrollEnabled={true}
+        renderItem={({ item, index }) =>
+          item.from_id === _id ? (
+            <YourMessage
+              key={index}
+              yourImgUrl={singleChatMessageList[0].yourImgUrl}
+              yourUserName={singleChatMessageList[0].yourUserName}
+              message={item.message}
+              timeStamp={item.created_at}
+            />
+          ) : (
+            <SenderMessage
+              key={index}
+              senderImgURL={singleChatMessageList[0].senderImgURL}
+              senderUserName={singleChatMessageList[0].senderUserName}
+              message={item.message}
+              timeStamp={item.created_at}
+            />
+          )
+        }
+      />
+      <HStack style={styles.bottomForm} space={3} width="full">
+        {/* <Pressable onPress={handleCamera}>
+              <Entypo name="camera" color={"white"} size={20} />
+            </Pressable> */}
+        <TextInput
+          multiline={true}
+          numberOfLines={4}
+          style={styles.textInput}
+          value={input}
+          placeholder="请输入您的消息"
+          placeholderTextColor="#999"
+          keyboardType="default"
+          onChangeText={setInput}
+        />
+        <Pressable
+          onPress={handleSend}
+          style={[styles.sendMessage, { opacity: input === "" ? 0.3 : 1 }]}
+          disabled={input === "" ? true : false}
+        >
+          <Text style={styles.whiteText}>{translations.send}</Text>
+        </Pressable>
+      </HStack>
     </Container>
   );
 };
@@ -303,12 +378,12 @@ const styles = StyleSheet.create({
     maxHeight: 500,
   },
   messageTimeStamp: {
-    color: 'white',
+    color: "white",
     fontSize: 11,
     textAlign: "right",
     marginTop: 6,
     opacity: 0.5,
-    marginBottom: 16
+    // marginBottom: 16,
   },
   centeredContent: {
     flex: 1,
@@ -329,17 +404,18 @@ const styles = StyleSheet.create({
     backgroundColor: GLOBAL_COLORS.videoContentBG,
   },
   textInput: {
-    color: 'white',
+    color: "white",
     backgroundColor: GLOBAL_COLORS.primaryColor,
     paddingHorizontal: 16,
     paddingVertical: 5,
     borderRadius: 16,
-    width: "75%",
+    flex: 1,
   },
   sendMessage: {
     backgroundColor: GLOBAL_COLORS.secondaryColor,
     paddingVertical: 5,
     paddingHorizontal: 19,
-    borderRadius: 16
+    borderRadius: 16,
+    alignSelf: "flex-end",
   },
 });

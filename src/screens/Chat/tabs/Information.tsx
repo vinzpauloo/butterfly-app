@@ -1,17 +1,20 @@
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import {
-  StyleSheet,
-  Text,
-  Pressable,
   Alert,
   FlatList,
-  Dimensions,
+  Image,
+  Pressable,
+  RefreshControl,
+  StyleSheet,
+  Text,
+  View,
 } from "react-native";
 import { VStack, HStack, Avatar, Skeleton } from "native-base";
 
 import { BASE_URL_FILE_SERVER } from "react-native-dotenv";
 import { useQuery } from "@tanstack/react-query";
 import { useNavigation } from "@react-navigation/native";
+import moment from "moment";
 
 import BottomMessage from "components/BottomMessage";
 import ChatService from "services/api/ChatService";
@@ -20,20 +23,18 @@ import Container from "components/Container";
 import FansIcon from "assets/images/FansIcon.png";
 import IncomeIcon from "assets/images/IncomeIcon.png";
 import LikeIcon from "assets/images/LikeIcon.png";
+import Loading from "components/Loading";
 import SystemIcon from "assets/images/SystemIcon.png";
-import { messageList } from "data/messageList";
 import { translationStore } from "../../../zustand/translationStore";
 import { userStore } from "../../../zustand/userStore";
-import { Image } from "react-native";
 import { GLOBAL_COLORS } from "global";
 
-const windowWidth = Dimensions.get("window").width;
-
 type MessageItemProps = {
-  senderUserName: string;
-  senderMessage: string;
-  senderImgURL: string;
-  senderTimeStamp: string;
+  id: number;
+  userName: string;
+  message: string;
+  imgURL: string;
+  timeStamp: string;
 };
 
 type Props = {};
@@ -46,30 +47,39 @@ const MessageItem = (props: MessageItemProps) => {
       <Pressable
         onPress={() => {
           navigation.navigate("SingleChatScreen", {
-            postTitle: props.senderUserName,
+            postTitle: props.userName,
+            chatId: props.id,
           });
         }}
       >
-        <HStack space={3} alignItems='center'>
+        <HStack space={3} alignItems="center">
           <Pressable
             onPress={() => {
-              Alert.alert("Go to " + props.senderUserName + " profile");
+              Alert.alert("Go to " + props.userName + " profile");
             }}
           >
             <Avatar
               color="white"
               size={12}
-              source={{ uri: BASE_URL_FILE_SERVER + props.senderImgURL }}
+              source={{ uri: BASE_URL_FILE_SERVER + props.imgURL }}
             />
           </Pressable>
           <VStack space={1.5} flexShrink={1}>
-            <HStack justifyContent='space-between' alignItems='center'>
-              <Text style={styles.text}>{props.senderUserName}</Text>
-              <Text style={{opacity: 0.5, color: 'white', fontSize: 10}}>18:24 05/04/2023</Text>
+            <HStack
+              justifyContent="space-between"
+              alignItems="center"
+              width="full"
+            >
+              <Text style={[styles.text, { fontSize: 16 }]}>
+                {props.userName}
+              </Text>
+              <Text style={{ opacity: 0.5, color: "white", fontSize: 10 }}>
+                {moment(props.timeStamp).format("h:mm A")}{" "}
+                {moment(props.timeStamp).format("MM/DD/YYYY")}
+              </Text>
             </HStack>
-            <Text style={styles.text}>
-              {props.senderMessage}
-              {props.senderMessage}
+            <Text style={[styles.text, { fontSize: 15 }]} numberOfLines={1}>
+              {props.message}
             </Text>
           </VStack>
         </HStack>
@@ -113,15 +123,32 @@ const MessageItemSkeleton = () => {
 };
 
 const Information = (props: Props) => {
-  const translations = translationStore((state) => state.translations);
   const navigation = useNavigation<any>();
+  // ** state
+  const [paginate, setPaginate] = useState(10);
+  const [lastPage, setLastPage] = useState(0);
+  const [startScroll, setStartScroll] = useState(true);
+  const [page, setPage] = useState(1);
+  const [data, setData] = useState([]);
+  const [refreshing, setRefreshing] = useState(false);
+  const [refreshingId, setRefreshingId] = useState(0);
+  const [loading, setLoading] = useState(true);
+  // ** global state
+  const { translations } = translationStore((state) => state);
+  const { api_token } = userStore((state) => state);
+  // ** api
+  const { getChats, getAllChats } = ChatService();
 
-  const token = userStore((state) => state.api_token);
-  const { getChats } = ChatService();
-  const {} = useQuery({
-    queryKey: ["getChats"],
-    queryFn: () => getChats(token),
+  const { isLoading } = useQuery({
+    queryKey: ["getAllChats", page, refreshingId],
+    queryFn: () =>
+      getAllChats({
+        token: api_token,
+        data: { page: page, paginate: paginate },
+      }),
     onSuccess: (data) => {
+      setLastPage(data.last_page);
+      setData((prev) => [...prev].concat(data.data));
       console.log("Success getChats", data);
     },
     onError: (error) => {
@@ -129,11 +156,32 @@ const Information = (props: Props) => {
     },
   });
 
-  const [messageListIsLoaded, setmessageListIsLoaded] = useState(false);
+  // ** refresher
+  const onRefresh = useCallback(() => {
+    setLoading(true);
+    setStartScroll(true);
+    setRefreshing(true);
+    setTimeout(() => {
+      setData([]);
+      setPage(1);
+      setRefreshingId((prev) => prev + 1);
+      setRefreshing(false);
+    }, 2000);
+  }, []);
 
-  useEffect(() => {
-    setTimeout(() => setmessageListIsLoaded(true), 1000);
-  });
+  // ** when scroll reach the end or bottom part
+  const reachEnd = () => {
+    if (startScroll) return null;
+    if (!isLoading) {
+      if (lastPage !== page) {
+        setPage((prev) => prev + 1);
+        setStartScroll(true);
+        setLoading(false);
+      }
+    }
+  };
+
+  useEffect(() => {});
 
   return (
     <Container>
@@ -142,7 +190,7 @@ const Information = (props: Props) => {
           onPress={() => {
             navigation.navigate("InformationScreen", {
               postTitle: translations.liked,
-              postMessage: 'LikeCard'
+              postMessage: "LikeCard",
             });
           }}
         >
@@ -155,7 +203,7 @@ const Information = (props: Props) => {
           onPress={() => {
             navigation.navigate("InformationScreen", {
               postTitle: translations.fan,
-              postMessage: 'FanCard'
+              postMessage: "FanCard",
             });
           }}
         >
@@ -169,7 +217,7 @@ const Information = (props: Props) => {
           onPress={() => {
             navigation.navigate("InformationScreen", {
               postTitle: translations.comments,
-              postMessage: 'CommentCard'
+              postMessage: "CommentCard",
             });
           }}
         >
@@ -183,7 +231,7 @@ const Information = (props: Props) => {
           onPress={() => {
             navigation.navigate("InformationScreen", {
               postTitle: translations.income,
-              postMessage: 'IncomeCard'
+              postMessage: "IncomeCard",
             });
           }}
         >
@@ -197,7 +245,7 @@ const Information = (props: Props) => {
           onPress={() => {
             navigation.navigate("InformationScreen", {
               postTitle: translations.system,
-              postMessage: 'SystemCard'
+              postMessage: "SystemCard",
             });
           }}
         >
@@ -208,23 +256,47 @@ const Information = (props: Props) => {
         </Pressable>
       </HStack>
       <Text style={styles.categoryText}>{translations.privateMessage}</Text>
-      {messageListIsLoaded ? (
+      {isLoading && loading ? (
+        <MessageItemSkeleton />
+      ) : (
         <FlatList
-          data={messageList}
+          refreshControl={
+            <RefreshControl
+              colors={[GLOBAL_COLORS.secondaryColor]}
+              refreshing={refreshing}
+              onRefresh={onRefresh}
+            />
+          }
+          onEndReachedThreshold={0.01} // always make this default to 0.01 to have no bug for fetching data for the onEndReached -> https://github.com/facebook/react-native/issues/14015#issuecomment-346547942
+          onMomentumScrollBegin={() => setStartScroll(false)}
+          onEndReached={reachEnd}
+          bounces={false}
+          data={data}
           scrollEnabled={true}
           renderItem={({ item, index }) => (
             <MessageItem
-              senderUserName={item.userName}
-              senderMessage={item.message}
-              senderImgURL={item.imgURL}
-              senderTimeStamp={item.timeStamp}
+              id={item.id}
+              userName={item.username}
+              message={item.latest_message}
+              imgURL={item.photo}
+              timeStamp={item.created_at}
             />
           )}
           keyExtractor={(item, index) => "" + index}
-          ListFooterComponent={<BottomMessage />}
+          // ListFooterComponent={<BottomMessage />}
+          ListFooterComponent={() => (
+            <>
+              {/* the gap will be remove if the lastpage is been fetch */}
+              {lastPage !== page || (lastPage === page && isLoading) ? (
+                <View style={{ marginBottom: 60 }}>
+                  {/* to have a gap in bottom part of section to see the loading icon */}
+                  {isLoading ? <Loading /> : null}
+                </View>
+              ) : null}
+              {lastPage === page && !isLoading ? <BottomMessage /> : null}
+            </>
+          )}
         />
-      ) : (
-        <MessageItemSkeleton />
       )}
     </Container>
   );
@@ -255,6 +327,7 @@ const styles = StyleSheet.create({
   },
   text: {
     color: "white",
+    fontWeight: "bold",
   },
   deleteIcon: {
     alignSelf: "center",
@@ -265,7 +338,7 @@ const styles = StyleSheet.create({
     marginTop: 16,
     padding: 16,
     marginHorizontal: 16,
-    borderRadius: 4
+    borderRadius: 4,
   },
   dividerColor: {
     backgroundColor: "#999",

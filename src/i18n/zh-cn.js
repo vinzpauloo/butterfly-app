@@ -97,7 +97,7 @@ export default zh_cn = {
   nickname: "昵称",
   no: "不",
   noData: "暂无数据",
-  notYetMember: "错误的",
+  notYetMember: "还不是VIP",
   numberOfWorks: "作品数量",
   obtainSMSVerification: "获取短信验证码",
   officialEmail: "官方邮箱",

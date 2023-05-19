@@ -63,6 +63,8 @@ import {
 } from "lib/asyncStorage";
 import { captureSuccess, captureError } from "services/sentry";
 
+import moment from "moment";
+
 const { width } = Dimensions.get("window");
 
 // **** COMPONENTS START **** //
@@ -174,7 +176,7 @@ const User = () => {
 
 // **** VIP COMPONENT START CODE **** //
 const VIPStatus = () => {
-  const { is_Vip, _id } = userStore((store) => store);
+  const { is_Vip, vipPeriod, _id } = userStore((store) => store);
   const { translations } = translationStore((store) => store);
   const navigation = useNavigation<any>();
 
@@ -222,7 +224,8 @@ const VIPStatus = () => {
             <VStack pl={2.5} flexGrow={1}>
               {is_Vip ? (
                 <Text style={[styles.vipTitle, { color: "#F09536" }]}>
-                  {translations.vipPeriod} : {"2023-05-19"}
+                  {translations.vipPeriod} :{" "}
+                  {moment(vipPeriod).format("MM/DD/YYYY")}
                 </Text>
               ) : (
                 <Text
@@ -231,7 +234,7 @@ const VIPStatus = () => {
                     { color: GLOBAL_COLORS.primaryTextColor },
                   ]}
                 >
-                  {translations.vip} : {translations.notYetMember}
+                  {translations.notYetMember}
                 </Text>
               )}
               <Text
@@ -599,6 +602,7 @@ const MainProfile = () => {
         ...userStoreData,
         coins: data.coins,
         is_Vip: data.is_Vip,
+        vipPeriod: data.vip,
       });
     },
     onError: (error) => {

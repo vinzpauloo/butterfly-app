@@ -99,7 +99,7 @@ export default en_us = {
   nickname: "Nickname",
   no: "NO",
   noData: "No Data",
-  notYetMember: "False",
+  notYetMember: "Not yet VIP",
   numberOfWorks: "Number of Works",
   obtainSMSVerification: "SMS Code",
   officialEmail: "Official Email",

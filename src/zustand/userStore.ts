@@ -12,6 +12,7 @@ interface IUser {
   is_Vip?: boolean;
   referral_code?: string | null;
   recline?: string | null;
+  vipPeriod?: string | null;
 }
 
 interface IUserStore extends IUser {

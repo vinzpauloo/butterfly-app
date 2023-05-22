@@ -29,6 +29,8 @@ const VideoOverlay = (props: Props) => {
   const [videoOrientation, setVideoOrientation] = useState("");
   const [videoIsLoaded, setVideoIsLoaded] = useState(false);
   const [videoTotalDuration, setVideoTotalDuration] = useState(0);
+  const [isVideoFinished, setIsVideoFinished] = useState(false);
+  const video = React.useRef(null);
 
   // VIDEO WATCH TIME AND BUFFERED TIME (FOR FUTURE)
   const [totalWatchTime, setTotalWatchTime] = useState(0);
@@ -45,10 +47,15 @@ const VideoOverlay = (props: Props) => {
       : setTimeout(() => setShowPlayPauseButton(false), 500);
   };
 
+  const handleRepeat = () => {
+    video.current.replayAsync();
+  };
+
   return (
     <>
       <Pressable style={styles.videoContainer} onPress={pausePlayVideo}>
         <Video
+          ref={video}
           source={{ uri: BASE_URL_STREAMING_SERVER + props.videoURL }}
           style={[styles.video, { width: width > 500 ? 375 : width }]}
           resizeMode={
@@ -78,6 +85,7 @@ const VideoOverlay = (props: Props) => {
           onPlaybackStatusUpdate={(status: AVPlaybackStatusSuccess) => {
             status.isLoaded ? setTotalWatchTime(status.positionMillis) : null;
             setTotalBufferedTime(status.playableDurationMillis);
+            setIsVideoFinished(status.didJustFinish);
 
             // LOG THE VIDEO WATCH TIME AND TOTAL VIDEO BUFFERED TIME (FOR FUTURE)
             // status.isPlaying ?
@@ -96,6 +104,20 @@ const VideoOverlay = (props: Props) => {
               size={48}
               color="white"
             />
+          </Animated.View>
+        ) : isVideoFinished ? (
+          <Animated.View
+            style={styles.playPauseIcon}
+            entering={ZoomIn}
+            exiting={ZoomOut}
+          >
+            <Pressable onPress={handleRepeat}>
+              <Ionicons
+                name={isVideoFinished ? "refresh" : null}
+                size={48}
+                color="white"
+              />
+            </Pressable>
           </Animated.View>
         ) : null}
       </Pressable>

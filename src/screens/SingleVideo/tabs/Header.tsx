@@ -12,6 +12,8 @@ import AntDesign from "react-native-vector-icons/AntDesign";
 import { downloadFile, writeAsString } from "lib/expoFileSystem";
 import { useNavigation, useRoute } from "@react-navigation/native";
 import { useQuery } from "@tanstack/react-query";
+import { BASE_URL_STREAMING_SERVER } from "react-native-dotenv";
+import { Spinner } from "native-base";
 
 import BannerAds from "features/ads/components/BannerAds";
 import CoinIcon from "assets/images/coinIcon.png";
@@ -63,8 +65,9 @@ export const Header = ({
     queryFn: () =>
       getDownloadVideo({ data: { work_id: data._id }, token: token }),
     onSuccess: async (res: any) => {
-      const fileUrl = res.url;
+      const fileUrl = BASE_URL_STREAMING_SERVER + res.url;
       const fileName = data._id + ".mp4"; // Work ID + video extension
+      setDownloading([...downloading, data._id]); // add the id in downloading
       console.log("Downloading ...", fileUrl);
       const result = await downloadFile(fileUrl, fileName);
       if (result.status === 200) {
@@ -78,6 +81,10 @@ export const Header = ({
         setDownloaded([...downloaded, data._id]); // add the id in downloaded video
       }
       setToDownload(false);
+    },
+    onError: (error) => {
+      setToDownload(false);
+      console.log("download-video-single-video Error: ", error);
     },
     enabled: toDownload,
   });
@@ -94,7 +101,7 @@ export const Header = ({
 
   const handleDownload = () => {
     if (isVIP) {
-      setDownloading([...downloading, data._id]); // add the id in downloading
+      // setDownloading([...downloading, data._id]); // add the id in downloading
       setToDownload(true);
     } else {
       setOpen(true);
@@ -122,7 +129,12 @@ export const Header = ({
       // if the video is downloading
       return (
         <View style={styles.buttonItem} pointerEvents="box-none">
-          <Image source={DownloadIcon} style={styles.icon} />
+          {/* <Image source={DownloadIcon} style={styles.icon} /> */}
+          <Spinner
+            size="sm"
+            style={styles.icon}
+            color={GLOBAL_COLORS.secondaryColor}
+          />
           <Text style={styles.text}>{translations.downloading}...</Text>
         </View>
       );

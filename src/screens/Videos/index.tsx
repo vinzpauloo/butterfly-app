@@ -1,10 +1,10 @@
 import {
-  Dimensions,
   Image,
   Pressable,
   RefreshControl,
   StyleSheet,
   Text,
+  useWindowDimensions,
   View,
 } from "react-native";
 import React, { useCallback, useState } from "react";
@@ -28,8 +28,6 @@ import { userStore } from "../../zustand/userStore";
 import { useNavigation } from "@react-navigation/native";
 import VideoHistorySkeleton from "components/skeletons/VidoeHistorySkeleton";
 
-const { width } = Dimensions.get("window");
-
 // **** START: COMPONENTS **** //
 const Layout = ({ children, style = null }) => {
   const styles = StyleSheet.create({
@@ -44,6 +42,7 @@ const Layout = ({ children, style = null }) => {
 // **** END: COMPONENTS **** //
 
 const Video = ({ item, onOpen, setId }) => {
+  const { width } = useWindowDimensions();
   const navigation = useNavigation<any>();
   const translations = translationStore((state) => state.translations);
   const WIDTH_IMG = width < GLOBAL_SCREEN_SIZE.mobileMedium ? "40%" : "30%";

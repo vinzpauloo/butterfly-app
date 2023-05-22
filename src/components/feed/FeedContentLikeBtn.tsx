@@ -1,6 +1,7 @@
 import { Image, Pressable, StyleSheet, Text } from "react-native";
 import React, { memo } from "react";
 
+import { Spinner } from "native-base";
 import { useMutation } from "@tanstack/react-query";
 
 import HeartActive from "assets/images/heartActive.png";
@@ -14,32 +15,38 @@ const FeedContentLikeBtn = ({ id, like, setLike }) => {
   const { likeWork, unlikeWork } = LikeService();
 
   // for like
-  const { mutate: mutateLike } = useMutation(likeWork, {
-    onSuccess: (data) => {
-      if (data) {
-        setLike((prev) => {
-          return { isAlreadyLike: true, likeCount: prev.likeCount + 1 };
-        });
-      }
-    },
-    onError: (error) => {
-      console.log("postLike", error);
-    },
-  });
+  const { mutate: mutateLike, isLoading: isLikeLoading } = useMutation(
+    likeWork,
+    {
+      onSuccess: (data) => {
+        if (data) {
+          setLike((prev) => {
+            return { isAlreadyLike: true, likeCount: prev.likeCount + 1 };
+          });
+        }
+      },
+      onError: (error) => {
+        console.log("postLike", error);
+      },
+    }
+  );
 
   // for unlike
-  const { mutate: mutateUnLike } = useMutation(unlikeWork, {
-    onSuccess: (data) => {
-      if (data) {
-        setLike((prev) => {
-          return { isAlreadyLike: false, likeCount: prev.likeCount - 1 };
-        });
-      }
-    },
-    onError: (error) => {
-      console.log("postUnlike", error);
-    },
-  });
+  const { mutate: mutateUnLike, isLoading: isUnlikeLoading } = useMutation(
+    unlikeWork,
+    {
+      onSuccess: (data) => {
+        if (data) {
+          setLike((prev) => {
+            return { isAlreadyLike: false, likeCount: prev.likeCount - 1 };
+          });
+        }
+      },
+      onError: (error) => {
+        console.log("postUnlike", error);
+      },
+    }
+  );
 
   const handleLike = () => {
     // check here if not like yet
@@ -63,11 +70,23 @@ const FeedContentLikeBtn = ({ id, like, setLike }) => {
   };
 
   return (
-    <Pressable style={styles.bottomItem} onPress={handleLike}>
-      <Image
-        source={like.isAlreadyLike ? HeartActive : HeartInactive}
-        style={styles.icon}
-      />
+    <Pressable
+      style={styles.bottomItem}
+      onPress={handleLike}
+      disabled={isLikeLoading || isUnlikeLoading}
+    >
+      {isLikeLoading || isUnlikeLoading ? (
+        <Spinner
+          size="sm"
+          style={styles.icon}
+          color={GLOBAL_COLORS.secondaryColor}
+        />
+      ) : (
+        <Image
+          source={like.isAlreadyLike ? HeartActive : HeartInactive}
+          style={styles.icon}
+        />
+      )}
       <Text style={styles.bottomText}>{like.likeCount}</Text>
     </Pressable>
   );

@@ -1,23 +1,35 @@
-import { Image, Pressable, StyleSheet, Text, View } from "react-native";
+import {
+  Image,
+  Pressable,
+  StyleSheet,
+  Text,
+  useWindowDimensions,
+} from "react-native";
 import React, { useEffect, useState } from "react";
 
-import { FlashList } from "@shopify/flash-list";
 import * as FileSystem from "expo-file-system";
+import { BASE_URL_FILE_SERVER } from "react-native-dotenv";
+import { FlashList } from "@shopify/flash-list";
+import { HStack, VStack } from "native-base";
+import { useNavigation } from "@react-navigation/native";
 
 import Container from "components/Container";
 import VideoComponent from "components/VideoComponent";
 import { downloadStore } from "../../zustand/downloadStore";
-import { GLOBAL_COLORS } from "global";
+import { GLOBAL_COLORS, GLOBAL_SCREEN_SIZE } from "global";
 import { readAsString } from "lib/expoFileSystem";
-import { useNavigation } from "@react-navigation/native";
-import { BASE_URL_FILE_SERVER } from "react-native-dotenv";
+import { translationStore } from "../../zustand/translationStore";
 
 const DEFAULT_DIRECTORY = FileSystem.documentDirectory + "downloads/";
 
 const SingleVideo = ({ item, fullPathURl }) => {
+  const { width } = useWindowDimensions();
   const navigation = useNavigation<any>();
+  const translations = translationStore((state) => state.translations);
+  const WIDTH_IMG = width < GLOBAL_SCREEN_SIZE.mobileMedium ? "40%" : "30%";
+  const WIDTH_CONTENT = width < GLOBAL_SCREEN_SIZE.mobileMedium ? "60%" : "70%";
 
-  const navigatoToWatchDownloadVideo = () => {
+  const handlePress = () => {
     navigation.navigate("DownloadVideo", {
       previousScreen: "Downloads",
       postTitle: item.title,
@@ -26,28 +38,40 @@ const SingleVideo = ({ item, fullPathURl }) => {
   };
 
   return (
-    <Pressable style={styles.container} onPress={navigatoToWatchDownloadVideo}>
-      <View style={styles.thumbnailContainer}>
-        <VideoComponent item={item} />
-        <Image
-          source={{ uri: BASE_URL_FILE_SERVER + item.thumbnail_url }}
-          style={styles.image}
-        />
-      </View>
-      <View style={styles.content}>
-        <Image
-          source={{ uri: BASE_URL_FILE_SERVER + item.user.photo }}
-          style={styles.modelImg}
-        />
-        <View style={styles.texts}>
-          <Text style={styles.text} numberOfLines={1}>
+    <Pressable
+      onPress={handlePress}
+      style={{
+        paddingHorizontal: 10,
+        backgroundColor: GLOBAL_COLORS.primaryColor,
+      }}
+    >
+      <HStack width="full" height="20" my="1.5">
+        <VStack width={WIDTH_IMG} height="full" position="relative">
+          <VideoComponent item={item} />
+          <Image
+            source={{ uri: BASE_URL_FILE_SERVER + item.thumbnail_url }}
+            resizeMode="cover"
+            style={{ width: "100%", height: "100%", borderRadius: 4 }}
+          />
+        </VStack>
+        <VStack
+          width={WIDTH_CONTENT}
+          height="full"
+          py="0.5"
+          pl="2"
+          justifyContent="space-between"
+        >
+          <Text style={styles.title} numberOfLines={2}>
             {item.title}
           </Text>
-          <Text style={styles.username} numberOfLines={1}>
-            {item.user.username}
+          <Text style={styles.subtitle}>
+            {translations.duration}: {item.duration}
           </Text>
-        </View>
-      </View>
+          <HStack alignItems="center" justifyContent="space-between">
+            <Text style={styles.subtitle}>{item.user.username}</Text>
+          </HStack>
+        </VStack>
+      </HStack>
     </Pressable>
   );
 };
@@ -136,5 +160,11 @@ const styles = StyleSheet.create({
   username: {
     color: GLOBAL_COLORS.usernameTextColor,
     fontSize: 15,
+  },
+  title: {
+    color: GLOBAL_COLORS.primaryTextColor,
+  },
+  subtitle: {
+    color: GLOBAL_COLORS.inactiveTextColor,
   },
 });

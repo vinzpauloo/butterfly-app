@@ -2,6 +2,7 @@ import { Pressable, StyleSheet, Text, View } from "react-native";
 import React, { useState } from "react";
 
 import AntDesign from "react-native-vector-icons/AntDesign";
+import { Spinner } from "native-base";
 import { useMutation, useQuery } from "@tanstack/react-query";
 
 import { GLOBAL_COLORS } from "global";
@@ -34,30 +35,36 @@ const LikeButton = ({ data, id }) => {
   });
 
   // for like
-  const { mutate: mutateLike } = useMutation(likeWork, {
-    onSuccess: (data) => {
-      if (data) {
-        setIsAlreadyLike(true);
-        setLikeCount((prev) => prev + 1);
-      }
-    },
-    onError: (error) => {
-      console.log("postLike", error);
-    },
-  });
+  const { mutate: mutateLike, isLoading: isLikeLoading } = useMutation(
+    likeWork,
+    {
+      onSuccess: (data) => {
+        if (data) {
+          setIsAlreadyLike(true);
+          setLikeCount((prev) => prev + 1);
+        }
+      },
+      onError: (error) => {
+        console.log("postLike", error);
+      },
+    }
+  );
 
   // for unlike
-  const { mutate: mutateUnLike } = useMutation(unlikeWork, {
-    onSuccess: (data) => {
-      if (data) {
-        setIsAlreadyLike(false);
-        setLikeCount((prev) => prev - 1);
-      }
-    },
-    onError: (error) => {
-      console.log("postUnlike", error);
-    },
-  });
+  const { mutate: mutateUnLike, isLoading: isUnlikeLoading } = useMutation(
+    unlikeWork,
+    {
+      onSuccess: (data) => {
+        if (data) {
+          setIsAlreadyLike(false);
+          setLikeCount((prev) => prev - 1);
+        }
+      },
+      onError: (error) => {
+        console.log("postUnlike", error);
+      },
+    }
+  );
 
   const handleLike = () => {
     // check here if not like yet
@@ -85,13 +92,25 @@ const LikeButton = ({ data, id }) => {
   };
 
   return (
-    <Pressable style={styles.buttonItem} onPress={handleLike}>
-      <AntDesign
-        name="heart"
-        color={changeButtonColor(isAlreadyLike)}
-        size={15}
-        style={styles.icon}
-      />
+    <Pressable
+      style={styles.buttonItem}
+      onPress={handleLike}
+      disabled={isLikeLoading || isUnlikeLoading}
+    >
+      {isLikeLoading || isUnlikeLoading ? (
+        <Spinner
+          size="sm"
+          style={styles.icon}
+          color={GLOBAL_COLORS.secondaryColor}
+        />
+      ) : (
+        <AntDesign
+          name="heart"
+          color={changeButtonColor(isAlreadyLike)}
+          size={15}
+          style={styles.icon}
+        />
+      )}
       <Text style={[styles.text, { color: changeButtonColor(isAlreadyLike) }]}>
         {likeCount}
       </Text>

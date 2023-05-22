@@ -12,18 +12,12 @@ interface IWatchVideoParams {
 
 const WatchVideo = () => {
   const getDownloadVideo = async (params: IWatchVideoParams) => {
-    const { data } = await axios({
-      // headers: { ...getHeaders(), Authorization: `Bearer ${params.token}` },
-      headers: {
-        Accept: "application/json",
-        "X-authorization": "postman|1",
-        Authorization: `Bearer ${params.token}`,
-      },
-      url: `${API_BASE_URL_SIT}/videos/download`,
+    return request({
+      headers: { ...getHeaders(), Authorization: `Bearer ${params.token}` },
+      url: "/videos/download",
       method: "GET",
       params: params.data,
     });
-    return data.data;
   };
 
   return { getDownloadVideo };

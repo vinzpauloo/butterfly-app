@@ -1,13 +1,15 @@
 import { Image, Pressable, StyleSheet, Text, View } from "react-native";
 import React, { useEffect, useState } from "react";
 
+import Ionicons from "react-native-vector-icons/Ionicons";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import {
   useIsFocused,
   useNavigation,
   useRoute,
 } from "@react-navigation/native";
-import Ionicons from "react-native-vector-icons/Ionicons";
+import { HStack, Spinner } from "native-base";
+import { BASE_URL_FILE_SERVER } from "react-native-dotenv";
 
 import CarouselSkeleton from "components/skeletons/CarouselSkeleton";
 import CustomerService from "services/api/CustomerService";
@@ -18,7 +20,6 @@ import WorkService from "services/api/WorkService";
 import { GLOBAL_COLORS } from "global";
 import { translationStore } from "../../zustand/translationStore";
 import { userStore } from "../../zustand/userStore";
-import { BASE_URL_FILE_SERVER } from "react-native-dotenv";
 
 const HeaderTitle = ({ data }) => {
   const token = userStore((store) => store.api_token);
@@ -31,16 +32,19 @@ const HeaderTitle = ({ data }) => {
     setIsFollowed(data.is_followed);
   }, [data]);
 
-  const { mutate: mutateFollow } = useMutation(followCreator, {
-    onSuccess: (data) => {
-      if (data.isFollowed) {
-        setIsFollowed(true);
-      }
-    },
-    onError: (error) => {
-      console.log("followCreator", error);
-    },
-  });
+  const { mutate: mutateFollow, isLoading: isFollowLoading } = useMutation(
+    followCreator,
+    {
+      onSuccess: (data) => {
+        if (data.isFollowed) {
+          setIsFollowed(true);
+        }
+      },
+      onError: (error) => {
+        console.log("followCreator", error);
+      },
+    }
+  );
 
   const handleFollow = () => {
     mutateFollow({
@@ -73,12 +77,27 @@ const HeaderTitle = ({ data }) => {
         </Pressable>
         <View>
           <Text style={styles.title}>{data?.user?.username}</Text>
-          <Text style={styles.followers}>{data?.followers}粉丝</Text>
+          <Text style={styles.followers}>
+            {data?.followers} {translations.fan}
+          </Text>
         </View>
       </View>
       {isFollowed ? null : (
-        <Pressable style={styles.followBtn} onPress={handleFollow}>
-          <Text style={styles.followText}>+{translations.follow}</Text>
+        <Pressable
+          style={styles.followBtn}
+          onPress={handleFollow}
+          disabled={isFollowLoading}
+        >
+          <HStack alignItems="center" justifyContent="space-between" space={2}>
+            <Text style={styles.followText}>+{translations.follow}</Text>
+            {isFollowLoading ? (
+              <Spinner
+                size="sm"
+                style={styles.spinner}
+                color={GLOBAL_COLORS.primaryTextColor}
+              />
+            ) : null}
+          </HStack>
         </Pressable>
       )}
     </View>
@@ -221,5 +240,11 @@ const styles = StyleSheet.create({
   followText: {
     color: "#fff",
     fontSize: 14,
+  },
+  spinner: {
+    marginHorizontal: 3,
+    height: 10,
+    width: 10,
+    resizeMode: "contain",
   },
 });

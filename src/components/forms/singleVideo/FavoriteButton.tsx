@@ -1,7 +1,7 @@
 import { Image, StyleSheet, Text, View, Pressable } from "react-native";
 import React from "react";
 
-import MaterialIcons from "react-native-vector-icons/MaterialIcons";
+import { Spinner } from "native-base";
 import { useMutation } from "@tanstack/react-query";
 
 import FavoriteActive from "assets/images/favoriteActive.png";
@@ -17,28 +17,32 @@ const FavoriteButton = ({ id, isAlreadyFavorite, setIsAlreadyFavorite }) => {
   const { favoriteVideo, unfavoriteVideo } = CustomerService();
 
   // for favorite
-  const { mutate: mutateFavorite } = useMutation(favoriteVideo, {
-    onSuccess: (data) => {
-      if (data.isFavorite) {
-        setIsAlreadyFavorite(true);
-      }
-    },
-    onError: (error) => {
-      console.log("postFavorite", error);
-    },
-  });
+  const { mutate: mutateFavorite, isLoading: isFavoriteLoading } = useMutation(
+    favoriteVideo,
+    {
+      onSuccess: (data) => {
+        if (data.isFavorite) {
+          setIsAlreadyFavorite(true);
+        }
+      },
+      onError: (error) => {
+        console.log("postFavorite", error);
+      },
+    }
+  );
 
   // for remove as favorite
-  const { mutate: mutateRemoveFavorite } = useMutation(unfavoriteVideo, {
-    onSuccess: (data) => {
-      if (data.isRemoved.response) {
-        setIsAlreadyFavorite(false);
-      }
-    },
-    onError: (error) => {
-      console.log("postRemoveFavorite", error);
-    },
-  });
+  const { mutate: mutateRemoveFavorite, isLoading: isRemoveFavoriteLoading } =
+    useMutation(unfavoriteVideo, {
+      onSuccess: (data) => {
+        if (data.isRemoved.response) {
+          setIsAlreadyFavorite(false);
+        }
+      },
+      onError: (error) => {
+        console.log("postRemoveFavorite", error);
+      },
+    });
 
   const handleFavorite = () => {
     // check here if not like yet
@@ -64,12 +68,23 @@ const FavoriteButton = ({ id, isAlreadyFavorite, setIsAlreadyFavorite }) => {
   };
 
   return (
-    <Pressable onPress={handleFavorite}>
+    <Pressable
+      onPress={handleFavorite}
+      disabled={isFavoriteLoading || isRemoveFavoriteLoading}
+    >
       <View style={styles.buttonItem} pointerEvents="box-none">
-        <Image
-          source={isAlreadyFavorite ? FavoriteActive : FavoriteInactive}
-          style={styles.icon}
-        />
+        {isFavoriteLoading || isRemoveFavoriteLoading ? (
+          <Spinner
+            size="sm"
+            style={styles.icon}
+            color={GLOBAL_COLORS.secondaryColor}
+          />
+        ) : (
+          <Image
+            source={isAlreadyFavorite ? FavoriteActive : FavoriteInactive}
+            style={styles.icon}
+          />
+        )}
         <Text
           style={[styles.text, { color: changeButtonColor(isAlreadyFavorite) }]}
         >

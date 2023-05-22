@@ -21,6 +21,7 @@ import ChatService from "services/api/ChatService";
 import CommentsIcon from "assets/images/CommentsIcon.png";
 import Container from "components/Container";
 import FansIcon from "assets/images/FansIcon.png";
+import FavoriteIcon from "assets/images/FavoriteIcon.png";
 import IncomeIcon from "assets/images/IncomeIcon.png";
 import LikeIcon from "assets/images/LikeIcon.png";
 import Loading from "components/Loading";
@@ -201,15 +202,15 @@ const Information = (props: Props) => {
         <Pressable
           onPress={() => {
             navigation.navigate("InformationScreen", {
-              postTitle: translations.fan,
+              postTitle: translations.favorite,
               postMessage: "FanCard",
             });
           }}
         >
           <VStack space={1.5} style={styles.boxContainer}>
-            <Image source={LikeIcon} style={styles.icons} />
+            <Image source={FavoriteIcon} style={styles.icons} />
 
-            <Text style={styles.centerText}>{translations.fan}</Text>
+            <Text style={styles.centerText}>{translations.favorite}</Text>
           </VStack>
         </Pressable>
         <Pressable
@@ -226,7 +227,7 @@ const Information = (props: Props) => {
             <Text style={styles.centerText}>{translations.comments}</Text>
           </VStack>
         </Pressable>
-        <Pressable
+        {/* <Pressable
           onPress={() => {
             navigation.navigate("InformationScreen", {
               postTitle: translations.income,
@@ -239,7 +240,7 @@ const Information = (props: Props) => {
 
             <Text style={styles.centerText}>{translations.income}</Text>
           </VStack>
-        </Pressable>
+        </Pressable> */}
         <Pressable
           onPress={() => {
             navigation.navigate("InformationScreen", {

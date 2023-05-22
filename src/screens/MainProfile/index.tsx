@@ -296,7 +296,7 @@ const LinkList = () => {
       icon: HistoryIcon,
       navigate: () => {
         navigation.navigate("Videos", {
-          postTitle: "历史记录",
+          postTitle: translations.recordingHistory,
         });
       },
     },
@@ -305,7 +305,7 @@ const LinkList = () => {
       icon: DownloadIcon,
       navigate: () => {
         navigation.navigate("Videos", {
-          postTitle: "离线缓存",
+          postTitle: translations.offlineCache,
         });
       },
     },

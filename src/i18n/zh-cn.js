@@ -59,6 +59,7 @@ export default zh_cn = {
   female: "女",
   fillInInvitation: "填写邀请码",
   follow: "关注",
+  followed: "已关注",
   followers: "追随者",
   following: "关注中",
   foreverVIP: "永久VIP",

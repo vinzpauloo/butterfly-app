@@ -61,6 +61,7 @@ export default en_us = {
   female: "Female",
   fillInInvitation: "Fill in the invitation code",
   follow: "Follow",
+  followed: "Followed",
   followers: "Followers",
   following: "Following",
   foreverVIP: "Forever VIP",

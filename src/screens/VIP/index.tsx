@@ -1,10 +1,10 @@
 import {
-  Dimensions,
   Image,
   Pressable,
   RefreshControl,
   StyleSheet,
   Text,
+  useWindowDimensions,
   View,
 } from "react-native";
 import React, { useState, useEffect, useCallback } from "react";
@@ -62,12 +62,11 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { BASE_URL_FILE_SERVER } from "react-native-dotenv";
 import { useNavigation } from "@react-navigation/native";
 
-const { width } = Dimensions.get("window");
-
 const Tab = createMaterialTopTabNavigator();
 
 // **** HEADER COMPONENT START CODE **** //
 const Header = () => {
+  const { width } = useWindowDimensions();
   const { alias } = userStore((state) => state);
   const { translations } = translationStore((store) => store);
   return (
@@ -85,7 +84,20 @@ const Header = () => {
       >
         <Image source={Profile} style={styles.profileImg} />
         <VStack>
-          <Text style={styles.headerTitle} numberOfLines={1}>
+          <Text
+            style={[
+              styles.headerTitle,
+              {
+                width:
+                  width > 400
+                    ? width * 0.5
+                    : width < GLOBAL_SCREEN_SIZE.mobile
+                    ? width * 0.6
+                    : width * 0.5,
+              },
+            ]}
+            numberOfLines={1}
+          >
             {alias}
           </Text>
           {/* <Text style={styles.headerSubtitle}>您目前不是会员</Text> */}
@@ -259,6 +271,7 @@ const VIPChoices = ({ active, setActive, bundle, setActiveBundleId }) => {
 // **** VIP CHOICES COMPONENT END CODE **** //
 
 const BindInvitationCode = () => {
+  const { width } = useWindowDimensions();
   // ** GLOBAL STORE
   const { translations } = translationStore((store) => store);
   const navigation = useNavigation<any>();
@@ -270,7 +283,20 @@ const BindInvitationCode = () => {
   return (
     <Pressable onPress={handlePress}>
       <View style={styles.bindInvitationCodeContainer}>
-        <Text style={styles.bindLeftText} numberOfLines={2}>
+        <Text
+          style={[
+            styles.bindLeftText,
+            {
+              width:
+                width > 400
+                  ? width * 0.5
+                  : width < GLOBAL_SCREEN_SIZE.mobile
+                  ? width * 0.6
+                  : width * 0.65,
+            },
+          ]}
+          numberOfLines={2}
+        >
           {translations.bindInvitationCodeOrMobile}{" "}
           <Text style={{ color: GLOBAL_COLORS.secondaryColor }}>VIP</Text> 1{" "}
           {translations.day}
@@ -290,6 +316,7 @@ const BindInvitationCode = () => {
 
 // **** PROMOTIONAL PACKAGE COMPONENT START CODE **** //
 const PromotionalPackage = ({ perks }) => {
+  const { width } = useWindowDimensions();
   // ** GLOBAL STORE
   const { translations } = translationStore((store) => store);
   const lists = [
@@ -371,7 +398,14 @@ const PromotionalPackage = ({ perks }) => {
                   style={styles.images}
                 />
               </View>
-              <Text style={styles.imagesText}>{item.title}</Text>
+              <Text
+                style={[
+                  styles.imagesText,
+                  { fontSize: width < GLOBAL_SCREEN_SIZE.mobile ? 11 : 12 },
+                ]}
+              >
+                {item.title}
+              </Text>
             </Box>
           </Box>
         ))}
@@ -459,6 +493,7 @@ const Member = ({ route }) => {
 
 // **** WALLET COMPONENT START CODE **** //
 const Wallet = ({ route }) => {
+  const { width } = useWindowDimensions();
   // ** GLOBAL STORE
   const { api_token, coins } = userStore((store) => store);
   const userStoreData = userStore((store) => store);
@@ -1035,12 +1070,6 @@ const styles = StyleSheet.create({
     color: GLOBAL_COLORS.primaryTextColor,
     fontSize: 16,
     fontWeight: "bold",
-    width:
-      width > 400
-        ? width * 0.5
-        : width < GLOBAL_SCREEN_SIZE.mobile
-        ? width * 0.6
-        : width * 0.5,
   },
   headerSubtitle: { color: GLOBAL_COLORS.primaryTextColor, fontSize: 10 },
   headerBtn: {
@@ -1099,12 +1128,6 @@ const styles = StyleSheet.create({
     paddingVertical: 5,
   },
   bindLeftText: {
-    width:
-      width > 400
-        ? width * 0.5
-        : width < GLOBAL_SCREEN_SIZE.mobile
-        ? width * 0.6
-        : width * 0.65,
     color: GLOBAL_COLORS.primaryTextColor,
   },
   bindRightText: {
@@ -1140,7 +1163,6 @@ const styles = StyleSheet.create({
   imagesText: {
     color: "#FFF",
     textTransform: "uppercase",
-    fontSize: width < GLOBAL_SCREEN_SIZE.mobile ? 11 : 12,
     marginTop: 5,
     textAlign: "center",
   },

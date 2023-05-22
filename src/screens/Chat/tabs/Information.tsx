@@ -8,6 +8,7 @@ import {
   StyleSheet,
   Text,
   View,
+  useWindowDimensions,
 } from "react-native";
 import { VStack, HStack, Avatar, Skeleton } from "native-base";
 
@@ -22,13 +23,11 @@ import CommentsIcon from "assets/images/CommentsIcon.png";
 import Container from "components/Container";
 import FansIcon from "assets/images/FansIcon.png";
 import FavoriteIcon from "assets/images/FavoriteIcon.png";
-import IncomeIcon from "assets/images/IncomeIcon.png";
-import LikeIcon from "assets/images/LikeIcon.png";
 import Loading from "components/Loading";
 import SystemIcon from "assets/images/SystemIcon.png";
 import { translationStore } from "../../../zustand/translationStore";
 import { userStore } from "../../../zustand/userStore";
-import { GLOBAL_COLORS } from "global";
+import { GLOBAL_COLORS, GLOBAL_SCREEN_SIZE } from "global";
 
 type MessageItemProps = {
   id: number;
@@ -41,6 +40,7 @@ type MessageItemProps = {
 type Props = {};
 
 const MessageItem = (props: MessageItemProps) => {
+  const { width } = useWindowDimensions();
   const navigation = useNavigation<any>();
 
   return (
@@ -74,10 +74,18 @@ const MessageItem = (props: MessageItemProps) => {
               <Text style={[styles.text, { fontSize: 16 }]}>
                 {props.userName}
               </Text>
-              <Text style={{ opacity: 0.5, color: "white", fontSize: 10 }}>
-                {moment(props.timeStamp).format("h:mm A")}{" "}
-                {moment(props.timeStamp).format("MM/DD/YYYY")}
-              </Text>
+              {width < GLOBAL_SCREEN_SIZE.mobile ? (
+                <Text style={{ opacity: 0.5, color: "white", fontSize: 10 }}>
+                  {moment(props.timeStamp).calendar().includes("Today")
+                    ? moment(props.timeStamp).format("h:mm A")
+                    : moment(props.timeStamp).format("MM/DD/YYYY")}
+                </Text>
+              ) : (
+                <Text style={{ opacity: 0.5, color: "white", fontSize: 10 }}>
+                  {moment(props.timeStamp).format("h:mm A")}{" "}
+                  {moment(props.timeStamp).format("MM/DD/YYYY")}
+                </Text>
+              )}
             </HStack>
             <Text style={[styles.text, { fontSize: 15 }]} numberOfLines={1}>
               {props.message}

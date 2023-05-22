@@ -253,7 +253,9 @@ const index = () => {
                 {isLoading ? <Loading /> : null}
               </View>
             ) : null}
-            {lastPage === page && !isLoading ? <BottomMessage /> : null}
+            {lastPage === page && !isLoading && !!data?.data.length ? (
+              <BottomMessage />
+            ) : null}
             {!!data?.data.length ? null : (
               <Text style={styles.emptyResult}>{translation.noData}</Text>
             )}

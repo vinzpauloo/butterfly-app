@@ -9,6 +9,7 @@ import {
   ScrollView,
   Image,
   RefreshControl,
+  useWindowDimensions,
 } from "react-native";
 
 import * as ImagePicker from "expo-image-picker";
@@ -150,6 +151,7 @@ const ChatScreenSkeleton = () => {
 };
 
 const SingleChatScreen = () => {
+  const { height } = useWindowDimensions();
   const { getDate } = formatDate();
   const scrollViewRef = useRef(null);
   const route = useRoute<any>();
@@ -347,8 +349,7 @@ const SingleChatScreen = () => {
             </Pressable> */}
         <TextInput
           multiline={true}
-          numberOfLines={4}
-          style={styles.textInput}
+          style={[styles.textInput, { maxHeight: height * 0.08 }]}
           value={input}
           placeholder="请输入您的消息"
           placeholderTextColor="#999"
@@ -432,7 +433,7 @@ const styles = StyleSheet.create({
     backgroundColor: GLOBAL_COLORS.videoContentBG,
   },
   textInput: {
-    color: "white",
+    color: GLOBAL_COLORS.primaryTextColor,
     backgroundColor: GLOBAL_COLORS.primaryColor,
     paddingHorizontal: 16,
     paddingVertical: 5,

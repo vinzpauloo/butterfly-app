@@ -26,7 +26,7 @@ type Props = {
 };
 
 const CommentTextInput = (props: Props) => {
-  const { width } = useWindowDimensions();
+  const { width, height } = useWindowDimensions();
   const translations = translationStore((state) => state.translations);
   const [text, setText] = useState("");
   const [isKeyboardShown, setIsKeyboardShown] = useState(false);
@@ -145,7 +145,7 @@ const CommentTextInput = (props: Props) => {
           <TextInput
             ref={textInputRef}
             multiline={true}
-            style={styles.textInput}
+            style={[styles.textInput, { maxHeight: height * 0.08 }]}
             value={text}
             placeholder={translations.comment}
             placeholderTextColor="#999"
@@ -179,10 +179,11 @@ const styles = StyleSheet.create({
     backgroundColor: GLOBAL_COLORS.videoContentBG,
   },
   textInput: {
+    color: GLOBAL_COLORS.primaryTextColor,
     backgroundColor: GLOBAL_COLORS.primaryColor,
-    paddingHorizontal: 12,
+    paddingHorizontal: 16,
     borderRadius: 16,
-    color: "white",
+    paddingVertical: 5,
     flex: 1,
   },
   cancelReply: {
@@ -193,11 +194,10 @@ const styles = StyleSheet.create({
     color: "white",
   },
   sendComment: {
-    alignItems: "center",
     backgroundColor: GLOBAL_COLORS.secondaryColor,
     paddingVertical: 5,
     paddingHorizontal: 19,
     borderRadius: 16,
-    width: 80,
+    alignSelf: "flex-end",
   },
 });

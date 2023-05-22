@@ -8,6 +8,7 @@ import CustomerService from "services/api/CustomerService";
 import Feather from "react-native-vector-icons/Feather";
 import { BASE_URL_FILE_SERVER } from "react-native-dotenv";
 import { GLOBAL_COLORS } from "global";
+import { Spinner } from "native-base";
 
 type Props = {
   customerID: string;
@@ -23,23 +24,25 @@ const UserOverlay = (props: Props) => {
   const token = userStore((state) => state.api_token);
 
   const { followCreator, unfollowCreator } = CustomerService();
-  const { mutate: mutateFollowCreator } = useMutation(followCreator, {
-    onSuccess: (data) => {
-      if (data?.isFollowed) props.setIsFollowed(true);
-    },
-    onError: (error) => {
-      console.log(error);
-    },
-  });
+  const { mutate: mutateFollowCreator, isLoading: isFollowCreatorLoading } =
+    useMutation(followCreator, {
+      onSuccess: (data) => {
+        if (data?.isFollowed) props.setIsFollowed(true);
+      },
+      onError: (error) => {
+        console.log(error);
+      },
+    });
 
-  const { mutate: mutateUnfollowCreator } = useMutation(unfollowCreator, {
-    onSuccess: (data) => {
-      if (data?.isUnfollowed) props.setIsFollowed(false);
-    },
-    onError: (error) => {
-      console.log(error);
-    },
-  });
+  const { mutate: mutateUnfollowCreator, isLoading: isUnfollowCreatorLoading } =
+    useMutation(unfollowCreator, {
+      onSuccess: (data) => {
+        if (data?.isUnfollowed) props.setIsFollowed(false);
+      },
+      onError: (error) => {
+        console.log(error);
+      },
+    });
 
   function followVideoCreator() {
     mutateFollowCreator({
@@ -73,12 +76,21 @@ const UserOverlay = (props: Props) => {
       <Pressable
         style={styles.followButton}
         onPress={props.isFollowed ? unfollowVideoCreator : followVideoCreator}
+        disabled={isFollowCreatorLoading || isUnfollowCreatorLoading}
       >
-        <Feather
-          name={props.isFollowed ? "check" : "plus"}
-          color={"white"}
-          size={26}
-        />
+        {isFollowCreatorLoading || isUnfollowCreatorLoading ? (
+          <Spinner
+            size="sm"
+            style={styles.icon}
+            color={GLOBAL_COLORS.primaryTextColor}
+          />
+        ) : (
+          <Feather
+            name={props.isFollowed ? "check" : "plus"}
+            color={"white"}
+            size={26}
+          />
+        )}
       </Pressable>
     </View>
   );
@@ -103,5 +115,10 @@ const styles = StyleSheet.create({
     bottom: 12,
     backgroundColor: GLOBAL_COLORS.errorColor,
     borderRadius: 13,
+  },
+  icon: {
+    height: 27,
+    width: 27,
+    resizeMode: "contain",
   },
 });

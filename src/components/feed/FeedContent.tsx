@@ -40,11 +40,11 @@ const Header = ({ item, setOpen, isFromSingleUserScreen }) => {
     <View style={styles.headerContainer}>
       <Pressable style={styles.profileContent} onPress={navigateSingleUser}>
         <Image
-          source={{ uri: BASE_URL_FILE_SERVER + item.user.photo }}
+          source={{ uri: BASE_URL_FILE_SERVER + item.user?.photo }}
           style={styles.profilePhoto}
         />
         <VStack>
-          <Text style={styles.username}>{item.user.username}</Text>
+          <Text style={styles.username}>{item.user?.username}</Text>
           <HStack>
             <Text style={styles.timeDate}>
               {moment(item.created_at).format("h:mm A")}{" "}

@@ -51,6 +51,13 @@ interface ICertificate {
   token: string;
   locale: string;
 }
+interface ICustomerWorkFeeds {
+  data: {
+    type: string;
+  };
+  token: string;
+  category: string;
+}
 
 interface IExistingCustomer extends INewCustomer {
   token: string;
@@ -205,6 +212,18 @@ const CustomerService = () => {
     });
   };
 
+  const getCustomerWorkFeeds = (params: ICustomerWorkFeeds) => {
+    return request({
+      headers: {
+        ...getHeaders(),
+        Authorization: `Bearer ${params.token}`,
+      },
+      url: `/customers/${params.category}`,
+      method: "GET",
+      params: params.data,
+    });
+  };
+
   return {
     getCustomerById,
     postLoginCustomer,
@@ -222,6 +241,7 @@ const CustomerService = () => {
     getCustomerProfile,
     putCustomerProfile,
     getCertificate,
+    getCustomerWorkFeeds,
   };
 };
 

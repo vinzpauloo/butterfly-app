@@ -198,7 +198,7 @@ const Information = (props: Props) => {
           onPress={() => {
             navigation.navigate("InformationScreen", {
               postTitle: translations.liked,
-              postMessage: "LikeCard",
+              postMessage: "likes",
             });
           }}
         >
@@ -225,7 +225,7 @@ const Information = (props: Props) => {
           onPress={() => {
             navigation.navigate("InformationScreen", {
               postTitle: translations.comments,
-              postMessage: "CommentCard",
+              postMessage: "comments",
             });
           }}
         >
@@ -337,19 +337,12 @@ const styles = StyleSheet.create({
     color: "white",
     fontWeight: "bold",
   },
-  deleteIcon: {
-    alignSelf: "center",
-    marginLeft: "auto",
-  },
   messageContainer: {
     backgroundColor: GLOBAL_COLORS.videoContentBG,
     marginTop: 16,
     padding: 16,
     marginHorizontal: 16,
     borderRadius: 4,
-  },
-  dividerColor: {
-    backgroundColor: "#999",
   },
   icons: {
     height: 38,

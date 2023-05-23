@@ -1,21 +1,20 @@
-import { StyleSheet, useWindowDimensions } from "react-native";
-import React, { useState } from "react";
+import { StyleSheet } from "react-native";
+import React from "react";
 
 import { useToast } from "native-base";
-import { BarCodeScanner } from "expo-barcode-scanner";
+import { Camera } from "expo-camera";
+import { storeDataObject } from "lib/asyncStorage";
 import { useMutation } from "@tanstack/react-query";
+import { useNavigation } from "@react-navigation/native";
 
 import Container from "components/Container";
 import CustomerService from "services/api/CustomerService";
 import { GLOBAL_COLORS } from "global";
 import { userStore } from "../../../../zustand/userStore";
-import { storeDataObject } from "lib/asyncStorage";
-import { useNavigation } from "@react-navigation/native";
 import { translationStore } from "../../../../zustand/translationStore";
 
 const index = () => {
   const toast = useToast();
-  const { width, height } = useWindowDimensions();
   // **** GLOBAL STATE
   const token = userStore((store) => store.api_token);
   const setUserStore = userStore((state) => state.setUserData);
@@ -67,46 +66,17 @@ const index = () => {
 
   return (
     <Container>
-      {/* <VStack
-        alignItems="center"
-        height={height}
-        width={width}
-        backgroundColor={GLOBAL_COLORS.primaryColor}
-      >
-        <Text style={styles.title}>{translations.theButterflyProject}</Text>
-        <Box alignItems="center" mt={20} style={styles.scannerContent}>
-          <Image source={ButterflyLogo} style={styles.butterflyLogo} /> */}
-      <BarCodeScanner
+      <Camera
         onBarCodeScanned={handleBarCodeScanned}
-        style={{ height, width }}
+        barCodeScannerSettings={{
+          barCodeTypes: ["qr"],
+        }}
+        style={StyleSheet.absoluteFillObject}
       />
-      {/* </Box> */}
-      {/* // </VStack> */}
     </Container>
   );
 };
 
 export default index;
 
-const styles = StyleSheet.create({
-  // SCANNER
-  title: {
-    fontSize: 20,
-    fontWeight: "bold",
-    color: GLOBAL_COLORS.primaryTextColor,
-    marginTop: 20,
-    marginBottom: 30,
-  },
-  scannerContent: {
-    borderWidth: 1,
-    borderColor: GLOBAL_COLORS.primaryTextColor,
-    paddingVertical: 25,
-    borderRadius: 20,
-  },
-  butterflyLogo: {
-    position: "absolute",
-    height: 94,
-    width: 94,
-    top: -80,
-  },
-});
+const styles = StyleSheet.create({});

@@ -1,22 +1,24 @@
-import Moment from "./tabs/Moment";
-import Projects from "./tabs/Projects";
 import React, { useState } from "react";
-import SingleUserHeader from "components/headers/SingleUserHeader";
-import StickyTabs from "layouts/StickyTabs";
-import { translationStore } from "../../zustand/translationStore";
 import { Text, Pressable, StyleSheet, Image, Dimensions } from "react-native";
-import { GLOBAL_COLORS, GLOBAL_SCREEN_SIZE } from "global";
+
 import { HStack, Spinner, VStack } from "native-base";
+import { useMutation, useQuery } from "@tanstack/react-query";
+import { useNavigation, useRoute } from "@react-navigation/native";
+
 import chatInactive from "assets/images/chatInactive.png";
 import coinIcon from "assets/images/coinIcon.png";
 import CustomModal from "components/CustomModal";
-import DonateModalContent from "components/DonateModalContent";
-import VIPModalContent from "components/VIPModalContent";
-import { useNavigation, useRoute } from "@react-navigation/native";
 import CustomerService from "services/api/CustomerService";
-import { useMutation, useQuery } from "@tanstack/react-query";
-import { userStore } from "../../zustand/userStore";
+import DonateModalContent from "components/DonateModalContent";
+import Moment from "./tabs/Moment";
+import SingleUserHeader from "components/headers/SingleUserHeader";
+import StickyTabs from "layouts/StickyTabs";
 import UserService from "services/api/UserService";
+import VIPModalContent from "components/VIPModalContent";
+import Work from "./tabs/Work";
+import { GLOBAL_COLORS, GLOBAL_SCREEN_SIZE } from "global";
+import { translationStore } from "../../zustand/translationStore";
+import { userStore } from "../../zustand/userStore";
 
 const { width } = Dimensions.get("window");
 
@@ -127,9 +129,9 @@ const SingleUserScreen = () => {
         Content: <Moment />,
       },
       {
-        name: "projects",
+        name: "work",
         label: translations.work,
-        Content: <Projects />,
+        Content: <Work />,
       },
     ],
   };

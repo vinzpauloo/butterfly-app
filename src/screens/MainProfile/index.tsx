@@ -109,6 +109,7 @@ const Header = () => {
 const User = () => {
   const { alias, photo, is_Vip, coins } = userStore((store) => store);
   const { translations } = translationStore((store) => store);
+  const navigation = useNavigation<any>();
 
   return (
     <HStack>
@@ -153,20 +154,40 @@ const User = () => {
           </VStack>
         </HStack>
         <HStack justifyContent="space-between" alignItems="center" pr="8">
-          <VStack alignItems="center">
-            <Text style={styles.bottomTopText}>0</Text>
-            <Text style={styles.bottomText}>{translations.talkAbout}</Text>
-          </VStack>
+          <Pressable
+            onPress={() => {
+              navigation.navigate("InformationScreen", {
+                postTitle: translations.liked,
+                postMessage: "likes",
+              });
+            }}
+          >
+            <VStack alignItems="center">
+              <Text style={styles.bottomTopText}>0</Text>
+              <Text style={styles.bottomText}>{translations.like}</Text>
+            </VStack>
+          </Pressable>
           <Divider orientation="vertical" mx={1} h="1/2" />
-          <VStack alignItems="center">
-            <Text style={styles.bottomTopText}>0</Text>
-            <Text style={styles.bottomText}>{translations.follow}</Text>
-          </VStack>
+          <Pressable
+            onPress={() => {
+              navigation.navigate("InformationScreen", {
+                postTitle: translations.favorite,
+                postMessage: "favorites",
+              });
+            }}
+          >
+            <VStack alignItems="center">
+              <Text style={styles.bottomTopText}>0</Text>
+              <Text style={styles.bottomText}>{translations.favorite}</Text>
+            </VStack>
+          </Pressable>
           <Divider orientation="vertical" mx={1} h="1/2" />
-          <VStack alignItems="center">
-            <Text style={styles.bottomTopText}>0</Text>
-            <Text style={styles.bottomText}>{translations.fan}</Text>
-          </VStack>
+          <Pressable>
+            <VStack alignItems="center">
+              <Text style={styles.bottomTopText}>0</Text>
+              <Text style={styles.bottomText}>{translations.follow}</Text>
+            </VStack>
+          </Pressable>
         </HStack>
       </VStack>
     </HStack>

@@ -9,7 +9,7 @@ import { userStore } from "../../../zustand/userStore";
 
 type Props = {};
 
-const Projects = (props: Props) => {
+const Work = (props: Props) => {
   const token = userStore((state) => state.api_token);
   const route = useRoute<any>();
   const userID = route?.params?.userID;
@@ -22,7 +22,7 @@ const Projects = (props: Props) => {
 
   const { getWorks } = WorkService();
   const { isLoading, isRefetching } = useQuery({
-    queryKey: ["SingleUserProjects", userID, page, refreshingId],
+    queryKey: ["SingleUserWork", userID, page, refreshingId],
     queryFn: () =>
       getWorks({
         data: {
@@ -60,6 +60,6 @@ const Projects = (props: Props) => {
   );
 };
 
-export default Projects;
+export default Work;
 
 const styles = StyleSheet.create({});

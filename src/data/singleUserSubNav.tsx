@@ -1,7 +1,7 @@
 import React from "react";
 
 import Moment from "screens/SingleUser/tabs/Moment";
-import Projects from "screens/SingleUser/tabs/Projects";
+import Work from "screens/SingleUser/tabs/Work";
 import Collection from "screens/SingleUser/tabs/Collection";
 import SingleUserHeader from "components/headers/SingleUserHeader";
 
@@ -14,9 +14,9 @@ export const singleUserSubNav = {
       Content: <Moment />,
     },
     {
-      name: "projects",
+      name: "work",
       label: "作品",
-      Content: <Projects />,
+      Content: <Work />,
     },
     {
       name: "collection",

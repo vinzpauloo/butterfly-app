@@ -102,21 +102,19 @@ const Contents = ({ data }) => {
   const [id, setId] = useState<number | null>(null);
 
   return (
-    <Container>
-      <View style={styles.gridVideoContainer}>
-        <MasonryList
-          // estimatedItemSize={166}
-          numColumns={2}
-          data={data}
-          renderItem={({ item }: any) => (
-            <Video item={item} onOpen={onOpen} setId={setId} />
-          )}
-          keyExtractor={(_, index) => "" + index}
-        />
+    <View style={styles.gridVideoContainer}>
+      <MasonryList
+        // estimatedItemSize={166}
+        numColumns={2}
+        data={data}
+        renderItem={({ item }: any) => (
+          <Video item={item} onOpen={onOpen} setId={setId} />
+        )}
+        keyExtractor={(_, index) => "" + index}
+      />
 
-        <Modal isOpen={isOpen} onOpen={onOpen} onClose={onClose} id={id} />
-      </View>
-    </Container>
+      <Modal isOpen={isOpen} onOpen={onOpen} onClose={onClose} id={id} />
+    </View>
   );
 };
 // ** END: CONTENTS
@@ -194,7 +192,7 @@ export default function Favorite() {
         onEndReached={reachEnd}
         data={[1]}
         keyExtractor={(item, index) => "" + index}
-        renderItem={({ item, index }) => <Contents data={data} />}
+        renderItem={({ item, index }) => <Contents key={index} data={data} />}
         ListFooterComponent={() => (
           <>
             {/* the gap will be remove if the lastpage is been fetch */}

@@ -6,7 +6,7 @@ import StickyTabs from "layouts/StickyTabs";
 import { translationStore } from "../../zustand/translationStore";
 import { Text, Pressable, StyleSheet, Image, Dimensions } from "react-native";
 import { GLOBAL_COLORS, GLOBAL_SCREEN_SIZE } from "global";
-import { HStack, VStack } from "native-base";
+import { HStack, Spinner, VStack } from "native-base";
 import chatInactive from "assets/images/chatInactive.png";
 import coinIcon from "assets/images/coinIcon.png";
 import CustomModal from "components/CustomModal";
@@ -57,30 +57,32 @@ const SingleUserScreen = () => {
 
   const { followCreator, unfollowCreator } = CustomerService();
   // follow content creator
-  const { mutate: mutateFollowCreator } = useMutation(followCreator, {
-    onSuccess: (data) => {
-      if (data?.isFollowed) {
-        setIsCreatorFollowed(true);
-        route.params.setIsFollowed(true); // this is use to update the vlog screen status when followed the model
-      }
-    },
-    onError: (error) => {
-      console.log(error);
-    },
-  });
+  const { mutate: mutateFollowCreator, isLoading: isFollowCreatorLoading } =
+    useMutation(followCreator, {
+      onSuccess: (data) => {
+        if (data?.isFollowed) {
+          setIsCreatorFollowed(true);
+          route.params.setIsFollowed(true); // this is use to update the vlog screen status when followed the model
+        }
+      },
+      onError: (error) => {
+        console.log(error);
+      },
+    });
 
   // unfollow content creator
-  const { mutate: mutateUnfollowCreator } = useMutation(unfollowCreator, {
-    onSuccess: (data) => {
-      if (data?.isUnfollowed) {
-        setIsCreatorFollowed(false);
-        route.params.setIsFollowed(false); // this is use to update the vlog screen status when unfollowed the model
-      }
-    },
-    onError: (error) => {
-      console.log(error);
-    },
-  });
+  const { mutate: mutateUnfollowCreator, isLoading: isUnfollowCreatorLoading } =
+    useMutation(unfollowCreator, {
+      onSuccess: (data) => {
+        if (data?.isUnfollowed) {
+          setIsCreatorFollowed(false);
+          route.params.setIsFollowed(false); // this is use to update the vlog screen status when unfollowed the model
+        }
+      },
+      onError: (error) => {
+        console.log(error);
+      },
+    });
 
   // ** EVENTS
   const followContentCreator = () => {
@@ -170,14 +172,31 @@ const SingleUserScreen = () => {
               style={[
                 styles.button,
                 isCreatorFollowed ? styles.unfollowBG : styles.followBG,
+                {
+                  flexDirection: "row",
+                  alignItems: "center",
+                  justifyContent: "center",
+                },
               ]}
+              disabled={isFollowCreatorLoading || isUnfollowCreatorLoading}
             >
               <Text style={styles.whiteText}>
-                {isCreatorFollowed ? "-" : "+"}{" "}
+                {isCreatorFollowed ? "" : "+"}
                 {isCreatorFollowed
                   ? translations.unfollow
                   : translations.follow}
               </Text>
+              {isFollowCreatorLoading || isUnfollowCreatorLoading ? (
+                <Spinner
+                  size="sm"
+                  style={styles.icon}
+                  color={
+                    isCreatorFollowed
+                      ? GLOBAL_COLORS.secondaryColor
+                      : GLOBAL_COLORS.inactiveTextColor
+                  }
+                />
+              ) : null}
             </Pressable>
           </HStack>
           <CustomModal open={openVIPModal} setOpen={setVIPModalOpen}>
@@ -225,5 +244,10 @@ const styles = StyleSheet.create({
   },
   unfollowBG: {
     backgroundColor: GLOBAL_COLORS.inactiveTextColor,
+  },
+  icon: {
+    marginLeft: 10,
+    height: 10,
+    width: 10,
   },
 });

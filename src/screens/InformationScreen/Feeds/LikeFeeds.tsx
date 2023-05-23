@@ -9,7 +9,16 @@ export default function LikeFeeds({ data }) {
     <>
       {data.map((item, index) => (
         <React.Fragment key={index}>
-          <FeedContent key={index} data={item.feeds} />
+          <FeedContent
+            key={index}
+            data={{
+              ...item.feeds,
+              user: item.user,
+              is_liked: item.is_liked,
+              like: item.like,
+              comment: item.comment,
+            }}
+          />
           <View style={styles.divider} />
         </React.Fragment>
       ))}

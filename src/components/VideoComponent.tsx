@@ -1,4 +1,4 @@
-import { Dimensions, Image, StyleSheet } from "react-native";
+import { Image, StyleSheet, useWindowDimensions } from "react-native";
 import React from "react";
 
 import { HStack, Text } from "native-base";
@@ -7,9 +7,8 @@ import VideoIcon from "assets/images/videoIcon.png";
 import VIPTag from "./VIPTag";
 import { GLOBAL_COLORS, GLOBAL_SCREEN_SIZE } from "global";
 
-const { width } = Dimensions.get("window");
-
 const VideoComponent = ({ item }) => {
+  const { width } = useWindowDimensions();
   return (
     <>
       <VIPTag isAbsolute={true} />

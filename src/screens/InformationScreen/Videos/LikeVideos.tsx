@@ -10,49 +10,14 @@ import {
 import React, { useState } from "react";
 
 import Entypo from "react-native-vector-icons/Entypo";
-import Foundation from "react-native-vector-icons/Foundation";
 import MasonryList from "@react-native-seoul/masonry-list";
 import { useNavigation } from "@react-navigation/native";
 import { useDisclose } from "native-base";
 
 import Modal from "components/BottomModal";
-import VideoComponent from "components/VideoComponent";
-import VIPTag from "components/VIPTag";
 import { GLOBAL_COLORS, GLOBAL_SCREEN_SIZE } from "global";
 import { BASE_URL_FILE_SERVER } from "react-native-dotenv";
-
-export const FollowingBottomContent = ({ item }) => {
-  const { width } = useWindowDimensions();
-  return (
-    <View style={styles.textContent}>
-      <View style={{ flexDirection: "row", alignItems: "center" }}>
-        <Image
-          source={{ uri: BASE_URL_FILE_SERVER + item.user.photo }}
-          style={styles.modelImg}
-        />
-        <Text
-          numberOfLines={1}
-          style={[
-            styles.modelText,
-            { width: width < GLOBAL_SCREEN_SIZE.mobile ? 60 : null },
-          ]}
-        >
-          {item.user.username}
-        </Text>
-      </View>
-      <View style={{ flexDirection: "row", alignItems: "center" }}>
-        <Foundation
-          name="heart"
-          size={18}
-          color={GLOBAL_COLORS.secondaryColor}
-        />
-        <Text style={styles.modelLikeCount}>
-          {!!item?.like?.total_likes ? item?.like?.total_likes : 0}w
-        </Text>
-      </View>
-    </View>
-  );
-};
+import VideoComponent from "components/VideoComponent";
 
 export const GridVideosBottomContent = ({ onOpen, username, setId, id }) => {
   const handlePress = (event) => {
@@ -74,72 +39,23 @@ export const GridVideosBottomContent = ({ onOpen, username, setId, id }) => {
   );
 };
 
-const AdsContainer = ({ item, isFollowingScreen, onOpen, setId }: any) => {
-  const { width } = useWindowDimensions();
-  const handlePress = () => {};
-
-  return (
-    <TouchableOpacity
-      activeOpacity={1}
-      style={styles.videoContainer}
-      onPress={handlePress}
-    >
-      <View style={styles.thumbnailContainer}>
-        <VIPTag isAbsolute={true} />
-        <Image
-          source={{ uri: BASE_URL_FILE_SERVER + item.photo_url }}
-          style={[styles.video, { height: width * 0.3 }]}
-        />
-      </View>
-      <View style={styles.bottomContent}>
-        <View style={styles.titleContent}>
-          <Text style={[styles.text, styles.title]} numberOfLines={2}>
-            {item?.title}
-          </Text>
-        </View>
-        {/* {isFollowingScreen ? (
-          <FollowingBottomContent item={item} />
-        ) : (
-          <GridVideosBottomContent
-            username={item?.username}
-            onOpen={onOpen}
-            setId={setId}
-            id={item._id}
-          />
-        )} */}
-      </View>
-    </TouchableOpacity>
-  );
-};
-
-export const Video = ({ item, isFollowingScreen, onOpen, setId }: any) => {
+export const Video = ({ item, onOpen, setId }: any) => {
   const { width } = useWindowDimensions();
   const navigation = useNavigation<any>();
   const videoHeight =
-    item.orientation === "Landscape" ? width * 0.3 : width * 0.5;
+    item.works.orientation === "Landscape" ? width * 0.3 : width * 0.5;
   const handlePress = () => {
-    if (item.orientation === "Landscape") {
+    if (item.works.orientation === "Landscape") {
       navigation.navigate("SingleVideo", {
-        id: item?._id,
+        id: item.works?._id,
       });
     } else {
       navigation.navigate("VlogScreen", {
-        id: item?._id,
+        id: item.works?._id,
       });
     }
   };
 
-  // if (item?.username === "Ads") {
-  if (item?.photo_url) {
-    return (
-      <AdsContainer
-        item={item}
-        isFollowingScreen={isFollowingScreen}
-        onOpen={onOpen}
-      />
-    );
-  }
-
   return (
     <TouchableOpacity
       activeOpacity={1}
@@ -147,34 +63,30 @@ export const Video = ({ item, isFollowingScreen, onOpen, setId }: any) => {
       onPress={handlePress}
     >
       <View style={styles.thumbnailContainer}>
-        <VideoComponent item={item} />
+        <VideoComponent item={{ ...item.works, ...item }} />
         <Image
-          source={{ uri: BASE_URL_FILE_SERVER + item.thumbnail_url }}
+          source={{ uri: BASE_URL_FILE_SERVER + item.works.thumbnail_url }}
           style={[styles.video, { height: videoHeight }]}
         />
       </View>
       <View style={styles.bottomContent}>
         <View style={styles.titleContent}>
           <Text style={[styles.text, styles.title]} numberOfLines={2}>
-            {item?.title}
+            {item?.works.title}
           </Text>
         </View>
-        {isFollowingScreen ? (
-          <FollowingBottomContent item={item} />
-        ) : (
-          <GridVideosBottomContent
-            username={item?.user?.username}
-            onOpen={onOpen}
-            setId={setId}
-            id={item._id}
-          />
-        )}
+        <GridVideosBottomContent
+          username={item?.user?.username}
+          onOpen={onOpen}
+          setId={setId}
+          id={item._id}
+        />
       </View>
     </TouchableOpacity>
   );
 };
 
-export default function LikeVideos({ data, isFollowingScreen = false }) {
+export default function LikeVideos({ data }) {
   const { isOpen, onOpen, onClose } = useDisclose();
   const [id, setId] = useState<number | null>(null);
 
@@ -185,12 +97,7 @@ export default function LikeVideos({ data, isFollowingScreen = false }) {
         numColumns={2}
         data={data}
         renderItem={({ item }: any) => (
-          <Video
-            item={item.works}
-            isFollowingScreen={isFollowingScreen}
-            onOpen={onOpen}
-            setId={setId}
-          />
+          <Video item={item} onOpen={onOpen} setId={setId} />
         )}
         keyExtractor={(_, index) => "" + index}
       />
@@ -258,5 +165,13 @@ const styles = StyleSheet.create({
     fontSize: 12,
     color: GLOBAL_COLORS.primaryTextColor,
     paddingHorizontal: 5,
+  },
+  videoComponents: {
+    position: "absolute",
+    zIndex: 10,
+  },
+  videoIcon: {
+    width: 15,
+    height: 15,
   },
 });

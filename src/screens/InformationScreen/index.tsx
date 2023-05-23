@@ -19,6 +19,7 @@ import CommentFeeds from "./Feeds/CommentFeeds";
 import CommentVideos from "./Videos/CommentVideos";
 import Container from "components/Container";
 import CustomerService from "services/api/CustomerService";
+import Favorite from "./Favorite";
 import FeedItemSkeleton from "components/skeletons/FeedItemSkeleton";
 import gold from "assets/images/gold.png";
 import LikeFeeds from "./Feeds/LikeFeeds";
@@ -87,6 +88,7 @@ const SystemCard = ({ data }) => {
 const WorksVlogs = ({ route }) => {
   // ** global state
   const { api_token } = userStore((store) => store);
+  const { translations } = translationStore((store) => store);
   // ** state
   const [data, setData] = useState([]);
   const [page, setPage] = useState(1);
@@ -176,12 +178,8 @@ const WorksVlogs = ({ route }) => {
             {route?.params.postMessage === "likes" && (
               <LikeVideos data={data} />
             )}
-            {route?.params.postMessage === "FanCard" && <FanCard data={data} />}
             {route?.params.postMessage === "comments" && (
               <CommentVideos data={data} />
-            )}
-            {route?.params.postMessage === "IncomeCard" && (
-              <IncomeCard data={data} />
             )}
             {route?.params.postMessage === "SystemCard" && (
               <SystemCard data={data} />
@@ -197,7 +195,12 @@ const WorksVlogs = ({ route }) => {
                 {isLoading ? <Loading /> : null}
               </View>
             ) : null}
-            {lastPage === page && !isLoading ? <BottomMessage /> : null}
+            {lastPage === page && !isLoading && data.length ? (
+              <BottomMessage />
+            ) : null}
+            {!!data.length ? null : (
+              <Text style={styles.emptyResult}>{translations.noData}</Text>
+            )}
           </>
         )}
       />
@@ -212,6 +215,7 @@ const WorksVlogs = ({ route }) => {
 const Feeds = ({ route }) => {
   // ** global state
   const { api_token } = userStore((store) => store);
+  const { translations } = translationStore((store) => store);
   // ** state
   const [data, setData] = useState([]);
   const [page, setPage] = useState(1);
@@ -297,12 +301,8 @@ const Feeds = ({ route }) => {
         renderItem={({ item, index }) => (
           <React.Fragment key={index}>
             {route?.params.postMessage === "likes" && <LikeFeeds data={data} />}
-            {route?.params.postMessage === "FanCard" && <FanCard data={data} />}
             {route?.params.postMessage === "comments" && (
               <CommentFeeds data={data} />
-            )}
-            {route?.params.postMessage === "IncomeCard" && (
-              <IncomeCard data={data} />
             )}
             {route?.params.postMessage === "SystemCard" && (
               <SystemCard data={data} />
@@ -318,7 +318,12 @@ const Feeds = ({ route }) => {
                 {isLoading ? <Loading /> : null}
               </View>
             ) : null}
-            {lastPage === page && !isLoading ? <BottomMessage /> : null}
+            {lastPage === page && !isLoading && data.length ? (
+              <BottomMessage />
+            ) : null}
+            {!!data.length ? null : (
+              <Text style={styles.emptyResult}>{translations.noData}</Text>
+            )}
           </>
         )}
       />
@@ -360,6 +365,11 @@ const MenuTabs = ({ postMessage }) => {
 
 const InformationScreen = () => {
   const route = useRoute<any>();
+
+  if (route?.params.postMessage === "favorites") {
+    return <Favorite />;
+  }
+
   return <MenuTabs postMessage={route.params.postMessage} />;
 };
 
@@ -416,5 +426,11 @@ const styles = StyleSheet.create({
     height: 38,
     width: 38,
     resizeMode: "contain",
+  },
+  emptyResult: {
+    textAlign: "center",
+    fontSize: 30,
+    marginVertical: 15,
+    color: GLOBAL_COLORS.secondaryColor,
   },
 });

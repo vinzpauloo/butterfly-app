@@ -211,7 +211,7 @@ const Information = (props: Props) => {
           onPress={() => {
             navigation.navigate("InformationScreen", {
               postTitle: translations.favorite,
-              postMessage: "FanCard",
+              postMessage: "favorites",
             });
           }}
         >

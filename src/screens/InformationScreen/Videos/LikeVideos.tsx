@@ -15,7 +15,7 @@ import { useNavigation } from "@react-navigation/native";
 import { useDisclose } from "native-base";
 
 import Modal from "components/BottomModal";
-import { GLOBAL_COLORS, GLOBAL_SCREEN_SIZE } from "global";
+import { GLOBAL_COLORS } from "global";
 import { BASE_URL_FILE_SERVER } from "react-native-dotenv";
 import VideoComponent from "components/VideoComponent";
 

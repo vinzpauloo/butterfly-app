@@ -4,6 +4,7 @@ import {
   PusherChannel,
   PusherEvent,
 } from "@pusher/pusher-websocket-react-native";
+import { PUSHER_APP_KEY } from "react-native-dotenv";
 
 const pusher = Pusher.getInstance();
 
@@ -15,7 +16,7 @@ const initializePusher = () => {
     console.log("@@ Initializing pusher ...");
 
     await pusher.init({
-      apiKey: "f9aaec2a9032709a666e",
+      apiKey: PUSHER_APP_KEY,
       cluster: "ap1",
     });
     await pusher.connect();

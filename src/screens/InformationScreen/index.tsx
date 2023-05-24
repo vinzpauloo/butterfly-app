@@ -27,6 +27,7 @@ import LikeVideos from "./Videos/LikeVideos";
 import Loading from "components/Loading";
 import MasonrySkeleton from "components/skeletons/MasonrySkeleton";
 import MomentHeaderSkeleton from "components/skeletons/MomentHeaderSkeleton";
+import NoCacheMessage from "features/sectionList/components/NoCacheMessage";
 import SystemIcon from "assets/images/SystemIcon.png";
 import vincent from "assets/images/vincent-avatar.png";
 import { GLOBAL_COLORS } from "global";
@@ -186,6 +187,7 @@ const WorksVlogs = ({ route }) => {
             )}
           </>
         )}
+        ListEmptyComponent={!!data.length ? null : <NoCacheMessage />}
         ListFooterComponent={() => (
           <>
             {/* the gap will be remove if the lastpage is been fetch */}
@@ -198,9 +200,6 @@ const WorksVlogs = ({ route }) => {
             {lastPage === page && !isLoading && data.length ? (
               <BottomMessage />
             ) : null}
-            {!!data.length ? null : (
-              <Text style={styles.emptyResult}>{translations.noData}</Text>
-            )}
           </>
         )}
       />
@@ -309,6 +308,7 @@ const Feeds = ({ route }) => {
             )}
           </React.Fragment>
         )}
+        ListEmptyComponent={!!data.length ? null : <NoCacheMessage />}
         ListFooterComponent={() => (
           <>
             {/* the gap will be remove if the lastpage is been fetch */}
@@ -321,9 +321,6 @@ const Feeds = ({ route }) => {
             {lastPage === page && !isLoading && data.length ? (
               <BottomMessage />
             ) : null}
-            {!!data.length ? null : (
-              <Text style={styles.emptyResult}>{translations.noData}</Text>
-            )}
           </>
         )}
       />

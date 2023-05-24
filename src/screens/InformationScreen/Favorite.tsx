@@ -14,20 +14,21 @@ import Entypo from "react-native-vector-icons/Entypo";
 import MasonryList from "@react-native-seoul/masonry-list";
 import { useNavigation } from "@react-navigation/native";
 import { useDisclose } from "native-base";
-
-import Modal from "components/BottomModal";
-import { GLOBAL_COLORS } from "global";
+import { useQuery } from "@tanstack/react-query";
+import { FlashList } from "@shopify/flash-list";
 import { BASE_URL_FILE_SERVER } from "react-native-dotenv";
+
+import BottomMessage from "components/BottomMessage";
+import Container from "components/Container";
+import CustomerService from "services/api/CustomerService";
+import Loading from "components/Loading";
+import MasonrySkeleton from "components/skeletons/MasonrySkeleton";
+import Modal from "components/BottomModal";
+import NoCacheMessage from "features/sectionList/components/NoCacheMessage";
 import VideoComponent from "components/VideoComponent";
+import { GLOBAL_COLORS } from "global";
 import { userStore } from "../../zustand/userStore";
 import { translationStore } from "../../zustand/translationStore";
-import CustomerService from "services/api/CustomerService";
-import { useQuery } from "@tanstack/react-query";
-import Container from "components/Container";
-import MasonrySkeleton from "components/skeletons/MasonrySkeleton";
-import { FlashList } from "@shopify/flash-list";
-import Loading from "components/Loading";
-import BottomMessage from "components/BottomMessage";
 
 export const GridVideosBottomContent = ({ onOpen, username, setId, id }) => {
   const handlePress = (event) => {
@@ -193,6 +194,7 @@ export default function Favorite() {
         data={[1]}
         keyExtractor={(item, index) => "" + index}
         renderItem={({ item, index }) => <Contents key={index} data={data} />}
+        ListEmptyComponent={!!data.length ? null : <NoCacheMessage />}
         ListFooterComponent={() => (
           <>
             {/* the gap will be remove if the lastpage is been fetch */}
@@ -205,9 +207,6 @@ export default function Favorite() {
             {lastPage === page && !isLoading && data.length ? (
               <BottomMessage />
             ) : null}
-            {!!data.length ? null : (
-              <Text style={styles.emptyResult}>{translations.noData}</Text>
-            )}
           </>
         )}
       />

@@ -5,6 +5,7 @@ import Container from "components/Container";
 import Feeds from "components/feed/Feeds";
 import FeedItemSkeleton from "components/skeletons/FeedItemSkeleton";
 import GeneralSearch from "services/api/GeneralSearch";
+import NoCacheMessage from "features/sectionList/components/NoCacheMessage";
 import { GLOBAL_COLORS } from "global";
 import { userStore } from "../../../zustand/userStore";
 import { useQuery } from "@tanstack/react-query";
@@ -71,7 +72,7 @@ const Feed = ({ searchText, fetchChecker, setFetchChecker, page, setPage }) => {
   return (
     <Container>
       {data.length === 0 && !isLoading ? (
-        <Text style={styles.emptyResult}>{translations.noData}</Text>
+        <NoCacheMessage />
       ) : (
         <Feeds
           data={data}

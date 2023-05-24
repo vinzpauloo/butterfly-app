@@ -15,18 +15,19 @@ import { BASE_URL_FILE_SERVER } from "react-native-dotenv";
 import { FlashList } from "@shopify/flash-list";
 import { HStack, VStack, useDisclose } from "native-base";
 import { useQuery } from "@tanstack/react-query";
+import { useNavigation } from "@react-navigation/native";
 
 import BottomMessage from "components/BottomMessage";
 import Container from "components/Container";
 import Loading from "components/Loading";
 import Modal from "components/BottomModal";
+import NoCacheMessage from "features/sectionList/components/NoCacheMessage";
 import VideoComponent from "components/VideoComponent";
+import VideoHistorySkeleton from "components/skeletons/VidoeHistorySkeleton";
 import WorkService from "services/api/WorkService";
 import { GLOBAL_COLORS, GLOBAL_SCREEN_SIZE } from "global";
 import { translationStore } from "../../zustand/translationStore";
 import { userStore } from "../../zustand/userStore";
-import { useNavigation } from "@react-navigation/native";
-import VideoHistorySkeleton from "components/skeletons/VidoeHistorySkeleton";
 
 // **** START: COMPONENTS **** //
 const Layout = ({ children, style = null }) => {
@@ -243,6 +244,7 @@ const index = () => {
             ) : null}
           </Layout>
         )}
+        ListEmptyComponent={!!data.length ? null : <NoCacheMessage />}
         ListFooterComponent={() => (
           <>
             {/* the gap will be remove if the lastpage is been fetch */}
@@ -255,9 +257,6 @@ const index = () => {
             {lastPage === page && !isLoading && !!data?.data.length ? (
               <BottomMessage />
             ) : null}
-            {!!data?.data.length ? null : (
-              <Text style={styles.emptyResult}>{translation.noData}</Text>
-            )}
           </>
         )}
       />

@@ -1,19 +1,20 @@
-import { ScrollView, StyleSheet, Text, View } from "react-native";
+import { StyleSheet, View } from "react-native";
 import React, { useEffect, useState } from "react";
 
-import { useQuery } from "@tanstack/react-query";
-
-import Container from "components/Container";
-import GeneralSearch from "services/api/GeneralSearch";
-import GridVideos, { Video } from "features/sectionList/components/GridVideos";
-import VideoListSkeleton from "components/skeletons/VideoListSkeleton";
-import { userStore } from "../../../zustand/userStore";
-import { GLOBAL_COLORS } from "global";
 import { MasonryFlashList } from "@shopify/flash-list";
 import { useDisclose } from "native-base";
-import Loading from "components/Loading";
-import BottomMessage from "components/BottomMessage";
 import { useIsFocused } from "@react-navigation/native";
+import { useQuery } from "@tanstack/react-query";
+
+import BottomMessage from "components/BottomMessage";
+import Container from "components/Container";
+import GeneralSearch from "services/api/GeneralSearch";
+import Loading from "components/Loading";
+import NoCacheMessage from "features/sectionList/components/NoCacheMessage";
+import VideoListSkeleton from "components/skeletons/VideoListSkeleton";
+import { GLOBAL_COLORS } from "global";
+import { userStore } from "../../../zustand/userStore";
+import { Video } from "features/sectionList/components/GridVideos";
 import { translationStore } from "../../../zustand/translationStore";
 
 const Work = ({ searchText, fetchChecker, setFetchChecker, page, setPage }) => {
@@ -89,7 +90,7 @@ const Work = ({ searchText, fetchChecker, setFetchChecker, page, setPage }) => {
   return (
     <Container>
       {data.length === 0 && !isLoading ? (
-        <Text style={styles.emptyResult}>{translation.noData}</Text>
+        <NoCacheMessage />
       ) : (
         <MasonryFlashList
           data={data}

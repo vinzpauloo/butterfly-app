@@ -59,6 +59,11 @@ interface ICustomerWorkFeeds {
   category: string;
 }
 
+interface IFollowedCreators {
+  customer_id: string;
+  token: string;
+}
+
 interface IExistingCustomer extends INewCustomer {
   token: string;
 }
@@ -93,10 +98,10 @@ const CustomerService = () => {
     });
   };
 
-  const getFollowedCreators = (customer_id: string) => {
+  const getFollowedCreators = (params: IFollowedCreators) => {
     return request({
-      headers: getHeaders(),
-      url: `/customers/followed-creators/${customer_id}`,
+      headers: { ...getHeaders(), Authorization: `Bearer ${params.token}` },
+      url: `/customers/followed-creators`,
       method: "GET",
     });
   };

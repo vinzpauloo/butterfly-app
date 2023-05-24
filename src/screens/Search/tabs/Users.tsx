@@ -20,6 +20,7 @@ import Container from "components/Container";
 import CustomerService from "services/api/CustomerService";
 import GeneralSearch from "services/api/GeneralSearch";
 import Loading from "components/Loading";
+import NoCacheMessage from "features/sectionList/components/NoCacheMessage";
 import VideoListSkeleton from "components/skeletons/VideoListSkeleton";
 import VIPTag from "components/VIPTag";
 import { GLOBAL_COLORS } from "global";
@@ -218,7 +219,7 @@ const Users = ({
   return (
     <Container>
       {data.length === 0 && !isLoading ? (
-        <Text style={styles.emptyResult}>{translation.noData}</Text>
+        <NoCacheMessage />
       ) : (
         <FlashList
           data={data}

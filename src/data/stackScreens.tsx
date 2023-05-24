@@ -15,6 +15,7 @@ import Container from "components/Container";
 import CustomerService from "screens/Settings/AccountRetrievalTabs/CustomerService";
 import DownloadScreen from "screens/Download";
 import DownloadVideo from "screens/DownloadVideo";
+import FollowedCreators from "screens/MainProfile/screens/Settings/FollowedCreators";
 import FollowersScreen from "screens/FollowersScreen";
 import InitialLoad from "screens/InitialLoad";
 import InformationScreen from "screens/InformationScreen";
@@ -190,6 +191,11 @@ export const stackScreens = {
     {
       name: "DownloadVideo",
       component: DownloadVideo,
+      options: basicHeader,
+    },
+    {
+      name: "FollowedCreators",
+      component: FollowedCreators,
       options: basicHeader,
     },
     {

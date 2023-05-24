@@ -182,7 +182,14 @@ const User = () => {
             </VStack>
           </Pressable>
           <Divider orientation="vertical" mx={1} h="1/2" />
-          <Pressable>
+          <Pressable
+            onPress={() => {
+              navigation.navigate("FollowedCreators", {
+                postTitle: translations.followed,
+                postMessage: "follow",
+              });
+            }}
+          >
             <VStack alignItems="center">
               <Text style={styles.bottomTopText}>0</Text>
               <Text style={styles.bottomText}>{translations.follow}</Text>

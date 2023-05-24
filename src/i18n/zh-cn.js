@@ -184,6 +184,8 @@ export default zh_cn = {
   vlog: "Vlog",
   wallet: "钱包",
   wantSay: "附上你想说的",
+  warningBindMobile: "請綁定您的手機號碼",
+  warningBindInvitationCode: "請綁定您的邀請碼",
   watchTicket: "看票",
   watchForFree: "免费观看",
   withdrawnProceeds: "提款",

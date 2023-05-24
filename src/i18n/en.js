@@ -187,6 +187,8 @@ export default en_us = {
   vlog: "Vlog",
   wallet: "Wallet",
   wantSay: "Attach what you want to say",
+  warningBindMobile: "Please Bind Your Mobile Number",
+  warningBindInvitationCode: "Please Bind Your Invitation Code",
   watchForFree: "Watch For Free",
   watchTicket: "Watch Ticket",
   withdrawnProceeds: "Withdrawn Proceeds",

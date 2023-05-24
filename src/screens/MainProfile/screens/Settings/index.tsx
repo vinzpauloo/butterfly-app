@@ -1,15 +1,16 @@
 import {
-  Dimensions,
   Image,
   ScrollView,
   StyleSheet,
   Text,
+  useWindowDimensions,
   View,
 } from "react-native";
 import React, { useState } from "react";
 
 import * as Clipboard from "expo-clipboard";
 import Entypo from "react-native-vector-icons/Entypo";
+import FontAwesome from "react-native-vector-icons/FontAwesome";
 import Ionicons from "react-native-vector-icons/Ionicons";
 import LottieView from "lottie-react-native";
 import {
@@ -32,8 +33,6 @@ import { GLOBAL_COLORS, GLOBAL_SCREEN_SIZE } from "global";
 import { translationStore } from "../../../../zustand/translationStore";
 import { userStore } from "../../../../zustand/userStore";
 import { useNavigation } from "@react-navigation/native";
-
-const { width } = Dimensions.get("window");
 
 // **** START: FILE COMPONENTS **** //
 const LayoutContent = ({ children }) => {
@@ -158,7 +157,27 @@ const FirstContainer = ({
             </>
           ) : (
             <>
-              <Text style={styles.textLabel}>{translations.mobileNumber}</Text>
+              <Stack position="relative" flex={1}>
+                <Text style={styles.textLabel}>
+                  {translations.mobileNumber}
+                </Text>
+                {!!userStoreData.mobile ? null : (
+                  <HStack
+                    position="absolute"
+                    alignItems="center"
+                    width="full"
+                    space={1}
+                    style={{
+                      bottom: -15,
+                    }}
+                  >
+                    <FontAwesome name="warning" size={12} color="#EF9535" />
+                    <Text style={{ color: "#EF9535" }} numberOfLines={1}>
+                      {translations.warningBindMobile}
+                    </Text>
+                  </HStack>
+                )}
+              </Stack>
               <HStack alignItems="center">
                 <Text style={styles.textLabel}>{translations.toBind}</Text>
                 <Entypo
@@ -187,6 +206,7 @@ const FirstContainer = ({
 
 // **** START: SECOND CONTAINER **** //
 const SecondContainer = ({ setOpen }) => {
+  const { width } = useWindowDimensions();
   // ** STATE
   const [copy, setCopy] = useState(false);
   // ** GLOBAL STORE
@@ -304,9 +324,25 @@ const SecondContainer = ({ setOpen }) => {
             </>
           ) : (
             <>
-              <Text style={styles.textLabel}>
-                {translations.bindInvitationCode}
-              </Text>
+              <Stack position="relative" flex={1}>
+                <Text style={styles.textLabel}>
+                  {translations.bindInvitationCode}
+                </Text>
+                {!!referral_code ? null : (
+                  <HStack
+                    position="absolute"
+                    alignItems="center"
+                    width="full"
+                    space={1}
+                    style={{ bottom: -15 }}
+                  >
+                    <FontAwesome name="warning" size={12} color="#EF9535" />
+                    <Text style={{ color: "#EF9535" }} numberOfLines={1}>
+                      {translations.warningBindInvitationCode}
+                    </Text>
+                  </HStack>
+                )}
+              </Stack>
               <HStack alignItems="center">
                 <Text style={styles.textLabel}>{translations.toBind}</Text>
                 <Entypo

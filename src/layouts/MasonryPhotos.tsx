@@ -65,12 +65,12 @@ const SingleImage = (props: SingleImageProp) => {
         }}
         style={[styles.singleImage, { height: props.height }]}
         resizeMode="cover"
-        imageStyle={{ borderRadius: 4 }}
+        imageStyle={{ borderRadius: 5 }}
       >
         <VIPTag />
         <LinearGradient
           colors={["rgba(0, 0, 0, 0)", "rgba(0, 0, 0, .8)"]}
-          style={{ marginTop: "auto" }}
+          style={{ marginTop: "auto", borderRadius: 5 }}
         >
           <VStack style={styles.blackContainer}>
             <Text style={styles.whiteText} numberOfLines={1}>

@@ -11,7 +11,7 @@ const VideoComponent = ({ item }) => {
   const { width } = useWindowDimensions();
   return (
     <>
-      <VIPTag isAbsolute={true} />
+      <VIPTag item={item} isAbsolute={true} />
       <HStack
         space={1}
         style={[styles.videoComponents, { left: 5, bottom: 5 }]}

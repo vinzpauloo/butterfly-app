@@ -85,7 +85,7 @@ const AdsContainer = ({ item, isFollowingScreen, onOpen, setId }: any) => {
       onPress={handlePress}
     >
       <View style={styles.thumbnailContainer}>
-        <VIPTag isAbsolute={true} />
+        <VIPTag item={item} isAbsolute={true} />
         <Image
           source={{ uri: BASE_URL_FILE_SERVER + item.photo_url }}
           style={[styles.video, { height: width * 0.3 }]}

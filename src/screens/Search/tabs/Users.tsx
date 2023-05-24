@@ -99,7 +99,7 @@ const VideoContainer = ({ data, user }) => {
     <Pressable style={styles.videoContainer} onPress={navigateToSingleVideo}>
       <View style={styles.videoContent}>
         <View style={styles.thumbnailContainer}>
-          <VIPTag isAbsolute={true} />
+          <VIPTag item={data} isAbsolute={true} />
           <Image
             source={{ uri: BASE_URL_FILE_SERVER + data.thumbnail_url }}
             style={styles.video}

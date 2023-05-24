@@ -1,33 +1,38 @@
-import { Alert, Pressable, StyleSheet, Text, View } from "react-native";
+import { Image, StyleSheet, Text, View } from "react-native";
 import React from "react";
-import { useNavigation } from "@react-navigation/native";
-import { userStore } from "../zustand/userStore";
+
+import CoinIcon from "assets/images/coinIcon.png";
 import { translationStore } from "../zustand/translationStore";
 
 interface IVIPTag {
   isAbsolute?: boolean;
+  item?: any | null;
 }
 
-const VIPTag: React.FC<IVIPTag> = ({ isAbsolute }) => {
-  const { is_Vip } = userStore((state) => state);
+const VIPTag = ({ item = null, isAbsolute }: IVIPTag) => {
   const { translations } = translationStore((store) => store);
 
-  const navigation = useNavigation<any>();
-
-  const handlePress = () => {
-    if (!is_Vip)
-      navigation.navigate("VIPScreen", {
-        postTitle: translations.memberCentre,
-      });
-  };
+  if (!item) {
+    return (
+      <View style={styles.container}>
+        <Text style={styles.text}>{translations.vip}</Text>
+      </View>
+    );
+  }
 
   return (
-    <Pressable
-      onPress={handlePress}
-      style={[styles.container, isAbsolute && styles.absolute]}
-    >
-      <Text style={styles.text}>VIP</Text>
-    </Pressable>
+    <>
+      {item.available_to === "vip" ? (
+        <View style={[styles.container, isAbsolute && styles.absolute]}>
+          <Text style={styles.text}>{translations.vip}</Text>
+        </View>
+      ) : (
+        <View style={[styles.coin, isAbsolute && styles.absolute]}>
+          <Image source={CoinIcon} style={styles.icon} />
+          <Text style={styles.text}>{item.coin_amount}</Text>
+        </View>
+      )}
+    </>
   );
 };
 
@@ -38,17 +43,34 @@ const styles = StyleSheet.create({
     marginLeft: "auto",
     paddingHorizontal: 10,
     backgroundColor: "#F7D3A5",
-    borderTopRightRadius: 4,
-    borderBottomLeftRadius: 4,
+    borderTopRightRadius: 5,
+    borderBottomLeftRadius: 5,
+    paddingBottom: 2,
+  },
+  coin: {
+    flexDirection: "row",
+    alignItems: "center",
+    marginLeft: "auto",
+    paddingHorizontal: 7,
+    paddingBottom: 2,
+    backgroundColor: "#F7D3A5",
+    borderTopRightRadius: 5,
+    borderBottomLeftRadius: 5,
   },
   text: {
     color: "#000000",
-    fontSize: 10,
+    fontSize: 12,
     fontWeight: "bold",
   },
   absolute: {
     position: "absolute",
     right: 0,
     zIndex: 2,
+  },
+  icon: {
+    height: 15,
+    width: 15,
+    resizeMode: "contain",
+    marginRight: 2,
   },
 });

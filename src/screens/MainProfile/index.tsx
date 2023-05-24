@@ -1,17 +1,28 @@
 import {
-  Dimensions,
   Image,
   Pressable,
   RefreshControl,
   ScrollView,
   StyleSheet,
   Text,
+  useWindowDimensions,
   View,
 } from "react-native";
 import React, { useCallback, useState } from "react";
 
 import * as Clipboard from "expo-clipboard";
+import Entypo from "react-native-vector-icons/Entypo";
+import Ionicons from "react-native-vector-icons/Ionicons";
+import localizations from "i18n/localizations";
+import MaterialIcons from "react-native-vector-icons/MaterialIcons";
+import moment from "moment";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { BASE_URL_FILE_SERVER } from "react-native-dotenv";
+import {
+  useIsFocused,
+  useNavigation,
+  useRoute,
+} from "@react-navigation/native";
 import {
   Box,
   Divider,
@@ -22,50 +33,29 @@ import {
   VStack,
   useToast,
 } from "native-base";
+import { storeDataObject, storeDataString } from "lib/asyncStorage";
 
 import AccountIcon from "assets/images/account_icon.png";
-import ApplicationIcon from "assets/images/application_icon.png";
 import Container from "components/Container";
 import CopyIcon from "assets/images/copy_icon.png";
 import CustomerService from "services/api/CustomerService";
 import DownloadIcon from "assets/images/download_icon.png";
 import EmailIcon from "assets/images/email_icon.png";
-import Entypo from "react-native-vector-icons/Entypo";
 import FlagUSA from "assets/images/Flag-USA.png";
 import FlagChina from "assets/images/Flag-China.webp";
-import Fontisto from "react-native-vector-icons/Fontisto";
 import HistoryIcon from "assets/images/history_icon.png";
-import Ionicons from "react-native-vector-icons/Ionicons";
 import LanguageImg from "assets/images/language.png";
-import localizations from "i18n/localizations";
-import OfficialIcon from "assets/images/official_icon.png";
 import SaveIcon from "assets/images/save_icon.png";
 import ServiceIcon from "assets/images/service_icon.png";
 import ShareIcon from "assets/images/share_icon.png";
 import SiteSettingsService from "services/api/SiteSettingsService";
-import UserService from "services/api/UserService";
 import VIPActive from "assets/images/VIPActive.png";
 import VIPNotActive from "assets/images/VIPNotActive.png";
 import { GLOBAL_COLORS, GLOBAL_SCREEN_SIZE } from "global";
 import { translationStore } from "../../zustand/translationStore";
 import { userStore } from "../../zustand/userStore";
-import {
-  useIsFocused,
-  useNavigation,
-  useRoute,
-} from "@react-navigation/native";
-import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { adsGlobalStore } from "../../zustand/adsGlobalStore";
-import {
-  storeDataObject,
-  getDataObject,
-  storeDataString,
-} from "lib/asyncStorage";
 import { captureSuccess, captureError } from "services/sentry";
-
-import moment from "moment";
-
-const { width } = Dimensions.get("window");
 
 // **** COMPONENTS START **** //
 const Layout = ({ children, style = null }) => {
@@ -91,7 +81,12 @@ const Header = () => {
 
   return (
     <HStack py={2} justifyContent={"flex-end"} alignItems="center">
-      <Fontisto name="bell" color="#fff" size={25} style={styles.icon} />
+      <MaterialIcons
+        name="announcement"
+        color="#fff"
+        size={25}
+        style={styles.icon}
+      />
       <Pressable onPress={handlePressSettings}>
         <Ionicons
           name="settings-outline"
@@ -204,6 +199,7 @@ const User = () => {
 
 // **** VIP COMPONENT START CODE **** //
 const VIPStatus = () => {
+  const { width } = useWindowDimensions();
   const { is_Vip, vipPeriod, _id } = userStore((store) => store);
   const { translations } = translationStore((store) => store);
   const navigation = useNavigation<any>();

@@ -33,6 +33,7 @@ export default zh_cn = {
   clear: "清除",
   clearSearches: "清除搜索",
   clickToGet: "点击获取",
+  close: "关闭",
   coin: "金币",
   comment: "发表评论",
   comments: "评论",

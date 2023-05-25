@@ -35,6 +35,7 @@ export default en_us = {
   clear: "Clear",
   clearSearches: "Clear Searches",
   clickToGet: "Click To Get",
+  close: "Close",
   coin: "Coin",
   comment: "Comment",
   comments: "Comments",

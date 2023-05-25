@@ -79,14 +79,23 @@ const Header = () => {
     navigation.navigate("Settings", { postTitle: translations.setup });
   };
 
+  const handlePressAnnouncement = () => {
+    navigation.navigate("InformationScreen", {
+      postTitle: translations.system,
+      postMessage: "systemAnnouncement",
+    });
+  };
+
   return (
     <HStack py={2} justifyContent={"flex-end"} alignItems="center">
-      <MaterialIcons
-        name="announcement"
-        color="#fff"
-        size={25}
-        style={styles.icon}
-      />
+      <Pressable onPress={handlePressAnnouncement}>
+        <MaterialIcons
+          name="announcement"
+          color="#fff"
+          size={25}
+          style={styles.icon}
+        />
+      </Pressable>
       <Pressable onPress={handlePressSettings}>
         <Ionicons
           name="settings-outline"

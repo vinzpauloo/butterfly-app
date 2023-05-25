@@ -104,7 +104,8 @@ const SingleUserScreen = () => {
   const handleChatPress = () => {
     if (is_Vip) {
       navigation.navigate("SingleChatScreen", {
-        postTitle: "CC ID: " + userID,
+        postTitle: data?.username,
+        chatId: data?.id,
       });
     } else {
       setVIPModalOpen(true);

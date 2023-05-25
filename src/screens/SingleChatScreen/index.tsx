@@ -354,8 +354,8 @@ const SingleChatScreen = () => {
           multiline={true}
           style={[styles.textInput, { maxHeight: height * 0.08 }]}
           value={input}
-          placeholder="请输入您的消息"
-          placeholderTextColor="#999"
+          placeholder={translations.pleaseEnterYourMessage}
+          placeholderTextColor={GLOBAL_COLORS.inactiveTextColor}
           keyboardType="default"
           onChangeText={setInput}
         />

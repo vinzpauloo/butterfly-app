@@ -124,6 +124,7 @@ export default zh_cn = {
   pleaseEnterInvitationCode: "请输入邀请码",
   pleaseEnterPhoneNumber: "请输入手机号码",
   pleaseEnterSMSCode: "请输入短信验证码",
+  pleaseEnterYourMessage: "请输入您的消息",
   pleaseFillInvitationCode: "请填写邀请码",
   popularUsers: "近期热门用户",
   previousSearches: "以前的搜索",

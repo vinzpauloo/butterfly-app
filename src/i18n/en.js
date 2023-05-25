@@ -127,6 +127,7 @@ export default en_us = {
   pleaseEnterInvitationCode: "Please enter the invitation code",
   pleaseEnterPhoneNumber: "Please Enter The Phone Number",
   pleaseEnterSMSCode: "Enter SMS verification code",
+  pleaseEnterYourMessage: "Please enter your message",
   pleaseFillInvitationCode: "Please fill in the invitation code",
   popularUsers: "Recent popular users",
   previousSearches: "Previous Searches",

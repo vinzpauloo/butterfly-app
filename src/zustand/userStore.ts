@@ -25,6 +25,7 @@ export const userStore = create<IUserStore>((set) => ({
   site_id: "",
   api_token: "",
   alias: "",
+  coin: "",
   gender: "",
   mobile: "",
   photo: "",

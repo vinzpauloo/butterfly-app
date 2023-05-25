@@ -16,9 +16,9 @@ import { BASE_URL_STREAMING_SERVER } from "react-native-dotenv";
 import { Spinner } from "native-base";
 
 import BannerAds from "features/ads/components/BannerAds";
+import BuyVideoModal from "components/BuyVideoModal";
 import CoinIcon from "assets/images/coinIcon.png";
 import CustomModal from "components/CustomModal";
-import DonateModalContent from "components/DonateModalContent";
 import DownloadIcon from "assets/images/downloadIcon.png";
 import DownloadedIcon from "assets/images/downloadedIcon.png";
 import FavoriteButton from "components/forms/singleVideo/FavoriteButton";
@@ -51,6 +51,7 @@ export const Header = ({
   // ** STATES
   const [open, setOpen] = useState(false);
   const [openDonateModal, setOpenDonateModal] = useState(false);
+  const [openIsVIPModal, setOpenIsVIPModal] = useState(false);
   const [toDownload, setToDownload] = useState(false);
 
   // ** HOOKS
@@ -105,6 +106,16 @@ export const Header = ({
       setToDownload(true);
     } else {
       setOpen(true);
+    }
+  };
+
+  const handleVIPCoin = () => {
+    if (data?.available_to === "vip") {
+      if (!isVIP) {
+        setOpenIsVIPModal(true);
+      }
+    } else {
+      setOpenDonateModal(true);
     }
   };
 
@@ -196,14 +207,28 @@ export const Header = ({
             isAlreadyFavorite={isAlreadyFavorite}
             setIsAlreadyFavorite={setIsAlreadyFavorite}
           />
-          <Pressable onPress={() => setOpenDonateModal(true)}>
-            <View style={styles.buttonItem}>
-              <Image source={CoinIcon} style={styles.icon} />
-              <Text style={styles.text}>
-                {/* 22{translations.coin} */}
-                {translations.donate}
-              </Text>
-            </View>
+          <Pressable onPress={handleVIPCoin}>
+            {data?.available_to === "vip" ? (
+              <View style={styles.buttonItem}>
+                <Text
+                  style={[
+                    {
+                      backgroundColor: "#EF9535",
+                      paddingHorizontal: 7,
+                      borderRadius: 2,
+                      color: GLOBAL_COLORS.primaryTextColor,
+                    },
+                  ]}
+                >
+                  {translations.vip}
+                </Text>
+              </View>
+            ) : (
+              <View style={styles.buttonItem}>
+                <Image source={CoinIcon} style={styles.icon} />
+                <Text style={styles.text}>{data?.coin_amount}</Text>
+              </View>
+            )}
           </Pressable>
           <DownloadStatus videoID={data._id} />
           <Pressable
@@ -225,10 +250,10 @@ export const Header = ({
         <VIPModalContent setOpen={setOpen} />
       </CustomModal>
       <CustomModal open={openDonateModal} setOpen={setOpenDonateModal}>
-        <DonateModalContent
-          setOpen={setOpenDonateModal}
-          userID={data?.user.id}
-        />
+        <BuyVideoModal userID={data?.user.id} coin={data?.coin_amount} />
+      </CustomModal>
+      <CustomModal open={openIsVIPModal} setOpen={setOpenIsVIPModal}>
+        <VIPModalContent setOpen={setOpen} />
       </CustomModal>
     </>
   );

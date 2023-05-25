@@ -68,7 +68,10 @@ const SenderMessage = (props: SenderMessageProps) => {
             {/* {message.image && <Image source={{ uri: BASE_URL_FILE_SERVER + message.image }} style={styles.yourSentImage} />} */}
           </View>
         </>
-        <Text style={styles.messageTimeStamp}>{props.timeStamp}</Text>
+        <Text style={styles.messageTimeStamp}>
+          {moment(props.timeStamp).format("h:mm A")}{" "}
+          {moment(props.timeStamp).format("MM/DD/YYYY")}
+        </Text>
       </VStack>
     </View>
   );

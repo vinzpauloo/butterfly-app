@@ -101,8 +101,8 @@ const Header = () => {
 // **** HEADER COMPONENT END CODE **** //
 
 // **** USER COMPONENT START CODE **** //
-const User = () => {
-  const { alias, photo, is_Vip, coins } = userStore((store) => store);
+const User = ({ data }) => {
+  const { alias, photo, is_Vip } = userStore((store) => store);
   const { translations } = translationStore((store) => store);
   const navigation = useNavigation<any>();
 
@@ -132,10 +132,10 @@ const User = () => {
             <HStack justifyContent="space-between">
               <Stack flexGrow="1">
                 <Text style={styles.middleText}>
-                  {translations.coin} : {coins}
+                  {translations.coin} : {data?.coins}
                 </Text>
               </Stack>
-              <Stack flexGrow="1">
+              {/* <Stack flexGrow="1">
                 <Text style={styles.middleText}>
                   {translations.movieTicket} : 0
                 </Text>
@@ -144,7 +144,7 @@ const User = () => {
                 <Text style={styles.middleText}>
                   {translations.watchForFree} : 0/0
                 </Text>
-              </Stack>
+              </Stack> */}
             </HStack>
           </VStack>
         </HStack>
@@ -158,7 +158,7 @@ const User = () => {
             }}
           >
             <VStack alignItems="center">
-              <Text style={styles.bottomTopText}>0</Text>
+              <Text style={styles.bottomTopText}>{data?.total_likes}</Text>
               <Text style={styles.bottomText}>{translations.like}</Text>
             </VStack>
           </Pressable>
@@ -172,7 +172,7 @@ const User = () => {
             }}
           >
             <VStack alignItems="center">
-              <Text style={styles.bottomTopText}>0</Text>
+              <Text style={styles.bottomTopText}>{data?.total_favorites}</Text>
               <Text style={styles.bottomText}>{translations.favorite}</Text>
             </VStack>
           </Pressable>
@@ -186,7 +186,7 @@ const User = () => {
             }}
           >
             <VStack alignItems="center">
-              <Text style={styles.bottomTopText}>0</Text>
+              <Text style={styles.bottomTopText}>{data?.total_follow}</Text>
               <Text style={styles.bottomText}>{translations.follow}</Text>
             </VStack>
           </Pressable>
@@ -615,7 +615,7 @@ const MainProfile = () => {
 
   // ** API
   const { getCustomerProfile } = CustomerService();
-  const { isRefetching } = useQuery({
+  const { isRefetching, data } = useQuery({
     queryKey: ["customerProfile"],
     queryFn: () => getCustomerProfile(api_token),
     onSuccess: (data) => {
@@ -655,7 +655,7 @@ const MainProfile = () => {
       >
         <Layout>
           <Header />
-          <User />
+          <User data={data} />
           <VIPStatus />
         </Layout>
         <Layout style={{ marginVertical: 15 }}>

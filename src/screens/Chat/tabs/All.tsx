@@ -36,6 +36,7 @@ const All = () => {
     <Container>
       <View style={styles.userContainer}>
         <FlashList
+          showsVerticalScrollIndicator={false}
           estimatedItemSize={399}
           data={data}
           renderItem={({ item }: any) => (

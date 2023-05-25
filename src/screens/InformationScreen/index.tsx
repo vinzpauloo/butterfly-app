@@ -1,14 +1,6 @@
 import React, { useCallback, useState } from "react";
-import {
-  StyleSheet,
-  Text,
-  Pressable,
-  Image,
-  View,
-  RefreshControl,
-} from "react-native";
+import { StyleSheet, View, RefreshControl } from "react-native";
 
-import { Avatar, HStack, VStack } from "native-base";
 import { createMaterialTopTabNavigator } from "@react-navigation/material-top-tabs";
 import { FlashList } from "@shopify/flash-list";
 import { useQuery } from "@tanstack/react-query";
@@ -21,69 +13,18 @@ import Container from "components/Container";
 import CustomerService from "services/api/CustomerService";
 import Favorite from "./Favorite";
 import FeedItemSkeleton from "components/skeletons/FeedItemSkeleton";
-import gold from "assets/images/gold.png";
 import LikeFeeds from "./Feeds/LikeFeeds";
 import LikeVideos from "./Videos/LikeVideos";
 import Loading from "components/Loading";
 import MasonrySkeleton from "components/skeletons/MasonrySkeleton";
 import MomentHeaderSkeleton from "components/skeletons/MomentHeaderSkeleton";
 import NoCacheMessage from "features/sectionList/components/NoCacheMessage";
-import SystemIcon from "assets/images/SystemIcon.png";
-import vincent from "assets/images/vincent-avatar.png";
 import { GLOBAL_COLORS } from "global";
 import { userStore } from "../../zustand/userStore";
 import { translationStore } from "../../zustand/translationStore";
+import SystemAnnouncement from "./SystemAnnoucement";
 
 const Tab = createMaterialTopTabNavigator();
-
-const FanCard = ({ data }) => {
-  return (
-    <HStack style={styles.cardContainer} space={2}>
-      <Avatar size={12} source={vincent} />
-      <VStack space={1} flexShrink={1}>
-        <Text style={styles.whiteText}>Vincent@CC</Text>
-        <Text style={styles.subtext}>04/05 关注了你</Text>
-      </VStack>
-      <HStack marginLeft="auto" flexDirection="row" space={2}>
-        <Pressable style={styles.blackButton}>
-          <Text style={styles.whiteText}>回关</Text>
-        </Pressable>
-        <Pressable style={styles.orangeButton}>
-          <Text style={styles.whiteText}>聊天</Text>
-        </Pressable>
-      </HStack>
-    </HStack>
-  );
-};
-
-const IncomeCard = ({ data }) => {
-  return (
-    <HStack style={styles.cardContainer} space={2}>
-      <Avatar size={12} source={vincent} />
-      <Text style={styles.whiteText}>Vincent@CC</Text>
-      <HStack ml="auto" space={2}>
-        <Image source={gold} style={styles.goldIcon} />
-        <Text style={styles.subtext}>
-          打赏 <Text style={styles.goldText}>20</Text> 金币
-        </Text>
-      </HStack>
-    </HStack>
-  );
-};
-
-const SystemCard = ({ data }) => {
-  return (
-    <HStack style={styles.cardContainer} space={2}>
-      <Image source={SystemIcon} style={styles.systemIcon} />
-      <VStack space={2} flexShrink={1}>
-        <Text style={styles.whiteText}>系统公告</Text>
-        <Text style={styles.subtext}>
-          您的视频“xxxxxxx”涉嫌违规，被强制下架，请及时查看
-        </Text>
-      </VStack>
-    </HStack>
-  );
-};
 
 // ** START: WORKS AND VLOGS
 const WorksVlogs = ({ route }) => {
@@ -181,9 +122,6 @@ const WorksVlogs = ({ route }) => {
             )}
             {route?.params.postMessage === "comments" && (
               <CommentVideos data={data} />
-            )}
-            {route?.params.postMessage === "SystemCard" && (
-              <SystemCard data={data} />
             )}
           </>
         )}
@@ -303,9 +241,6 @@ const Feeds = ({ route }) => {
             {route?.params.postMessage === "comments" && (
               <CommentFeeds data={data} />
             )}
-            {route?.params.postMessage === "SystemCard" && (
-              <SystemCard data={data} />
-            )}
           </React.Fragment>
         )}
         ListEmptyComponent={!!data.length ? null : <NoCacheMessage />}
@@ -365,6 +300,8 @@ const InformationScreen = () => {
 
   if (route?.params.postMessage === "favorites") {
     return <Favorite />;
+  } else if (route?.params.postMessage === "systemAnnouncement") {
+    return <SystemAnnouncement />;
   }
 
   return <MenuTabs postMessage={route.params.postMessage} />;

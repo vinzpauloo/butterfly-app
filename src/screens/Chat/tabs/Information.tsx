@@ -10,12 +10,12 @@ import {
   View,
   useWindowDimensions,
 } from "react-native";
-import { VStack, HStack, Avatar, Skeleton } from "native-base";
 
+import moment from "moment";
 import { BASE_URL_FILE_SERVER } from "react-native-dotenv";
 import { useQuery } from "@tanstack/react-query";
 import { useNavigation } from "@react-navigation/native";
-import moment from "moment";
+import { VStack, HStack, Avatar, Skeleton } from "native-base";
 
 import BottomMessage from "components/BottomMessage";
 import ChatService from "services/api/ChatService";
@@ -253,7 +253,7 @@ const Information = (props: Props) => {
           onPress={() => {
             navigation.navigate("InformationScreen", {
               postTitle: translations.system,
-              postMessage: "SystemCard",
+              postMessage: "systemAnnouncement",
             });
           }}
         >

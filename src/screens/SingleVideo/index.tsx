@@ -114,7 +114,7 @@ const SingleVideoScreen = () => {
   const [like, setLike] = useState({ isAlreadyLike: false, likeCount: 0 });
   const [isAlreadyFavorite, setIsAlreadyFavorite] = useState(false);
 
-  const { data, isLoading, isFetching } = useQuery({
+  const { data, isLoading } = useQuery({
     queryKey: ["workSingleVideoScreen", route.params.id],
     queryFn: () => getWorkById({ workId: route.params.id, token: token }),
     onError: (error) => {
@@ -134,7 +134,7 @@ const SingleVideoScreen = () => {
     navigation.navigate("VIPScreen", { postTitle: "会员中心" });
   };
 
-  if (isLoading || isFetching) {
+  if (isLoading) {
     return (
       <>
         <CarouselSkeleton />

@@ -1,68 +1,52 @@
-import { Image, StyleSheet, TextInput, View } from "react-native";
-import React, { useState } from "react";
+import { Image, StyleSheet } from "react-native";
+import React from "react";
 
 import { VStack, Modal, Text, Button, Spinner, HStack } from "native-base";
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 
-import DonateService from "services/api/DonateService";
+import CoinIcon from "assets/images/coinIcon.png";
+import CustomerService from "services/api/CustomerService";
 import { GLOBAL_COLORS } from "global";
 import { translationStore } from "../zustand/translationStore";
 import { userStore } from "../zustand/userStore";
 
-import CoinIcon from "assets/images/coinIcon.png";
-
-export default function BuyVideoModal({ userID = 1, coin }) {
-  // ** GLOBAL STORE
+export default function BuyVideoModal({ id, coin, setOpen }) {
+  // ** Get QueryClient from the context
+  const queryClient = useQueryClient();
+  // ** global store
+  const userStoreData = userStore((store) => store);
   const translations = translationStore((state) => state.translations);
-  const { api_token, coins } = userStore((state) => state);
+  const { api_token, coins, setUserData } = userStore((state) => state);
+  // ** api
+  const { postBuyVideos } = CustomerService();
+  const { mutate, isLoading } = useMutation(postBuyVideos, {
+    onSuccess: (data) => {
+      // ** close the modal
+      setOpen(false);
+      // ** Update userStore data here
+      setUserData({
+        ...userStoreData,
+        coins: data.customer_balance,
+      });
+      // ** refetch the single vidoe
+      queryClient.invalidateQueries({
+        queryKey: ["workSingleVideoScreen", id],
+      });
+    },
+    onError: (error) => {
+      console.log("Buy Videos: ", error);
+    },
+  });
 
-  // ** STATES
-  const [amount, setAmount] = useState("");
-  const [message, setMessage] = useState("");
-  const [errorMsg, setErrorMsg] = useState("");
-
-  // ** API
-  const { postDonate } = DonateService();
-  const { mutate, isLoading, isSuccess, isError, reset } = useMutation(
-    postDonate,
-    {
-      onSuccess: (data) => {
-        console.log("mutateDonate onSuccess", data);
-        handleResetDonate();
-      },
-      onError: (error) => {
-        console.log("mutateDonate onError", error);
-        // @ts-ignore
-        setErrorMsg(error.data.message);
-      },
-    }
-  );
-
-  // ** EVENTS
+  // ** events
   const onPressBuyVideo = () => {
-    // const donateData = {
-    //   data: {
-    //     user_id: userID,
-    //     amount: parseInt(amount),
-    //     message,
-    //   },
-    //   token: api_token,
-    // };
-
-    // console.log("donating ...", donateData);
-    // mutate(donateData);
-    console.log("buy");
+    mutate({
+      data: {
+        id,
+      },
+      token: api_token,
+    });
   };
-
-  const handleResetDonate = () => {
-    setAmount("");
-    setMessage("");
-    setTimeout(() => {
-      reset();
-    }, 3000);
-  };
-
-  console.log("@@", 14 >= coin);
 
   return (
     <Modal.Content bgColor={GLOBAL_COLORS.videoContentBG}>
@@ -89,20 +73,9 @@ export default function BuyVideoModal({ userID = 1, coin }) {
             </Text>
             <Text color={GLOBAL_COLORS.inactiveTextColor}>{coins}</Text>
           </HStack>
-
-          {isSuccess && (
-            <Text color={GLOBAL_COLORS.secondaryColor}>
-              {translations.donateSuccess}
-            </Text>
-          )}
-
-          {isError && (
-            <Text color={GLOBAL_COLORS.errorColor} style={styles.errorMsg}>
-              {errorMsg}
-            </Text>
-          )}
-
-          {!isLoading ? (
+          {isLoading ? (
+            <Spinner size={20} color={GLOBAL_COLORS.secondaryColor} />
+          ) : (
             <Button
               disabled={coins >= coin ? false : true}
               size="sm"
@@ -114,8 +87,6 @@ export default function BuyVideoModal({ userID = 1, coin }) {
             >
               {translations.buyNow}
             </Button>
-          ) : (
-            <Spinner color={GLOBAL_COLORS.secondaryColor} size="lg" />
           )}
         </VStack>
       </Modal.Body>
@@ -140,8 +111,5 @@ const styles = StyleSheet.create({
     height: 40,
     width: 40,
     resizeMode: "contain",
-  },
-  errorMsg: {
-    textTransform: "capitalize",
   },
 });

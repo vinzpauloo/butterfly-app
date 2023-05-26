@@ -207,29 +207,31 @@ export const Header = ({
             isAlreadyFavorite={isAlreadyFavorite}
             setIsAlreadyFavorite={setIsAlreadyFavorite}
           />
-          <Pressable onPress={handleVIPCoin}>
-            {data?.available_to === "vip" ? (
-              <View style={styles.buttonItem}>
-                <Text
-                  style={[
-                    {
-                      backgroundColor: "#EF9535",
-                      paddingHorizontal: 7,
-                      borderRadius: 2,
-                      color: GLOBAL_COLORS.primaryTextColor,
-                    },
-                  ]}
-                >
-                  {translations.vip}
-                </Text>
-              </View>
-            ) : (
-              <View style={styles.buttonItem}>
-                <Image source={CoinIcon} style={styles.icon} />
-                <Text style={styles.text}>{data?.coin_amount}</Text>
-              </View>
-            )}
-          </Pressable>
+          {data?.is_bought ? null : (
+            <Pressable onPress={handleVIPCoin}>
+              {data?.available_to === "vip" ? (
+                <View style={styles.buttonItem}>
+                  <Text
+                    style={[
+                      {
+                        backgroundColor: "#EF9535",
+                        paddingHorizontal: 7,
+                        borderRadius: 2,
+                        color: GLOBAL_COLORS.primaryTextColor,
+                      },
+                    ]}
+                  >
+                    {translations.vip}
+                  </Text>
+                </View>
+              ) : (
+                <View style={styles.buttonItem}>
+                  <Image source={CoinIcon} style={styles.icon} />
+                  <Text style={styles.text}>{data?.coin_amount}</Text>
+                </View>
+              )}
+            </Pressable>
+          )}
           <DownloadStatus videoID={data._id} />
           <Pressable
             onPress={() =>
@@ -250,7 +252,11 @@ export const Header = ({
         <VIPModalContent setOpen={setOpen} />
       </CustomModal>
       <CustomModal open={openDonateModal} setOpen={setOpenDonateModal}>
-        <BuyVideoModal userID={data?.user.id} coin={data?.coin_amount} />
+        <BuyVideoModal
+          id={data?._id}
+          coin={data?.coin_amount}
+          setOpen={setOpenDonateModal}
+        />
       </CustomModal>
       <CustomModal open={openIsVIPModal} setOpen={setOpenIsVIPModal}>
         <VIPModalContent setOpen={setOpen} />

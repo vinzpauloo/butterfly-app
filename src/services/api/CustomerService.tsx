@@ -58,6 +58,12 @@ interface ICustomerWorkFeeds {
   token: string;
   category: string;
 }
+interface IBuyVideo {
+  data: {
+    id: string;
+  };
+  token: string;
+}
 
 interface IFollowedCreators {
   customer_id: string;
@@ -229,6 +235,17 @@ const CustomerService = () => {
     });
   };
 
+  const postBuyVideos = (params: IBuyVideo) => {
+    return request({
+      headers: {
+        ...getHeaders(),
+        Authorization: `Bearer ${params.token}`,
+      },
+      url: `/customers/buyworks/${params.data.id}`,
+      method: "POST",
+    });
+  };
+
   return {
     getCustomerById,
     postLoginCustomer,
@@ -247,6 +264,7 @@ const CustomerService = () => {
     putCustomerProfile,
     getCertificate,
     getCustomerWorkFeeds,
+    postBuyVideos,
   };
 };
 

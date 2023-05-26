@@ -163,7 +163,7 @@ const SingleUserScreen = () => {
             >
               <HStack space={1.5}>
                 <Image style={styles.image} source={coinIcon} />
-                <Text style={styles.whiteText}>{translations.reward}</Text>
+                <Text style={styles.whiteText}>{translations.donate}</Text>
               </HStack>
             </Pressable>
             <Pressable

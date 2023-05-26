@@ -1,14 +1,15 @@
-import FeedContent from "components/feed/FeedContent";
-import { Avatar, HStack, Image, Text, VStack, View } from "native-base";
 import { Pressable, StyleSheet } from "react-native";
 import React from "react";
-import { GLOBAL_COLORS } from "global";
-import girl from "assets/images/girl-thumbnail.png";
-import commentIcon from "assets/images/commentIcon.png";
-import vincent from "assets/images/vincent-avatar.png";
+
+import { HStack, Image, Text, VStack, View } from "native-base";
 import { BASE_URL_FILE_SERVER } from "react-native-dotenv";
 
+import { GLOBAL_COLORS } from "global";
+import commentIcon from "assets/images/commentIcon.png";
+import { translationStore } from "../../../zustand/translationStore";
+
 export default function CommentVideos({ data }) {
+  const { translations } = translationStore((store) => store);
   return (
     <View>
       {data?.map((item, index) => (
@@ -17,19 +18,25 @@ export default function CommentVideos({ data }) {
           space={2}
           key={index}
         >
-          <Avatar size={12} source={vincent} />
+          <Image
+            source={{ uri: BASE_URL_FILE_SERVER + item.user.photo }}
+            style={styles.profile}
+            resizeMode="contain"
+          />
           <VStack space={1} flexShrink={1}>
             <HStack space={2} flexShrink={1}>
-              <Text style={styles.whiteText}>Vincent@CC</Text>
+              <Text style={styles.whiteText}>{item.user.username}</Text>
               <Text style={styles.redText}>UP</Text>
             </HStack>
             <Text style={styles.subtext} numberOfLines={1}>
-              Comment：{item.message}
+              {translations.comment}：{item.message}
             </Text>
             <Pressable style={styles.replyButton}>
               <HStack alignItems="center" space={1}>
                 <Image source={commentIcon} style={styles.icon} />
-                <Text style={styles.subtext}>回复评论</Text>
+                <Text style={styles.subtext}>
+                  {translations.replyToComment}
+                </Text>
               </HStack>
             </Pressable>
           </VStack>
@@ -61,13 +68,13 @@ const styles = StyleSheet.create({
     color: "#8F9399",
   },
   replyButton: {
-    width: 100,
     height: 28,
     backgroundColor: GLOBAL_COLORS.primaryColor,
     borderRadius: 16,
     justifyContent: "center",
     alignItems: "center",
     marginTop: 10,
+    paddingHorizontal: 10,
   },
   icon: {
     height: 15,
@@ -88,5 +95,10 @@ const styles = StyleSheet.create({
     backgroundColor: "gray",
     borderRadius: 4,
     marginLeft: "auto",
+  },
+  profile: {
+    height: 50,
+    width: 50,
+    borderRadius: 25,
   },
 });

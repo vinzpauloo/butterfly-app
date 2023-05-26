@@ -144,6 +144,7 @@ export default zh_cn = {
   renewVIP: "更新VIP",
   reply: "回复",
   replyTo: "回复",
+  replyToComment: "回复评论",
   reprinting: "未经作者允许禁止转载",
   reward: "打赏",
   rewarded: "赏了",

@@ -147,6 +147,7 @@ export default en_us = {
   renewVIP: "Renew VIP",
   reply: "Reply",
   replyTo: "Reply to",
+  replyToComment: "Reply to comment",
   reprinting: "Copyright do not distribute",
   reward: "Reward",
   rewarded: "Rewarded",

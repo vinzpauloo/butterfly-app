@@ -29,24 +29,8 @@ import { singleChatMessageList } from "data/singleChatMessageList";
 import { BASE_URL_FILE_SERVER } from "react-native-dotenv";
 import { translationStore } from "../../zustand/translationStore";
 import { userStore } from "../../zustand/userStore";
-import { FlashList } from "@shopify/flash-list";
-
-const NoMessageYet = () => {
-  return (
-    <>
-      <View style={styles.centeredContent}>
-        <Text style={styles.whiteText}>
-          文明发言,才能触及彼岸珍惜每一位原创者
-        </Text>
-      </View>
-      <Text style={[styles.whiteText, styles.bottomText]}>请上拉刷新消息</Text>
-    </>
-  );
-};
 
 type SenderMessageProps = {
-  senderImgURL: string;
-  senderUserName: string;
   message: string;
   timeStamp: string;
 };
@@ -55,19 +39,12 @@ const SenderMessage = (props: SenderMessageProps) => {
   return (
     <View style={{ marginVertical: 8 }}>
       <VStack style={styles.senderMessageAndTimeStampContainer}>
-        <>
-          <Text style={styles.senderName}>{props.senderUserName}</Text>
-          <View
-            style={[
-              styles.messageContainer,
-              styles.senderSingleMessageContainer,
-            ]}
-          >
-            <Text style={styles.senderMessageText}>{props.message}</Text>
-            {/* SENDER SENT IMAGES */}
-            {/* {message.image && <Image source={{ uri: BASE_URL_FILE_SERVER + message.image }} style={styles.yourSentImage} />} */}
-          </View>
-        </>
+        <View
+          style={[styles.messageContainer, styles.senderSingleMessageContainer]}
+        >
+          <Text style={styles.senderMessageText}>{props.message}</Text>
+        </View>
+
         <Text style={styles.messageTimeStamp}>
           {moment(props.timeStamp).format("h:mm A")}{" "}
           {moment(props.timeStamp).format("MM/DD/YYYY")}
@@ -78,8 +55,6 @@ const SenderMessage = (props: SenderMessageProps) => {
 };
 
 type YourMessageProps = {
-  yourImgUrl: string;
-  yourUserName: string;
   message: string;
   timeStamp: string;
   messageImage?: string;
@@ -330,16 +305,12 @@ const SingleChatScreen = () => {
           item.from_id === _id ? (
             <YourMessage
               key={index}
-              yourImgUrl={singleChatMessageList[0].yourImgUrl}
-              yourUserName={singleChatMessageList[0].yourUserName}
               message={item.message}
               timeStamp={item.created_at}
             />
           ) : (
             <SenderMessage
               key={index}
-              senderImgURL={singleChatMessageList[0].senderImgURL}
-              senderUserName={singleChatMessageList[0].senderUserName}
               message={item.message}
               timeStamp={item.created_at}
             />

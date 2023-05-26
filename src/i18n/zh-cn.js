@@ -132,6 +132,7 @@ export default zh_cn = {
   privateMessage: "私信列表",
   profile: "主页",
   promotionPackage: "促销包",
+  purchasedVideos: "购买的视频",
   purchaseVIP: "购买VIP",
   qrCodeScanning: "二维码扫描",
   recentlyUpdated: "最近更新",

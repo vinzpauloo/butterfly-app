@@ -31,7 +31,8 @@ import PortraitVideo from "layouts/PortraitVideo";
 import Preloading from "screens/Preloading";
 import PrivacyPolicy from "screens/Settings/tabs/PrivacyPolicy";
 import ProfilePhoto from "screens/Settings/tabs/ProfilePhoto";
-import RecordingHistory from "../screens/Account/tabs/RecordingHistory";
+import PurchasedVideos from "screens/MainProfile/screens/PurchasedVideos";
+import RecordingHistory from "screens/MainProfile/screens/RecordingHistory";
 import RequestCode from "screens/Settings/tabs/RequestCode";
 import ScannerQR from "screens/MainProfile/screens/ScannerQR";
 import Search from "screens/Search";
@@ -46,7 +47,6 @@ import SingleChatScreen from "screens/SingleChatScreen";
 import SingleTag from "screens/SingleTag";
 import SingleFeedScreen from "screens/SingleFeedScreen";
 import TermsOfService from "screens/TermsOfService";
-import Videos from "screens/Videos";
 import VIPScreen from "screens/VIP";
 import WorkService from "services/api/WorkService";
 import { GLOBAL_COLORS } from "global";
@@ -264,9 +264,14 @@ export const stackScreens = {
       options: { headerShown: false },
     },
     {
+      name: "PurchasedVideos",
+      component: PurchasedVideos,
+      options: basicHeader,
+    },
+    {
       name: "RecordingHistory",
       component: RecordingHistory,
-      options: { headerShown: false },
+      options: basicHeader,
     },
     {
       name: "RequestCode",
@@ -342,11 +347,6 @@ export const stackScreens = {
       name: "VlogScreen",
       component: VlogScreen,
       options: { headerShown: false },
-    },
-    {
-      name: "Videos",
-      component: Videos,
-      options: basicHeader,
     },
     {
       name: "VIPScreen",

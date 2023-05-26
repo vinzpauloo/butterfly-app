@@ -135,6 +135,7 @@ export default en_us = {
   privateMessage: "Private Message List",
   profile: "Profile",
   promotionPackage: "Promotion Package",
+  purchasedVideos: "Purchased Videos",
   purchaseVIP: "Purchase VIP",
   qrCodeScanning: "QR Code Scanning",
   recentlyUpdated: "Recent",

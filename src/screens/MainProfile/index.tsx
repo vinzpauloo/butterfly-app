@@ -328,17 +328,17 @@ const LinkList = () => {
       title: translations.recordingHistory,
       icon: HistoryIcon,
       navigate: () => {
-        navigation.navigate("Videos", {
+        navigation.navigate("RecordingHistory", {
           postTitle: translations.recordingHistory,
         });
       },
     },
     {
-      title: translations.offlineCache,
+      title: translations.purchasedVideos,
       icon: DownloadIcon,
       navigate: () => {
-        navigation.navigate("Videos", {
-          postTitle: translations.offlineCache,
+        navigation.navigate("PurchasedVideos", {
+          postTitle: translations.purchasedVideos,
         });
       },
     },

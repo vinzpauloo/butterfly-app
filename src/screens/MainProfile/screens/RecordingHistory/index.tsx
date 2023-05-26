@@ -1,33 +1,22 @@
-import {
-  Image,
-  Pressable,
-  RefreshControl,
-  StyleSheet,
-  Text,
-  useWindowDimensions,
-  View,
-} from "react-native";
+import { RefreshControl, StyleSheet, Text, View } from "react-native";
 import React, { useCallback, useState } from "react";
 
-import Entypo from "react-native-vector-icons/Entypo";
 import moment from "moment";
-import { BASE_URL_FILE_SERVER } from "react-native-dotenv";
 import { FlashList } from "@shopify/flash-list";
-import { HStack, VStack, useDisclose } from "native-base";
+import { VStack, useDisclose } from "native-base";
 import { useQuery } from "@tanstack/react-query";
-import { useNavigation } from "@react-navigation/native";
 
 import BottomMessage from "components/BottomMessage";
 import Container from "components/Container";
 import Loading from "components/Loading";
 import Modal from "components/BottomModal";
 import NoCacheMessage from "features/sectionList/components/NoCacheMessage";
-import VideoComponent from "components/VideoComponent";
+import Video from "screens/MainProfile/components/Video";
 import VideoHistorySkeleton from "components/skeletons/VidoeHistorySkeleton";
 import WorkService from "services/api/WorkService";
-import { GLOBAL_COLORS, GLOBAL_SCREEN_SIZE } from "global";
-import { translationStore } from "../../zustand/translationStore";
-import { userStore } from "../../zustand/userStore";
+import { GLOBAL_COLORS } from "global";
+import { translationStore } from "../../../../zustand/translationStore";
+import { userStore } from "../../../../zustand/userStore";
 
 // **** START: COMPONENTS **** //
 const Layout = ({ children, style = null }) => {
@@ -42,64 +31,6 @@ const Layout = ({ children, style = null }) => {
 };
 // **** END: COMPONENTS **** //
 
-const Video = ({ item, onOpen, setId }) => {
-  const { width } = useWindowDimensions();
-  const navigation = useNavigation<any>();
-  const translations = translationStore((state) => state.translations);
-  const WIDTH_IMG = width < GLOBAL_SCREEN_SIZE.mobileMedium ? "40%" : "30%";
-  const WIDTH_CONTENT = width < GLOBAL_SCREEN_SIZE.mobileMedium ? "60%" : "70%";
-
-  const handlePressDots = (event) => {
-    setId(item._id);
-    onOpen(event);
-  };
-
-  const handlePress = () => {
-    navigation.navigate("SingleVideo", {
-      id: item._id,
-    });
-  };
-
-  return (
-    <Pressable onPress={handlePress}>
-      <HStack width="full" height="20" my="1.5">
-        <VStack width={WIDTH_IMG} height="full" position="relative">
-          <VideoComponent item={item} />
-          <Image
-            source={{ uri: BASE_URL_FILE_SERVER + item.thumbnail_url }}
-            resizeMode="cover"
-            style={{ width: "100%", height: "100%", borderRadius: 4 }}
-          />
-        </VStack>
-        <VStack
-          width={WIDTH_CONTENT}
-          height="full"
-          py="0.5"
-          pl="2"
-          justifyContent="space-between"
-        >
-          <Text style={styles.title} numberOfLines={2}>
-            {item.title}
-          </Text>
-          <Text style={styles.subtitle}>
-            {translations.duration}: {item.duration}
-          </Text>
-          <HStack alignItems="center" justifyContent="space-between">
-            <Text style={styles.subtitle}>{item.user.username}</Text>
-            <Pressable onPress={handlePressDots}>
-              <Entypo
-                name="dots-three-vertical"
-                color={GLOBAL_COLORS.inactiveTextColor}
-              />
-            </Pressable>
-          </HStack>
-        </VStack>
-      </HStack>
-    </Pressable>
-  );
-};
-
-// **** START: CONTENT **** //
 const Content = ({ title, data, onOpen, setId }) => {
   return (
     <Layout>
@@ -112,10 +43,8 @@ const Content = ({ title, data, onOpen, setId }) => {
     </Layout>
   );
 };
-// **** END: CONTENT **** //
 
-const index = () => {
-  const translation = translationStore((state) => state.translations);
+export default function index() {
   const { isOpen, onOpen, onClose } = useDisclose();
   // **** GLOBAL STATE
   const { api_token } = userStore((store) => store);
@@ -263,9 +192,7 @@ const index = () => {
       <Modal isOpen={isOpen} onOpen={onOpen} onClose={onClose} id={id} />
     </Container>
   );
-};
-
-export default index;
+}
 
 const styles = StyleSheet.create({
   contentTitle: {

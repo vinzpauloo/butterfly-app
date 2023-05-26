@@ -59,7 +59,7 @@ interface ICustomerWorkFeeds {
   category: string;
 }
 interface IBuyVideo {
-  data: {
+  data?: {
     id: string;
   };
   token: string;
@@ -246,6 +246,17 @@ const CustomerService = () => {
     });
   };
 
+  const getBoughtVideos = (params: IBuyVideo) => {
+    return request({
+      headers: {
+        ...getHeaders(),
+        Authorization: `Bearer ${params.token}`,
+      },
+      url: "/customers/boughtworks",
+      method: "GET",
+    });
+  };
+
   return {
     getCustomerById,
     postLoginCustomer,
@@ -265,6 +276,7 @@ const CustomerService = () => {
     getCertificate,
     getCustomerWorkFeeds,
     postBuyVideos,
+    getBoughtVideos,
   };
 };
 

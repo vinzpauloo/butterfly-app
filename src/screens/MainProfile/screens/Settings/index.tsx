@@ -23,7 +23,7 @@ import {
   VStack,
 } from "native-base";
 import { useMutation, useQuery } from "@tanstack/react-query";
-import { BASE_URL_FILE_SERVER } from "react-native-dotenv";
+import { BASE_URL_FILE_SERVER, SUPER_AGENT_ID } from "react-native-dotenv";
 
 import Container from "components/Container";
 import CustomerService from "services/api/CustomerService";
@@ -372,6 +372,7 @@ const ThirdContainer = () => {
   const handleCertificate = () => {
     navigation.navigate("SingleChatScreen", {
       postTitle: translations.customerService,
+      chatId: SUPER_AGENT_ID,
     });
   };
 

@@ -15,6 +15,8 @@ interface IFeeds {
     images_only?: boolean;
     services_only?: boolean;
     approval?: string;
+    sort_by?: string;
+    sort?: string;
   };
   token: string;
 }

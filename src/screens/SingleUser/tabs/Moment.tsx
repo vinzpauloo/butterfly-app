@@ -33,6 +33,8 @@ const Moment = (props: Props) => {
           with: [`user`, `comment`, `like`].toString(),
           page: page,
           approval: "Approved",
+          sort_by: "created_at",
+          sort: "desc",
         },
         token: token,
       }),
@@ -49,7 +51,7 @@ const Moment = (props: Props) => {
 
   const reachEnd = () => {
     // if (startScroll) return null;
-    if (!isFetching || !isLoading ) {
+    if (!isFetching || !isLoading) {
       if (lastPage !== page) {
         setPage((prev) => prev + 1);
         setStartScroll(true);
@@ -89,16 +91,22 @@ const Moment = (props: Props) => {
       // getItemCount={() => data.length}
       keyExtractor={(item: any) => item.id}
       renderItem={({ item }) => (
-          <FeedContent data={item} isFromSingleUserScreen/>
+        <FeedContent data={item} isFromSingleUserScreen />
       )}
       ListFooterComponent={() => (
-        <View style={{ height:60 }}>
-          {isFetching || isLoading ? <Loading /> : page === lastPage && <BottomMessage />}
+        <View style={{ height: 60 }}>
+          {isFetching || isLoading ? (
+            <Loading />
+          ) : (
+            page === lastPage && <BottomMessage />
+          )}
         </View>
       )}
-      ItemSeparatorComponent={() =>
-        <Divider style={{ height: 8, backgroundColor: GLOBAL_COLORS.videoContentBG }} />
-      }
+      ItemSeparatorComponent={() => (
+        <Divider
+          style={{ height: 8, backgroundColor: GLOBAL_COLORS.videoContentBG }}
+        />
+      )}
     />
   );
 };

@@ -22,9 +22,10 @@ export default en_us = {
   bindMobilePhoneMessage:
     "Bind mobile phone number and agent code to get 7 days free VIP permission",
   bottomMessage: "You have reached the end!",
+  boughtWorks: "Bought Works",
+  boundSuccessfully: "The account is bound successfully",
   buyGoldPack: "buy gold pack",
   buyNow: "Buy Now",
-  boundSuccessfully: "The account is bound successfully",
   buyTheVideo: "Buy the video to watch the full version",
   cancel: "Cancel",
   changeUsername: "Change Username",

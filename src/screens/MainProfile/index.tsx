@@ -144,16 +144,16 @@ const User = ({ data }) => {
                   {translations.coin} : {data?.coins}
                 </Text>
               </Stack>
-              {/* <Stack flexGrow="1">
+              <Stack flexGrow="1">
                 <Text style={styles.middleText}>
-                  {translations.movieTicket} : 0
+                  {translations.boughtWorks} : {data?.total_bought_works}
                 </Text>
               </Stack>
               <Stack flexGrow="1">
                 <Text style={styles.middleText}>
-                  {translations.watchForFree} : 0/0
+                  {/* {translations.watchForFree} : 0/0 */}
                 </Text>
-              </Stack> */}
+              </Stack>
             </HStack>
           </VStack>
         </HStack>

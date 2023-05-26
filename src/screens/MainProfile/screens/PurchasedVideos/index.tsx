@@ -102,7 +102,7 @@ export default function index() {
         data={data}
         renderItem={({ item, index }) => (
           <Layout>
-            <Video item={item} onOpen={onOpen} setId={setId} />
+            <Video item={item.works} onOpen={onOpen} setId={setId} />
           </Layout>
         )}
         ListEmptyComponent={!!data.length ? null : <NoCacheMessage />}

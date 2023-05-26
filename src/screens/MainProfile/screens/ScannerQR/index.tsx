@@ -1,7 +1,13 @@
-import { StyleSheet } from "react-native";
-import React from "react";
+import {
+  Pressable,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  useWindowDimensions,
+} from "react-native";
+import React, { useState } from "react";
 
-import { useToast } from "native-base";
+import { VStack, useToast } from "native-base";
 import { Camera } from "expo-camera";
 import { storeDataObject } from "lib/asyncStorage";
 import { useMutation } from "@tanstack/react-query";
@@ -13,13 +19,38 @@ import { GLOBAL_COLORS } from "global";
 import { userStore } from "../../../../zustand/userStore";
 import { translationStore } from "../../../../zustand/translationStore";
 
-const index = () => {
+export default function index() {
+  const { width } = useWindowDimensions();
+  // ** styles
+  const styles = StyleSheet.create({
+    button: {
+      position: "absolute",
+      bottom: 56,
+      left: width / 2,
+      transform: [{ translateX: -40 }],
+      backgroundColor: GLOBAL_COLORS.secondaryColor,
+      height: 80,
+      width: 80,
+      borderRadius: 40,
+      alignItems: "center",
+      justifyContent: "center",
+      borderWidth: 2,
+      borderColor: GLOBAL_COLORS.primaryTextColor,
+    },
+    text: {
+      textTransform: "uppercase",
+      fontWeight: "bold",
+    },
+  });
+
   const toast = useToast();
-  // **** GLOBAL STATE
+  // ** state
+  const [scan, setScan] = useState(false);
+  // ** GLOBAL STATE
   const token = userStore((store) => store.api_token);
   const setUserStore = userStore((state) => state.setUserData);
   const translations = translationStore((state) => state.translations);
-  // **** API
+  // ** API
   const { bindDevice } = CustomerService();
   const navigation = useNavigation();
 
@@ -59,24 +90,29 @@ const index = () => {
   });
 
   const handleBarCodeScanned = ({ data }) => {
-    if (!isLoading) {
-      mutate({ data: { id: data }, token });
+    if (scan) {
+      if (!!data) {
+        mutate({ data: { id: data }, token });
+        setScan(false);
+      }
     }
+    setScan(false);
   };
 
   return (
     <Container>
-      <Camera
-        onBarCodeScanned={handleBarCodeScanned}
-        barCodeScannerSettings={{
-          barCodeTypes: ["qr"],
-        }}
-        style={StyleSheet.absoluteFillObject}
-      />
+      <VStack flex={1} position="relative">
+        <Camera
+          onBarCodeScanned={scan ? handleBarCodeScanned : undefined}
+          barCodeScannerSettings={{
+            barCodeTypes: ["qr"],
+          }}
+          style={StyleSheet.absoluteFillObject}
+        />
+        <TouchableOpacity style={styles.button} onPress={() => setScan(true)}>
+          <Text style={styles.text}>{translations.scanCode}</Text>
+        </TouchableOpacity>
+      </VStack>
     </Container>
   );
-};
-
-export default index;
-
-const styles = StyleSheet.create({});
+}

@@ -103,7 +103,7 @@ const Contents = ({ data }) => {
   const [id, setId] = useState<number | null>(null);
 
   return (
-    <View style={styles.gridVideoContainer}>
+    <>
       <MasonryList
         // estimatedItemSize={166}
         numColumns={2}
@@ -115,7 +115,7 @@ const Contents = ({ data }) => {
       />
 
       <Modal isOpen={isOpen} onOpen={onOpen} onClose={onClose} id={id} />
-    </View>
+    </>
   );
 };
 // ** END: CONTENTS
@@ -123,7 +123,6 @@ const Contents = ({ data }) => {
 export default function Favorite() {
   // ** global state
   const { api_token } = userStore((store) => store);
-  const { translations } = translationStore((store) => store);
   // ** state
   const [data, setData] = useState([]);
   const [page, setPage] = useState(1);
@@ -191,10 +190,10 @@ export default function Favorite() {
         onEndReachedThreshold={0.01} // always make this default to 0.01 to have no bug for fetching data for the onEndReached -> https://github.com/facebook/react-native/issues/14015#issuecomment-346547942
         onTouchStart={() => setStartScroll(false)}
         onEndReached={reachEnd}
-        data={[1]}
+        data={!!data.length ? [1] : []}
         keyExtractor={(item, index) => "" + index}
         renderItem={({ item, index }) => <Contents key={index} data={data} />}
-        ListEmptyComponent={!!data.length ? null : <NoCacheMessage />}
+        ListEmptyComponent={false ? null : <NoCacheMessage />}
         ListFooterComponent={() => (
           <>
             {/* the gap will be remove if the lastpage is been fetch */}
@@ -218,10 +217,6 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: GLOBAL_COLORS.primaryColor,
-  },
-  gridVideoContainer: {
-    flex: 1,
-    paddingHorizontal: 10,
   },
   thumbnailContainer: {
     position: "relative",

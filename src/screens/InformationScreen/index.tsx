@@ -113,7 +113,7 @@ const WorksVlogs = ({ route }) => {
         onEndReachedThreshold={0.01} // always make this default to 0.01 to have no bug for fetching data for the onEndReached -> https://github.com/facebook/react-native/issues/14015#issuecomment-346547942
         onTouchStart={() => setStartScroll(false)}
         onEndReached={reachEnd}
-        data={[1]}
+        data={!!data.length ? [1] : []}
         keyExtractor={(item, index) => "" + index}
         renderItem={({ item, index }) => (
           <>
@@ -233,7 +233,7 @@ const Feeds = ({ route }) => {
         onEndReachedThreshold={0.01} // always make this default to 0.01 to have no bug for fetching data for the onEndReached -> https://github.com/facebook/react-native/issues/14015#issuecomment-346547942
         onTouchStart={() => setStartScroll(false)}
         onEndReached={reachEnd}
-        data={[1]}
+        data={!!data.length ? [1] : []}
         keyExtractor={(item, index) => "" + index}
         renderItem={({ item, index }) => (
           <React.Fragment key={index}>

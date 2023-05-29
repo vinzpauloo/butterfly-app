@@ -1,5 +1,5 @@
 import { Pressable, StyleSheet } from "react-native";
-import React from "react";
+import React, { useState } from "react";
 
 import { HStack, Image, Text, VStack, View, useDisclose } from "native-base";
 import { BASE_URL_FILE_SERVER } from "react-native-dotenv";
@@ -10,9 +10,11 @@ import { translationStore } from "../../../zustand/translationStore";
 import BottomComment from "components/BottomComment";
 
 export default function CommentFeeds({ data }) {
+  const [id, setId] = useState("");
   const { translations } = translationStore((store) => store);
   const { isOpen, onOpen, onClose } = useDisclose();
-  const onPress = () => {
+  const onPress = (id) => {
+    setId(id);
     onOpen();
   };
   return (
@@ -37,7 +39,10 @@ export default function CommentFeeds({ data }) {
               <Text style={styles.subtext} numberOfLines={1}>
                 {translations.comment}：{item.message}
               </Text>
-              <Pressable style={styles.replyButton} onPress={onPress}>
+              <Pressable
+                style={styles.replyButton}
+                onPress={() => onPress(item.feeds._id)}
+              >
                 <HStack alignItems="center" space={1}>
                   <Image source={commentIcon} style={styles.icon} />
                   <Text style={styles.subtext}>
@@ -47,13 +52,9 @@ export default function CommentFeeds({ data }) {
               </Pressable>
             </VStack>
           </HStack>
-          <BottomComment
-            workID={item.feeds._id}
-            isOpen={isOpen}
-            onClose={onClose}
-          />
         </>
       ))}
+      <BottomComment workID={id} isOpen={isOpen} onClose={onClose} />
     </View>
   );
 }

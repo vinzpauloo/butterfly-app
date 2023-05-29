@@ -1,46 +1,58 @@
 import { Pressable, StyleSheet } from "react-native";
 import React from "react";
 
-import { HStack, Image, Text, VStack, View } from "native-base";
+import { HStack, Image, Text, VStack, View, useDisclose } from "native-base";
 import { BASE_URL_FILE_SERVER } from "react-native-dotenv";
 
 import commentIcon from "assets/images/commentIcon.png";
 import { GLOBAL_COLORS } from "global";
 import { translationStore } from "../../../zustand/translationStore";
+import BottomComment from "components/BottomComment";
 
 export default function CommentFeeds({ data }) {
   const { translations } = translationStore((store) => store);
+  const { isOpen, onOpen, onClose } = useDisclose();
+  const onPress = () => {
+    onOpen();
+  };
   return (
     <View>
       {data?.map((item, index) => (
-        <HStack
-          style={[styles.cardContainer, { alignItems: "flex-start" }]}
-          space={2}
-          key={index}
-        >
-          <Image
-            source={{ uri: BASE_URL_FILE_SERVER + item.user.photo }}
-            style={styles.profile}
-            resizeMode="contain"
-          />
-          <VStack space={1} flexShrink={1}>
-            <HStack space={2} flexShrink={1}>
-              <Text style={styles.whiteText}>{item.feeds.username}</Text>
-              <Text style={styles.redText}>UP</Text>
-            </HStack>
-            <Text style={styles.subtext} numberOfLines={1}>
-              {translations.comment}：{item.message}
-            </Text>
-            <Pressable style={styles.replyButton}>
-              <HStack alignItems="center" space={1}>
-                <Image source={commentIcon} style={styles.icon} />
-                <Text style={styles.subtext}>
-                  {translations.replyToComment}
-                </Text>
+        <>
+          <HStack
+            style={[styles.cardContainer, { alignItems: "flex-start" }]}
+            space={2}
+            key={index}
+          >
+            <Image
+              source={{ uri: BASE_URL_FILE_SERVER + item.user.photo }}
+              style={styles.profile}
+              resizeMode="contain"
+            />
+            <VStack space={1} flexShrink={1}>
+              <HStack space={2} flexShrink={1}>
+                <Text style={styles.whiteText}>{item.feeds.username}</Text>
+                <Text style={styles.redText}>UP</Text>
               </HStack>
-            </Pressable>
-          </VStack>
-        </HStack>
+              <Text style={styles.subtext} numberOfLines={1}>
+                {translations.comment}：{item.message}
+              </Text>
+              <Pressable style={styles.replyButton} onPress={onPress}>
+                <HStack alignItems="center" space={1}>
+                  <Image source={commentIcon} style={styles.icon} />
+                  <Text style={styles.subtext}>
+                    {translations.replyToComment}
+                  </Text>
+                </HStack>
+              </Pressable>
+            </VStack>
+          </HStack>
+          <BottomComment
+            workID={item.feeds._id}
+            isOpen={isOpen}
+            onClose={onClose}
+          />
+        </>
       ))}
     </View>
   );
